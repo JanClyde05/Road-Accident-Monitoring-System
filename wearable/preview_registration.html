@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RAMS Wearable — Device Registration Preview</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #060913;
+      color: #f4f4f5; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      letter-spacing: -0.01em;
+    }
+    .card {
+      background: #0e1230;
+      border: 1px solid #27272a;
+      border-radius: 16px; padding: 28px;
+      max-width: 440px; width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .brand-header {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; margin-bottom: 6px;
+    }
+    .brand-logo {
+      width: 38px; height: 38px; border-radius: 8px;
+      border: 1px solid #3f3f46; object-fit: contain; background: #000; padding: 2px;
+    }
+    h1 { font-size: 15px; font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase; color: #ffffff; }
+    .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 20px; }
+    label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a1a1aa; margin-bottom: 6px; margin-top: 14px; }
+    input {
+      width: 100%; padding: 11px 14px; font-size: 13px; font-family: 'JetBrains Mono', monospace;
+      background: #18181b; border: 1px solid #27272a;
+      border-radius: 10px; color: #ffffff; outline: none; transition: border 0.2s;
+    }
+    input:focus { border-color: #ffffff; }
+    .btn {
+      display: block; width: 100%; padding: 12px; margin-top: 22px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer;
+      background: #ffffff; color: #09090b; border: 1px solid #ffffff; border-radius: 10px;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); background: #e4e4e7; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #status {
+      margin-top: 16px; padding: 10px; border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-align: center; text-transform: uppercase; display: none;
+    }
+    .status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); display: block !important; }
+    .status-err { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); display: block !important; }
+    .status-loading { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); display: block !important; }
+    .nav { text-align: center; margin-top: 20px; font-family: 'JetBrains Mono', monospace; }
+    .nav a { color: #f4f4f5; font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; }
+    .nav a:hover { border-color: #ffffff; }
+    .photo-preview { margin-top: 12px; text-align: center; }
+    .photo-preview img {
+      max-width: 100px; max-height: 100px; border-radius: 12px;
+      border: 1px solid #3f3f46; display: none; margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand-header">
+      <img src="../../Pictures/LOGO/LOGO.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../public/logo.jpg'">
+      <h1>Road Accident Monitoring</h1>
+    </div>
+    <p class="subtitle">Wearable Device Registration — Setup Mode</p>
+
+    <label for="name">Rider Full Name</label>
+    <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" value="Juan Dela Cruz" required>
+
+    <label for="driveLink">Photo (Google Drive Share Link)</label>
+    <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+    <div class="photo-preview">
+      <img id="photoPreview" alt="Photo preview">
+    </div>
+
+    <button class="btn" id="registerBtn" onclick="doRegister()">REGISTER DEVICE</button>
+    <div id="status" class="status-ok">REGISTERED! TOKEN: RAMS-9921</div>
+
+    <div class="nav"><a href="#">OFFLINE MAP</a> &nbsp; <a href="#">LIVE TELEMETRY</a></div>
+  </div>
+
+  <script>
+    function doRegister() {
+      var st = document.getElementById('status');
+      st.className = 'status-ok';
+      st.textContent = 'REGISTERED! TOKEN: RAMS-9921';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# ESP32-S3 Wearable WebSocket Architecture Migration Plan
+
+This plan documents the upcoming architectural migration for the **Wearable ESP32-S3 Firmware Setup Mode**, transitioning from `ESPAsyncWebServer` HTTP registration handling to a dedicated **WebSocket Server Architecture (`WebSocketsServer` on port 81)**, matching the dark slate design system rules.
+
+> [!NOTE]
+> All current progress, aesthetic redesigns, pin markers, profile drawers, receiver captive portal updates, and zero-emoji design rules have been saved and verified (0 build errors). This plan is prepared for execution when ready.
+
+---
+
+## Technical Overview & Objectives
+
+1. **WebSocket Protocol Migration**:
+   - Replace HTTP POST registration endpoints on the wearable with real-time bidirectional WebSocket message frames.
+   - Client sends JSON frame: `{"type": "register", "name": "...", "driveLink": "..."}`.
+   - Wearable responds via WS broadcast/unicast frame: `{"type": "register_result", "success": true, "token": "RAMS-9921"}`.
+
+2. **Unified Dark Slate Aesthetic & Zero-Emoji Rule**:
+   - Maintain the dark slate monochromatic design (`#060913` base, `#0e1230` card surface, `#27272a` borders).
+   - Use high-contrast monospaced uppercase controls and inline SVG vector icons instead of emojis.
+   - Include the official system logo in top-left header.
+
+---
+
+## Proposed Changes
+
+### Wearable Firmware Component
+
+#### [MODIFY] [local_ap.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.h)
+#### [MODIFY] [local_ap.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.cpp)
+
+- Update `WebSocketsServer _wsServer(81)` initialization and event handlers.
+- Refactor WS message dispatcher to parse `type: "register"` and invoke `registrationProcess(name, driveLink)`.
+- Stream live IMU & GPS telemetry frames over WS during setup/diagnostic mode.
+
+#### [MODIFY] [registration.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.h)
+#### [MODIFY] [registration.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.cpp)
+
+- Expose clean token generation and NVS persistence API for WebSocket payload consumption.
+
+#### [NEW] [preview_registration.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/preview_registration.html)
+
+- Local browser test preview for WebSocket client interface testing.
+
+---
+
+## Verification & Deployment Plan
+
+### Manual Verification
+- Open `wearable/preview_registration.html` in browser to verify WebSocket registration flow and visual aesthetics.
+- Verify `npx tsc --noEmit` and `npm run build` in `backend/` to confirm 0 compilation errors.

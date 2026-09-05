@@ -1,0 +1,185 @@
+import { getStore } from "@netlify/blobs";
+
+// In-memory fallback stores for offline local development
+const memoryEvents = new Map<string, any>();
+const memoryAudio = new Map<string, Uint8Array>();
+let memoryIndex: string[] = [];
+
+export async function saveEvent(eventId: string, eventData: any) {
+  memoryEvents.set(eventId, eventData);
+  try {
+    const store = getStore("events");
+    await store.setJSON(eventId, eventData);
+  } catch (err) {
+    console.warn(`[STORE] Netlify Blobs unavailable locally for event ${eventId}`);
+  }
+}
+
+export async function getEvent(eventId: string): Promise<any> {
+  try {
+    const store = getStore("events");
+    const data = await store.get(eventId, { type: "json" });
+    if (data) return data;
+  } catch {}
+
+  return memoryEvents.get(eventId) || null;
+}
+
+export async function saveAudio(audioKey: string, audioData: Uint8Array, metadata: any) {
+  memoryAudio.set(audioKey, audioData);
+  try {
+    const store = getStore("audio-clips");
+    await store.set(audioKey, audioData, { metadata });
+  } catch (err) {
+    console.warn(`[STORE] Netlify Blobs unavailable locally for audio ${audioKey}`);
+  }
+}
+
+export async function getAudio(audioKey: string): Promise<Uint8Array | null> {
+  const keysToTry = [audioKey];
+  if (!audioKey.endsWith(".wav")) keysToTry.push(`${audioKey}.wav`);
+  if (audioKey.endsWith(".wav")) keysToTry.push(audioKey.replace(/\.wav$/, ""));
+
+  try {
+    const store = getStore("audio-clips");
+    for (const key of keysToTry) {
+      const data = await store.get(key, { type: "arrayBuffer" });
+      if (data) return new Uint8Array(data);
+    }
+  } catch {}
+
+  for (const key of keysToTry) {
+    const memData = memoryAudio.get(key);
+    if (memData) return memData;
+  }
+
+  return null;
+}
+
+export async function getEventIndex(): Promise<string[]> {
+  let blobsIndex: string[] = [];
+  try {
+    const store = getStore("events");
+    const existing = await store.get("_index", { type: "json" }) as string[] | null;
+    if (existing && Array.isArray(existing)) blobsIndex = existing;
+
+    // Auto-discover any unindexed event blobs directly from Netlify Blobs list
+    const { blobs } = await store.list();
+    if (blobs && Array.isArray(blobs)) {
+      const discoveredKeys = blobs
+        .map((b) => b.key)
+        .filter((k) => k !== "_index" && (k.startsWith("evt_") || k.startsWith("evt-")));
+      blobsIndex = Array.from(new Set([...blobsIndex, ...discoveredKeys]));
+    }
+  } catch {}
+
+  const merged = Array.from(new Set([...memoryIndex, ...blobsIndex, ...Array.from(memoryEvents.keys())]));
+  return merged.slice(0, 100);
+}
+
+export async function updateEventIndex(eventIds: string | string[]) {
+  const idsToAdd = Array.isArray(eventIds) ? eventIds : [eventIds];
+  let index = await getEventIndex();
+
+  for (const id of idsToAdd) {
+    index = [id, ...index.filter((existingId) => existingId !== id)];
+  }
+  index = index.slice(0, 100);
+  memoryIndex = index;
+
+  try {
+    const store = getStore("events");
+    await store.setJSON("_index", index);
+  } catch {}
+}
+
+export const DEFAULT_SEED_EVENTS = [
+  {
+    id: "evt_telemetry_latest",
+    lat: 0,
+    lon: 0,
+    type: "telemetry",
+    isTelemetry: true,
+    batt: 0,
+    signal: 0,
+    speed: 0.0,
+    accuracy: 0,
+    createdAt: new Date().toISOString(),
+    status: "normal",
+    title: "Awaiting Wearable GPS Fix"
+  }
+];
+
+export function generateSampleWavBuffer(durationSeconds = 4, freq = 440): Uint8Array {
+  const sampleRate = 8000;
+  const numChannels = 1;
+  const bitsPerSample = 16;
+  const numSamples = sampleRate * durationSeconds;
+  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
+  const dataSize = numSamples * blockAlign;
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+  const u8 = new Uint8Array(buffer);
+
+  const writeString = (offset: number, str: string) => {
+    for (let i = 0; i < str.length; i++) {
+      u8[offset + i] = str.charCodeAt(i);
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(8, "WAVE");
+
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+
+  writeString(36, "data");
+  view.setUint32(40, dataSize, true);
+
+  let offset = 44;
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / sampleRate;
+    const envelope = Math.sin((Math.PI * i) / numSamples);
+    const sample = Math.sin(2 * Math.PI * freq * t) * 0.4;
+    const intSample = Math.floor(sample * envelope * 32767);
+    view.setInt16(offset, intSample, true);
+    offset += 2;
+  }
+
+  return u8;
+}
+
+export async function seedEvents() {
+  for (const evt of DEFAULT_SEED_EVENTS) {
+    await saveEvent(evt.id, evt);
+    await updateEventIndex(evt.id);
+  }
+}
+
+export async function clearAllStores() {
+  memoryEvents.clear();
+  memoryAudio.clear();
+  memoryIndex = [];
+
+  try {
+    const eventStore = getStore("events");
+    // Read current index to delete all individual event entries
+    const existingIndex = await eventStore.get("_index", { type: "json" }) as string[] | null;
+    if (existingIndex && Array.isArray(existingIndex)) {
+      for (const id of existingIndex) {
+        try { await eventStore.delete(id); } catch {}
+      }
+    }
+    // Also delete known legacy seed IDs that may be orphaned
+    try { await eventStore.delete("evt-live-101"); } catch {}
+    await eventStore.setJSON("_index", []);
+  } catch {}
+}

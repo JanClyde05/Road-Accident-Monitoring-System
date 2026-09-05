@@ -1,0 +1,20 @@
+[build]
+  base = "GPS-Audio/backend"
+  command = "npm run build"
+  publish = "GPS-Audio/backend/dist"
+
+[functions]
+  directory = "GPS-Audio/backend/netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
