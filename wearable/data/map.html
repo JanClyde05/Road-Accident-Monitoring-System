@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RAMS Wearable — Offline Radar Map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="brand-header">
+        <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.png'">
+        <h1>Offline Radar Map</h1>
+      </div>
+      <p class="subtitle">Autonomous GPS Locator &bull; WebSocket Port 81</p>
+    </div>
+
+    <div class="ws-pill disconnected" id="wsPill">
+      <span><span class="dot"></span><span id="wsStatusText">CONNECTING TO WEBSOCKET...</span></span>
+      <span>PORT 81</span>
+    </div>
+
+    <!-- Navigation Tabs (Top Position) -->
+    <div class="nav-tabs">
+      <a href="/" class="tab-btn" style="text-decoration:none;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Setup</span>
+      </a>
+      <a href="/telemetry" class="tab-btn" style="text-decoration:none;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Telemetry</span>
+      </a>
+      <a href="/map" class="tab-btn active" style="text-decoration:none;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        <span>Radar</span>
+      </a>
+    </div>
+
+    <div class="radar-stage">
+      <div class="radar-ring" style="width:160px;height:160px;"></div>
+      <div class="radar-ring" style="width:110px;height:110px;"></div>
+      <div class="radar-ring" style="width:60px;height:60px;"></div>
+      <div style="position:absolute;width:100%;height:1px;background:#27272a;"></div>
+      <div style="position:absolute;height:100%;width:1px;background:#27272a;"></div>
+      
+      <div class="radar-pin">
+        <div class="pin-dot"></div>
+        <span class="pin-label">Road User</span>
+      </div>
+
+      <div style="position:absolute;top:8px;left:8px;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;background:#09090b;padding:2px 6px;border-radius:4px;border:1px solid #27272a;">
+        Tuguegarao Sector 17&deg;N
+      </div>
+    </div>
+
+    <div id="radarCoords" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
+      LAT: 17.613240  LON: 121.726910 (9 SATELLITES LOCKED)
+    </div>
+
+    <div class="grid-3" style="margin-top:12px;">
+      <div class="metric-card">
+        <div class="metric-label">Latitude</div>
+        <div class="metric-val" id="vlat" style="font-size:10px;">17.6132&deg; N</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Longitude</div>
+        <div class="metric-val" id="vlon" style="font-size:10px;">121.7269&deg; E</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Satellites</div>
+        <div class="metric-val" id="vsats" style="font-size:10px;color:#34d399;">9 Sats</div>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      Autonomous ESP32-S3 SoftAP &bull; Dedicated WebSocket Server (Port 81)
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

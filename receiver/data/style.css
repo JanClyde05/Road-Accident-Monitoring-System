@@ -8,7 +8,7 @@
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #060913;
+  background-color: #09090b;
   color: #f4f4f5;
   min-height: 100vh;
   display: flex;
@@ -27,11 +27,11 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
 .card {
   width: 100%;
   max-width: 440px;
-  background: #0e1230;
+  background: #121214;
   border: 1px solid #27272a;
   border-radius: 16px;
   padding: 28px 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* ── Header ───────────────────────────────────────────────────── */

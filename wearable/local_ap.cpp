@@ -23,15 +23,20 @@
 #include "config.h"
 #include "registration.h"
 #include "offline_map.h"
+#include "lora_tx.h"
 #include "../shared/logo_data.h"
 #include <WiFi.h>
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 #include <ArduinoJson.h>
+#include <LittleFS.h>
+#include <DNSServer.h>
 
 static WebServer _httpServer(80);
 static WebSocketsServer _wsServer(SETUP_WS_PORT);
+static DNSServer _dnsServer;
 static bool _active = false;
+static bool _fsMounted = false;
 
 // ── Registration Page HTML ──────────────────────────────────────────────────
 // Inline HTML served from flash — no filesystem dependency for setup mode.
@@ -47,18 +52,18 @@ static const char REGISTRATION_HTML[] PROGMEM = R"rawliteral(
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #060913;
+      background: #09090b;
       color: #f4f4f5; min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
       letter-spacing: -0.01em;
     }
     .card {
-      background: #0e1230;
+      background: #121214;
       border: 1px solid #27272a;
       border-radius: 16px; padding: 28px;
       max-width: 440px; width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .brand-header {
       display: flex; align-items: center; justify-content: center;
@@ -224,19 +229,19 @@ static const char TELEMETRY_HTML[] PROGMEM = R"rawliteral(
   <title>RAMS — Live Telemetry</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:#060913;color:#e0e4f0;
+    body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:#09090b;color:#f4f4f5;
       padding:16px;min-height:100vh}
     .header-bar{display:flex;align-items:center;gap:12px;margin-bottom:4px}
-    .brand-logo{width:36px;height:36px;border-radius:6px;border:1px solid rgba(123,140,255,0.4);object-fit:cover}
+    .brand-logo{width:36px;height:36px;border-radius:6px;border:1px solid #3f3f46;object-fit:cover}
     h1{font-size:16px;font-weight:900;letter-spacing:-.025em;text-transform:uppercase;color:#fff}
-    .sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#5c6480;margin-bottom:12px}
+    .sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a1a1aa;margin-bottom:12px}
     .conn{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;
       font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:12px}
     .conn.on{background:rgba(52,217,127,0.15);color:#34d97f;border:1px solid rgba(52,217,127,0.3)}
     .conn.off{background:rgba(255,64,87,0.15);color:#ff4057;border:1px solid rgba(255,64,87,0.3)}
     .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
     @media(max-width:500px){.grid{grid-template-columns:1fr 1fr}}
-    .card{background:rgba(14,18,48,0.85);border:1px solid rgba(80,100,220,0.18);
+    .card{background:#18181b;border:1px solid #27272a;
       border-radius:10px;padding:10px 12px}
     .card-label{font-size:9px;color:#5c6480;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
     .card-value{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;margin-top:2px}
@@ -309,8 +314,8 @@ static const char TELEMETRY_HTML[] PROGMEM = R"rawliteral(
 
   <!-- Nav -->
   <div class="nav-row">
-    <a class="nav-link" href="/">📋 Registration</a>
-    <a class="nav-link" href="/map">📍 Offline Map</a>
+    <a class="nav-link" href="/">Registration</a>
+    <a class="nav-link" href="/map">Offline Map</a>
   </div>
 
   <script>
@@ -468,6 +473,9 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
           response = "{\"type\":\"register_result\",\"success\":false,\"error\":\"Invalid Drive link or registration failed\"}";
         }
         _wsServer.sendTXT(clientNum, response);
+      } else if (msg.indexOf("\"type\":\"ping\"") >= 0) {
+        // WebSocket latency probe
+        _wsServer.sendTXT(clientNum, "{\"type\":\"pong\"}");
       }
       break;
     }
@@ -482,6 +490,14 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
 void localApStart() {
   if (_active) return;
 
+  // Initialize LittleFS for web portal assets (data/ folder)
+  _fsMounted = LittleFS.begin(true);
+  if (!_fsMounted) {
+    Serial.println(F("[AP] LittleFS mount failed, using flash PROGMEM fallbacks"));
+  } else {
+    Serial.println(F("[AP] LittleFS mounted successfully"));
+  }
+
   // Start SoftAP
   WiFi.mode(WIFI_AP);
   WiFi.softAP(SETUP_AP_SSID, nullptr, SETUP_AP_CHANNEL);
@@ -493,27 +509,93 @@ void localApStart() {
   Serial.print(F(" IP: "));
   Serial.println(apIP);
 
+  // Start captive portal DNS redirect
+  _dnsServer.start(53, "*", apIP);
+
   // Setup HTTP routes
   _httpServer.on("/", HTTP_GET, []() {
-    _httpServer.send_P(200, "text/html", REGISTRATION_HTML);
+    if (_fsMounted && LittleFS.exists("/index.html")) {
+      File f = LittleFS.open("/index.html", "r");
+      _httpServer.streamFile(f, "text/html");
+      f.close();
+    } else {
+      _httpServer.send_P(200, "text/html", REGISTRATION_HTML);
+    }
   });
 
   _httpServer.on("/map", HTTP_GET, []() {
-    String html = offlineMapGetHTML();
-    _httpServer.send(200, "text/html", html);
+    if (_fsMounted && LittleFS.exists("/map.html")) {
+      File f = LittleFS.open("/map.html", "r");
+      _httpServer.streamFile(f, "text/html");
+      f.close();
+    } else {
+      String html = offlineMapGetHTML();
+      _httpServer.send(200, "text/html", html);
+    }
   });
 
   _httpServer.on("/telemetry", HTTP_GET, []() {
-    _httpServer.send_P(200, "text/html", TELEMETRY_HTML);
+    if (_fsMounted && LittleFS.exists("/telemetry.html")) {
+      File f = LittleFS.open("/telemetry.html", "r");
+      _httpServer.streamFile(f, "text/html");
+      f.close();
+    } else {
+      _httpServer.send_P(200, "text/html", TELEMETRY_HTML);
+    }
   });
 
   _httpServer.on("/logo.jpg", HTTP_GET, []() {
-    _httpServer.sendHeader("Location", LOGO_BASE64);
+    if (_fsMounted && LittleFS.exists("/logo.jpg")) {
+      File f = LittleFS.open("/logo.jpg", "r");
+      _httpServer.streamFile(f, "image/jpeg");
+      f.close();
+    } else {
+      _httpServer.sendHeader("Location", LOGO_BASE64);
+      _httpServer.send(302, "text/plain", "");
+    }
+  });
+
+  // Captive portal detection endpoints (Android, Apple, Windows)
+  _httpServer.on("/generate_204", HTTP_GET, []() {
+    _httpServer.sendHeader("Location", "http://192.168.4.1/");
+    _httpServer.send(302, "text/plain", "");
+  });
+  _httpServer.on("/hotspot-detect.html", HTTP_GET, []() {
+    _httpServer.sendHeader("Location", "http://192.168.4.1/");
+    _httpServer.send(302, "text/plain", "");
+  });
+  _httpServer.on("/canonical.html", HTTP_GET, []() {
+    _httpServer.sendHeader("Location", "http://192.168.4.1/");
+    _httpServer.send(302, "text/plain", "");
+  });
+  _httpServer.on("/connecttest.txt", HTTP_GET, []() {
+    _httpServer.sendHeader("Location", "http://192.168.4.1/");
     _httpServer.send(302, "text/plain", "");
   });
 
+  // Serve static files from LittleFS (e.g. /style.css, /app.js)
+  if (_fsMounted) {
+    _httpServer.serveStatic("/", LittleFS, "/");
+  }
+
+  // Captive portal catch-all
   _httpServer.onNotFound([]() {
-    _httpServer.sendHeader("Location", "/");
+    String uri = _httpServer.uri();
+    if (_fsMounted && LittleFS.exists(uri)) {
+      String contentType = "text/plain";
+      if (uri.endsWith(".html")) contentType = "text/html";
+      else if (uri.endsWith(".css")) contentType = "text/css";
+      else if (uri.endsWith(".js")) contentType = "application/javascript";
+      else if (uri.endsWith(".png")) contentType = "image/png";
+      else if (uri.endsWith(".jpg") || uri.endsWith(".jpeg")) contentType = "image/jpeg";
+      else if (uri.endsWith(".ico")) contentType = "image/x-icon";
+      else if (uri.endsWith(".svg")) contentType = "image/svg+xml";
+      File f = LittleFS.open(uri, "r");
+      _httpServer.streamFile(f, contentType);
+      f.close();
+      return;
+    }
+    _httpServer.sendHeader("Location", "http://192.168.4.1/");
     _httpServer.send(302, "text/plain", "");
   });
 
@@ -524,12 +606,13 @@ void localApStart() {
   _wsServer.onEvent(_onWebSocketEvent);
 
   _active = true;
-  Serial.println(F("[AP] HTTP + WebSocket server started"));
+  Serial.println(F("[AP] HTTP + WebSocket server started (Port 80/81)"));
 }
 
 void localApStop() {
   if (!_active) return;
 
+  _dnsServer.stop();
   _wsServer.disconnect();
   _httpServer.close();
 
@@ -544,6 +627,7 @@ void localApStop() {
 
 void localApUpdate() {
   if (!_active) return;
+  _dnsServer.processNextRequest();
   _httpServer.handleClient();
   _wsServer.loop();
 }

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RAMS Wearable — WebSocket Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    
+    <!-- Header Branding -->
+    <div class="header">
+      <div class="brand-header">
+        <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.png'">
+        <h1>Road Accident Monitoring</h1>
+      </div>
+      <p class="subtitle">Wearable ESP32-S3 &bull; WebSocket Interface (Port 81)</p>
+    </div>
+
+    <!-- WebSocket Status Pill -->
+    <div class="ws-pill disconnected" id="wsPill">
+      <span><span class="dot"></span><span id="wsStatusText">CONNECTING TO WEBSOCKET...</span></span>
+      <span>PORT 81</span>
+    </div>
+
+    <!-- Crash Alert Banner (FSM State 4) -->
+    <div class="alert-banner" id="alertBanner" style="display:none;">
+      <div>
+        <div class="alert-title">CRASH DETECTED &bull; ALARM ACTIVE</div>
+        <div class="alert-sub">Broadcasting emergency alert packet over LoRa</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs Capsule Bar (Top Position for Optimal Ergonomics) -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="btn-setup" onclick="switchTab('setup')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Setup</span>
+      </button>
+      <button class="tab-btn" id="btn-telemetry" onclick="switchTab('telemetry')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Telemetry</span>
+      </button>
+      <button class="tab-btn" id="btn-map" onclick="switchTab('map')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        <span>Radar</span>
+      </button>
+      <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+        <span>WS Logs</span>
+      </button>
+    </div>
+
+    <!-- ── View 1: Profile Setup ── -->
+    <div id="view-setup">
+      <div class="form-group">
+        <label for="name">Road User Full Name (Pedestrian, Cyclist, Rider)</label>
+        <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" value="Juan Dela Cruz" required>
+      </div>
+
+      <div class="form-group">
+        <label for="driveLink">Photo (Google Drive Share Link)</label>
+        <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+        
+        <div class="photo-card">
+          <img id="photoPreview" class="photo-thumb" alt="Profile preview">
+          <div id="photoPlaceholder" class="photo-placeholder">PHOTO</div>
+          <div style="font-size:10px;color:#a1a1aa;line-height:1.3;">
+            <span id="namePreview" style="color:#ffffff;font-weight:700;display:block;">Juan Dela Cruz</span>
+            <span>Token: <strong id="tokenDisplay" style="color:#34d399;font-family:monospace;">RAMS-9921</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="registerBtn" onclick="doRegister()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        SAVE &amp; REGISTER (WEBSOCKET)
+      </button>
+
+      <div id="statusMsg" class="msg-banner"></div>
+    </div>
+
+    <!-- ── View 2: Live Telemetry ── -->
+    <div id="view-telemetry" style="display:none;">
+      <div class="grid-2">
+        <div class="metric-card">
+          <div class="metric-label">FSM State</div>
+          <div class="metric-val" id="vfsm" style="font-size:11px;">0: IDLE</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Vector Accel |A|</div>
+          <div class="metric-val" id="vam">1.000 g</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="metric-card">
+          <div class="metric-label" style="color:#f87171;">Ax (X)</div>
+          <div class="metric-val" id="vax">0.00 g</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" style="color:#34d399;">Ay (Y)</div>
+          <div class="metric-val" id="vay">0.00 g</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" style="color:#60a5fa;">Az (Z)</div>
+          <div class="metric-val" id="vaz">1.00 g</div>
+        </div>
+      </div>
+
+      <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between;">
+        <span>Accel Waveform (100Hz Stream)</span>
+        <span style="color:#34d399;font-weight:700;">WebSocket Port 81</span>
+      </div>
+      <canvas id="waveformCanvas"></canvas>
+
+      <div class="grid-3">
+        <div class="metric-card">
+          <div class="metric-label">Gyro X</div>
+          <div class="metric-val" id="vgx" style="font-size:11px;">0.0 &deg;/s</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Gyro Y</div>
+          <div class="metric-val" id="vgy" style="font-size:11px;">0.0 &deg;/s</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Gyro Z</div>
+          <div class="metric-val" id="vgz" style="font-size:11px;">0.0 &deg;/s</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="metric-card">
+          <div class="metric-label">Latitude</div>
+          <div class="metric-val" id="vlat" style="font-size:10px;">17.6132&deg; N</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Longitude</div>
+          <div class="metric-val" id="vlon" style="font-size:10px;">121.7269&deg; E</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Satellites</div>
+          <div class="metric-val" id="vsats" style="font-size:10px;color:#34d399;">9 Sats</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── View 3: Offline Radar Map ── -->
+    <div id="view-map" style="display:none;">
+      <div class="radar-stage">
+        <div class="radar-ring" style="width:160px;height:160px;"></div>
+        <div class="radar-ring" style="width:110px;height:110px;"></div>
+        <div class="radar-ring" style="width:60px;height:60px;"></div>
+        <div style="position:absolute;width:100%;height:1px;background:#27272a;"></div>
+        <div style="position:absolute;height:100%;width:1px;background:#27272a;"></div>
+        
+        <div class="radar-pin">
+          <div class="pin-dot"></div>
+          <span class="pin-label">Road User</span>
+        </div>
+
+        <div style="position:absolute;top:8px;left:8px;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;background:#09090b;padding:2px 6px;border-radius:4px;border:1px solid #27272a;">
+          Tuguegarao Sector 17&deg;N
+        </div>
+      </div>
+
+      <div id="radarCoords" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
+        LAT: 17.613240  LON: 121.726910 (9 SATELLITES LOCKED)
+      </div>
+    </div>
+
+    <!-- ── View 4: WebSocket Logs ── -->
+    <div id="view-logs" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">
+        <span>WebSocket Frame Log (Port 81)</span>
+        <div style="display:flex;gap:8px;">
+          <a href="#" onclick="sendPing();return false;" style="color:#ffffff;text-decoration:underline;">Ping Frame</a>
+          <a href="#" onclick="clearLogs();return false;" style="color:#a1a1aa;text-decoration:none;">Clear</a>
+        </div>
+      </div>
+
+      <div class="terminal-box" id="terminalLogs">
+        <div style="color:#52525b;text-align:center;padding:12px;">Waiting for WebSocket frames...</div>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      Autonomous ESP32-S3 SoftAP &bull; Dedicated WebSocket Server (Port 81)
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

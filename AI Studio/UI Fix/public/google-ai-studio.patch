@@ -1,0 +1,2245 @@
+diff --git a/backend/netlify/functions/upload.mts b/backend/netlify/functions/upload.mts
+index 4c22e31..4c037e7 100644
+--- a/backend/netlify/functions/upload.mts
++++ b/backend/netlify/functions/upload.mts
+@@ -22,6 +22,16 @@ import {
+ } from "./store.js";
+ 
+ // Event type display names for the frontend
++// Helper to ensure valid Unix epoch timestamps (guards against ESP32 millis() boot uptime)
++function parseSafeTimestamp(raw: any): number {
++  const parsed = typeof raw === 'number' ? raw : parseInt(raw);
++  // Must be a valid millisecond epoch timestamp after Jan 1, 2024 (1,704,067,200,000)
++  if (parsed && parsed > 1704067200000) {
++    return parsed;
++  }
++  return Date.now();
++}
++
+ const EVENT_TYPE_NAMES: Record<number, string> = {
+   0: "Fall",
+   1: "Skid",
+@@ -94,7 +104,7 @@ export default async (request: Request, context: Context) => {
+         lat: parseFloat(lat),
+         lon: parseFloat(lon),
+         battPct: parseInt(battPct) || 0,
+-        timestamp: parseInt(timestamp) || Date.now(),
++        timestamp: parseSafeTimestamp(timestamp),
+         createdAt: new Date().toISOString(),
+         status: "normal",
+         title: "Live GPS Telemetry",
+@@ -147,7 +157,7 @@ export default async (request: Request, context: Context) => {
+       eventType: parseInt(eventType) || 0,
+       eventTypeName: EVENT_TYPE_NAMES[eventType] || "Unknown",
+       aMag: parseFloat(aMag) || 0,
+-      timestamp: parseInt(timestamp) || Date.now(),
++      timestamp: parseSafeTimestamp(timestamp),
+       createdAt: new Date().toISOString(),
+       status,
+       title,
+diff --git a/backend/package-lock.json b/backend/package-lock.json
+index 9b3656b..87a094f 100644
+--- a/backend/package-lock.json
++++ b/backend/package-lock.json
+@@ -798,9 +798,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1136,9 +1133,6 @@
+       "cpu": [
+         "arm"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1152,9 +1146,6 @@
+       "cpu": [
+         "arm"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1168,9 +1159,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1184,9 +1172,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1200,9 +1185,6 @@
+       "cpu": [
+         "loong64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1216,9 +1198,6 @@
+       "cpu": [
+         "loong64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1232,9 +1211,6 @@
+       "cpu": [
+         "ppc64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1248,9 +1224,6 @@
+       "cpu": [
+         "ppc64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1264,9 +1237,6 @@
+       "cpu": [
+         "riscv64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1280,9 +1250,6 @@
+       "cpu": [
+         "riscv64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1296,9 +1263,6 @@
+       "cpu": [
+         "s390x"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1312,9 +1276,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1328,9 +1289,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1548,9 +1506,6 @@
+         "arm64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1568,9 +1523,6 @@
+         "arm64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1588,9 +1540,6 @@
+         "x64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1608,9 +1557,6 @@
+         "x64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2322,6 +2268,7 @@
+       "cpu": [
+         "arm64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2342,6 +2289,7 @@
+       "cpu": [
+         "arm64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2362,6 +2310,7 @@
+       "cpu": [
+         "x64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2382,6 +2331,7 @@
+       "cpu": [
+         "x64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2402,6 +2352,7 @@
+       "cpu": [
+         "arm"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2422,9 +2373,7 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2445,9 +2394,7 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2468,9 +2415,7 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2491,9 +2436,7 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2514,6 +2457,7 @@
+       "cpu": [
+         "arm64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+@@ -2534,6 +2478,7 @@
+       "cpu": [
+         "x64"
+       ],
++      "dev": true,
+       "license": "MPL-2.0",
+       "optional": true,
+       "os": [
+diff --git a/receiver/local_queue.cpp b/receiver/local_queue.cpp
+index 6e355a6..b9648c4 100644
+--- a/receiver/local_queue.cpp
++++ b/receiver/local_queue.cpp
+@@ -62,16 +62,11 @@ bool localQueueAdd(const char* deviceToken, const char* packetType,
+   }
+ 
+   if (slot < 0) {
+-    // Queue full — drop oldest (slot 0) and shift
+-    Serial.println(F("[QUEUE] Queue full! Dropping oldest..."));
++    // Queue full — drop oldest (slot 0) directly without cascading file renames
++    // to preserve SPI flash endurance and eliminate write amplification.
++    Serial.println(F("[QUEUE] Queue full! Dropping oldest item (slot 0)"));
+     LittleFS.remove(_filePath(0));
+-    for (uint8_t i = 1; i < MAX_QUEUED; i++) {
+-      if (LittleFS.exists(_filePath(i))) {
+-        LittleFS.rename(_filePath(i), _filePath(i - 1));
+-      }
+-    }
+-    slot = _queueCount - 1;
+-    if (slot < 0) slot = 0;
++    slot = 0;
+   }
+ 
+   // Build JSON payload
+diff --git a/wearable/data/app.js b/wearable/data/app.js
+new file mode 100644
+index 0000000..148a300
+--- /dev/null
++++ b/wearable/data/app.js
+@@ -0,0 +1,89 @@
++/* RAMS Wearable Client Helper - WebSockets */
++var ws = null;
++var wsReady = false;
++var reconnectTimer = null;
++
++function getWsUrl() {
++  var host = window.location.hostname || '192.168.4.1';
++  return 'ws://' + host + ':81/';
++}
++
++function initWebSocket(onMessageCallback) {
++  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
++    return;
++  }
++
++  updateConnectionStatus('connecting');
++
++  try {
++    ws = new WebSocket(getWsUrl());
++
++    ws.onopen = function() {
++      wsReady = true;
++      updateConnectionStatus('connected');
++      console.log('[WS] Connected to wearable port 81');
++      if (reconnectTimer) {
++        clearTimeout(reconnectTimer);
++        reconnectTimer = null;
++      }
++    };
++
++    ws.onclose = function() {
++      wsReady = false;
++      updateConnectionStatus('disconnected');
++      console.log('[WS] Disconnected, scheduling reconnect...');
++      scheduleReconnect(onMessageCallback);
++    };
++
++    ws.onerror = function(err) {
++      console.warn('[WS] Error:', err);
++      wsReady = false;
++      updateConnectionStatus('disconnected');
++    };
++
++    ws.onmessage = function(evt) {
++      try {
++        var data = JSON.parse(evt.data);
++        if (typeof onMessageCallback === 'function') {
++          onMessageCallback(data);
++        }
++      } catch (ex) {
++        console.error('[WS] Parse error:', ex);
++      }
++    };
++  } catch (e) {
++    console.error('[WS] Init exception:', e);
++    scheduleReconnect(onMessageCallback);
++  }
++}
++
++function scheduleReconnect(cb) {
++  if (reconnectTimer) return;
++  reconnectTimer = setTimeout(function() {
++    reconnectTimer = null;
++    initWebSocket(cb);
++  }, 2000);
++}
++
++function updateConnectionStatus(state) {
++  var dot = document.getElementById('wsDot');
++  var txt = document.getElementById('wsText');
++  if (!dot || !txt) return;
++
++  dot.className = 'badge-dot ' + state;
++  if (state === 'connected') {
++    txt.textContent = 'WEBSOCKET ACTIVE';
++  } else if (state === 'connecting') {
++    txt.textContent = 'CONNECTING...';
++  } else {
++    txt.textContent = 'DISCONNECTED';
++  }
++}
++
++function sendWsMessage(obj) {
++  if (!ws || ws.readyState !== WebSocket.OPEN) {
++    return false;
++  }
++  ws.send(JSON.stringify(obj));
++  return true;
++}
+diff --git a/wearable/data/index.html b/wearable/data/index.html
+new file mode 100644
+index 0000000..f5f53f5
+--- /dev/null
++++ b/wearable/data/index.html
+@@ -0,0 +1,145 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>RAMS — Device Registration</title>
++  <link rel="stylesheet" href="/style.css">
++</head>
++<body>
++  <div class="card">
++    <div class="brand-header">
++      <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.jpg'">
++      <h1>Road Accident Monitoring</h1>
++    </div>
++    <p class="subtitle">Wearable Device Registration — Setup Mode</p>
++
++    <div style="text-align: center; margin-bottom: 14px;">
++      <div class="connection-badge">
++        <span class="badge-dot connecting" id="wsDot"></span>
++        <span id="wsText">CONNECTING...</span>
++      </div>
++    </div>
++
++    <form id="regForm" onsubmit="handleRegister(event)">
++      <label for="name">Rider Full Name</label>
++      <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" required autocomplete="name">
++
++      <label for="driveLink">Photo (Google Drive Share Link)</label>
++      <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing" required autocomplete="off">
++
++      <div class="photo-preview">
++        <img id="photoPreview" alt="Photo preview">
++      </div>
++
++      <button type="submit" class="btn" id="registerBtn">REGISTER DEVICE</button>
++    </form>
++
++    <div id="status"></div>
++
++    <div class="nav">
++      <a href="/" class="active">SETUP</a>
++      <a href="/telemetry">LIVE TELEMETRY</a>
++      <a href="/map">OFFLINE MAP</a>
++    </div>
++  </div>
++
++  <script src="/app.js"></script>
++  <script>
++    function parseDriveFileId(link) {
++      if (!link) return '';
++      var fid = '';
++      var dIdx = link.indexOf('/d/');
++      if (dIdx > -1) {
++        var s = dIdx + 3;
++        var e = link.indexOf('/', s);
++        if (e < 0) e = link.indexOf('?', s);
++        if (e < 0) e = link.length;
++        fid = link.substring(s, e);
++      } else {
++        var idIdx = link.indexOf('id=');
++        if (idIdx > -1) {
++          var s2 = idIdx + 3;
++          var e2 = link.indexOf('&', s2);
++          if (e2 < 0) e2 = link.length;
++          fid = link.substring(s2, e2);
++        }
++      }
++      return fid;
++    }
++
++    document.getElementById('driveLink').addEventListener('input', function() {
++      var link = this.value.trim();
++      var img = document.getElementById('photoPreview');
++      var fid = parseDriveFileId(link);
++
++      if (fid) {
++        var directUrl = 'https://lh3.googleusercontent.com/d/' + fid;
++        img.src = directUrl;
++        img.style.display = 'block';
++        img.onerror = function() {
++          img.style.display = 'none';
++        };
++      } else {
++        img.style.display = 'none';
++      }
++    });
++
++    function handleWsMessage(msg) {
++      if (msg.type === 'register_result') {
++        var st = document.getElementById('status');
++        var btn = document.getElementById('registerBtn');
++        if (msg.success) {
++          st.className = 'status-ok';
++          st.textContent = 'REGISTERED! TOKEN: ' + (msg.token || 'ASSIGNED');
++          btn.disabled = true;
++          btn.textContent = 'REGISTERED';
++        } else {
++          st.className = 'status-err';
++          st.textContent = 'ERROR: ' + (msg.error || 'Registration failed');
++          btn.disabled = false;
++          btn.textContent = 'REGISTER DEVICE';
++        }
++      }
++    }
++
++    function handleRegister(e) {
++      e.preventDefault();
++      var name = document.getElementById('name').value.trim();
++      var link = document.getElementById('driveLink').value.trim();
++      var st = document.getElementById('status');
++      var btn = document.getElementById('registerBtn');
++
++      if (!name) {
++        st.className = 'status-err';
++        st.textContent = 'NAME IS REQUIRED';
++        return;
++      }
++      if (!link) {
++        st.className = 'status-err';
++        st.textContent = 'GOOGLE DRIVE LINK IS REQUIRED';
++        return;
++      }
++
++      st.className = 'status-loading';
++      st.textContent = 'REGISTERING VIA WEBSOCKET...';
++      btn.disabled = true;
++
++      var sent = sendWsMessage({
++        type: 'register',
++        name: name,
++        driveLink: link
++      });
++
++      if (!sent) {
++        st.className = 'status-err';
++        st.textContent = 'WEBSOCKET NOT READY. PLEASE WAIT A MOMENT...';
++        btn.disabled = false;
++      }
++    }
++
++    // Initialize WebSocket on page load
++    initWebSocket(handleWsMessage);
++  </script>
++</body>
++</html>
+diff --git a/wearable/data/logo.jpg b/wearable/data/logo.jpg
+new file mode 100644
+index 0000000..6122ed4
+Binary files /dev/null and b/wearable/data/logo.jpg differ
+diff --git a/wearable/data/map.html b/wearable/data/map.html
+new file mode 100644
+index 0000000..a3c168c
+--- /dev/null
++++ b/wearable/data/map.html
+@@ -0,0 +1,159 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>RAMS — Offline Map</title>
++  <link rel="stylesheet" href="/style.css">
++  <style>
++    body {
++      justify-content: flex-start;
++      padding: 16px;
++    }
++    .card {
++      max-width: 600px;
++      padding: 20px;
++    }
++    .map-container {
++      position: relative;
++      width: 100%;
++      height: 320px;
++      background: #090d1a;
++      border: 1px solid #27272a;
++      border-radius: 12px;
++      overflow: hidden;
++      margin: 14px 0;
++      display: flex;
++      align-items: center;
++      justify-content: center;
++    }
++    .map-grid {
++      position: absolute;
++      inset: 0;
++      background-image: 
++        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
++        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
++      background-size: 32px 32px;
++    }
++    .gps-pin {
++      position: absolute;
++      width: 14px;
++      height: 14px;
++      border-radius: 50%;
++      background: #ef4444;
++      border: 2px solid #ffffff;
++      box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
++      transform: translate(-50%, -50%);
++      transition: left 0.3s ease, top 0.3s ease;
++      display: none;
++    }
++    .gps-pin::after {
++      content: '';
++      position: absolute;
++      inset: -6px;
++      border-radius: 50%;
++      border: 1.5px solid rgba(239, 68, 68, 0.5);
++      animation: pulse 1.8s infinite;
++    }
++    @keyframes pulse {
++      0% { transform: scale(0.8); opacity: 1; }
++      100% { transform: scale(2.2); opacity: 0; }
++    }
++    .map-meta {
++      display: flex;
++      justify-content: space-between;
++      font-family: 'JetBrains Mono', monospace;
++      font-size: 11px;
++      color: #a1a1aa;
++      margin-top: 6px;
++    }
++  </style>
++</head>
++<body>
++  <div class="card">
++    <div class="brand-header">
++      <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo">
++      <h1>Road Accident Monitoring</h1>
++    </div>
++    <p class="subtitle">Offline Map & Local Positioning</p>
++
++    <div style="text-align: center;">
++      <div class="connection-badge">
++        <span class="badge-dot connecting" id="wsDot"></span>
++        <span id="wsText">CONNECTING...</span>
++      </div>
++    </div>
++
++    <div class="map-container" id="mapContainer">
++      <div class="map-grid"></div>
++      <div id="gpsPin" class="gps-pin"></div>
++      <div id="noFixBanner" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a1a1aa; text-transform: uppercase;">
++        WAITING FOR GPS SATELLITE FIX...
++      </div>
++    </div>
++
++    <div class="map-meta">
++      <span id="coordDisplay">LAT: --.------  LON: --.------</span>
++      <span id="satDisplay">0 SATELLITES</span>
++    </div>
++
++    <div class="nav">
++      <a href="/">SETUP</a>
++      <a href="/telemetry">LIVE TELEMETRY</a>
++      <a href="/map" class="active">OFFLINE MAP</a>
++    </div>
++  </div>
++
++  <script src="/app.js"></script>
++  <script>
++    // Known map corner coordinates for Cagayan / Tuguegarao area (spec defaults)
++    var MAP_BOUNDS = {
++      topLat: 17.6500,
++      bottomLat: 17.5800,
++      leftLon: 121.6800,
++      rightLon: 121.7800
++    };
++
++    function updateMapPin(lat, lon, hasFix, sats) {
++      var pin = document.getElementById('gpsPin');
++      var banner = document.getElementById('noFixBanner');
++      var coords = document.getElementById('coordDisplay');
++      var satEl = document.getElementById('satDisplay');
++
++      satEl.textContent = (sats || 0) + ' SATELLITES' + (hasFix ? ' (FIX)' : ' (NO FIX)');
++
++      if (!hasFix) {
++        pin.style.display = 'none';
++        banner.style.display = 'block';
++        coords.textContent = 'LAT: --.------  LON: --.------';
++        return;
++      }
++
++      banner.style.display = 'none';
++      pin.style.display = 'block';
++      coords.textContent = 'LAT: ' + lat.toFixed(6) + '  LON: ' + lon.toFixed(6);
++
++      // Interpolate inside bounds (0 to 100%)
++      var xPct = (lon - MAP_BOUNDS.leftLon) / (MAP_BOUNDS.rightLon - MAP_BOUNDS.leftLon);
++      var yPct = (MAP_BOUNDS.topLat - lat) / (MAP_BOUNDS.topLat - MAP_BOUNDS.bottomLat);
++
++      // Clamp to visible viewport
++      if (xPct < 0.05) xPct = 0.05;
++      if (xPct > 0.95) xPct = 0.95;
++      if (yPct < 0.05) yPct = 0.05;
++      if (yPct > 0.95) yPct = 0.95;
++
++      pin.style.left = (xPct * 100) + '%';
++      pin.style.top = (yPct * 100) + '%';
++    }
++
++    function handleWsMap(data) {
++      if (data.type === 'gps') {
++        updateMapPin(data.lat, data.lon, data.fix, data.sats);
++      }
++    }
++
++    initWebSocket(handleWsMap);
++  </script>
++</body>
++</html>
+diff --git a/wearable/data/style.css b/wearable/data/style.css
+new file mode 100644
+index 0000000..2dd381b
+--- /dev/null
++++ b/wearable/data/style.css
+@@ -0,0 +1,311 @@
++@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap');
++
++*, *::before, *::after {
++  margin: 0;
++  padding: 0;
++  box-sizing: border-box;
++}
++
++body {
++  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
++  background-color: #09090b;
++  color: #f4f4f5;
++  min-height: 100vh;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  justify-content: center;
++  padding: 16px;
++  letter-spacing: -0.01em;
++}
++
++code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status, .metric-title, .nav a, .status-pill {
++  font-family: 'JetBrains Mono', monospace;
++}
++
++/* ── Card Container ───────────────────────────────────────────── */
++.card {
++  width: 100%;
++  max-width: 460px;
++  background: #18181b;
++  border: 1px solid #27272a;
++  border-radius: 14px;
++  padding: 24px 20px;
++  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
++}
++
++/* ── Header ───────────────────────────────────────────────────── */
++.header {
++  text-align: left;
++  margin-bottom: 16px;
++  padding-bottom: 14px;
++  border-bottom: 1px solid #27272a;
++}
++
++.brand-header {
++  display: flex;
++  align-items: center;
++  gap: 12px;
++  margin-bottom: 4px;
++}
++
++.brand-logo {
++  width: 38px;
++  height: 38px;
++  border-radius: 8px;
++  object-fit: contain;
++  border: 1px solid #3f3f46;
++  background: #000000;
++  padding: 2px;
++}
++
++h1 {
++  font-size: 14px;
++  font-weight: 900;
++  letter-spacing: -0.02em;
++  color: #ffffff;
++  text-transform: uppercase;
++}
++
++.subtitle {
++  font-size: 10px;
++  font-weight: 700;
++  color: #a1a1aa;
++  letter-spacing: 0.6px;
++  text-transform: uppercase;
++  margin-top: 2px;
++}
++
++/* ── Connection Status ────────────────────────────────────────── */
++.status-pill {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  gap: 8px;
++  padding: 8px 12px;
++  border-radius: 9999px;
++  font-size: 11px;
++  font-weight: 700;
++  letter-spacing: 0.5px;
++  margin-bottom: 16px;
++  border: 1px solid #27272a;
++  background: #09090b;
++  text-transform: uppercase;
++}
++
++.status-pill.connected {
++  background: rgba(16, 185, 129, 0.1);
++  color: #34d399;
++  border-color: rgba(16, 185, 129, 0.3);
++}
++
++.status-pill.connecting {
++  background: rgba(245, 158, 11, 0.1);
++  color: #fbbf24;
++  border-color: rgba(245, 158, 11, 0.3);
++}
++
++.status-pill.disconnected {
++  background: rgba(239, 68, 68, 0.1);
++  color: #f87171;
++  border-color: rgba(239, 68, 68, 0.3);
++}
++
++.dot {
++  width: 7px;
++  height: 7px;
++  border-radius: 50%;
++  background: currentColor;
++}
++
++/* ── Form Controls ────────────────────────────────────────────── */
++.form-group {
++  margin-bottom: 12px;
++}
++
++label {
++  display: block;
++  font-size: 10px;
++  font-weight: 700;
++  color: #a1a1aa;
++  margin-bottom: 6px;
++  letter-spacing: 0.5px;
++  text-transform: uppercase;
++}
++
++input[type="text"], input[type="url"], input[type="password"] {
++  width: 100%;
++  padding: 10px 12px;
++  background: #09090b;
++  border: 1px solid #27272a;
++  border-radius: 8px;
++  color: #ffffff;
++  font-size: 12px;
++  font-family: 'JetBrains Mono', monospace;
++  outline: none;
++  transition: border-color 0.15s ease;
++}
++
++input:focus {
++  border-color: #ffffff;
++}
++
++/* ── Buttons ─────────────────────────────────────────────────── */
++.btn {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  width: 100%;
++  padding: 10px 16px;
++  font-size: 11px;
++  font-weight: 800;
++  letter-spacing: 0.8px;
++  text-transform: uppercase;
++  border-radius: 8px;
++  cursor: pointer;
++  border: 1px solid transparent;
++  transition: all 0.15s ease;
++  text-decoration: none;
++  font-family: 'JetBrains Mono', monospace;
++}
++
++.btn-primary {
++  background: #ffffff;
++  color: #09090b;
++  border-color: #ffffff;
++}
++
++.btn-primary:hover:not(:disabled) {
++  background: #e4e4e7;
++  transform: translateY(-1px);
++}
++
++.btn-outline {
++  background: #09090b;
++  color: #f4f4f5;
++  border-color: #27272a;
++}
++
++.btn-outline:hover:not(:disabled) {
++  background: #27272a;
++  border-color: #ffffff;
++}
++
++.btn-danger {
++  background: rgba(239, 68, 68, 0.15);
++  color: #f87171;
++  border-color: rgba(239, 68, 68, 0.4);
++}
++
++.btn-danger:hover:not(:disabled) {
++  background: rgba(239, 68, 68, 0.25);
++  color: #ffffff;
++}
++
++.btn:disabled {
++  opacity: 0.4;
++  cursor: not-allowed;
++  transform: none;
++}
++
++/* ── Navigation Tabs ──────────────────────────────────────────── */
++.nav {
++  display: flex;
++  justify-content: center;
++  gap: 6px;
++  margin-top: 18px;
++  padding-top: 14px;
++  border-top: 1px solid #27272a;
++}
++
++.nav a {
++  flex: 1;
++  text-align: center;
++  color: #a1a1aa;
++  font-size: 10px;
++  font-weight: 700;
++  text-transform: uppercase;
++  text-decoration: none;
++  padding: 8px 4px;
++  border-radius: 8px;
++  border: 1px solid #27272a;
++  background: #09090b;
++  transition: all 0.15s;
++  white-space: nowrap;
++}
++
++.nav a:hover {
++  color: #ffffff;
++  border-color: #3f3f46;
++  background: #18181b;
++}
++
++.nav a.active {
++  color: #09090b;
++  border-color: #ffffff;
++  background: #ffffff;
++  font-weight: 800;
++}
++
++/* ── Metrics Grid ─────────────────────────────────────────────── */
++.grid-2 {
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: 8px;
++  margin: 10px 0;
++}
++
++.grid-3 {
++  display: grid;
++  grid-template-columns: 1fr 1fr 1fr;
++  gap: 8px;
++  margin: 8px 0;
++}
++
++.metric-card {
++  background: #09090b;
++  border: 1px solid #27272a;
++  border-radius: 8px;
++  padding: 9px 10px;
++  text-align: center;
++}
++
++.metric-title {
++  font-size: 9px;
++  font-weight: 700;
++  color: #a1a1aa;
++  text-transform: uppercase;
++  letter-spacing: 0.5px;
++}
++
++.metric-val {
++  font-family: 'JetBrains Mono', monospace;
++  font-size: 14px;
++  font-weight: 800;
++  color: #ffffff;
++  margin-top: 2px;
++}
++
++.fsm-badge {
++  display: inline-block;
++  padding: 3px 6px;
++  border-radius: 4px;
++  font-family: 'JetBrains Mono', monospace;
++  font-size: 9px;
++  font-weight: 800;
++  text-transform: uppercase;
++  margin-top: 3px;
++  background: #27272a;
++  color: #ffffff;
++  border: 1px solid #3f3f46;
++}
++
++canvas {
++  width: 100%;
++  height: 96px;
++  background: #09090b;
++  border: 1px solid #27272a;
++  border-radius: 8px;
++  margin-top: 6px;
++  display: block;
++}
+diff --git a/wearable/data/telemetry.html b/wearable/data/telemetry.html
+new file mode 100644
+index 0000000..ab8f694
+--- /dev/null
++++ b/wearable/data/telemetry.html
+@@ -0,0 +1,250 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>RAMS — Live Telemetry</title>
++  <link rel="stylesheet" href="/style.css">
++  <style>
++    body {
++      justify-content: flex-start;
++      padding: 16px;
++    }
++    .card {
++      max-width: 600px;
++      padding: 20px;
++    }
++    .grid-2 {
++      display: grid;
++      grid-template-columns: 1fr 1fr;
++      gap: 10px;
++      margin: 12px 0;
++    }
++    .grid-3 {
++      display: grid;
++      grid-template-columns: 1fr 1fr 1fr;
++      gap: 8px;
++      margin: 10px 0;
++    }
++    .metric-card {
++      background: #18181b;
++      border: 1px solid #27272a;
++      border-radius: 10px;
++      padding: 10px 12px;
++      text-align: center;
++    }
++    .metric-title {
++      font-family: 'JetBrains Mono', monospace;
++      font-size: 9px;
++      font-weight: 700;
++      color: #a1a1aa;
++      text-transform: uppercase;
++      letter-spacing: 0.5px;
++    }
++    .metric-val {
++      font-family: 'JetBrains Mono', monospace;
++      font-size: 16px;
++      font-weight: 800;
++      color: #ffffff;
++      margin-top: 4px;
++    }
++    .fsm-badge {
++      display: inline-block;
++      padding: 4px 10px;
++      border-radius: 6px;
++      font-family: 'JetBrains Mono', monospace;
++      font-size: 11px;
++      font-weight: 800;
++      text-transform: uppercase;
++      margin-top: 4px;
++      background: #27272a;
++      color: #a1a1aa;
++    }
++    .fsm-0 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
++    .fsm-1 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
++    .fsm-2 { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.4); }
++    .fsm-3 { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.4); }
++    .fsm-4 { background: rgba(239, 68, 68, 0.4); color: #ffffff; border: 1px solid #ef4444; }
++    canvas {
++      width: 100%;
++      height: 110px;
++      background: #111422;
++      border: 1px solid #27272a;
++      border-radius: 8px;
++      margin-top: 6px;
++      display: block;
++    }
++    .chart-label {
++      font-family: 'JetBrains Mono', monospace;
++      font-size: 10px;
++      color: #a1a1aa;
++      text-transform: uppercase;
++      margin-top: 10px;
++      display: flex;
++      justify-content: space-between;
++    }
++  </style>
++</head>
++<body>
++  <div class="card">
++    <div class="brand-header">
++      <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo">
++      <h1>Road Accident Monitoring</h1>
++    </div>
++    <p class="subtitle">Live Diagnostics & Sensor Stream</p>
++
++    <div style="text-align: center; margin-bottom: 12px;">
++      <div class="connection-badge">
++        <span class="badge-dot connecting" id="wsDot"></span>
++        <span id="wsText">CONNECTING...</span>
++      </div>
++    </div>
++
++    <!-- FSM State & Peak Magnitude -->
++    <div class="grid-2">
++      <div class="metric-card">
++        <div class="metric-title">FSM State</div>
++        <div id="fsmBadge" class="fsm-badge fsm-0">0: IDLE (ARMED)</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Accel Magnitude (|A|)</div>
++        <div class="metric-val" id="valAm">1.000 g</div>
++      </div>
++    </div>
++
++    <!-- Live Accelerometer Readings -->
++    <div class="grid-3">
++      <div class="metric-card">
++        <div class="metric-title">Accel X</div>
++        <div class="metric-val" id="valAx">0.00 g</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Accel Y</div>
++        <div class="metric-val" id="valAy">0.00 g</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Accel Z</div>
++        <div class="metric-val" id="valAz">1.00 g</div>
++      </div>
++    </div>
++
++    <div class="chart-label">
++      <span>Accel Waveform (X=Red, Y=Green, Z=Blue)</span>
++      <span id="rateLabel">100Hz IMU</span>
++    </div>
++    <canvas id="chartA" width="560" height="110"></canvas>
++
++    <!-- Gyroscope Readings -->
++    <div class="grid-3" style="margin-top: 14px;">
++      <div class="metric-card">
++        <div class="metric-title">Gyro X</div>
++        <div class="metric-val" id="valGx">0.0 °/s</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Gyro Y</div>
++        <div class="metric-val" id="valGy">0.0 °/s</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Gyro Z</div>
++        <div class="metric-val" id="valGz">0.0 °/s</div>
++      </div>
++    </div>
++
++    <!-- GPS Data -->
++    <div class="grid-3" style="margin-top: 14px;">
++      <div class="metric-card">
++        <div class="metric-title">Latitude</div>
++        <div class="metric-val" id="valLat">--.------</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Longitude</div>
++        <div class="metric-val" id="valLon">--.------</div>
++      </div>
++      <div class="metric-card">
++        <div class="metric-title">Sats / Fix</div>
++        <div class="metric-val" id="valSats">0 / NO</div>
++      </div>
++    </div>
++
++    <div class="nav">
++      <a href="/">SETUP</a>
++      <a href="/telemetry" class="active">LIVE TELEMETRY</a>
++      <a href="/map">OFFLINE MAP</a>
++    </div>
++  </div>
++
++  <script src="/app.js"></script>
++  <script>
++    var FSM_NAMES = ['0: IDLE', '1: FREEFALL', '2: WAIT IMPACT', '3: STILLNESS', '4: CONFIRMED'];
++    var aHistory = [];
++    var maxPoints = 120;
++    var canvasA = document.getElementById('chartA');
++    var ctxA = canvasA.getContext('2d');
++
++    function drawChart() {
++      var w = canvasA.width;
++      var h = canvasA.height;
++      ctxA.clearRect(0, 0, w, h);
++
++      // Grid lines
++      ctxA.strokeStyle = '#1e243b';
++      ctxA.lineWidth = 1;
++      ctxA.beginPath();
++      ctxA.moveTo(0, h/2);
++      ctxA.lineTo(w, h/2);
++      ctxA.stroke();
++
++      if (aHistory.length < 2) return;
++
++      var step = w / (maxPoints - 1);
++      var colors = ['#f87171', '#34d399', '#60a5fa'];
++
++      for (var axis = 0; axis < 3; axis++) {
++        ctxA.strokeStyle = colors[axis];
++        ctxA.lineWidth = 1.5;
++        ctxA.beginPath();
++        for (var i = 0; i < aHistory.length; i++) {
++          var x = i * step;
++          // Scale -4g to +4g into canvas height
++          var val = aHistory[i][axis];
++          var y = (h / 2) - (val * (h / 8));
++          if (y < 2) y = 2;
++          if (y > h - 2) y = h - 2;
++          if (i === 0) ctxA.moveTo(x, y);
++          else ctxA.lineTo(x, y);
++        }
++        ctxA.stroke();
++      }
++    }
++
++    function handleWsTelemetry(data) {
++      if (data.type === 'tel') {
++        document.getElementById('valAx').textContent = data.ax.toFixed(2) + ' g';
++        document.getElementById('valAy').textContent = data.ay.toFixed(2) + ' g';
++        document.getElementById('valAz').textContent = data.az.toFixed(2) + ' g';
++        document.getElementById('valAm').textContent = data.am.toFixed(3) + ' g';
++
++        document.getElementById('valGx').textContent = data.gx.toFixed(1) + ' °/s';
++        document.getElementById('valGy').textContent = data.gy.toFixed(1) + ' °/s';
++        document.getElementById('valGz').textContent = data.gz.toFixed(1) + ' °/s';
++
++        var fsmBadge = document.getElementById('fsmBadge');
++        var fsm = data.fsm || 0;
++        fsmBadge.className = 'fsm-badge fsm-' + fsm;
++        fsmBadge.textContent = FSM_NAMES[fsm] || ('STATE ' + fsm);
++
++        aHistory.push([data.ax, data.ay, data.az]);
++        if (aHistory.length > maxPoints) aHistory.shift();
++        drawChart();
++      } else if (data.type === 'gps') {
++        document.getElementById('valLat').textContent = data.fix ? data.lat.toFixed(6) : 'NO FIX';
++        document.getElementById('valLon').textContent = data.fix ? data.lon.toFixed(6) : 'NO FIX';
++        document.getElementById('valSats').textContent = (data.sats || 0) + (data.fix ? ' / FIX' : ' / NO');
++      }
++    }
++
++    initWebSocket(handleWsTelemetry);
++    drawChart();
++  </script>
++</body>
++</html>
+diff --git a/wearable/detection.cpp b/wearable/detection.cpp
+index 75d7374..46da0bc 100644
+--- a/wearable/detection.cpp
++++ b/wearable/detection.cpp
+@@ -98,6 +98,7 @@ void detectionInit() {
+ void detectionReset() {
+   _fallState = FS_IDLE;
+   _freefallStart = 0;
++  _freefallGlitchCount = 0;
+   _impactDeadline = 0;
+   _stillnessStart = 0;
+   _peakImpactG = 0;
+@@ -134,19 +135,27 @@ DetectionResult detectionUpdate(const SensorData& data) {
+       if (data.aMag < FREEFALL_THRESHOLD_G) {
+         _fallState = FS_FREEFALL;
+         _freefallStart = now;
++        _freefallGlitchCount = 0;
+       }
+       break;
+ 
+     case FS_FREEFALL:
+-      if (data.aMag >= FREEFALL_THRESHOLD_G) {
+-        // Freefall ended prematurely (e.g., brief sensor glitch)
+-        _fallState = FS_IDLE;
+-      } else if (now - _freefallStart >= FREEFALL_MIN_DURATION_MS) {
+-        // Freefall sustained long enough — advance to waiting for impact
+-        _fallState = FS_WAIT_IMPACT;
+-        _impactDeadline = now + IMPACT_WINDOW_MS;
+-        _peakImpactG = 0;
+-        Serial.println(F("[DETECT] Freefall confirmed, waiting for impact..."));
++      if (data.aMag < FREEFALL_THRESHOLD_G) {
++        if (now - _freefallStart >= FREEFALL_MIN_DURATION_MS) {
++          // Freefall sustained long enough — advance to waiting for impact
++          _fallState = FS_WAIT_IMPACT;
++          _impactDeadline = now + IMPACT_WINDOW_MS;
++          _peakImpactG = 0;
++          _freefallGlitchCount = 0;
++          Serial.println(F("[DETECT] Freefall confirmed, waiting for impact..."));
++        }
++      } else {
++        // Glitch tolerance: allow up to 2 isolated noisy samples (<20ms) from body rotation/vibration
++        _freefallGlitchCount++;
++        if (_freefallGlitchCount > 2 || (now - _freefallStart < 30)) {
++          _fallState = FS_IDLE;
++          _freefallGlitchCount = 0;
++        }
+       }
+       break;
+ 
+diff --git a/wearable/local_ap.cpp b/wearable/local_ap.cpp
+index 40d8df5..9077f61 100644
+--- a/wearable/local_ap.cpp
++++ b/wearable/local_ap.cpp
+@@ -1,422 +1,121 @@
+ /*
+  * Road Accident Monitoring System — Local SoftAP Implementation
+  * ================================================================
+- * Setup-mode WiFi AP + WebSocket + HTTP server.
+- *
+- * When activated, creates a local WiFi network ("RAMS_Setup") and
+- * serves three pages:
+- *   /           — Registration form (name + Drive link)
+- *   /map        — Offline live map with GPS pin
+- *   /telemetry  — Live IMU data, FSM state, GPS + map dashboard
+- *
+- * WebSocket on port 81 pushes two data types:
+- *   {"type":"gps","lat":17.613,"lon":121.727,"sats":6,"fix":true}
+- *   {"type":"tel","ax":0.01,"ay":-0.02,"az":1.00,"gx":0.5,"gy":-0.3,"gz":0.1,"am":1.00,"fsm":0}
+- *
+- * Registration submissions arrive via WebSocket as:
+- *   {"type":"register","name":"...","driveLink":"..."}
+- *
+- * WiFi radio is completely shut down when leaving setup mode.
++ * Setup-mode WiFi AP + Captive Portal + WebSocket + HTTP server.
++ * 
++ * Features:
++ *   - Auto-opening Captive Portal (DNSServer redirect to 192.168.4.1)
++ *   - Serves static files directly from LittleFS (/data folder)
++ *   - Embedded PROGMEM fallback if LittleFS is unformatted/unflashed
++ *   - WebSocket Server (port 81) for real-time bidirectional communication:
++ *       Registration: {"type":"register","name":"...","driveLink":"..."}
++ *       Telemetry:    {"type":"tel","ax":...,"ay":...,"az":...,"gx":...,"gy":...,"gz":...,"am":...,"fsm":...}
++ *       GPS:          {"type":"gps","lat":...,"lon":...,"sats":...,"fix":...}
++ *   - WiFi radio is completely shut down when exiting setup mode (zero battery drain).
+  */
+ 
+ #include "local_ap.h"
+ #include "config.h"
+ #include "registration.h"
+ #include "offline_map.h"
++#include "lora_tx.h"
+ #include "../shared/logo_data.h"
++
+ #include <WiFi.h>
+ #include <WebServer.h>
+ #include <WebSocketsServer.h>
++#include <DNSServer.h>
++#include <LittleFS.h>
+ #include <ArduinoJson.h>
+ 
+ static WebServer _httpServer(80);
+ static WebSocketsServer _wsServer(SETUP_WS_PORT);
++static DNSServer _dnsServer;
+ static bool _active = false;
++static bool _littleFsOk = false;
++
++// ── Content-Type Resolution ─────────────────────────────────────────────────
++static String _getContentType(const String& path) {
++  if (path.endsWith(".html") || path.endsWith(".htm")) return "text/html";
++  if (path.endsWith(".css"))  return "text/css";
++  if (path.endsWith(".js"))   return "application/javascript";
++  if (path.endsWith(".json")) return "application/json";
++  if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
++  if (path.endsWith(".png"))  return "image/png";
++  if (path.endsWith(".ico"))  return "image/x-icon";
++  return "text/plain";
++}
+ 
+-// ── Registration Page HTML ──────────────────────────────────────────────────
+-// Inline HTML served from flash — no filesystem dependency for setup mode.
+-
+-static const char REGISTRATION_HTML[] PROGMEM = R"rawliteral(
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-  <meta charset="UTF-8">
+-  <meta name="viewport" content="width=device-width,initial-scale=1">
+-  <title>RAMS — Device Registration</title>
+-  <style>
+-    * { margin:0; padding:0; box-sizing:border-box; }
+-    body {
+-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+-      background: #060913;
+-      color: #f4f4f5; min-height: 100vh;
+-      display: flex; align-items: center; justify-content: center;
+-      padding: 20px;
+-      letter-spacing: -0.01em;
+-    }
+-    .card {
+-      background: #0e1230;
+-      border: 1px solid #27272a;
+-      border-radius: 16px; padding: 28px;
+-      max-width: 440px; width: 100%;
+-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+-    }
+-    .brand-header {
+-      display: flex; align-items: center; justify-content: center;
+-      gap: 12px; margin-bottom: 6px;
+-    }
+-    .brand-logo {
+-      width: 38px; height: 38px; border-radius: 8px;
+-      border: 1px solid #3f3f46; object-fit: contain; background: #000; padding: 2px;
+-    }
+-    h1 { font-size: 15px; font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase; color: #ffffff; }
+-    .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 20px; }
+-    label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a1a1aa; margin-bottom: 6px; margin-top: 14px; }
+-    input {
+-      width: 100%; padding: 11px 14px; font-size: 13px; font-family: 'JetBrains Mono', monospace;
+-      background: #18181b; border: 1px solid #27272a;
+-      border-radius: 10px; color: #ffffff; outline: none; transition: border 0.2s;
+-    }
+-    input:focus { border-color: #ffffff; }
+-    .btn {
+-      display: block; width: 100%; padding: 12px; margin-top: 22px;
+-      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer;
+-      background: #ffffff; color: #09090b; border: 1px solid #ffffff; border-radius: 10px;
+-      transition: transform 0.15s, opacity 0.2s;
+-    }
+-    .btn:hover { transform: translateY(-1px); background: #e4e4e7; }
+-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+-    #status {
+-      margin-top: 16px; padding: 10px; border-radius: 10px;
+-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-align: center; text-transform: uppercase; display: none;
+-    }
+-    .status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); display: block !important; }
+-    .status-err { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); display: block !important; }
+-    .status-loading { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); display: block !important; }
+-    .nav { text-align: center; margin-top: 20px; font-family: 'JetBrains Mono', monospace; }
+-    .nav a { color: #f4f4f5; font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; }
+-    .nav a:hover { border-color: #ffffff; }
+-    .photo-preview { margin-top: 12px; text-align: center; }
+-    .photo-preview img {
+-      max-width: 100px; max-height: 100px; border-radius: 12px;
+-      border: 1px solid #3f3f46; display: none; margin: 0 auto;
+-    }
+-  </style>
+-</head>
+-<body>
+-  <div class="card">
+-    <div class="brand-header">
+-      <img src="data:image/jpeg;base64, )rawliteral" LOGO_DATA R"rawliteral(" id="logoImg" class="brand-logo" alt="RAMS Logo">
+-      <h1>Road Accident Monitoring</h1>
+-    </div>
+-    <p class="subtitle">Wearable Device Registration — Setup Mode</p>
+-
+-    <label for="name">Rider Full Name</label>
+-    <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" required>
+-
+-    <label for="driveLink">Photo (Google Drive Share Link)</label>
+-    <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+-    <div class="photo-preview">
+-      <img id="photoPreview" alt="Photo preview">
+-    </div>
+-
+-    <button class="btn" id="registerBtn" onclick="doRegister()">REGISTER DEVICE</button>
+-    <div id="status"></div>
+-
+-    <div class="nav"><a href="/map">OFFLINE MAP</a> &nbsp; <a href="/telemetry">LIVE TELEMETRY</a></div>
+-  </div>
+-
+-  <script>
+-    var ws;
+-    var wsReady = false;
+-
+-    function connectWS() {
+-      ws = new WebSocket('ws://' + location.hostname + ':81/');
+-      ws.onopen = function() { wsReady = true; };
+-      ws.onclose = function() {
+-        wsReady = false;
+-        setTimeout(connectWS, 2000);
+-      };
+-      ws.onmessage = function(e) {
+-        try {
+-          var msg = JSON.parse(e.data);
+-          if (msg.type === 'register_result') {
+-            var st = document.getElementById('status');
+-            if (msg.success) {
+-              st.className = 'status-ok';
+-              st.textContent = 'REGISTERED! TOKEN: ' + msg.token;
+-              document.getElementById('registerBtn').disabled = true;
+-            } else {
+-              st.className = 'status-err';
+-              st.textContent = 'ERROR: ' + (msg.error || 'Registration failed');
+-              document.getElementById('registerBtn').disabled = false;
+-            }
+-          }
+-        } catch(ex) {}
+-      };
+-    }
+-    connectWS();
+-
+-    // Validate the Drive link by trying to load the converted image
+-    document.getElementById('driveLink').addEventListener('change', function() {
+-      var link = this.value;
+-      if (!link) return;
+-      var img = document.getElementById('photoPreview');
+-      // Extract file ID client-side for preview
+-      var fid = '';
+-      var dIdx = link.indexOf('/d/');
+-      if (dIdx > -1) {
+-        var s = dIdx + 3;
+-        var e = link.indexOf('/', s);
+-        if (e < 0) e = link.indexOf('?', s);
+-        if (e < 0) e = link.length;
+-        fid = link.substring(s, e);
+-      } else {
+-        var idIdx = link.indexOf('id=');
+-        if (idIdx > -1) {
+-          var s2 = idIdx + 3;
+-          var e2 = link.indexOf('&', s2);
+-          if (e2 < 0) e2 = link.length;
+-          fid = link.substring(s2, e2);
+-        }
+-      }
+-      if (fid) {
+-        var directUrl = 'https://lh3.googleusercontent.com/d/' + fid;
+-        img.src = directUrl;
+-        img.style.display = 'block';
+-        img.onerror = function() {
+-          img.style.display = 'none';
+-          var st = document.getElementById('status');
+-          st.className = 'status-err';
+-          st.textContent = 'Photo not accessible. Make sure link sharing is set to "Anyone with the link".';
+-        };
+-      }
+-    });
+-
+-    function doRegister() {
+-      var name = document.getElementById('name').value.trim();
+-      var link = document.getElementById('driveLink').value.trim();
+-      var st = document.getElementById('status');
+-
+-      if (!name) { st.className = 'status-err'; st.textContent = 'Name is required.'; return; }
+-      if (!link) { st.className = 'status-err'; st.textContent = 'Google Drive link is required.'; return; }
+-      if (!wsReady) { st.className = 'status-err'; st.textContent = 'Not connected. Please wait...'; return; }
+-
+-      st.className = 'status-loading';
+-      st.textContent = 'Registering...';
+-      document.getElementById('registerBtn').disabled = true;
++// ── LittleFS File Streaming Helper ──────────────────────────────────────────
++static bool _serveFromLittleFS(const String& path) {
++  if (!_littleFsOk) return false;
++  String filePath = path;
++  if (filePath.endsWith("/")) filePath += "index.html";
+ 
+-      ws.send(JSON.stringify({ type: 'register', name: name, driveLink: link }));
+-    }
+-  </script>
+-</body>
+-</html>
+-)rawliteral";
+-
+-// ── Telemetry Dashboard Page HTML ───────────────────────────────────────────
+-// Live diagnostic view — IMU data graphs, FSM state, GPS, and map link.
+-
+-static const char TELEMETRY_HTML[] PROGMEM = R"rawliteral(
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-  <meta charset="UTF-8">
+-  <meta name="viewport" content="width=device-width,initial-scale=1">
+-  <title>RAMS — Live Telemetry</title>
+-  <style>
+-    *{margin:0;padding:0;box-sizing:border-box}
+-    body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:#060913;color:#e0e4f0;
+-      padding:16px;min-height:100vh}
+-    .header-bar{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+-    .brand-logo{width:36px;height:36px;border-radius:6px;border:1px solid rgba(123,140,255,0.4);object-fit:cover}
+-    h1{font-size:16px;font-weight:900;letter-spacing:-.025em;text-transform:uppercase;color:#fff}
+-    .sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#5c6480;margin-bottom:12px}
+-    .conn{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;
+-      font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:12px}
+-    .conn.on{background:rgba(52,217,127,0.15);color:#34d97f;border:1px solid rgba(52,217,127,0.3)}
+-    .conn.off{background:rgba(255,64,87,0.15);color:#ff4057;border:1px solid rgba(255,64,87,0.3)}
+-    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+-    @media(max-width:500px){.grid{grid-template-columns:1fr 1fr}}
+-    .card{background:rgba(14,18,48,0.85);border:1px solid rgba(80,100,220,0.18);
+-      border-radius:10px;padding:10px 12px}
+-    .card-label{font-size:9px;color:#5c6480;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+-    .card-value{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;margin-top:2px}
+-    .card-unit{font-size:10px;color:#5c6480;font-weight:400}
+-    .fsm-bar{display:flex;gap:4px;margin-bottom:12px}
+-    .fsm-state{flex:1;padding:8px 4px;text-align:center;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:10px;
+-      font-weight:700;letter-spacing:.4px;background:rgba(14,18,48,0.6);
+-      border:1px solid rgba(80,100,220,0.15);color:#5c6480;transition:all .2s}
+-    .fsm-state.active{background:rgba(123,140,255,0.2);border-color:#7b8cff;color:#7b8cff}
+-    .fsm-state.alert{background:rgba(255,64,87,0.2);border-color:#ff4057;color:#ff4057}
+-    canvas{width:100%;height:140px;background:rgba(14,18,48,0.85);
+-      border:1px solid rgba(80,100,220,0.18);border-radius:10px;margin-bottom:8px}
+-    .chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#5c6480;margin-bottom:4px}
+-    .gps-row{display:flex;gap:8px;margin-bottom:12px}
+-    .gps-row .card{flex:1}
+-    .nav-row{display:flex;gap:8px;margin-top:8px;font-family:'JetBrains Mono',monospace}
+-    .nav-link{flex:1;display:block;text-align:center;padding:10px;border-radius:8px;
+-      font-size:12px;font-weight:700;color:#7b8cff;text-decoration:none;
+-      border:1px solid rgba(100,120,255,0.25);transition:background .15s}
+-    .nav-link:hover{background:rgba(74,90,255,0.1)}
+-  </style>
+-</head>
+-<body>
+-  <div class="header-bar">
+-    <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo">
+-    <h1>Live Diagnostic Telemetry</h1>
+-  </div>
+-  <p class="sub">Road Accident Monitoring System — Wearable Sensor Stream</p>
+-  <div class="conn off" id="cs"><span>● UPLINK DISCONNECTED</span></div>
+-
+-  <!-- FSM State Bar -->
+-  <div class="fsm-bar">
+-    <div class="fsm-state" id="fs0">IDLE</div>
+-    <div class="fsm-state" id="fs1">FREEFALL</div>
+-    <div class="fsm-state" id="fs2">IMPACT</div>
+-    <div class="fsm-state" id="fs3">STILL</div>
+-    <div class="fsm-state" id="fs4">ALERT</div>
+-  </div>
+-
+-  <!-- Sensor Cards -->
+-  <div class="grid">
+-    <div class="card"><div class="card-label">Accel X</div><div class="card-value" id="vax">—<span class="card-unit"> g</span></div></div>
+-    <div class="card"><div class="card-label">Accel Y</div><div class="card-value" id="vay">—<span class="card-unit"> g</span></div></div>
+-    <div class="card"><div class="card-label">Accel Z</div><div class="card-value" id="vaz">—<span class="card-unit"> g</span></div></div>
+-    <div class="card"><div class="card-label">Gyro X</div><div class="card-value" id="vgx">—<span class="card-unit"> °/s</span></div></div>
+-    <div class="card"><div class="card-label">Gyro Y</div><div class="card-value" id="vgy">—<span class="card-unit"> °/s</span></div></div>
+-    <div class="card"><div class="card-label">Gyro Z</div><div class="card-value" id="vgz">—<span class="card-unit"> °/s</span></div></div>
+-  </div>
+-
+-  <!-- |A| Magnitude -->
+-  <div class="card" style="margin-bottom:12px">
+-    <div class="card-label">Acceleration Magnitude |A|</div>
+-    <div class="card-value" id="vam" style="font-size:26px;color:#7b8cff">—<span class="card-unit"> g</span></div>
+-  </div>
+-
+-  <!-- Accel Chart -->
+-  <div class="chart-title">Acceleration (g) — rolling 200 samples</div>
+-  <canvas id="ca" width="800" height="140"></canvas>
+-
+-  <!-- Gyro Chart -->
+-  <div class="chart-title">Gyroscope (°/s) — rolling 200 samples</div>
+-  <canvas id="cg" width="800" height="140"></canvas>
+-
+-  <!-- GPS -->
+-  <div class="gps-row">
+-    <div class="card"><div class="card-label">Latitude</div><div class="card-value" id="vlat">—</div></div>
+-    <div class="card"><div class="card-label">Longitude</div><div class="card-value" id="vlon">—</div></div>
+-    <div class="card"><div class="card-label">Satellites</div><div class="card-value" id="vsat">—</div></div>
+-  </div>
+-
+-  <!-- Nav -->
+-  <div class="nav-row">
+-    <a class="nav-link" href="/">📋 Registration</a>
+-    <a class="nav-link" href="/map">📍 Offline Map</a>
+-  </div>
+-
+-  <script>
+-    var ws, accelBuf=[], gyroBuf=[], amBuf=[];
+-    var ca=document.getElementById('ca'), ctxA=ca.getContext('2d');
+-    var cg=document.getElementById('cg'), ctxG=cg.getContext('2d');
+-    var dpr=window.devicePixelRatio||1;
+-
+-    function initCanvas(c,ctx){
+-      c.width=c.offsetWidth*dpr;c.height=140*dpr;
+-      ctx.scale(dpr,dpr);
+-    }
+-    initCanvas(ca,ctxA); initCanvas(cg,ctxG);
++  if (!LittleFS.exists(filePath)) {
++    return false;
++  }
+ 
+-    var FSM_NAMES=['fs0','fs1','fs2','fs3','fs4'];
++  File f = LittleFS.open(filePath, "r");
++  if (!f) return false;
+ 
+-    function setFSM(state){
+-      FSM_NAMES.forEach(function(id,i){
+-        var el=document.getElementById(id);
+-        el.className='fsm-state'+(i===state?(state>=4?' alert':' active'):'');
+-      });
+-    }
+-
+-    function drawChart(ctx,w,h,data,colors,yMin,yMax){
+-      ctx.clearRect(0,0,w,h);
+-      // Grid
+-      ctx.strokeStyle='rgba(80,100,220,0.1)';ctx.lineWidth=1;
+-      for(var g=0;g<=4;g++){
+-        var gy=g/4*h;
+-        ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(w,gy);ctx.stroke();
+-      }
+-      // Zero line
+-      var zeroY=h*(yMax/(yMax-yMin));
+-      ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.setLineDash([3,3]);
+-      ctx.beginPath();ctx.moveTo(0,zeroY);ctx.lineTo(w,zeroY);ctx.stroke();
+-      ctx.setLineDash([]);
+-      // Data lines
+-      var N=200;
+-      for(var c=0;c<colors.length;c++){
+-        ctx.strokeStyle=colors[c];ctx.lineWidth=1.5;ctx.beginPath();
+-        for(var i=0;i<data.length;i++){
+-          var x=i/N*w;
+-          var v=data[i][c];
+-          var y=h-((v-yMin)/(yMax-yMin))*h;
+-          y=Math.max(0,Math.min(h,y));
+-          if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+-        }
+-        ctx.stroke();
+-      }
+-    }
++  String contentType = _getContentType(filePath);
++  _httpServer.streamFile(f, contentType);
++  f.close();
++  return true;
++}
+ 
+-    function connectWS(){
+-      ws=new WebSocket('ws://'+location.hostname+':81/');
+-      ws.onopen=function(){
+-        document.getElementById('cs').className='conn on';
+-        document.getElementById('cs').innerHTML='<span>● Connected</span>';
+-      };
+-      ws.onclose=function(){
+-        document.getElementById('cs').className='conn off';
+-        document.getElementById('cs').innerHTML='<span>● Disconnected</span>';
+-        setTimeout(connectWS,2000);
+-      };
+-      ws.onmessage=function(e){
+-        try{
+-          var d=JSON.parse(e.data);
+-          if(d.type==='tel'){
+-            // Update values
+-            document.getElementById('vax').innerHTML=d.ax.toFixed(3)+'<span class="card-unit"> g</span>';
+-            document.getElementById('vay').innerHTML=d.ay.toFixed(3)+'<span class="card-unit"> g</span>';
+-            document.getElementById('vaz').innerHTML=d.az.toFixed(3)+'<span class="card-unit"> g</span>';
+-            document.getElementById('vgx').innerHTML=d.gx.toFixed(1)+'<span class="card-unit"> °/s</span>';
+-            document.getElementById('vgy').innerHTML=d.gy.toFixed(1)+'<span class="card-unit"> °/s</span>';
+-            document.getElementById('vgz').innerHTML=d.gz.toFixed(1)+'<span class="card-unit"> °/s</span>';
+-
+-            var amColor=d.am<0.4?'#ff4057':d.am>3.0?'#ff4057':'#7b8cff';
+-            document.getElementById('vam').innerHTML='<span style="color:'+amColor+'">'+d.am.toFixed(3)+'</span><span class="card-unit"> g</span>';
+-
+-            setFSM(d.fsm);
+-
+-            // Buffer for charts (keep last 200)
+-            accelBuf.push([d.ax,d.ay,d.az]);
+-            gyroBuf.push([d.gx,d.gy,d.gz]);
+-            if(accelBuf.length>200)accelBuf.shift();
+-            if(gyroBuf.length>200)gyroBuf.shift();
+-
+-            var aw=ca.offsetWidth,ah=140;
+-            drawChart(ctxA,aw,ah,accelBuf,['#ff4057','#34d97f','#7b8cff'],-5,5);
+-            var gw=cg.offsetWidth,gh=140;
+-            drawChart(ctxG,gw,gh,gyroBuf,['#ff4057','#34d97f','#7b8cff'],-500,500);
+-          }
+-          if(d.type==='gps'){
+-            document.getElementById('vlat').textContent=d.fix?d.lat.toFixed(6):'No fix';
+-            document.getElementById('vlon').textContent=d.fix?d.lon.toFixed(6):'—';
+-            document.getElementById('vsat').textContent=d.sats;
+-          }
+-        }catch(ex){}
+-      };
++// ── Inline Fallback HTML (Served if LittleFS Data Folder Not Flashed) ────────
++static const char FALLBACK_REGISTRATION_HTML[] PROGMEM = R"rawliteral(<!DOCTYPE html>
++<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
++<title>RAMS — Device Registration</title>
++<style>
++*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',sans-serif;background:#060913;color:#f4f4f5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
++.card{background:#0e1230;border:1px solid #27272a;border-radius:16px;padding:28px;max-width:440px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,0.6)}
++h1{font-size:15px;font-weight:900;text-transform:uppercase;color:#fff;text-align:center}
++.sub{text-align:center;font-size:10px;font-family:monospace;color:#a1a1aa;margin:6px 0 20px}
++label{display:block;font-family:monospace;font-size:10px;color:#a1a1aa;margin:12px 0 4px;text-transform:uppercase}
++input{width:100%;padding:11px 14px;background:#18181b;border:1px solid #27272a;border-radius:10px;color:#fff;font-family:monospace;outline:none}
++button{width:100%;padding:12px;margin-top:20px;background:#fff;color:#09090b;font-weight:800;border:none;border-radius:10px;cursor:pointer;font-family:monospace;text-transform:uppercase}
++#status{margin-top:14px;padding:10px;border-radius:8px;font-family:monospace;font-size:11px;text-align:center;display:none}
++.nav{text-align:center;margin-top:20px;font-family:monospace;font-size:11px}
++.nav a{color:#fff;text-decoration:none;padding:6px 12px;background:#18181b;border:1px solid #27272a;border-radius:8px;margin:0 4px}
++</style></head><body>
++<div class="card">
++<h1>Road Accident Monitoring</h1>
++<p class="sub">Setup Mode (Fallback Firmware View)</p>
++<label>Rider Name</label>
++<input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
++<label>Drive Photo Link</label>
++<input type="url" id="link" placeholder="https://drive.google.com/...">
++<button id="btn" onclick="doReg()">Register Device</button>
++<div id="status"></div>
++<div class="nav"><a href="/telemetry">Telemetry</a><a href="/map">Map</a></div>
++</div>
++<script>
++var ws=new WebSocket('ws://'+location.hostname+':81/');
++ws.onmessage=function(e){
++  try{
++    var d=JSON.parse(e.data);
++    if(d.type==='register_result'){
++      var s=document.getElementById('status');
++      s.style.display='block';
++      s.style.color=d.success?'#34d399':'#f87171';
++      s.textContent=d.success?'REGISTERED: '+d.token:'ERROR: '+(d.error||'Failed');
+     }
+-    connectWS();
+-  </script>
+-</body>
+-</html>
+-)rawliteral";
+-
+-// ── WebSocket Event Handler ─────────────────────────────────────────────────
++  }catch(x){}
++};
++function doReg(){
++  var n=document.getElementById('name').value.trim();
++  var l=document.getElementById('link').value.trim();
++  if(!n||!l)return;
++  document.getElementById('status').style.display='block';
++  document.getElementById('status').textContent='Registering...';
++  ws.send(JSON.stringify({type:'register',name:n,driveLink:l}));
++}
++</script></body></html>)rawliteral";
+ 
++// ── WebSocket Event Handler (Safe Buffer Parsing) ───────────────────────────
+ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload, size_t length) {
+   switch (type) {
+     case WStype_CONNECTED:
+@@ -428,45 +127,37 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
+       break;
+ 
+     case WStype_TEXT: {
+-      // Parse incoming JSON message
+-      String msg = String((char*)payload);
+-      Serial.printf("[AP] WS message from #%u: %s\n", clientNum, msg.c_str());
+-
+-      // Check for registration request
+-      if (msg.indexOf("\"type\":\"register\"") >= 0) {
+-        // Extract name and driveLink from JSON (simple parsing, no ArduinoJson dependency)
+-        String name = "";
+-        String driveLink = "";
+-
+-        int nameIdx = msg.indexOf("\"name\":\"");
+-        if (nameIdx >= 0) {
+-          int start = nameIdx + 8;
+-          int end = msg.indexOf("\"", start);
+-          if (end > start) name = msg.substring(start, end);
+-        }
++      // Safe parsing using length prevents heap buffer over-read (Finding 3)
++      JsonDocument doc;
++      DeserializationError err = deserializeJson(doc, payload, length);
++      if (err) {
++        Serial.printf("[AP] Invalid WS JSON payload: %s\n", err.c_str());
++        break;
++      }
+ 
+-        int linkIdx = msg.indexOf("\"driveLink\":\"");
+-        if (linkIdx >= 0) {
+-          int start = linkIdx + 13;
+-          int end = msg.indexOf("\"", start);
+-          if (end > start) driveLink = msg.substring(start, end);
+-        }
++      const char* msgType = doc["type"] | "";
+ 
+-        // Process registration
+-        bool success = registrationProcess(name, driveLink);
++      if (strcmp(msgType, "register") == 0) {
++        const char* name = doc["name"] | "";
++        const char* driveLink = doc["driveLink"] | "";
++
++        Serial.printf("[AP] Processing registration for '%s'...\n", name);
++        bool success = registrationProcess(String(name), String(driveLink));
+ 
+-        // Send result back to client
+         String response;
+         if (success) {
+           String token = registrationGetToken();
+           response = "{\"type\":\"register_result\",\"success\":true,\"token\":\"" + token + "\"}";
+-
+-          // Also send PKT_REGISTER via LoRa so the receiver/backend knows
++          
++          // Transmit registration packet over LoRa to receiver / cloud backend
+           String photoUrl = registrationGetPhotoUrl();
+-          loraSendRegister(token.c_str(), name.c_str(), photoUrl.c_str());
++          loraSendRegister(token.c_str(), name, photoUrl.c_str());
++          Serial.printf("[AP] Registration successful. Token: %s\n", token.c_str());
+         } else {
+-          response = "{\"type\":\"register_result\",\"success\":false,\"error\":\"Invalid Drive link or registration failed\"}";
++          response = "{\"type\":\"register_result\",\"success\":false,\"error\":\"Invalid Drive link or flash error\"}";
++          Serial.println(F("[AP] Registration rejected."));
+         }
++
+         _wsServer.sendTXT(clientNum, response);
+       }
+       break;
+@@ -477,74 +168,136 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
+   }
+ }
+ 
+-// ── Public API ──────────────────────────────────────────────────────────────
+-
+-void localApStart() {
+-  if (_active) return;
+-
+-  // Start SoftAP
+-  WiFi.mode(WIFI_AP);
+-  WiFi.softAP(SETUP_AP_SSID, nullptr, SETUP_AP_CHANNEL);
+-  delay(100);
+-
+-  IPAddress apIP = WiFi.softAPIP();
+-  Serial.print(F("[AP] SoftAP started: "));
+-  Serial.print(SETUP_AP_SSID);
+-  Serial.print(F(" IP: "));
+-  Serial.println(apIP);
+-
+-  // Setup HTTP routes
++// ── Captive Portal & WebServer Routing Setup ────────────────────────────────
++static void _setupHttpRoutes() {
++  // 1. Root / Registration Page
+   _httpServer.on("/", HTTP_GET, []() {
+-    _httpServer.send_P(200, "text/html", REGISTRATION_HTML);
++    if (!_serveFromLittleFS("/index.html")) {
++      _httpServer.send_P(200, "text/html", FALLBACK_REGISTRATION_HTML);
++    }
+   });
+ 
++  // 2. Telemetry Dashboard
++  _httpServer.on("/telemetry", HTTP_GET, []() {
++    if (!_serveFromLittleFS("/telemetry.html")) {
++      _httpServer.send(200, "text/html", F("<h2>Live Telemetry</h2><p>Please upload LittleFS data folder.</p>"));
++    }
++  });
++
++  // 3. Offline Map Page
+   _httpServer.on("/map", HTTP_GET, []() {
+-    String html = offlineMapGetHTML();
+-    _httpServer.send(200, "text/html", html);
++    if (!_serveFromLittleFS("/map.html")) {
++      _httpServer.send(200, "text/html", offlineMapGetHTML());
++    }
+   });
+ 
+-  _httpServer.on("/telemetry", HTTP_GET, []() {
+-    _httpServer.send_P(200, "text/html", TELEMETRY_HTML);
++  // 4. Captive Portal OS Detection Endpoints (Direct Redirect to Root)
++  // Android connectivity check probes:
++  _httpServer.on("/generate_204", HTTP_GET, []() {
++    _httpServer.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/", true);
++    _httpServer.send(302, "text/plain", "");
++  });
++  _httpServer.on("/gen_204", HTTP_GET, []() {
++    _httpServer.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/", true);
++    _httpServer.send(302, "text/plain", "");
+   });
+ 
+-  _httpServer.on("/logo.jpg", HTTP_GET, []() {
+-    _httpServer.sendHeader("Location", LOGO_BASE64);
++  // Apple / iOS / macOS Captive Network Assistant probe:
++  _httpServer.on("/hotspot-detect.html", HTTP_GET, []() {
++    _httpServer.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/", true);
+     _httpServer.send(302, "text/plain", "");
+   });
+ 
++  // Windows connectivity probes:
++  _httpServer.on("/ncsi.txt", HTTP_GET, []() {
++    _httpServer.send(200, "text/plain", "Microsoft NCSI");
++  });
++  _httpServer.on("/connecttest.txt", HTTP_GET, []() {
++    _httpServer.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/", true);
++    _httpServer.send(302, "text/plain", "");
++  });
++
++  // 5. Catch-All Not Found / Static File Handler / Captive Redirect
+   _httpServer.onNotFound([]() {
+-    _httpServer.sendHeader("Location", "/");
++    String uri = _httpServer.uri();
++    
++    // Attempt to serve file directly from LittleFS (e.g., /style.css, /app.js, /logo.jpg)
++    if (_serveFromLittleFS(uri)) {
++      return;
++    }
++
++    // Redirect any unknown external web traffic to captive portal root
++    Serial.printf("[AP] Captive redirect for URI: %s\n", uri.c_str());
++    _httpServer.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/", true);
+     _httpServer.send(302, "text/plain", "");
+   });
++}
+ 
++// ── Public API ──────────────────────────────────────────────────────────────
++void localApStart() {
++  if (_active) return;
++
++  // Mount LittleFS to serve /data web assets
++  _littleFsOk = LittleFS.begin(true);
++  if (!_littleFsOk) {
++    Serial.println(F("[AP] LittleFS mount failed — will use inline HTML fallback"));
++  } else {
++    Serial.println(F("[AP] LittleFS mounted successfully"));
++  }
++
++  // Start SoftAP
++  WiFi.mode(WIFI_AP);
++  WiFi.softAP(SETUP_AP_SSID, nullptr, SETUP_AP_CHANNEL);
++  delay(100);
++
++  IPAddress apIP = WiFi.softAPIP();
++  Serial.print(F("[AP] SoftAP started: "));
++  Serial.print(SETUP_AP_SSID);
++  Serial.print(F(" | IP: "));
++  Serial.println(apIP);
++
++  // Start DNS Server for automatic captive portal capture (port 53)
++  _dnsServer.start(53, "*", apIP);
++  Serial.println(F("[AP] Captive Portal DNS server started on port 53"));
++
++  // Setup Web Server routes & start
++  _setupHttpRoutes();
+   _httpServer.begin();
+ 
+-  // Setup WebSocket
++  // Start WebSocket Server on port 81
+   _wsServer.begin();
+   _wsServer.onEvent(_onWebSocketEvent);
+ 
+   _active = true;
+-  Serial.println(F("[AP] HTTP + WebSocket server started"));
++  Serial.printf("[AP] HTTP (port 80) + WebSocket (port %d) active\n", SETUP_WS_PORT);
+ }
+ 
+ void localApStop() {
+   if (!_active) return;
+ 
++  _dnsServer.stop();
+   _wsServer.disconnect();
+   _httpServer.close();
+ 
+-  // Fully shut down WiFi radio — critical for the "no data plan" pitch
++  // Fully shut down WiFi radio — critical for battery preservation
+   WiFi.softAPdisconnect(true);
+   WiFi.mode(WIFI_OFF);
+   delay(100);
+ 
+   _active = false;
+-  Serial.println(F("[AP] SoftAP stopped, WiFi radio OFF"));
++  Serial.println(F("[AP] SoftAP & Captive Portal stopped, WiFi radio OFF"));
+ }
+ 
+ void localApUpdate() {
+   if (!_active) return;
++
++  // Process DNS queries for captive portal automatic redirection
++  _dnsServer.processNextRequest();
++
++  // Process HTTP client requests
+   _httpServer.handleClient();
++
++  // Process WebSocket events and packets
+   _wsServer.loop();
+ }
+ 
+@@ -556,17 +309,12 @@ void localApSendGPS(float lat, float lon, uint8_t satellites, bool hasFix) {
+   if (!_active) return;
+ 
+   // Broadcast GPS update to all connected WebSocket clients
+-  String json = "{\"type\":\"gps\",\"lat\":";
+-  json += String(lat, 6);
+-  json += ",\"lon\":";
+-  json += String(lon, 6);
+-  json += ",\"sats\":";
+-  json += String(satellites);
+-  json += ",\"fix\":";
+-  json += hasFix ? "true" : "false";
+-  json += "}";
+-
+-  _wsServer.broadcastTXT(json);
++  char buf[128];
++  snprintf(buf, sizeof(buf),
++    "{\"type\":\"gps\",\"lat\":%.6f,\"lon\":%.6f,\"sats\":%u,\"fix\":%s}",
++    lat, lon, satellites, hasFix ? "true" : "false");
++
++  _wsServer.broadcastTXT(buf);
+ }
+ 
+ void localApSendTelemetry(float ax, float ay, float az,
+@@ -574,7 +322,7 @@ void localApSendTelemetry(float ax, float ay, float az,
+                           float aMag, uint8_t fsmState) {
+   if (!_active) return;
+ 
+-  // Manual JSON for performance (called at ~20Hz)
++  // Broadcast IMU + FSM at ~20Hz
+   char buf[200];
+   snprintf(buf, sizeof(buf),
+     "{\"type\":\"tel\",\"ax\":%.3f,\"ay\":%.3f,\"az\":%.3f,"
+diff --git a/wearable/sensors.cpp b/wearable/sensors.cpp
+index a2aa679..1b8643d 100644
+--- a/wearable/sensors.cpp
++++ b/wearable/sensors.cpp
+@@ -22,16 +22,16 @@
+ #define MPU_WHO_AM_I    0x75
+ #define MPU_PWR_MGMT_1  0x6B
+ #define MPU_ACCEL_CONFIG 0x1C
+-#define MPU_GYRO_CONFIG  0x1A
++#define MPU_GYRO_CONFIG  0x1B
+ #define MPU_SMPLRT_DIV   0x19
+ #define MPU_CONFIG       0x1A
+ #define MPU_ACCEL_XOUT_H 0x3B
+ 
+ // ── Scale Factors ───────────────────────────────────────────────────────────
+-// ±2g range: 16384 LSB/g.  ±250°/s range: 131 LSB/(°/s).
+-// These match MPU-6050 default power-on config (FS_SEL=0, AFS_SEL=0).
+-#define ACCEL_SCALE  16384.0f
+-#define GYRO_SCALE   131.0f
++// ±8g range: 4096 LSB/g (AFS_SEL=2). ±500°/s range: 65.5 LSB/(°/s) (FS_SEL=1).
++// Configured in sensorsInit() to prevent accelerometer saturation during high-g impacts.
++#define ACCEL_SCALE  4096.0f
++#define GYRO_SCALE   65.5f
+ 
+ // ── Internal State ──────────────────────────────────────────────────────────
+ static bool _initialized = false;
+@@ -82,18 +82,15 @@ bool sensorsInit() {
+   // fast enough to capture impact spikes)
+   _writeReg(MPU_CONFIG, 0x03);
+ 
+-  // Accel range: ±2g (AFS_SEL=0) — maximum sensitivity for detecting
+-  // subtle freefall phases. Direct impacts above 2g will saturate,
+-  // but the FSM only needs to know "above threshold," not exact magnitude.
+-  // If saturation causes false negatives on impact detection, change to ±4g.
+-  _writeReg(MPU_ACCEL_CONFIG, 0x00);
++  // Accel range: ±8g (AFS_SEL=2, 0x10) — captures impact spikes up to 8g
++  // without clipping at 2g, while retaining high 4096 LSB/g precision for freefall.
++  _writeReg(MPU_ACCEL_CONFIG, 0x10);
+ 
+-  // Gyro range: ±500°/s (FS_SEL=1) — wide enough for skid detection's
+-  // 330°/s threshold with headroom.
+-  _writeReg(0x1B, 0x08);  // Register 0x1B = GYRO_CONFIG, 0x08 = FS_SEL=1
++  // Gyro range: ±500°/s (FS_SEL=1, 0x08) — accurate roll rate for skid detection.
++  _writeReg(MPU_GYRO_CONFIG, 0x08);
+ 
+   _initialized = true;
+-  Serial.println(F("[SENSORS] MPU-6050 initialized (±2g, ±500°/s, 100Hz)"));
++  Serial.println(F("[SENSORS] MPU-6050 initialized (±8g, ±500°/s, 100Hz)"));
+   return true;
+ }
+ 
+diff --git a/wearable/wearable.ino b/wearable/wearable.ino
+index eb16171..47fe5aa 100644
+--- a/wearable/wearable.ino
++++ b/wearable/wearable.ino
+@@ -47,6 +47,10 @@ static uint32_t _lastTelemetryMs = 0;
+ static uint32_t _lastGPSBroadcastMs = 0;
+ static bool _sensorsOk = false;
+ static bool _loraOk = false;
++static uint8_t  _alertBurstCount   = 0;
++static uint32_t _lastAlertRepeatMs = 0;
++static uint8_t  _alertEventType    = 0;
++static float    _alertPeakG        = 0.0f;
+ 
+ // ── Battery Reading ─────────────────────────────────────────────────────────
+ // ESP32-S3 SuperMini has an onboard LiPo charger but no dedicated battery
+@@ -190,6 +194,7 @@ void loop() {
+         // Cancel active alert
+         Serial.println(F("[WEARABLE] Button pressed — cancelling alert"));
+         detectionAcknowledgeAlert();
++        _alertBurstCount = 0;
+         buzzerOff();
+         neopixelSetState(NEO_ARMED);
+         buzzerSetPattern(BZR_CONFIRM);

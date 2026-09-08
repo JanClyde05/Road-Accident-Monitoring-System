@@ -1,0 +1,492 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #09090b;
+  color: #f4f4f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  letter-spacing: -0.01em;
+}
+
+code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status-pill, .tab-btn {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ── Main Container ────────────────────────────────────────────── */
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: #121214;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Header Branding ───────────────────────────────────────────── */
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #27272a;
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid #3f3f46;
+  background: #000;
+  padding: 2px;
+}
+
+.header h1 {
+  font-size: 15px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+}
+
+/* ── WebSocket Connection Status Pill ──────────────────────────── */
+
+.ws-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 16px;
+  border: 1px solid #27272a;
+  background: #18181b;
+  color: #a1a1aa;
+  transition: all 0.2s;
+}
+
+.ws-pill.connected {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.ws-pill.disconnected {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.ws-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 6px;
+  display: inline-block;
+}
+
+/* ── Emergency Crash Banner ────────────────────────────────────── */
+
+.alert-banner {
+  background: rgba(159, 18, 57, 0.8);
+  border: 1px solid #e11d48;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.alert-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.alert-sub {
+  font-size: 10px;
+  color: #fecdd3;
+  margin-top: 2px;
+}
+
+/* ── Forms & Inputs ────────────────────────────────────────────── */
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="url"] {
+  width: 100%;
+  padding: 10px 12px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #ffffff;
+}
+
+/* ── Photo Preview Box ─────────────────────────────────────────── */
+
+.photo-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  margin-top: 8px;
+}
+
+.photo-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  border: 1px solid #3f3f46;
+  background: #09090b;
+  object-fit: cover;
+  display: none;
+}
+
+.photo-placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  border: 1px solid #3f3f46;
+  background: #09090b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #71717a;
+  font-weight: 700;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────── */
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, opacity 0.2s, background-color 0.2s;
+}
+
+.btn-primary {
+  background: #ffffff;
+  color: #09090b;
+}
+
+.btn-primary:hover {
+  background: #e4e4e7;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 10px;
+}
+
+/* ── Telemetry Grid & Metrics ──────────────────────────────────── */
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.metric-card {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717a;
+  letter-spacing: 0.5px;
+}
+
+.metric-val {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+/* ── Canvas Waveform ───────────────────────────────────────────── */
+
+canvas {
+  width: 100%;
+  height: 96px;
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ── Radar Map View ────────────────────────────────────────────── */
+
+.radar-stage {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid #27272a;
+}
+
+.radar-pin {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #ffffff;
+}
+
+.pin-label {
+  margin-top: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: #09090b;
+  border: 1px solid #3f3f46;
+  border-radius: 4px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+/* ── Terminal / Protocol Logs ──────────────────────────────────── */
+
+.terminal-box {
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  padding: 10px;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 8px;
+}
+
+.terminal-entry {
+  display: flex;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid #18181b;
+  line-height: 1.4;
+}
+
+.dir-badge {
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dir-tx {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.dir-rx {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+/* ── Navigation Capsule Tabs ───────────────────────────────────── */
+
+.nav-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #27272a;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+  border-color: #3f3f46;
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: #09090b;
+  border-color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* ── Status Message Banners ────────────────────────────────────── */
+
+.msg-banner {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 12px;
+  display: none;
+}
+
+.msg-banner.ok {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  display: block;
+}
+
+.msg-banner.err {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  display: block;
+}
+
+.msg-banner.info {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  display: block;
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+
+.footer-text {
+  text-align: center;
+  font-size: 9px;
+  color: #52525b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #1c1c20;
+}

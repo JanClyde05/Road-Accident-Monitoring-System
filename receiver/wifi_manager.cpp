@@ -230,8 +230,8 @@ static void _setupRoutes() {
       // Inline fallback if LittleFS data isn't uploaded
       String html = F("<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'>"
                       "<title>RAMS Receiver WiFi Setup</title>"
-                      "<style>body{font-family:sans-serif;padding:16px;background:#060913;color:#f4f4f5;display:flex;justify-center;align-items:center;min-height:100vh}"
-                      ".card{width:100%;max-width:440px;background:#0e1230;border:1px solid #27272a;border-radius:16px;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.6)}"
+                      "<style>body{font-family:sans-serif;padding:16px;background:#09090b;color:#f4f4f5;display:flex;justify-center;align-items:center;min-height:100vh}"
+                      ".card{width:100%;max-width:440px;background:#121214;border:1px solid #27272a;border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}"
                       "h2{font-size:15px;font-weight:900;text-transform:uppercase;color:#fff;margin-bottom:4px}"
                       "input,button{display:block;width:100%;margin:10px 0;padding:11px 14px;font-size:13px;font-family:monospace;box-sizing:border-box;"
                       "background:#18181b;border:1px solid #27272a;border-radius:10px;color:#fff}"

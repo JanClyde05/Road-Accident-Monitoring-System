@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RAMS Wearable — Device Registration Preview</title>
+  <title>RAMS Wearable — WebSocket Device Registration</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #060913;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #09090b;
       color: #f4f4f5; min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
-      padding: 20px;
+      padding: 16px;
       letter-spacing: -0.01em;
     }
     .card {
-      background: #0e1230;
+      background: #121214;
       border: 1px solid #27272a;
-      border-radius: 16px; padding: 28px;
+      border-radius: 16px; padding: 24px;
       max-width: 440px; width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .brand-header {
       display: flex; align-items: center; justify-content: center;
@@ -30,48 +30,89 @@
       border: 1px solid #3f3f46; object-fit: contain; background: #000; padding: 2px;
     }
     h1 { font-size: 15px; font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase; color: #ffffff; }
-    .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 20px; }
-    label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a1a1aa; margin-bottom: 6px; margin-top: 14px; }
+    .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 16px; }
+    .ws-pill {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 12px; border-radius: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      background: #18181b; border: 1px solid #27272a; margin-bottom: 14px; color: #a1a1aa;
+    }
+    .ws-pill.connected { color: #34d399; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.08); }
+    .ws-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-right: 6px; display: inline-block; }
+    
+    .nav-tabs {
+      display: flex; gap: 6px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #27272a;
+    }
+    .tab-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 8px 4px; border-radius: 6px; font-size: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      background: #18181b; border: 1px solid #27272a; color: #a1a1aa; cursor: pointer; text-decoration: none;
+    }
+    .tab-btn.active {
+      background: #ffffff; color: #09090b; border-color: #ffffff; font-weight: 800; box-shadow: 0 2px 8px rgba(255,255,255,0.15);
+    }
+    
+    label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a1a1aa; margin-bottom: 6px; margin-top: 14px; }
     input {
-      width: 100%; padding: 11px 14px; font-size: 13px; font-family: 'JetBrains Mono', monospace;
+      width: 100%; padding: 10px 12px; font-size: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace;
       background: #18181b; border: 1px solid #27272a;
-      border-radius: 10px; color: #ffffff; outline: none; transition: border 0.2s;
+      border-radius: 8px; color: #ffffff; outline: none; transition: border-color 0.2s;
     }
     input:focus { border-color: #ffffff; }
     .btn {
-      display: block; width: 100%; padding: 12px; margin-top: 22px;
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer;
-      background: #ffffff; color: #09090b; border: 1px solid #ffffff; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 12px; margin-top: 20px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer;
+      background: #ffffff; color: #09090b; border: 1px solid #ffffff; border-radius: 8px;
       transition: transform 0.15s, opacity 0.2s;
     }
     .btn:hover { transform: translateY(-1px); background: #e4e4e7; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
     #status {
-      margin-top: 16px; padding: 10px; border-radius: 10px;
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-align: center; text-transform: uppercase; display: none;
+      margin-top: 14px; padding: 10px; border-radius: 8px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 700; text-align: center; text-transform: uppercase; display: none;
     }
     .status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); display: block !important; }
     .status-err { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); display: block !important; }
     .status-loading { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); display: block !important; }
-    .nav { text-align: center; margin-top: 20px; font-family: 'JetBrains Mono', monospace; }
-    .nav a { color: #f4f4f5; font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; }
-    .nav a:hover { border-color: #ffffff; }
-    .photo-preview { margin-top: 12px; text-align: center; }
+    .photo-preview { margin-top: 10px; text-align: center; }
     .photo-preview img {
-      max-width: 100px; max-height: 100px; border-radius: 12px;
-      border: 1px solid #3f3f46; display: none; margin: 0 auto;
+      max-width: 80px; max-height: 80px; border-radius: 8px;
+      border: 1px solid #3f3f46; display: none; margin: 0 auto; object-fit: cover;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="brand-header">
-      <img src="../../Pictures/LOGO/LOGO.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../public/logo.jpg'">
+      <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../Pictures/LOGO/LOGO.jpg'">
       <h1>Road Accident Monitoring</h1>
     </div>
-    <p class="subtitle">Wearable Device Registration — Setup Mode</p>
+    <p class="subtitle">Wearable Device Registration &bull; WebSocket Port 81</p>
 
-    <label for="name">Rider Full Name</label>
+    <div class="ws-pill connected" id="wsPill">
+      <span><span class="dot"></span><span id="wsStatusText">WEBSOCKET UPLINK READY</span></span>
+      <span>PORT 81</span>
+    </div>
+
+    <!-- Top Navigation Tabs -->
+    <div class="nav-tabs">
+      <a href="/" class="tab-btn active">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>Setup</span>
+      </a>
+      <a href="/telemetry" class="tab-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Telemetry</span>
+      </a>
+      <a href="/map" class="tab-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        <span>Radar</span>
+      </a>
+    </div>
+
+    <label for="name">Road User Full Name (Pedestrian, Cyclist, Rider)</label>
     <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" value="Juan Dela Cruz" required>
 
     <label for="driveLink">Photo (Google Drive Share Link)</label>
@@ -80,17 +121,103 @@
       <img id="photoPreview" alt="Photo preview">
     </div>
 
-    <button class="btn" id="registerBtn" onclick="doRegister()">REGISTER DEVICE</button>
-    <div id="status" class="status-ok">REGISTERED! TOKEN: RAMS-9921</div>
-
-    <div class="nav"><a href="#">OFFLINE MAP</a> &nbsp; <a href="#">LIVE TELEMETRY</a></div>
+    <button class="btn" id="registerBtn" onclick="doRegister()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      SAVE &amp; REGISTER (WEBSOCKET)
+    </button>
+    <div id="status"></div>
   </div>
 
   <script>
+    var ws;
+    var wsReady = false;
+
+    function connectWS() {
+      var host = location.hostname || '192.168.4.1';
+      try {
+        ws = new WebSocket('ws://' + host + ':81/');
+        ws.onopen = function() {
+          wsReady = true;
+          document.getElementById('wsPill').className = 'ws-pill connected';
+          document.getElementById('wsStatusText').textContent = 'WEBSOCKET PORT 81: CONNECTED';
+        };
+        ws.onclose = function() {
+          wsReady = false;
+          document.getElementById('wsPill').className = 'ws-pill';
+          document.getElementById('wsStatusText').textContent = 'WEBSOCKET: PREVIEW MODE';
+          setTimeout(connectWS, 4000);
+        };
+        ws.onmessage = function(e) {
+          try {
+            var msg = JSON.parse(e.data);
+            if (msg.type === 'register_result') {
+              var st = document.getElementById('status');
+              if (msg.success) {
+                st.className = 'status-ok';
+                st.textContent = 'REGISTERED VIA WEBSOCKET! TOKEN: ' + msg.token;
+                document.getElementById('registerBtn').disabled = true;
+              } else {
+                st.className = 'status-err';
+                st.textContent = 'ERROR: ' + (msg.error || 'Registration failed');
+                document.getElementById('registerBtn').disabled = false;
+              }
+            }
+          } catch(ex) {}
+        };
+      } catch(e) {
+        document.getElementById('wsStatusText').textContent = 'WEBSOCKET: PREVIEW MODE';
+      }
+    }
+    connectWS();
+
+    document.getElementById('driveLink').addEventListener('change', function() {
+      var link = this.value;
+      if (!link) return;
+      var img = document.getElementById('photoPreview');
+      var fid = '';
+      var dIdx = link.indexOf('/d/');
+      if (dIdx > -1) {
+        var s = dIdx + 3;
+        var e = link.indexOf('/', s);
+        if (e < 0) e = link.indexOf('?', s);
+        if (e < 0) e = link.length;
+        fid = link.substring(s, e);
+      } else {
+        var idIdx = link.indexOf('id=');
+        if (idIdx > -1) {
+          var s2 = idIdx + 3;
+          var e2 = link.indexOf('&', s2);
+          if (e2 < 0) e2 = link.length;
+          fid = link.substring(s2, e2);
+        }
+      }
+      if (fid) {
+        img.src = 'https://lh3.googleusercontent.com/d/' + fid;
+        img.style.display = 'block';
+        img.onerror = function() { img.style.display = 'none'; };
+      }
+    });
+
     function doRegister() {
+      var name = document.getElementById('name').value.trim();
+      var link = document.getElementById('driveLink').value.trim();
       var st = document.getElementById('status');
-      st.className = 'status-ok';
-      st.textContent = 'REGISTERED! TOKEN: RAMS-9921';
+
+      if (!name) { st.className = 'status-err'; st.textContent = 'Name is required.'; return; }
+
+      st.className = 'status-loading';
+      st.textContent = 'Transmitting WebSocket frame...';
+      document.getElementById('registerBtn').disabled = true;
+
+      if (ws && wsReady) {
+        ws.send(JSON.stringify({ type: 'register', name: name, driveLink: link }));
+      } else {
+        // Standalone preview fallback
+        setTimeout(function() {
+          st.className = 'status-ok';
+          st.textContent = 'REGISTERED VIA WEBSOCKET! TOKEN: RAMS-9921';
+        }, 500);
+      }
     }
   </script>
 </body>

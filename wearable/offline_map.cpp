@@ -76,17 +76,17 @@ String offlineMapGetHTML() {
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
-      background: #060913; color: #e0e4f0;
+      background: #09090b; color: #f4f4f5;
       overflow: hidden; height: 100vh;
     }
     .header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 10;
-      background: rgba(14, 18, 48, 0.9); backdrop-filter: blur(12px);
+      background: rgba(18, 18, 20, 0.95); backdrop-filter: blur(12px);
       padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid rgba(80, 100, 220, 0.2);
+      border-bottom: 1px solid #27272a;
     }
     .header-brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 32px; height: 32px; border-radius: 6px; border: 1px solid rgba(123, 140, 255, 0.4); object-fit: cover; }
+    .brand-logo { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #3f3f46; object-fit: cover; }
     .header h1 { font-size: 14px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; color: #ffffff; }
     .gps-info { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #8890b0; text-transform: uppercase; }
     .gps-info.has-fix { color: #34d97f; }
@@ -123,15 +123,15 @@ String offlineMapGetHTML() {
     }
     .nav-bar {
       position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-      z-index: 10; display: flex; gap: 8px; background: rgba(14, 18, 48, 0.9);
-      padding: 6px 12px; border-radius: 24px; font-family: 'JetBrains Mono', monospace;
-      border: 1px solid rgba(100, 120, 255, 0.3); backdrop-filter: blur(8px);
+      z-index: 10; display: flex; gap: 8px; background: rgba(18, 18, 20, 0.95);
+      padding: 6px 12px; border-radius: 12px; font-family: 'JetBrains Mono', monospace;
+      border: 1px solid #27272a; backdrop-filter: blur(8px);
     }
     .nav-bar a {
-      color: #7b8cff; font-size: 11px; font-weight: 700; text-decoration: none; text-transform: uppercase;
-      padding: 4px 12px; border-radius: 12px; transition: background .15s;
+      color: #f4f4f5; font-size: 11px; font-weight: 700; text-decoration: none; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 8px; background: #18181b; border: 1px solid #27272a; transition: border-color .15s;
     }
-    .nav-bar a:hover { background: rgba(123, 140, 255, 0.15); }
+    .nav-bar a:hover { border-color: #ffffff; }
   </style>
 </head>
 <body>
@@ -155,8 +155,8 @@ String offlineMapGetHTML() {
   </div>
 
   <div class="nav-bar">
-    <a href="/">📋 Registration</a>
-    <a href="/telemetry">🔬 Telemetry</a>
+    <a href="/">Registration</a>
+    <a href="/telemetry">Telemetry</a>
   </div>
 
   <script>
