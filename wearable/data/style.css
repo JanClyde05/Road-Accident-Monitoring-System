@@ -54,11 +54,11 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status-pill, .tab-b
 .brand-logo {
   width: 38px;
   height: 38px;
-  border-radius: 8px;
-  object-fit: contain;
-  border: 1px solid #3f3f46;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #52525b;
   background: #000;
-  padding: 2px;
+  padding: 1px;
 }
 
 .header h1 {
@@ -83,7 +83,7 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status-pill, .tab-b
 .ws-pill {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   padding: 8px 12px;
   border-radius: 8px;
@@ -96,6 +96,11 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status-pill, .tab-b
   background: #18181b;
   color: #a1a1aa;
   transition: all 0.2s;
+}
+
+.ws-pill-inner {
+  display: inline-flex;
+  align-items: center;
 }
 
 .ws-pill.connected {
@@ -148,6 +153,58 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status-pill, .tab-b
 }
 
 /* ── Forms & Inputs ────────────────────────────────────────────── */
+
+.user-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.user-type-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color: #a1a1aa;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.user-type-btn:hover {
+  border-color: #52525b;
+  color: #ffffff;
+  background: #202024;
+}
+
+.user-type-btn.active {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #09090b;
+  font-weight: 800;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.user-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.user-type-icon svg {
+  display: block;
+  stroke: currentColor;
+}
 
 .form-group {
   margin-bottom: 14px;
@@ -309,15 +366,15 @@ canvas {
   margin-bottom: 8px;
 }
 
-/* ── Radar Map View ────────────────────────────────────────────── */
+/* ── Tuguegarao City Map View ──────────────────────────────────── */
 
-.radar-stage {
+.map-stage {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 220px;
   background: #18181b;
   border: 1px solid #27272a;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -325,38 +382,110 @@ canvas {
   margin-bottom: 8px;
 }
 
-.radar-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid #27272a;
+.tuguegarao-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.radar-pin {
-  position: relative;
-  z-index: 5;
+.map-pin {
+  position: absolute;
+  z-index: 20;
+  transform: translate(-50%, -100%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: none;
+  transition: left 0.4s ease, top 0.4s ease;
 }
 
-.pin-dot {
-  width: 12px;
-  height: 12px;
+.pin-pulse {
+  position: absolute;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
+  background: rgba(239, 68, 68, 0.4);
+  animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  top: -6px;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.pin-marker {
+  width: 18px;
+  height: 24px;
   background: #ef4444;
   border: 2px solid #ffffff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
-.pin-label {
+.pin-core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.pin-name-tag {
   margin-top: 6px;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  background: #09090b;
-  border: 1px solid #3f3f46;
+  font-size: 8.5px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 1px 5px;
+  background: rgba(9, 9, 11, 0.9);
+  border: 1px solid #ef4444;
   border-radius: 4px;
   color: #ffffff;
   text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.map-sector-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 8.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #a1a1aa;
+  background: rgba(9, 9, 11, 0.85);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #27272a;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.no-fix-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid #3f3f46;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 8.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #fbbf24;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* ── Terminal / Protocol Logs ──────────────────────────────────── */

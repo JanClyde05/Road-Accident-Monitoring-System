@@ -385,11 +385,11 @@ export const ReceiverPortalSimulator: React.FC<ReceiverPortalSimulatorProps> = (
               
               {/* Header Branding */}
               <div className="text-center pb-4 border-b border-neutral-800/80">
-                <div className="inline-flex items-center justify-center p-2 rounded-xl bg-neutral-900 border border-neutral-700 mb-3">
+                <div className="inline-flex items-center justify-center p-1 rounded-full bg-neutral-950 border border-neutral-700 mb-3 overflow-hidden">
                   <img
                     src="/logo.jpg"
                     alt="RAMS Logo"
-                    className="w-10 h-10 object-contain rounded"
+                    className="w-10 h-10 object-cover rounded-full"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src = '/logo.png';
                     }}

@@ -42,11 +42,11 @@ export default function RAMSHeader({
           
           {/* Brand Mark & Identity */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg border border-neutral-300 dark:border-neutral-700 flex items-center justify-center bg-white dark:bg-neutral-900 overflow-hidden shadow-xs flex-shrink-0 p-0.5">
+            <div className="w-9 h-9 rounded-full border border-neutral-300 dark:border-neutral-700 flex items-center justify-center bg-white dark:bg-neutral-900 overflow-hidden shadow-xs flex-shrink-0 p-0.5">
               <img
                 src="/logo.png"
                 alt="RAMS Logo"
-                className="w-full h-full object-contain rounded"
+                className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src.endsWith('/logo.png')) {

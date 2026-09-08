@@ -3,7 +3,9 @@
 > **PGC Digital Innovation Challenge 2026**  
 > Version: v2 (evolved from "Danger Monitoring System" v1)  
 > GitHub: https://github.com/JanClyde05/Road-Accident-Monitoring-System  
-> Dashboard: https://road-accident-monitoring-system.netlify.app
+> Dashboard: https://road-accident-monitoring-system.netlify.app  
+> **Master Obsidian Memory Map**: [[RAMS_OBSIDIAN_MEMORY_MAP.md]] | Root: [[MEMORY_MAP.md]]  
+> **Design Specification**: [[DESIGN_RULES.md]]
 
 ---
 
@@ -72,10 +74,16 @@ mindmap
 | [local_ap.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.cpp) | SoftAP + WebSocket (setup mode: `/` Registration, `/map` Offline Map, `/telemetry` Live Charts) | WiFi.h, WebSocketsServer, ESPAsyncWebServer |
 | [registration.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.cpp) | Name + Drive link → token, NVS storage | ArduinoJson, Preferences |
 | [offline_map.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.cpp) | GPS-to-pixel static map viewer | map_image.h |
-| [map_image.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/map_image.h) | PROGMEM placeholder map tile | — (replace with real image) |
+| [preview_registration.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/preview_registration.html) | Standalone local browser preview (WebSocket + category selector) | data/style.css |
 | [wearable.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/wearable.ino) | Main orchestrator (armed/setup modes) | All above modules |
+| [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/index.html) | LittleFS single-page application (4 views, category selector) | style.css, app.js |
+| [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/style.css) | LittleFS styling (circular logo, custom teardrop pin, dark slate) | — |
+| [data/app.js](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/app.js) | LittleFS WebSocket client (hash token, category sync, Tuguegarao map) | — |
+| [data/map.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/map.html) | Standalone Tuguegarao City vector map route | style.css, app.js |
+| [data/telemetry.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/telemetry.html) | Standalone live IMU/GPS telemetry route | style.css, app.js |
+| [data/logo.png](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/logo.png) | Secondary raster emblem asset | — |
 
-### receiver/ (15 files)
+### receiver/ (16 files)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
 | [config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/config.h) | Backend URL, retry settings, pin map | — |
@@ -85,9 +93,11 @@ mindmap
 | [http_upload.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.cpp) | HTTPS POST JSON to Netlify | HTTPClient, WiFiClientSecure |
 | [local_queue.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.cpp) | LittleFS store-and-retry buffer | LittleFS |
 | [receiver.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/receiver.ino) | Main orchestrator | All above modules |
-| [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/index.html) | Captive portal page (LittleFS) | style.css, app.js |
-| [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/style.css) | Portal styling (dark mode, glassmorphism) | — |
+| [preview_receiver.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/preview_receiver.html) | Standalone local browser preview (circular logo + mock AP) | data/style.css |
+| [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/index.html) | Captive portal page (LittleFS, circular logo) | style.css, app.js |
+| [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/style.css) | Portal styling (circular logo wrap, clip-path, dark mode) | — |
 | [data/app.js](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/app.js) | Scan, connect, status poll logic | — |
+| [data/logo.png](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/logo.png) | Secondary raster emblem asset | — |
 
 ### backend/ (10 source files)
 | File | Purpose | Key Dependencies |

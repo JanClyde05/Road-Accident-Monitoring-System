@@ -21,6 +21,7 @@
 
 #include "detection.h"
 #include "config.h"
+#include "../shared/protocol.h"
 #include <math.h>
 
 // ── Fall FSM State ──────────────────────────────────────────────────────────
@@ -195,7 +196,7 @@ DetectionResult detectionUpdate(const SensorData& data) {
         result.triggered = true;
         result.eventType = EVT_FALL;
         result.peakAMag = _peakImpactG;
-        Serial.printf("[DETECT] ⚠ FALL CONFIRMED (peak=%.2fg, σ=%.3fg)\n", _peakImpactG, sigma);
+        Serial.printf("[DETECT] [ALERT] FALL CONFIRMED (peak=%.2fg, sigma=%.3fg)\n", _peakImpactG, sigma);
       }
 
       // Timeout: if stillness phase runs too long without confirming
@@ -240,7 +241,7 @@ DetectionResult detectionUpdate(const SensorData& data) {
         result.eventType = EVT_SKID;
         result.peakAMag = fabsf(data.ay);
         _skidActive = false;
-        Serial.printf("[DETECT] ⚠ SKID DETECTED (ay=%.2fg, gx=%.1f°/s)\n",
+        Serial.printf("[DETECT] [ALERT] SKID DETECTED (ay=%.2fg, gx=%.1f deg/s)\n",
                       data.ay, data.gx);
         return result;
       }
@@ -267,7 +268,7 @@ DetectionResult detectionUpdate(const SensorData& data) {
         result.triggered = true;
         result.eventType = EVT_DIRECT_IMPACT;
         result.peakAMag = data.aMag;
-        Serial.printf("[DETECT] ⚠ DIRECT IMPACT (%.2fg)\n", data.aMag);
+        Serial.printf("[DETECT] [ALERT] DIRECT IMPACT (%.2fg)\n", data.aMag);
         return result;
       }
     }
@@ -304,7 +305,7 @@ DetectionResult detectionUpdate(const SensorData& data) {
       result.triggered = true;
       result.eventType = EVT_GROUND_SHOCK;
       result.peakAMag = sigmaA;
-      Serial.printf("[DETECT] ⚠ GROUND SHOCK (σA=%.3f, σR=%.1f, σP=%.1f)\n",
+      Serial.printf("[DETECT] [ALERT] GROUND SHOCK (sigmaA=%.3f, sigmaR=%.1f, sigmaP=%.1f)\n",
                     sigmaA, sigmaRoll, sigmaPitch);
       return result;
     }
@@ -321,7 +322,7 @@ DetectionResult detectionUpdate(const SensorData& data) {
       result.triggered = true;
       result.eventType = EVT_WAVE_MOTION;
       result.peakAMag = sigmaA;
-      Serial.printf("[DETECT] ⚠ WAVE MOTION (σA=%.3f, σR=%.1f, σP=%.1f)\n",
+      Serial.printf("[DETECT] [ALERT] WAVE MOTION (sigmaA=%.3f, sigmaR=%.1f, sigmaP=%.1f)\n",
                     sigmaA, sigmaRoll, sigmaPitch);
       return result;
     }

@@ -52,7 +52,7 @@ export const ARCHITECTURE_NODES: ArchitectureNode[] = [
     role: 'Sensor Sampling & Edge Detection',
     hardware: 'ESP32 + MPU-6050 + ATGM336H GPS + Active Buzzer + RGB LED',
     protocolIn: 'I2C (MPU6050 100Hz) & UART (GPS 9600 baud)',
-    protocolOut: 'SPI to SX1278 (Ra-02 433MHz LoRa) & SoftAP WebSocket Server (Port 81, WebServer Deprecated)',
+    protocolOut: 'SPI to SX1278 (Ra-02 433MHz LoRa) & SoftAP WebSocket Server',
     latency: '< 10ms processing latency per sample',
     criticalRisks: [
       'Single-shot LoRa alert with 0 retries leads to dropped crash events on packet loss.',

@@ -50,14 +50,33 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   margin-bottom: 6px;
 }
 
-.brand-logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  object-fit: contain;
-  border: 1px solid #3f3f46;
+.brand-logo-wrap {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid #52525b;
   background: #000;
-  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 }
 
 .header h1 {

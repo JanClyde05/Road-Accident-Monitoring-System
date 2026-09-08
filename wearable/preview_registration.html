@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RAMS Wearable — WebSocket Device Registration</title>
+  <title>RAMS Wearable — Safety Registration</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -26,13 +26,13 @@
       gap: 12px; margin-bottom: 6px;
     }
     .brand-logo {
-      width: 38px; height: 38px; border-radius: 8px;
-      border: 1px solid #3f3f46; object-fit: contain; background: #000; padding: 2px;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid #52525b; object-fit: cover; background: #000; padding: 1px;
     }
     h1 { font-size: 15px; font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase; color: #ffffff; }
     .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 16px; }
     .ws-pill {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: center;
       padding: 7px 12px; border-radius: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace;
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
       background: #18181b; border: 1px solid #27272a; margin-bottom: 14px; color: #a1a1aa;
@@ -53,6 +53,18 @@
       background: #ffffff; color: #09090b; border-color: #ffffff; font-weight: 800; box-shadow: 0 2px 8px rgba(255,255,255,0.15);
     }
     
+    .user-type-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px;
+    }
+    .user-type-btn {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #18181b;
+      border: 1px solid #27272a; border-radius: 8px; color: #a1a1aa;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer;
+    }
+    .user-type-btn.active {
+      background: rgba(59, 130, 246, 0.15); border-color: #3b82f6; color: #93c5fd;
+    }
+
     label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #a1a1aa; margin-bottom: 6px; margin-top: 14px; }
     input {
       width: 100%; padding: 10px 12px; font-size: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -76,10 +88,19 @@
     .status-ok { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); display: block !important; }
     .status-err { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); display: block !important; }
     .status-loading { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); display: block !important; }
-    .photo-preview { margin-top: 10px; text-align: center; }
-    .photo-preview img {
-      max-width: 80px; max-height: 80px; border-radius: 8px;
-      border: 1px solid #3f3f46; display: none; margin: 0 auto; object-fit: cover;
+    
+    .photo-card {
+      display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+      border-radius: 8px; background: #18181b; border: 1px solid #27272a; margin-top: 8px;
+    }
+    .photo-thumb {
+      width: 42px; height: 42px; border-radius: 6px; border: 1px solid #3f3f46;
+      background: #09090b; object-fit: cover; display: none;
+    }
+    .photo-placeholder {
+      width: 42px; height: 42px; border-radius: 6px; border: 1px solid #3f3f46;
+      background: #09090b; display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: #71717a; font-weight: 700;
     }
   </style>
 </head>
@@ -89,11 +110,10 @@
       <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../Pictures/LOGO/LOGO.jpg'">
       <h1>Road Accident Monitoring</h1>
     </div>
-    <p class="subtitle">Wearable Device Registration &bull; WebSocket Port 81</p>
+    <p class="subtitle">Wearable Safety Device &bull; Autonomous Uplink</p>
 
     <div class="ws-pill connected" id="wsPill">
-      <span><span class="dot"></span><span id="wsStatusText">WEBSOCKET UPLINK READY</span></span>
-      <span>PORT 81</span>
+      <span><span class="dot"></span><span id="wsStatusText">WEBSOCKET: CONNECTED</span></span>
     </div>
 
     <!-- Top Navigation Tabs -->
@@ -108,17 +128,44 @@
       </a>
       <a href="/map" class="tab-btn">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-        <span>Radar</span>
+        <span>Map</span>
       </a>
     </div>
 
-    <label for="name">Road User Full Name (Pedestrian, Cyclist, Rider)</label>
-    <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" value="Juan Dela Cruz" required>
+    <label>Road User Category (Select Anytime)</label>
+    <div class="user-type-grid" id="userTypeGrid">
+      <button type="button" class="user-type-btn active" data-type="Pedestrian" onclick="selectType('Pedestrian')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/><path d="m14 13-1-3-3 2-2-4"/><path d="m10 22 2-7 3 3v4"/></svg>
+        <span>Pedestrian</span>
+      </button>
+      <button type="button" class="user-type-btn" data-type="Cyclist" onclick="selectType('Cyclist')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+        <span>Cyclist</span>
+      </button>
+      <button type="button" class="user-type-btn" data-type="Car Driver" onclick="selectType('Car Driver')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+        <span>Car Driver</span>
+      </button>
+      <button type="button" class="user-type-btn" data-type="Motorcycle Rider" onclick="selectType('Motorcycle Rider')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M12 16h2l3-6h-3l-2 3-3-1-2 4h5"/><path d="M9 8h4"/></svg>
+        <span>Motorcycle Rider</span>
+      </button>
+    </div>
 
-    <label for="driveLink">Photo (Google Drive Share Link)</label>
-    <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
-    <div class="photo-preview">
-      <img id="photoPreview" alt="Photo preview">
+    <label for="name">Road User Full Name</label>
+    <input type="text" id="name" placeholder="Input your name here" maxlength="23" value="" oninput="updatePreview()" required>
+
+    <label for="driveLink">Photo (Google Drive 2x2 Picture Link)</label>
+    <input type="url" id="driveLink" placeholder="Input you GDrive 2x2 Picture here" value="">
+    
+    <div class="photo-card">
+      <img id="photoPreview" class="photo-thumb" alt="Profile preview">
+      <div id="photoPlaceholder" class="photo-placeholder">2x2</div>
+      <div style="font-size:10px;color:#a1a1aa;line-height:1.3;">
+        <span id="namePreview" style="color:#ffffff;font-weight:700;display:block;">------</span>
+        <span id="userTypePreview" style="color:#60a5fa;font-size:9px;display:block;margin-bottom:2px;">Pedestrian</span>
+        <span>Token: <strong id="tokenDisplay" style="color:#34d399;font-family:monospace;">------</strong></span>
+      </div>
     </div>
 
     <button class="btn" id="registerBtn" onclick="doRegister()">
@@ -131,6 +178,31 @@
   <script>
     var ws;
     var wsReady = false;
+    var selectedType = 'Pedestrian';
+    var registeredToken = '------';
+
+    function selectType(t) {
+      selectedType = t;
+      document.querySelectorAll('.user-type-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-type') === t);
+      });
+      document.getElementById('userTypePreview').textContent = t;
+    }
+
+    function updatePreview() {
+      var n = document.getElementById('name').value.trim();
+      document.getElementById('namePreview').textContent = n.length > 0 ? n : '------';
+    }
+
+    function generateHashToken(name, type, link) {
+      var seed = (name || 'USER') + '|' + type + '|' + (link || '');
+      var hash = 0x811c;
+      for (var i = 0; i < seed.length; i++) {
+        hash ^= seed.charCodeAt(i);
+        hash = (hash * 0x0103) & 0xffff;
+      }
+      return 'RAMS-' + hash.toString(16).toUpperCase().padStart(4, '0');
+    }
 
     function connectWS() {
       var host = location.hostname || '192.168.4.1';
@@ -139,12 +211,12 @@
         ws.onopen = function() {
           wsReady = true;
           document.getElementById('wsPill').className = 'ws-pill connected';
-          document.getElementById('wsStatusText').textContent = 'WEBSOCKET PORT 81: CONNECTED';
+          document.getElementById('wsStatusText').textContent = 'WEBSOCKET: CONNECTED';
         };
         ws.onclose = function() {
           wsReady = false;
           document.getElementById('wsPill').className = 'ws-pill';
-          document.getElementById('wsStatusText').textContent = 'WEBSOCKET: PREVIEW MODE';
+          document.getElementById('wsStatusText').textContent = 'WEBSOCKET: DISCONNECTED';
           setTimeout(connectWS, 4000);
         };
         ws.onmessage = function(e) {
@@ -153,8 +225,10 @@
             if (msg.type === 'register_result') {
               var st = document.getElementById('status');
               if (msg.success) {
+                registeredToken = msg.token;
+                document.getElementById('tokenDisplay').textContent = msg.token;
                 st.className = 'status-ok';
-                st.textContent = 'REGISTERED VIA WEBSOCKET! TOKEN: ' + msg.token;
+                st.textContent = 'REGISTERED! TOKEN: ' + msg.token;
                 document.getElementById('registerBtn').disabled = true;
               } else {
                 st.className = 'status-err';
@@ -165,15 +239,23 @@
           } catch(ex) {}
         };
       } catch(e) {
-        document.getElementById('wsStatusText').textContent = 'WEBSOCKET: PREVIEW MODE';
+        document.getElementById('wsStatusText').textContent = 'WEBSOCKET: STANDBY';
       }
     }
     connectWS();
 
-    document.getElementById('driveLink').addEventListener('change', function() {
-      var link = this.value;
-      if (!link) return;
+    document.getElementById('driveLink').addEventListener('input', updatePhoto);
+    document.getElementById('driveLink').addEventListener('change', updatePhoto);
+
+    function updatePhoto() {
+      var link = this.value.trim();
       var img = document.getElementById('photoPreview');
+      var ph = document.getElementById('photoPlaceholder');
+      if (!link) {
+        img.style.display = 'none';
+        ph.style.display = 'flex';
+        return;
+      }
       var fid = '';
       var dIdx = link.indexOf('/d/');
       if (dIdx > -1) {
@@ -182,21 +264,17 @@
         if (e < 0) e = link.indexOf('?', s);
         if (e < 0) e = link.length;
         fid = link.substring(s, e);
-      } else {
-        var idIdx = link.indexOf('id=');
-        if (idIdx > -1) {
-          var s2 = idIdx + 3;
-          var e2 = link.indexOf('&', s2);
-          if (e2 < 0) e2 = link.length;
-          fid = link.substring(s2, e2);
-        }
       }
       if (fid) {
         img.src = 'https://lh3.googleusercontent.com/d/' + fid;
         img.style.display = 'block';
-        img.onerror = function() { img.style.display = 'none'; };
+        ph.style.display = 'none';
+        img.onerror = function() {
+          img.style.display = 'none';
+          ph.style.display = 'flex';
+        };
       }
-    });
+    }
 
     function doRegister() {
       var name = document.getElementById('name').value.trim();
@@ -206,17 +284,20 @@
       if (!name) { st.className = 'status-err'; st.textContent = 'Name is required.'; return; }
 
       st.className = 'status-loading';
-      st.textContent = 'Transmitting WebSocket frame...';
+      st.textContent = 'Transmitting registration...';
       document.getElementById('registerBtn').disabled = true;
 
+      var token = generateHashToken(name, selectedType, link);
+
       if (ws && wsReady) {
-        ws.send(JSON.stringify({ type: 'register', name: name, driveLink: link }));
+        ws.send(JSON.stringify({ type: 'register', name: name, driveLink: link, userType: selectedType, token: token }));
       } else {
-        // Standalone preview fallback
         setTimeout(function() {
+          registeredToken = token;
+          document.getElementById('tokenDisplay').textContent = token;
           st.className = 'status-ok';
-          st.textContent = 'REGISTERED VIA WEBSOCKET! TOKEN: RAMS-9921';
-        }, 500);
+          st.textContent = 'REGISTERED! TOKEN: ' + token;
+        }, 400);
       }
     }
   </script>

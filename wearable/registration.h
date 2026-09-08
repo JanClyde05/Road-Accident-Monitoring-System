@@ -23,14 +23,18 @@ void registrationInit();
 // Returns empty string if the link format is unrecognized.
 String convertDriveLink(const String& rawUrl);
 
-// Generate a new 8-character alphanumeric device token.
-String generateToken();
+// Generate a new interface-friendly device token (e.g. RAMS-4A2F).
+String generateToken(const String& name = "", const String& userType = "", const String& driveLink = "");
 
 // Process a registration request (called from the WebSocket handler).
 // name: user's display name (truncated to 23 chars for protocol)
 // driveLink: raw Google Drive share URL (will be converted)
+// userType: road user category (Pedestrian, Cyclist, Car Driver, Motorcycle Rider)
 // Returns true if registration was saved successfully.
-bool registrationProcess(const String& name, const String& driveLink);
+bool registrationProcess(const String& name, const String& driveLink, const String& userType = "Pedestrian");
+
+// Update road user type dynamically anytime
+bool registrationSetUserType(const String& userType);
 
 // Get the current device token (empty if not registered).
 String registrationGetToken();
@@ -40,6 +44,9 @@ String registrationGetName();
 
 // Get the converted photo URL (empty if not registered).
 String registrationGetPhotoUrl();
+
+// Get the registered road user category.
+String registrationGetUserType();
 
 // Returns true if the device has a saved registration.
 bool registrationIsRegistered();

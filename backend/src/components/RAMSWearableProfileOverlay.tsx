@@ -128,8 +128,8 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
         {/* Top Header Banner */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100/90 dark:bg-neutral-900/90">
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 flex items-center justify-center overflow-hidden p-0.5">
-              <img src="/logo.png" alt="RAMS" className="w-full h-full object-contain" onError={(e) => { (e.target as HTMLImageElement).src = '/logo.jpg'; }} />
+            <div className="w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 flex items-center justify-center overflow-hidden p-0.5">
+              <img src="/logo.png" alt="RAMS" className="w-full h-full object-cover rounded-full" onError={(e) => { (e.target as HTMLImageElement).src = '/logo.jpg'; }} />
             </div>
             <div>
               <h2 className="text-xs font-black uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
@@ -167,12 +167,12 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
                   referrerPolicy="no-referrer"
                   src={event.photoUrl}
                   alt={riderName}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800 shadow-md"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800 shadow-md"
                   onError={() => setImageError(true)}
                 />
               ) : (
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center p-2 shadow-md">
-                  <img src="/logo.png" alt="Emblem" className="w-full h-full object-contain" onError={(e) => { (e.target as HTMLImageElement).src = '/logo.jpg'; }} />
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center p-2 shadow-md overflow-hidden">
+                  <img src="/logo.png" alt="Emblem" className="w-full h-full object-cover rounded-full" onError={(e) => { (e.target as HTMLImageElement).src = '/logo.jpg'; }} />
                 </div>
               )}
               <span 

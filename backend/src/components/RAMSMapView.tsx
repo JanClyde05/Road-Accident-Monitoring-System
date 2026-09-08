@@ -84,8 +84,8 @@ function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivI
       </svg>
 
       <!-- Attached Monospace Label Pill -->
-      <div class="absolute -bottom-1 px-1.5 py-0.5 rounded font-mono font-bold text-[9px] uppercase tracking-wider text-white bg-neutral-900/90 dark:bg-black/90 border border-neutral-700/80 shadow-md whitespace-nowrap pointer-events-none transition-all">
-        ${isAlert ? `⚠ ${shortName}` : shortName}
+      <div class="absolute -bottom-1 px-1.5 py-0.5 rounded font-mono font-bold text-[9px] uppercase tracking-wider text-white bg-neutral-900/90 dark:bg-black/90 border border-neutral-700/80 shadow-md whitespace-nowrap pointer-events-none transition-all flex items-center gap-1">
+        ${isAlert ? '<span class="text-rose-400 font-black">!</span>' : ''}<span>${shortName}</span>
       </div>
     </div>
   `;

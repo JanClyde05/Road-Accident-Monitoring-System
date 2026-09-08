@@ -125,7 +125,7 @@ void setup() {
     sensorsCalibrate(200);
     detectionInit();
   } else {
-    Serial.println(F("[WEARABLE] ⚠ IMU init failed! Detection disabled."));
+    Serial.println(F("[WEARABLE] [ERROR] IMU init failed! Detection disabled."));
     neopixelSetState(NEO_ERROR);
   }
 
@@ -135,7 +135,7 @@ void setup() {
   // Initialize LoRa
   _loraOk = loraTxInit();
   if (!_loraOk) {
-    Serial.println(F("[WEARABLE] ⚠ LoRa init failed! Transmit disabled."));
+    Serial.println(F("[WEARABLE] [ERROR] LoRa init failed! Transmit disabled."));
   }
 
   // Set offline map bounds (Tuguegarao City area default)
@@ -148,17 +148,18 @@ void setup() {
     800, 600   // image dimensions in pixels
   );
 
-  // Boot into armed mode
-  _mode = MODE_ARMED;
-  neopixelSetState(NEO_GPS_ACQUIRING);  // Start with GPS acquiring
-
-  Serial.println(F("\n[WEARABLE] Boot complete — armed mode"));
-  if (registrationIsRegistered()) {
-    Serial.printf("[WEARABLE] Registered as '%s' (token: %s)\n",
+  // Boot into appropriate mode:
+  // If not yet registered, automatically boot into setup mode so RAMS_Setup SSID appears immediately!
+  if (!registrationIsRegistered()) {
+    Serial.println(F("\n[WEARABLE] Device not registered — automatically starting SETUP mode (RAMS_Setup)"));
+    _enterSetupMode();
+  } else {
+    _mode = MODE_ARMED;
+    neopixelSetState(NEO_GPS_ACQUIRING);  // Start with GPS acquiring
+    Serial.printf("\n[WEARABLE] Boot complete — registered as '%s' (token: %s)\n",
                   registrationGetName().c_str(),
                   registrationGetToken().c_str());
-  } else {
-    Serial.println(F("[WEARABLE] Not registered — long-press button for setup mode"));
+    Serial.println(F("[WEARABLE] Long-press button (3s) anytime to toggle setup mode"));
   }
 }
 
@@ -233,7 +234,7 @@ void loop() {
 
       if (det.triggered) {
         // Detection event confirmed — alert!
-        Serial.printf("[WEARABLE] ⚠ ALERT: eventType=%d peakG=%.2f\n",
+        Serial.printf("[WEARABLE] [ALERT] eventType=%d peakG=%.2f\n",
                       det.eventType, det.peakAMag);
 
         neopixelSetState(NEO_ALERT);

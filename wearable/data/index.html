@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RAMS Wearable — WebSocket Portal</title>
+  <title>RAMS Wearable — Safety Portal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,13 +15,12 @@
         <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.png'">
         <h1>Road Accident Monitoring</h1>
       </div>
-      <p class="subtitle">Wearable ESP32-S3 &bull; WebSocket Interface (Port 81)</p>
+      <p class="subtitle">Wearable Safety Device &bull; Autonomous Uplink</p>
     </div>
 
     <!-- WebSocket Status Pill -->
     <div class="ws-pill disconnected" id="wsPill">
-      <span><span class="dot"></span><span id="wsStatusText">CONNECTING TO WEBSOCKET...</span></span>
-      <span>PORT 81</span>
+      <span class="ws-pill-inner"><span class="dot"></span><span id="wsStatusText">WEBSOCKET: DISCONNECTED</span></span>
     </div>
 
     <!-- Crash Alert Banner (FSM State 4) -->
@@ -32,7 +31,7 @@
       </div>
     </div>
 
-    <!-- Navigation Tabs Capsule Bar (Top Position for Optimal Ergonomics) -->
+    <!-- Navigation Tabs Capsule Bar -->
     <div class="nav-tabs">
       <button class="tab-btn active" id="btn-setup" onclick="switchTab('setup')">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
@@ -44,7 +43,7 @@
       </button>
       <button class="tab-btn" id="btn-map" onclick="switchTab('map')">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-        <span>Radar</span>
+        <span>Map</span>
       </button>
       <button class="tab-btn" id="btn-logs" onclick="switchTab('logs')">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
@@ -54,21 +53,53 @@
 
     <!-- ── View 1: Profile Setup ── -->
     <div id="view-setup">
+      <!-- Road User Category Selector -->
       <div class="form-group">
-        <label for="name">Road User Full Name (Pedestrian, Cyclist, Rider)</label>
-        <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" value="Juan Dela Cruz" required>
+        <label>Road User Category (Select Anytime)</label>
+        <div class="user-type-grid" id="userTypeGrid">
+          <button type="button" class="user-type-btn active" data-type="Pedestrian" onclick="setUserType('Pedestrian')">
+            <span class="user-type-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/><path d="m14 13-1-3-3 2-2-4"/><path d="m10 22 2-7 3 3v4"/></svg>
+            </span>
+            <span>Pedestrian</span>
+          </button>
+          <button type="button" class="user-type-btn" data-type="Cyclist" onclick="setUserType('Cyclist')">
+            <span class="user-type-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+            </span>
+            <span>Cyclist</span>
+          </button>
+          <button type="button" class="user-type-btn" data-type="Car Driver" onclick="setUserType('Car Driver')">
+            <span class="user-type-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            </span>
+            <span>Car Driver</span>
+          </button>
+          <button type="button" class="user-type-btn" data-type="Motorcycle Rider" onclick="setUserType('Motorcycle Rider')">
+            <span class="user-type-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M12 16h2l3-6h-3l-2 3-3-1-2 4h5"/><path d="M9 8h4"/></svg>
+            </span>
+            <span>Motorcycle Rider</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Road User Full Name</label>
+        <input type="text" id="name" placeholder="Input your name here" maxlength="23" value="" oninput="updatePreview()" required>
       </div>
 
       <div class="form-group">
         <label for="driveLink">Photo (Google Drive Share Link)</label>
-        <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+        <input type="url" id="driveLink" placeholder="Input you GDrive 2x2 Picture here" value="">
         
         <div class="photo-card">
           <img id="photoPreview" class="photo-thumb" alt="Profile preview">
-          <div id="photoPlaceholder" class="photo-placeholder">PHOTO</div>
+          <div id="photoPlaceholder" class="photo-placeholder">2x2</div>
           <div style="font-size:10px;color:#a1a1aa;line-height:1.3;">
-            <span id="namePreview" style="color:#ffffff;font-weight:700;display:block;">Juan Dela Cruz</span>
-            <span>Token: <strong id="tokenDisplay" style="color:#34d399;font-family:monospace;">RAMS-9921</strong></span>
+            <span id="namePreview" style="color:#ffffff;font-weight:700;display:block;">------</span>
+            <span id="userTypePreview" style="color:#60a5fa;font-size:9px;display:block;margin-bottom:2px;">Pedestrian</span>
+            <span>Token: <strong id="tokenDisplay" style="color:#34d399;font-family:monospace;">------</strong></span>
           </div>
         </div>
       </div>
@@ -86,94 +117,137 @@
       <div class="grid-2">
         <div class="metric-card">
           <div class="metric-label">FSM State</div>
-          <div class="metric-val" id="vfsm" style="font-size:11px;">0: IDLE</div>
+          <div class="metric-val" id="vfsm" style="font-size:11px;">0: STANDBY</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Vector Accel |A|</div>
-          <div class="metric-val" id="vam">1.000 g</div>
+          <div class="metric-val" id="vam">—</div>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="metric-card">
           <div class="metric-label" style="color:#f87171;">Ax (X)</div>
-          <div class="metric-val" id="vax">0.00 g</div>
+          <div class="metric-val" id="vax">—</div>
         </div>
         <div class="metric-card">
           <div class="metric-label" style="color:#34d399;">Ay (Y)</div>
-          <div class="metric-val" id="vay">0.00 g</div>
+          <div class="metric-val" id="vay">—</div>
         </div>
         <div class="metric-card">
           <div class="metric-label" style="color:#60a5fa;">Az (Z)</div>
-          <div class="metric-val" id="vaz">1.00 g</div>
+          <div class="metric-val" id="vaz">—</div>
         </div>
       </div>
 
       <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between;">
-        <span>Accel Waveform (100Hz Stream)</span>
-        <span style="color:#34d399;font-weight:700;">WebSocket Port 81</span>
+        <span>Accel Waveform</span>
+        <span style="color:#a1a1aa;font-weight:700;" id="streamStatus">Waiting for live sensor data...</span>
       </div>
       <canvas id="waveformCanvas"></canvas>
 
       <div class="grid-3">
         <div class="metric-card">
           <div class="metric-label">Gyro X</div>
-          <div class="metric-val" id="vgx" style="font-size:11px;">0.0 &deg;/s</div>
+          <div class="metric-val" id="vgx" style="font-size:11px;">—</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Gyro Y</div>
-          <div class="metric-val" id="vgy" style="font-size:11px;">0.0 &deg;/s</div>
+          <div class="metric-val" id="vgy" style="font-size:11px;">—</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Gyro Z</div>
-          <div class="metric-val" id="vgz" style="font-size:11px;">0.0 &deg;/s</div>
+          <div class="metric-val" id="vgz" style="font-size:11px;">—</div>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="metric-card">
           <div class="metric-label">Latitude</div>
-          <div class="metric-val" id="vlat" style="font-size:10px;">17.6132&deg; N</div>
+          <div class="metric-val" id="vlat" style="font-size:10px;">No GPS fix</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Longitude</div>
-          <div class="metric-val" id="vlon" style="font-size:10px;">121.7269&deg; E</div>
+          <div class="metric-val" id="vlon" style="font-size:10px;">—</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Satellites</div>
-          <div class="metric-val" id="vsats" style="font-size:10px;color:#34d399;">9 Sats</div>
+          <div class="metric-val" id="vsats" style="font-size:10px;color:#a1a1aa;">0 Sats</div>
         </div>
       </div>
     </div>
 
-    <!-- ── View 3: Offline Radar Map ── -->
+    <!-- ── View 3: Tuguegarao City Map ── -->
     <div id="view-map" style="display:none;">
-      <div class="radar-stage">
-        <div class="radar-ring" style="width:160px;height:160px;"></div>
-        <div class="radar-ring" style="width:110px;height:110px;"></div>
-        <div class="radar-ring" style="width:60px;height:60px;"></div>
-        <div style="position:absolute;width:100%;height:1px;background:#27272a;"></div>
-        <div style="position:absolute;height:100%;width:1px;background:#27272a;"></div>
-        
-        <div class="radar-pin">
-          <div class="pin-dot"></div>
-          <span class="pin-label">Road User</span>
+      <div class="map-stage" id="mapStage">
+        <!-- SVG Map of Tuguegarao City -->
+        <svg class="tuguegarao-svg" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#18181b"/>
+          <!-- Grid Lines -->
+          <line x1="0" y1="60" x2="400" y2="60" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="0" y1="120" x2="400" y2="120" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="0" y1="180" x2="400" y2="180" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="100" y1="0" x2="100" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="200" y1="0" x2="200" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="300" y1="0" x2="300" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+
+          <!-- Cagayan River (West boundary) -->
+          <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#1e3a8a" stroke-width="14" opacity="0.6"/>
+          <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#3b82f6" stroke-width="3" opacity="0.4"/>
+
+          <!-- Main Roads (Tuguegarao Network) -->
+          <!-- Maharlika Highway (North - South through Centro) -->
+          <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#52525b" stroke-width="5"/>
+          <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+
+          <!-- Buntun Bridge Highway (West to Centro) -->
+          <path d="M 40 120 L 140 120 L 220 125" fill="none" stroke="#52525b" stroke-width="4"/>
+          <!-- Carig / Regional Gov Center Road (North East) -->
+          <path d="M 225 70 L 370 40" fill="none" stroke="#3f3f46" stroke-width="3"/>
+          <!-- Bagay Road / Pengue-Ruyu -->
+          <path d="M 220 125 L 360 170" fill="none" stroke="#3f3f46" stroke-width="3"/>
+          <!-- Caggay / Balzain Arterials -->
+          <path d="M 170 40 L 225 70" fill="none" stroke="#3f3f46" stroke-width="2.5"/>
+          <path d="M 140 120 L 170 190 L 210 240" fill="none" stroke="#3f3f46" stroke-width="2.5"/>
+
+          <!-- Key Landmark Badges -->
+          <text x="55" y="112" fill="#60a5fa" font-size="7" font-family="'JetBrains Mono',monospace" font-weight="700">BUNTUN BRIDGE</text>
+          <text x="235" y="115" fill="#f4f4f5" font-size="8" font-family="'JetBrains Mono',monospace" font-weight="800">CENTRO / POBLACION</text>
+          <text x="240" y="45" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace" font-weight="700">CARIG (GOV CENTER)</text>
+          <text x="120" y="70" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">CARITAN</text>
+          <text x="240" y="175" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">PENGUE-RUYU</text>
+          <text x="175" y="225" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">CAGGAY</text>
+        </svg>
+
+        <!-- Dynamic GPS Pin (Hidden until valid GPS lock is acquired) -->
+        <div class="map-pin" id="mapPin" style="display:none;">
+          <div class="pin-pulse"></div>
+          <div class="pin-marker">
+            <div class="pin-core"></div>
+          </div>
+          <span class="pin-name-tag" id="mapPinLabel">ROAD USER</span>
         </div>
 
-        <div style="position:absolute;top:8px;left:8px;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;background:#09090b;padding:2px 6px;border-radius:4px;border:1px solid #27272a;">
-          Tuguegarao Sector 17&deg;N
+        <!-- Sector Badge -->
+        <div class="map-sector-badge">
+          TUGUEGARAO CITY &bull; 17.613&deg;N, 121.727&deg;E
+        </div>
+
+        <!-- No Fix Overlay / Notice -->
+        <div class="no-fix-overlay" id="noFixNotice">
+          <span>NO GPS FIX &bull; TUGUEGARAO OVERVIEW (NO PIN PLACED)</span>
         </div>
       </div>
 
-      <div id="radarCoords" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
-        LAT: 17.613240  LON: 121.726910 (9 SATELLITES LOCKED)
+      <div id="mapCoordsText" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
+        GPS STATUS: WAITING FOR SATELLITE FIX
       </div>
     </div>
 
     <!-- ── View 4: WebSocket Logs ── -->
     <div id="view-logs" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">
-        <span>WebSocket Frame Log (Port 81)</span>
+        <span>WebSocket Frame Log</span>
         <div style="display:flex;gap:8px;">
           <a href="#" onclick="sendPing();return false;" style="color:#ffffff;text-decoration:underline;">Ping Frame</a>
           <a href="#" onclick="clearLogs();return false;" style="color:#a1a1aa;text-decoration:none;">Clear</a>
@@ -186,7 +260,7 @@
     </div>
 
     <div class="footer-text">
-      Autonomous ESP32-S3 SoftAP &bull; Dedicated WebSocket Server (Port 81)
+      Road Accident Monitoring System &bull; Wearable Safety Uplink
     </div>
   </div>
 

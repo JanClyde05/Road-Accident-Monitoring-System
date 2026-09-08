@@ -54,7 +54,7 @@ static const char DATA_PAGE_HTML[] PROGMEM = R"rawliteral(
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:#060913;color:#e0e4f0;padding:16px;min-height:100vh}
     .header-bar{display:flex;align-items:center;gap:12px;margin-bottom:4px}
-    .brand-logo{width:36px;height:36px;border-radius:6px;border:1px solid rgba(123,140,255,0.4);object-fit:cover}
+    .brand-logo{width:36px;height:36px;border-radius:50%;border:1.5px solid #52525b;object-fit:cover;background:#000;padding:1px;clip-path:circle(50% at 50% 50%);-webkit-clip-path:circle(50% at 50% 50%)}
     h1{font-size:16px;font-weight:900;letter-spacing:-.025em;text-transform:uppercase;color:#fff}
     .subtitle{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#5c6480;margin-bottom:16px}
     .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}

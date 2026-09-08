@@ -238,7 +238,11 @@ static void _setupRoutes() {
                       "button{background:#fff;color:#09090b;font-weight:800;text-transform:uppercase;border:none;cursor:pointer}"
                       ".net{padding:10px 12px;margin:4px 0;border-radius:8px;background:#18181b;border:1px solid #27272a;cursor:pointer;font-family:monospace;font-size:12px}"
                       ".net:hover{background:#27272a;border-color:#fff}</style></head><body><div class='card'>"
-                      "<h2>RAMS Receiver Setup</h2>"
+                      "<div style='display:flex;align-items:center;gap:12px;margin-bottom:6px;'>"
+                      "<div style='width:38px;height:38px;min-width:38px;min-height:38px;border-radius:50%;overflow:hidden;border:1.5px solid #52525b;background:#000;display:inline-flex;align-items:center;justify-content:center;padding:1px;box-sizing:border-box;clip-path:circle(50% at 50% 50%);-webkit-clip-path:circle(50% at 50% 50%);'>"
+                      "<img src='/logo.jpg' style='width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;clip-path:circle(50% at 50% 50%);-webkit-clip-path:circle(50% at 50% 50%);' alt='RAMS Logo' onerror='this.src=\"/logo.png\"'>"
+                      "</div>"
+                      "<h2>RAMS Receiver Setup</h2></div>"
                       "<p style='font-family:monospace;font-size:10px;color:#a1a1aa;text-transform:uppercase;'>Road Accident Monitoring System</p>"
                       "<div id='nets' style='margin:12px 0;'>Scanning networks...</div>"
                       "<input type='text' id='ssid' placeholder='WiFi Network (SSID)' required>"
@@ -249,7 +253,7 @@ static void _setupRoutes() {
                       "fetch('/scan').then(r=>r.json()).then(d=>{"
                       "var h='';d.forEach(n=>{"
                       "h+='<div class=\"net\" onclick=\"document.getElementById(\\'ssid\\').value=\\''+n.ssid+'\\'\">'"
-                      "+n.ssid+' ('+n.rssi+'dBm)'+(n.enc?' 🔒':'')+'</div>';});"
+                      "+n.ssid+' ('+n.rssi+'dBm)'+(n.enc?' [SEC]':'')+'</div>';});"
                       "document.getElementById('nets').innerHTML=h||'No networks found';});"
                       "function doConnect(){"
                       "var s=document.getElementById('ssid').value,p=document.getElementById('pass').value;"
@@ -266,6 +270,18 @@ static void _setupRoutes() {
 
   _server.on("/logo.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (LittleFS.exists("/logo.jpg")) {
+      request->send(LittleFS, "/logo.jpg", "image/jpeg");
+    } else if (LittleFS.exists("/logo.png")) {
+      request->send(LittleFS, "/logo.png", "image/png");
+    } else {
+      request->redirect(LOGO_BASE64);
+    }
+  });
+
+  _server.on("/logo.png", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (LittleFS.exists("/logo.png")) {
+      request->send(LittleFS, "/logo.png", "image/png");
+    } else if (LittleFS.exists("/logo.jpg")) {
       request->send(LittleFS, "/logo.jpg", "image/jpeg");
     } else {
       request->redirect(LOGO_BASE64);

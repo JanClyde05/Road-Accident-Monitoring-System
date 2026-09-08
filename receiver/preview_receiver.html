@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RAMS Receiver — WiFi Setup Portal Preview</title>
+  <link rel="stylesheet" href="data/style.css">
+  <style>
+    /* Standalone preview overrides ensuring circular crop and zero layout shifts */
+    body {
+      background: #09090b;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .brand-logo-wrap {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 50% !important;
+      overflow: hidden !important;
+      border: 1.5px solid #52525b;
+      background: #000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      clip-path: circle(50% at 50% 50%) !important;
+      -webkit-clip-path: circle(50% at 50% 50%) !important;
+    }
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+      display: block;
+      clip-path: circle(50% at 50% 50%) !important;
+      -webkit-clip-path: circle(50% at 50% 50%) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="brand-header">
+        <div class="brand-logo-wrap">
+          <img src="data/logo.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../Pictures/LOGO/LOGO.jpg'">
+        </div>
+        <h1>RAMS RECEIVER SETUP</h1>
+      </div>
+      <p class="subtitle">ROAD ACCIDENT MONITORING SYSTEM — CAPTIVE PORTAL</p>
+    </div>
+
+    <div id="connStatus" class="status disconnected">
+      <span class="dot"></span>
+      <span id="statusText">NOT CONNECTED</span>
+    </div>
+
+    <div class="section">
+      <h2>Available Networks</h2>
+      <div id="networks" class="network-list">
+        <div class="network-item" onclick="selectNetwork('Brgy-SanJose-CommandCenter')">
+          <span class="network-ssid">Brgy-SanJose-CommandCenter</span>
+          <span class="network-meta">-54dBm &nbsp; [SEC]</span>
+        </div>
+        <div class="network-item" onclick="selectNetwork('RHU-Emergency-Uplink')">
+          <span class="network-ssid">RHU-Emergency-Uplink</span>
+          <span class="network-meta">-62dBm &nbsp; [SEC]</span>
+        </div>
+        <div class="network-item" onclick="selectNetwork('MDRRMO-Rescue-Station')">
+          <span class="network-ssid">MDRRMO-Rescue-Station</span>
+          <span class="network-meta">-71dBm &nbsp; [SEC]</span>
+        </div>
+        <div class="network-item" onclick="selectNetwork('Barangay_Public_FreeWiFi')">
+          <span class="network-ssid">Barangay_Public_FreeWiFi</span>
+          <span class="network-meta">-86dBm &nbsp; [OPEN]</span>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="rescan()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        RESCAN NETWORKS
+      </button>
+    </div>
+
+    <div class="section">
+      <h2>Connect</h2>
+      <div class="form-group">
+        <label for="ssid">Network (SSID)</label>
+        <input type="text" id="ssid" placeholder="Select network above or enter manually" required>
+      </div>
+      <div class="form-group">
+        <label for="pass">Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="pass" placeholder="Enter WiFi password">
+          <button class="btn-icon" onclick="togglePass()" title="Show password" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btnConnect" onclick="doConnect()">CONNECT</button>
+    </div>
+
+    <div class="section">
+      <h2>Device Status &amp; Diagnostics</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">IP Address</span>
+          <span class="info-value" id="ipAddr">192.168.4.1</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Queue Size</span>
+          <span class="info-value" id="queueSize">0 PACKETS</span>
+        </div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="clearQueue()" style="margin-top:8px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        CLEAR OFFLINE QUEUE
+      </button>
+    </div>
+
+    <div id="msgBox" class="msg hidden"></div>
+  </div>
+
+  <script>
+    function selectNetwork(name) {
+      document.getElementById('ssid').value = name;
+      document.getElementById('pass').focus();
+    }
+    function togglePass() {
+      var p = document.getElementById('pass');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    }
+    function rescan() {
+      var box = document.getElementById('msgBox');
+      box.className = 'msg info';
+      box.textContent = 'Scanning 2.4GHz spectrum for Wi-Fi beacons...';
+      box.classList.remove('hidden');
+      setTimeout(function() {
+        box.className = 'msg success';
+        box.textContent = 'Found 4 Wi-Fi networks within range.';
+      }, 800);
+    }
+    function doConnect() {
+      var s = document.getElementById('ssid').value;
+      var box = document.getElementById('msgBox');
+      if (!s) {
+        box.className = 'msg error';
+        box.textContent = 'Please choose or type a Wi-Fi network SSID.';
+        box.classList.remove('hidden');
+        return;
+      }
+      box.className = 'msg info';
+      box.textContent = 'Connecting to ' + s + '... Please wait 15s.';
+      box.classList.remove('hidden');
+      setTimeout(function() {
+        var stat = document.getElementById('connStatus');
+        stat.className = 'status connected';
+        document.getElementById('statusText').textContent = 'CONNECTED (192.168.1.135)';
+        document.getElementById('ipAddr').textContent = '192.168.1.135';
+        box.className = 'msg success';
+        box.textContent = 'Connected successfully! Netlify cloud uplink active.';
+      }, 1500);
+    }
+    function clearQueue() {
+      document.getElementById('queueSize').textContent = '0 PACKETS';
+      var box = document.getElementById('msgBox');
+      box.className = 'msg success';
+      box.textContent = 'Offline flash queue purged successfully.';
+      box.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

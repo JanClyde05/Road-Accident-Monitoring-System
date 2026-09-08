@@ -39,11 +39,11 @@ export const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenDesignRu
         <div className="flex flex-col lg:flex-row lg:items-center justify-between py-3.5 gap-4">
           {/* Brand Mark & Identity */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg border border-neutral-700 flex items-center justify-center bg-neutral-900 overflow-hidden shadow-xs shrink-0 p-1">
+            <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center bg-neutral-900 overflow-hidden shadow-xs shrink-0 p-0.5">
               <img
                 src="/logo.jpg"
                 alt="RAMS Logo"
-                className="w-full h-full object-contain rounded"
+                className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
                 }}

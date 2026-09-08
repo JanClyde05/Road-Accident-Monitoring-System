@@ -60,8 +60,8 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     title: '1. Connect to Wearable SoftAP',
     badge: 'STEP 1: GET CONNECTED',
     target: 'softap',
-    description: 'Power on your wearable safety device. Open Wi-Fi settings on your mobile device or laptop and connect to "RAMS-WEARABLE". The interface establishes an immediate persistent WebSocket uplink on port 81 (no HTTP webserver overhead).',
-    actionHint: 'Look for the status badge at the top. When it indicates "PORT 81: CONNECTED", you are ready to proceed.',
+    description: 'Power on your wearable safety device. Open Wi-Fi settings on your mobile device or laptop and connect to "RAMS-WEARABLE". The interface establishes an immediate persistent WebSocket uplink (no HTTP webserver overhead).',
+    actionHint: 'Look for the status badge at the top. When it indicates "WEBSOCKET: CONNECTED", you are ready to proceed.',
     tab: 'setup'
   },
   {
@@ -78,7 +78,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     title: '3. Attach Emergency Photo Link',
     badge: 'STEP 3: IDENTIFICATION PHOTO',
     target: 'photo-link',
-    description: 'Paste a Google Drive image link. Having your photo securely attached allows emergency dispatch and local barangay responders to immediately identify you.',
+    description: 'Paste a Google Drive image link. Having your photo securely attached allows emergency dispatch and local responders to immediately identify you.',
     actionHint: 'Paste your link, and you will see the image thumbnail preview update in real-time.',
     tab: 'setup'
   },
@@ -87,20 +87,30 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     title: '4. Save Device via WebSocket',
     badge: 'STEP 4: SAVE TO DEVICE',
     target: 'register-btn',
-    description: 'Click "SAVE & REGISTER (WEBSOCKET)". A compact JSON frame is transmitted over port 81 and permanently saved to the ESP32 NVS flash storage. No HTTP server needed.',
+    description: 'Click "SAVE & REGISTER (WEBSOCKET)". A compact JSON frame is transmitted over WebSocket and permanently saved to on-device storage. No HTTP server needed.',
     actionHint: 'Click the high-contrast "SAVE & REGISTER (WEBSOCKET)" action button.',
     tab: 'setup'
   },
   {
     step: 5,
-    title: '5. Live Telemetry & Radar Protection',
+    title: '5. Live Telemetry & Map Protection',
     badge: 'STEP 5: READY & MONITORING',
     target: 'navigation',
     description: 'Your wearable device is now actively monitoring. It streams high-frequency 100Hz IMU samples over WebSocket and triggers automatic LoRa emergency broadcast packets upon collision.',
-    actionHint: 'Use the navigation bar to inspect Live Telemetry, Offline Radar Map, or the raw WebSocket Protocol stream.',
+    actionHint: 'Use the navigation bar to inspect Live Telemetry, Tuguegarao City Map, or the raw WebSocket Protocol stream.',
     tab: 'telemetry'
   }
 ];
+
+function generateFriendlyToken(name: string, type: string, link: string) {
+  const seed = `${name || 'USER'}|${type || 'Pedestrian'}|${link || ''}`;
+  let hash = 0x811c;
+  for (let i = 0; i < seed.length; i++) {
+    hash ^= seed.charCodeAt(i);
+    hash = (hash * 0x0103) & 0xffff;
+  }
+  return `RAMS-${hash.toString(16).toUpperCase().padStart(4, '0')}`;
+}
 
 export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = ({ onSwitchToReceiver }) => {
   const [currentPage, setCurrentPage] = useState<WearablePage>('telemetry');
@@ -115,10 +125,11 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
 
   // Simulated Sensor & Device Data
   const [fsmState, setFsmState] = useState<number>(0); // 0=Idle, 1=Freefall, 2=Impact, 3=Stillness, 4=Emergency
-  const [userName, setUserName] = useState<string>('Juan Dela Cruz');
-  const [driveLink, setDriveLink] = useState<string>('https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/view');
+  const [userName, setUserName] = useState<string>('');
+  const [driveLink, setDriveLink] = useState<string>('');
+  const [userType, setUserType] = useState<string>('Pedestrian');
   const [regStatus, setRegStatus] = useState<string | null>(null);
-  const [deviceToken, setDeviceToken] = useState<string>('RAMS-9921');
+  const [deviceToken, setDeviceToken] = useState<string>('------');
 
   // Telemetry values
   const [accel, setAccel] = useState({ x: 0.04, y: -0.02, z: 0.99, mag: 1.00 });
@@ -143,20 +154,6 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
       dir: 'rx',
       type: 'gps',
       payload: '{"type":"gps","lat":17.613240,"lon":121.726910,"sats":9,"fix":true}'
-    },
-    {
-      id: 'ws-init-3',
-      time: '16:20:02.450',
-      dir: 'tx',
-      type: 'register',
-      payload: '{"type":"register","name":"Juan Dela Cruz","driveLink":"https://drive.google.com/..."}'
-    },
-    {
-      id: 'ws-init-4',
-      time: '16:20:02.482',
-      dir: 'rx',
-      type: 'register_result',
-      payload: '{"type":"register_result","success":true,"token":"RAMS-9921"}'
     }
   ]);
 
@@ -327,6 +324,26 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
     setEmergencyCountdown(null);
   };
 
+  const handleToggleUserType = (type: string) => {
+    setUserType(type);
+    if (userName.trim() && deviceToken !== '------') {
+      const updatedToken = generateFriendlyToken(userName, type, driveLink);
+      setDeviceToken(updatedToken);
+    }
+    if (wsConnected) {
+      const now = new Date();
+      const timeStr = `${now.toTimeString().split(' ')[0]}.${String(now.getMilliseconds()).padStart(3, '0')}`;
+      const txPkt: WsPacket = {
+        id: `ws-tx-${Date.now()}`,
+        time: timeStr,
+        dir: 'tx',
+        type: 'register',
+        payload: JSON.stringify({ type: 'user_type', userType: type, name: userName })
+      };
+      setWsLogs((prev) => [txPkt, ...prev]);
+    }
+  };
+
   const handleMockRegister = (e: React.FormEvent) => {
     e.preventDefault();
     if (!wsConnected) return;
@@ -335,23 +352,24 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
     const now = new Date();
     const timeStr = `${now.toTimeString().split(' ')[0]}.${String(now.getMilliseconds()).padStart(3, '0')}`;
 
+    const generatedToken = generateFriendlyToken(userName, userType, driveLink);
+
     // 1. Client TX frame over WebSocket
     const txPkt: WsPacket = {
       id: `ws-tx-${Date.now()}`,
       time: timeStr,
       dir: 'tx',
       type: 'register',
-      payload: JSON.stringify({ type: 'register', name: userName, driveLink })
+      payload: JSON.stringify({ type: 'register', name: userName, driveLink, userType, token: generatedToken })
     };
 
     setWsLogs((prev) => [txPkt, ...prev]);
 
     setTimeout(() => {
-      const generatedToken = `RAMS-${Math.floor(1000 + Math.random() * 9000)}`;
       setDeviceToken(generatedToken);
       setRegStatus('success');
 
-      // 2. ESP32 RX confirmation frame over WebSocket
+      // 2. Wearable RX confirmation frame over WebSocket
       const now2 = new Date();
       const timeStr2 = `${now2.toTimeString().split(' ')[0]}.${String(now2.getMilliseconds()).padStart(3, '0')}`;
       const rxPkt: WsPacket = {
@@ -407,12 +425,12 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                 Wearable WebSocket Live Console & Telemetry Stream
               </h2>
               <span className="px-2 py-0.5 rounded border border-neutral-700 bg-neutral-950 text-[10px] font-mono font-bold text-neutral-300 uppercase tracking-wider">
-                Port 81 (No WebServer)
+                Full-Duplex Stream
               </span>
             </div>
             <p className="text-xs text-neutral-400 mt-1.5 leading-relaxed font-medium max-w-3xl">
-              Production simulator for the Wearable ESP32-S3 dedicated WebSocket architecture (<code className="text-neutral-200 font-mono">ws://192.168.4.1:81/</code>).
-              WebServer HTTP routing has been deprecated in favor of full-duplex WebSocket messaging for both on-device profile registration and 100Hz real-time telemetry streaming.
+              Production simulator for the Wearable dedicated WebSocket architecture (<code className="text-neutral-200 font-mono">ws://192.168.4.1/</code>).
+              WebServer HTTP routing has been deprecated in favor of full-duplex WebSocket messaging for both on-device profile registration and real-time telemetry streaming.
             </p>
           </div>
 
@@ -497,7 +515,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
               }`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${wsConnected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`}></span>
-              <span>{wsConnected ? `PORT 81: CONNECTED (${wsLatencyMs}ms)` : 'WS: DISCONNECTED'}</span>
+              <span>{wsConnected ? 'WEBSOCKET: CONNECTED' : 'WEBSOCKET: DISCONNECTED'}</span>
             </button>
 
             <button
@@ -581,11 +599,11 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
             {/* Audited WebSocket Column */}
             <div className="p-3.5 rounded-lg bg-neutral-950 border border-emerald-900/40 space-y-2">
               <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center justify-between pb-1 border-b border-neutral-800">
-                <span>Audited WebSocket Architecture (Port 81)</span>
+                <span>Audited WebSocket Architecture</span>
                 <span className="text-emerald-400 font-bold">CURRENT SPEC</span>
               </div>
               <ul className="space-y-1.5 text-neutral-300 text-[11px] list-disc pl-4 leading-relaxed">
-                <li>Single persistent, bi-directional TCP socket connection (<code className="text-white">ws://192.168.4.1:81/</code>).</li>
+                <li>Single persistent, bi-directional TCP socket connection (<code className="text-white">ws://192.168.4.1/</code>).</li>
                 <li>Zero HTTP server overhead; pure asynchronous event-driven message dispatcher.</li>
                 <li>Sub-5ms telemetry stream delivering 20Hz-100Hz IMU vectors and GPS fixes without polling.</li>
                 <li>Deterministic JSON message framing (<code className="text-white">register</code>, <code className="text-white">tel</code>, <code className="text-white">gps</code>).</li>
@@ -637,11 +655,11 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
               
               {/* Header Branding */}
               <div className="text-center pb-3 border-b border-neutral-800">
-                <div className="inline-flex items-center justify-center p-2 rounded-xl bg-neutral-900 border border-neutral-700 mb-2.5">
+                <div className="inline-flex items-center justify-center p-2 rounded-full bg-neutral-900 border border-neutral-700 mb-2.5">
                   <img
                     src="/logo.jpg"
                     alt="RAMS Logo"
-                    className="w-10 h-10 object-contain rounded"
+                    className="w-10 h-10 object-cover rounded-full"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src = '/logo.png';
                     }}
@@ -651,7 +669,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                   Road Accident Monitoring System
                 </h1>
                 <p className="text-[10px] sm:text-[11px] font-mono font-bold tracking-wider text-neutral-400 uppercase mt-0.5">
-                  Wearable ESP32-S3 • WebSocket Interface (Port 81)
+                  Wearable Safety Device • Autonomous Uplink
                 </p>
               </div>
 
@@ -674,7 +692,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                         wsConnected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'
                       }`}
                     ></span>
-                    <span>{wsConnected ? 'WEBSOCKET: LIVE STREAM (PORT 81)' : 'WEBSOCKET: DISCONNECTED'}</span>
+                    <span>{wsConnected ? 'WEBSOCKET: CONNECTED' : 'WEBSOCKET: DISCONNECTED'}</span>
                   </div>
                   <span className="text-[9px] text-neutral-400">
                     {wsConnected ? `${wsLatencyMs}ms • 100Hz` : 'RECONNECTING'}
@@ -746,7 +764,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                   }`}
                 >
                   <MapPin className="h-3 w-3" />
-                  <span>RADAR</span>
+                  <span>MAP</span>
                 </button>
 
                 <button
@@ -800,16 +818,39 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                         : ''
                     }`}>
                       <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                        Road User Full Name (Pedestrian, Cyclist, Commuter, or Rider)
+                        Road User Full Name
                       </label>
                       <input
                         type="text"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
-                        placeholder="e.g. Juan Dela Cruz"
+                        placeholder="Input your name here"
                         className="w-full px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white font-mono outline-none focus:border-white transition-colors"
                         required
                       />
+                    </div>
+
+                    {/* Road User Category Selector */}
+                    <div>
+                      <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        Road User Category (Toggle Anytime)
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {['Pedestrian', 'Cyclist', 'Car Driver', 'Motorcycle Rider'].map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => handleToggleUserType(cat)}
+                            className={`py-2 px-2.5 rounded-lg border font-mono text-[11px] font-bold text-center transition-all cursor-pointer ${
+                              userType === cat
+                                ? 'bg-white text-neutral-950 border-white shadow-xs'
+                                : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:text-white hover:border-neutral-700'
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     <div className={`transition-all duration-300 rounded-lg space-y-2 ${
@@ -819,20 +860,20 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                     }`}>
                       <div>
                         <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                          ID Photo (Google Drive Share Link)
+                          2x2 Picture (Google Drive Share Link)
                         </label>
                         <input
                           type="url"
                           value={driveLink}
                           onChange={(e) => setDriveLink(e.target.value)}
-                          placeholder="https://drive.google.com/file/d/.../view"
+                          placeholder="Input you GDrive 2x2 Picture here"
                           className="w-full px-3 py-2 bg-neutral-900 border border-neutral-800 rounded-lg text-xs text-white font-mono outline-none focus:border-white transition-colors"
                         />
                       </div>
 
                       {/* Photo preview info */}
                       <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-neutral-900/80 border border-neutral-800">
-                        <div className="w-10 h-10 rounded border border-neutral-700 bg-black flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="w-10 h-10 rounded-full border border-neutral-700 bg-black flex items-center justify-center overflow-hidden shrink-0">
                           {driveLink ? (
                             <img
                               src={
@@ -841,7 +882,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                                   : '/logo.jpg'
                               }
                               alt="Thumbnail preview"
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover rounded-full"
                               onError={(e) => {
                                 (e.currentTarget as HTMLImageElement).src = '/logo.jpg';
                               }}
@@ -853,7 +894,8 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                           )}
                         </div>
                         <div className="text-[10px] font-mono text-neutral-400 leading-snug truncate">
-                          <span className="text-white font-bold block truncate">{userName || 'Your Name'}</span>
+                          <span className="text-white font-bold block truncate">{userName || '------'}</span>
+                          <span className="truncate block">Category: <strong className="text-neutral-300 font-mono">{userType}</strong></span>
                           <span className="truncate block">Token: <strong className="text-emerald-400 font-mono">{deviceToken}</strong></span>
                         </div>
                       </div>
@@ -983,48 +1025,92 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
                 </div>
               )}
 
-              {/* VIEW 3: OFFLINE RADAR MAP */}
+              {/* VIEW 3: OFFLINE TUGUEGARAO CITY MAP */}
               {currentPage === 'map' && (
                 <div className="space-y-2.5">
                   <div className="relative w-full h-52 bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden flex items-center justify-center">
-                    {/* Concentric Vector Radar Rings */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-44 h-44 rounded-full border border-neutral-800"></div>
-                      <div className="w-30 h-30 rounded-full border border-neutral-800/80"></div>
-                      <div className="w-16 h-16 rounded-full border border-neutral-800/60"></div>
-                      <div className="absolute w-full h-[1px] bg-neutral-800/70"></div>
-                      <div className="absolute h-full w-[1px] bg-neutral-800/70"></div>
-                    </div>
+                    {/* SVG Map of Tuguegarao City */}
+                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                      <rect width="100%" height="100%" fill="#18181b"/>
+                      {/* Grid Lines */}
+                      <line x1="0" y1="60" x2="400" y2="60" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
+                      <line x1="0" y1="120" x2="400" y2="120" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
+                      <line x1="0" y1="180" x2="400" y2="180" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
+                      <line x1="100" y1="0" x2="100" y2="240" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
+                      <line x1="200" y1="0" x2="200" y2="240" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
+                      <line x1="300" y1="0" x2="300" y2="240" stroke="#27272a" strokeWidth="1" strokeDasharray="2,2"/>
 
-                    {/* GPS Position Pin */}
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="relative">
-                        <div className="h-3 w-3 rounded-full bg-rose-500 border border-white"></div>
-                        <div className="absolute -inset-1.5 rounded-full border border-rose-500/50 animate-ping"></div>
-                      </div>
-                      <span className="mt-2 text-[9px] font-mono font-bold bg-neutral-950 text-white px-2 py-0.5 rounded border border-neutral-700 uppercase tracking-wider">
-                        USER LOCATION
-                      </span>
-                    </div>
+                      {/* Cagayan River (West boundary) */}
+                      <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#1e3a8a" strokeWidth="14" opacity="0.6"/>
+                      <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#3b82f6" strokeWidth="3" opacity="0.4"/>
 
-                    {/* Coordinate Overlay */}
-                    <div className="absolute top-2 left-2 bg-neutral-950/90 px-2 py-0.5 rounded text-[9px] font-mono text-neutral-300 border border-neutral-800">
+                      {/* Main Roads */}
+                      <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#52525b" strokeWidth="5"/>
+                      <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6,4"/>
+                      <path d="M 40 120 L 140 120 L 220 125" fill="none" stroke="#52525b" strokeWidth="4"/>
+                      <path d="M 225 70 L 370 40" fill="none" stroke="#3f3f46" strokeWidth="3"/>
+                      <path d="M 220 125 L 360 170" fill="none" stroke="#3f3f46" strokeWidth="3"/>
+                      <path d="M 170 40 L 225 70" fill="none" stroke="#3f3f46" strokeWidth="2.5"/>
+                      <path d="M 140 120 L 170 190 L 210 240" fill="none" stroke="#3f3f46" strokeWidth="2.5"/>
+
+                      {/* Key Landmark Badges */}
+                      <text x="55" y="112" fill="#60a5fa" fontSize="8" fontFamily="monospace" fontWeight="700">BUNTUN BRIDGE</text>
+                      <text x="235" y="115" fill="#f4f4f5" fontSize="9" fontFamily="monospace" fontWeight="800">CENTRO / POBLACION</text>
+                      <text x="240" y="45" fill="#a1a1aa" fontSize="8" fontFamily="monospace" fontWeight="700">CARIG (GOV CENTER)</text>
+                      <text x="120" y="70" fill="#a1a1aa" fontSize="8" fontFamily="monospace">CARITAN</text>
+                      <text x="240" y="175" fill="#a1a1aa" fontSize="8" fontFamily="monospace">PENGUE-RUYU</text>
+                      <text x="175" y="225" fill="#a1a1aa" fontSize="8" fontFamily="monospace">CAGGAY</text>
+                    </svg>
+
+                    {/* Sector Badge */}
+                    <div className="absolute top-2 left-2 bg-neutral-950/90 px-2 py-0.5 rounded text-[9px] font-mono text-neutral-300 border border-neutral-800 z-10">
                       Tuguegarao Sector 17°N
                     </div>
+
+                    {/* Dynamic GPS Pin: STRICT RULE: Hidden if no valid GPS fix is acquired */}
+                    {gps.hasFix && gps.lat > 0 ? (
+                      <div
+                        className="absolute -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none"
+                        style={{
+                          left: `${Math.max(5, Math.min(95, ((gps.lon - 121.715) / (121.740 - 121.715)) * 100))}%`,
+                          top: `${Math.max(5, Math.min(95, ((17.625 - gps.lat) / (17.625 - 17.600)) * 100))}%`
+                        }}
+                      >
+                        <div className="relative">
+                          <div className="h-3.5 w-3.5 rounded-full bg-rose-500 border-2 border-white shadow-md"></div>
+                          <div className="absolute -inset-2 rounded-full border border-rose-500/60 animate-ping"></div>
+                        </div>
+                        <span className="mt-1 text-[8px] font-mono font-bold bg-neutral-950/95 text-white px-1.5 py-0.5 rounded border border-neutral-700 uppercase tracking-wider whitespace-nowrap">
+                          {userName || 'ROAD USER'}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center pointer-events-none z-10">
+                        <span className="px-3 py-1.5 rounded-md bg-neutral-950/90 border border-neutral-700 text-neutral-300 font-mono text-[10px] font-bold uppercase tracking-wider">
+                          NO GPS FIX • TUGUEGARAO OVERVIEW (NO PIN PLACED)
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-between items-center text-[10px] font-mono text-neutral-400 px-1">
-                    <span>LAT: {gps.lat.toFixed(6)}  LON: {gps.lon.toFixed(6)}</span>
-                    <span className="text-emerald-400 font-bold uppercase">{gps.sats} SATELLITES (LOCKED)</span>
+                    <span>
+                      {gps.hasFix && gps.lat > 0
+                        ? `LAT: ${gps.lat.toFixed(6)}  LON: ${gps.lon.toFixed(6)}`
+                        : 'GPS STATUS: WAITING FOR SATELLITE FIX'}
+                    </span>
+                    <span className={gps.hasFix && gps.lat > 0 ? 'text-emerald-400 font-bold uppercase' : 'text-amber-400 font-bold uppercase'}>
+                      {gps.hasFix && gps.lat > 0 ? `${gps.sats} SATELLITES (LOCKED)` : 'NO FIX (SEARCHING)'}
+                    </span>
                   </div>
                 </div>
               )}
 
-              {/* VIEW 4: WEBSOCKET PROTOCOL INSPECTOR (NEW!) */}
+              {/* VIEW 4: WEBSOCKET PROTOCOL INSPECTOR */}
               {currentPage === 'protocol' && (
                 <div className="space-y-2.5 font-mono text-xs">
                   <div className="flex items-center justify-between pb-1 border-b border-neutral-800 text-[10px] text-neutral-400">
-                    <span className="font-bold uppercase text-white">LIVE WEBSOCKET FRAMES (PORT 81)</span>
+                    <span className="font-bold uppercase text-white">LIVE WEBSOCKET FRAMES</span>
                     <div className="flex gap-2">
                       <button
                         onClick={handleSendWsPing}
@@ -1061,7 +1147,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
 
                   <div className="p-2 rounded bg-neutral-950 border border-neutral-800 text-[9px] text-neutral-400 flex items-center justify-between">
                     <span>Protocol: RFC 6455 Binary/Text Frames</span>
-                    <span className="text-emerald-400 font-bold">Port 81 • Fully Non-Blocking</span>
+                    <span className="text-emerald-400 font-bold">Non-Blocking WebSocket Uplink</span>
                   </div>
                 </div>
               )}
@@ -1070,7 +1156,7 @@ export const WearablePortalSimulator: React.FC<WearablePortalSimulatorProps> = (
 
             {/* Bottom Architecture Descriptor */}
             <div className="text-center text-[10px] font-mono uppercase tracking-wider text-neutral-600 mt-3 pt-1 border-t border-neutral-800/60">
-              Autonomous ESP32-S3 SoftAP • Dedicated WebSocket Server (Port 81) • WebServer Deprecated
+              Road Accident Monitoring System • Wearable Safety Uplink
             </div>
 
           </div>

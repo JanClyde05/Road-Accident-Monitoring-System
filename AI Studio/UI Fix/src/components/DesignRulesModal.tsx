@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Grid, Eye, Type, Palette, ShieldCheck, Check, Sparkles } from 'lucide-react';
+import { X, Grid, Eye, Type, Palette, ShieldCheck, Check, Sparkles, Ban, MapPin } from 'lucide-react';
 
 interface DesignRulesModalProps {
   isOpen: boolean;
@@ -42,6 +42,35 @@ export const DesignRulesModal: React.FC<DesignRulesModalProps> = ({ isOpen, onCl
         </div>
 
         <div className="space-y-6 text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          
+          {/* Section 0: THE PRIME DIRECTIVE - ZERO EMOJIS & CUSTOM DESIGN */}
+          <div className="p-4 sm:p-5 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-rose-200 dark:border-rose-900/50">
+              <div className="flex items-center gap-2 text-rose-700 dark:text-rose-300 font-black text-sm uppercase">
+                <Ban className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                <h3>Prime Directive: Strict Zero-Emoji Rule & Custom Vector Design</h3>
+              </div>
+              <span className="text-[10px] font-mono font-black uppercase tracking-wider px-2 py-0.5 rounded bg-rose-600 text-white">
+                Mandatory
+              </span>
+            </div>
+            <p className="mb-3 font-medium text-neutral-800 dark:text-neutral-200">
+              System emojis are <strong>strictly prohibited</strong> across the entire project. Emojis render inconsistently across operating systems, break monospace baseline heights, and compromise mission-critical safety aesthetics. Every icon or status indicator must be custom-engineered to align with the design system.
+            </p>
+
+            <div className="p-3 rounded bg-white dark:bg-neutral-950 border border-rose-200 dark:border-rose-900/40 space-y-2">
+              <div className="flex items-center gap-2 text-[11px] font-mono font-bold text-neutral-950 dark:text-white">
+                <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                <span>Reference Gold Standard: Custom Map Pin Architecture</span>
+              </div>
+              <ul className="space-y-1.5 font-mono text-[10px] text-neutral-600 dark:text-neutral-400 pl-4 list-disc leading-relaxed">
+                <li><strong>Teardrop Vector Geometry:</strong> Custom SVG teardrop base with precision anchor tip instead of generic pin emojis.</li>
+                <li><strong>Animated Radar Ring:</strong> Contextual expanding pulse wave (<code className="text-rose-500">.pin-radar-ring</code>) for active collision alerts.</li>
+                <li><strong>Custom Inner Vector Glyphs:</strong> Pure white circular disc harboring bespoke vector glyphs (shock exclamation for crash, radar crosshairs for telemetry, shield check for safe).</li>
+                <li><strong>Attached Monospace Pill:</strong> Hairline-bordered JetBrains Mono capsule displaying clean unit callsigns with zero emoji prefixes.</li>
+              </ul>
+            </div>
+          </div>
           
           {/* Section 1: Bold Typography Archetype */}
           <div className="p-4 sm:p-5 rounded-lg bg-neutral-100 dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-800">

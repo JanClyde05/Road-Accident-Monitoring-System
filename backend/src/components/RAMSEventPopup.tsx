@@ -59,17 +59,17 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
           {event.photoUrl && !imageFailed ? (
             <img
               referrerPolicy="no-referrer"
-              className="w-12 h-12 rounded-lg object-cover border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 shadow-xs"
+              className="w-12 h-12 rounded-full object-cover border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 shadow-xs"
               src={event.photoUrl}
               alt={registeredName}
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <div className="w-12 h-12 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-1 shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-1 shadow-xs overflow-hidden">
               <img
                 src="/logo.png"
                 alt="RAMS Emblem"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src.endsWith('/logo.png')) {

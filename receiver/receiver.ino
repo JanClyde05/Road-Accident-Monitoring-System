@@ -91,7 +91,7 @@ void setup() {
   // Initialize LoRa receiver
   _loraOk = loraRxInit();
   if (!_loraOk) {
-    Serial.println(F("[RECEIVER] ⚠ LoRa init failed! Cannot receive packets."));
+    Serial.println(F("[RECEIVER] [ERROR] LoRa init failed! Cannot receive packets."));
   }
 
   // Initialize local queue (LittleFS-backed retry buffer)

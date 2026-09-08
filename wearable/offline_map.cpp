@@ -86,7 +86,7 @@ String offlineMapGetHTML() {
       border-bottom: 1px solid #27272a;
     }
     .header-brand { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #3f3f46; object-fit: cover; }
+    .brand-logo { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #52525b; object-fit: cover; background: #000; padding: 1px; clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%); }
     .header h1 { font-size: 14px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; color: #ffffff; }
     .gps-info { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #8890b0; text-transform: uppercase; }
     .gps-info.has-fix { color: #34d97f; }

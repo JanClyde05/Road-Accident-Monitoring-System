@@ -1,8 +1,8 @@
 /*
- * Road Accident Monitoring System — Wearable WebSocket Client
+ * Road Accident Monitoring System — Wearable Client Interface
  * =============================================================
  * Dedicated WebSocket client running in the user's browser.
- * Connects directly to ws://<host>:81/ with zero HTTP server dependencies.
+ * Communicates directly with the wearable safety uplink.
  */
 
 var ws;
@@ -10,10 +10,18 @@ var wsReady = false;
 var activeTab = 'setup';
 var accelHistory = [];
 var wsPackets = [];
+var selectedUserType = 'Pedestrian';
+var currentDeviceToken = '------';
 
 // Canvas context
 var canvas = null;
 var ctx = null;
+
+// Tuguegarao Map Bounds (WGS84)
+var MAP_TOP_LAT    = 17.625;
+var MAP_BOTTOM_LAT = 17.600;
+var MAP_LEFT_LON   = 121.715;
+var MAP_RIGHT_LON  = 121.740;
 
 // FSM State Labels
 var FSM_LABELS = [
@@ -28,30 +36,77 @@ function $(id) {
   return document.getElementById(id);
 }
 
-// ── WebSocket Uplink Management ─────────────────────────────────
-
-var mockStreamTimer = null;
-
-function startMockStreamIfOffline() {
-  if (mockStreamTimer) return;
-  mockStreamTimer = setInterval(function() {
-    if (wsReady) return; // Real WebSocket takes precedence
-    var t = Date.now() / 1000;
-    var ax = Math.sin(t * 2) * 0.15;
-    var ay = Math.cos(t * 1.5) * 0.12;
-    var az = 1.0 + Math.sin(t * 4) * 0.08;
-    var am = Math.sqrt(ax * ax + ay * ay + az * az);
-    var gx = Math.sin(t) * 2.5;
-    var gy = Math.cos(t) * 1.8;
-    var gz = Math.sin(t * 0.5) * 0.9;
-    handleIncomingFrame(JSON.stringify({
-      type: 'tel',
-      ax: ax, ay: ay, az: az,
-      gx: gx, gy: gy, gz: gz,
-      am: am, fsm: 0
-    }), true);
-  }, 100);
+// ── Deterministic Compact Token Generation ───────────────────────
+// Computes a 16-bit hash from registered info to yield "RAMS-XXXX" (e.g. RAMS-4A2F)
+function generateFriendlyToken(name, userType, driveLink) {
+  var seed = (name || 'USER') + '|' + (userType || 'Pedestrian') + '|' + (driveLink || '');
+  var hash = 0x811c;
+  for (var i = 0; i < seed.length; i++) {
+    hash ^= seed.charCodeAt(i);
+    hash = (hash * 0x0103) & 0xffff;
+  }
+  var hex = hash.toString(16).toUpperCase().padStart(4, '0');
+  return 'RAMS-' + hex;
 }
+
+// ── Road User Category Selector ─────────────────────────────────
+
+function setUserType(type) {
+  selectedUserType = type;
+  var btns = document.querySelectorAll('.user-type-btn');
+  btns.forEach(function(b) {
+    if (b.getAttribute('data-type') === type) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+
+  if ($('userTypePreview')) {
+    $('userTypePreview').textContent = type;
+  }
+  if ($('mapPinLabel')) {
+    var rawName = ($('name') && $('name').value.trim()) || '';
+    $('mapPinLabel').textContent = rawName ? rawName.split(' ')[0].toUpperCase() : type.toUpperCase();
+  }
+
+  // Update token preview if registered or typing
+  var currentName = ($('name') && $('name').value.trim()) || '';
+  if (currentName && currentDeviceToken !== '------') {
+    currentDeviceToken = generateFriendlyToken(currentName, selectedUserType, ($('driveLink') && $('driveLink').value.trim()) || '');
+    if ($('tokenDisplay')) $('tokenDisplay').textContent = currentDeviceToken;
+  }
+
+  // If WebSocket is online, transmit update frame immediately so receiver stays synced
+  if (ws && wsReady) {
+    var frame = {
+      type: 'user_type',
+      userType: selectedUserType,
+      name: currentName,
+      token: currentDeviceToken !== '------' ? currentDeviceToken : ''
+    };
+    var payloadStr = JSON.stringify(frame);
+    logPacket('tx', payloadStr);
+    ws.send(payloadStr);
+  }
+}
+
+// ── Realtime Profile Input Previews ─────────────────────────────
+
+function updatePreview() {
+  var nameInput = $('name');
+  var namePreview = $('namePreview');
+  if (!nameInput || !namePreview) return;
+
+  var val = nameInput.value.trim();
+  namePreview.textContent = val.length > 0 ? val : '------';
+
+  if ($('mapPinLabel')) {
+    $('mapPinLabel').textContent = val.length > 0 ? val.split(' ')[0].toUpperCase() : selectedUserType.toUpperCase();
+  }
+}
+
+// ── WebSocket Uplink Management (No Fake / Mock Stream) ──────────
 
 function connectWS() {
   var host = location.hostname || '192.168.4.1';
@@ -63,43 +118,45 @@ function connectWS() {
 
     ws.onopen = function() {
       wsReady = true;
-      if (mockStreamTimer) { clearInterval(mockStreamTimer); mockStreamTimer = null; }
-      $('wsPill').className = 'ws-pill connected';
-      $('wsStatusText').textContent = 'WEBSOCKET PORT 81: CONNECTED';
-      logPacket('sys', 'Uplink connected to ESP32-S3 WebSocket server (Port 81)');
+      if ($('wsPill')) $('wsPill').className = 'ws-pill connected';
+      if ($('wsStatusText')) $('wsStatusText').textContent = 'WEBSOCKET: CONNECTED';
+      if ($('streamStatus')) {
+        $('streamStatus').textContent = '100Hz Live Stream';
+        $('streamStatus').style.color = '#34d399';
+      }
+      logPacket('sys', 'Wearable safety uplink connected');
     };
 
     ws.onclose = function() {
       wsReady = false;
-      $('wsPill').className = 'ws-pill disconnected';
-      $('wsStatusText').textContent = 'WEBSOCKET: DISCONNECTED (STANDALONE PREVIEW)';
-      logPacket('sys', 'WebSocket disconnected. Running standalone preview...');
-      startMockStreamIfOffline();
-      setTimeout(connectWS, 4000);
+      if ($('wsPill')) $('wsPill').className = 'ws-pill disconnected';
+      if ($('wsStatusText')) $('wsStatusText').textContent = 'WEBSOCKET: DISCONNECTED';
+      if ($('streamStatus')) {
+        $('streamStatus').textContent = 'Waiting for live sensor data...';
+        $('streamStatus').style.color = '#a1a1aa';
+      }
+      logPacket('sys', 'WebSocket disconnected. Retrying uplink...');
+      setTimeout(connectWS, 3000);
     };
 
-    ws.onerror = function(err) {
-      logPacket('sys', 'WebSocket offline (preview mode active)');
-      startMockStreamIfOffline();
+    ws.onerror = function() {
+      if ($('wsPill')) $('wsPill').className = 'ws-pill disconnected';
+      if ($('wsStatusText')) $('wsStatusText').textContent = 'WEBSOCKET: DISCONNECTED';
+      logPacket('sys', 'WebSocket offline. Standby mode active.');
     };
 
     ws.onmessage = function(e) {
-      handleIncomingFrame(e.data, false);
+      handleIncomingFrame(e.data);
     };
   } catch(ex) {
-    startMockStreamIfOffline();
-    setTimeout(connectWS, 4000);
+    setTimeout(connectWS, 3000);
   }
 }
 
 // ── Frame Dispatcher ────────────────────────────────────────────
 
-function handleIncomingFrame(rawData, isMock) {
-  var now = new Date();
-  var timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
-  if (!isMock) {
-    logPacket('rx', rawData);
-  }
+function handleIncomingFrame(rawData) {
+  logPacket('rx', rawData);
 
   try {
     var data = JSON.parse(rawData);
@@ -139,11 +196,45 @@ function handleIncomingFrame(rawData, isMock) {
 
     // 2. GPS Frame
     if (data.type === 'gps') {
-      if ($('vlat')) $('vlat').textContent = data.fix ? (data.lat.toFixed(4) + '° N') : 'No fix';
-      if ($('vlon')) $('vlon').textContent = data.fix ? (data.lon.toFixed(4) + '° E') : '—';
-      if ($('vsats')) $('vsats').textContent = data.sats + ' Sats' + (data.fix ? ' (3D)' : '');
-      if ($('radarCoords')) {
-        $('radarCoords').textContent = data.fix ? ('LAT: ' + data.lat.toFixed(6) + '  LON: ' + data.lon.toFixed(6)) : 'ACQUIRING GPS LOCK...';
+      var hasFix = Boolean(data.fix && data.lat && data.lat !== 0);
+
+      if ($('vlat')) $('vlat').textContent = hasFix ? (data.lat.toFixed(4) + '° N') : 'No GPS fix';
+      if ($('vlon')) $('vlon').textContent = hasFix ? (data.lon.toFixed(4) + '° E') : '—';
+      if ($('vsats')) {
+        $('vsats').textContent = (data.sats || 0) + ' Sats' + (hasFix ? ' (3D)' : '');
+        $('vsats').style.color = hasFix ? '#34d399' : '#a1a1aa';
+      }
+
+      // Map pin logic: only show pin if valid fix exists
+      var pin = $('mapPin');
+      var notice = $('noFixNotice');
+      var coordsText = $('mapCoordsText');
+
+      if (hasFix) {
+        if (pin) {
+          var pctX = (data.lon - MAP_LEFT_LON) / (MAP_RIGHT_LON - MAP_LEFT_LON);
+          var pctY = (MAP_TOP_LAT - data.lat) / (MAP_TOP_LAT - MAP_BOTTOM_LAT);
+          // Clamp to visible viewport
+          pctX = Math.max(0.06, Math.min(0.94, pctX));
+          pctY = Math.max(0.06, Math.min(0.94, pctY));
+
+          pin.style.left = (pctX * 100).toFixed(1) + '%';
+          pin.style.top = (pctY * 100).toFixed(1) + '%';
+          pin.style.display = 'flex';
+        }
+        if (notice) notice.style.display = 'none';
+        if (coordsText) {
+          coordsText.textContent = 'LAT: ' + data.lat.toFixed(6) + '  LON: ' + data.lon.toFixed(6) + ' (' + (data.sats || 0) + ' SATELLITES LOCKED)';
+          coordsText.style.color = '#34d399';
+        }
+      } else {
+        // No fix: explicitly DO NOT put any pin on the map
+        if (pin) pin.style.display = 'none';
+        if (notice) notice.style.display = 'flex';
+        if (coordsText) {
+          coordsText.textContent = 'GPS STATUS: WAITING FOR SATELLITE FIX (' + (data.sats || 0) + ' SATELLITES DETECTED)';
+          coordsText.style.color = '#a1a1aa';
+        }
       }
     }
 
@@ -151,8 +242,9 @@ function handleIncomingFrame(rawData, isMock) {
     if (data.type === 'register_result') {
       var st = $('statusMsg');
       if (data.success) {
+        currentDeviceToken = data.token;
         st.className = 'msg-banner ok';
-        st.textContent = 'REGISTERED VIA WEBSOCKET! TOKEN: ' + data.token;
+        st.textContent = 'REGISTERED! TOKEN: ' + data.token;
         $('registerBtn').disabled = true;
         if ($('tokenDisplay')) $('tokenDisplay').textContent = data.token;
       } else {
@@ -164,7 +256,7 @@ function handleIncomingFrame(rawData, isMock) {
 
     // 4. Pong Frame
     if (data.type === 'pong') {
-      logPacket('sys', 'Pong received from wearable device');
+      logPacket('sys', 'Pong received from wearable');
     }
   } catch(ex) {
     // Non-JSON frame
@@ -185,13 +277,19 @@ function doRegister() {
   }
 
   st.className = 'msg-banner info';
-  st.textContent = 'Transmitting registration frame over WebSocket...';
+  st.textContent = 'Transmitting registration frame...';
   $('registerBtn').disabled = true;
+
+  // Generate short interface-friendly token
+  var generatedToken = generateFriendlyToken(name, selectedUserType, link);
+  currentDeviceToken = generatedToken;
 
   var frame = {
     type: 'register',
     name: name,
-    driveLink: link
+    driveLink: link,
+    userType: selectedUserType,
+    token: generatedToken
   };
 
   var payloadStr = JSON.stringify(frame);
@@ -200,15 +298,14 @@ function doRegister() {
   if (ws && wsReady) {
     ws.send(payloadStr);
   } else {
-    // Standalone preview fallback
+    // Standalone fallback: simulate direct on-device save
     setTimeout(function() {
-      var mockToken = 'RAMS-' + Math.floor(1000 + Math.random() * 9000);
       handleIncomingFrame(JSON.stringify({
         type: 'register_result',
         success: true,
-        token: mockToken
-      }), false);
-    }, 450);
+        token: generatedToken
+      }));
+    }, 350);
   }
 }
 
@@ -240,6 +337,7 @@ function initCanvas() {
   ctx = canvas.getContext('2d');
   canvas.width = canvas.offsetWidth;
   canvas.height = 96;
+  drawWaveform();
 }
 
 function drawWaveform() {
@@ -250,7 +348,7 @@ function drawWaveform() {
   ctx.fillStyle = '#09090b';
   ctx.fillRect(0, 0, w, h);
 
-  // Baseline
+  // Baseline zero reference
   ctx.strokeStyle = '#27272a';
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -258,7 +356,14 @@ function drawWaveform() {
   ctx.lineTo(w, h / 2);
   ctx.stroke();
 
-  if (accelHistory.length < 2) return;
+  // If no live history yet, draw flat reference
+  if (accelHistory.length < 2) {
+    ctx.fillStyle = '#3f3f46';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Awaiting live accelerometer samples', w / 2, h / 2 - 8);
+    return;
+  }
 
   var step = w / 100;
   var colors = ['#f87171', '#34d399', '#60a5fa']; // X, Y, Z
@@ -332,8 +437,11 @@ function setupDrivePreview() {
   var input = $('driveLink');
   if (!input) return;
 
-  input.addEventListener('change', function() {
-    var link = this.value.trim();
+  input.addEventListener('input', handleDriveChange);
+  input.addEventListener('change', handleDriveChange);
+
+  function handleDriveChange() {
+    var link = input.value.trim();
     var img = $('photoPreview');
     var ph = $('photoPlaceholder');
     if (!link) {
@@ -369,7 +477,7 @@ function setupDrivePreview() {
         if (ph) ph.style.display = 'flex';
       };
     }
-  });
+  }
 }
 
 // ── Initialization ─────────────────────────────────────────────
@@ -380,3 +488,4 @@ window.addEventListener('DOMContentLoaded', function() {
   connectWS();
   window.addEventListener('resize', initCanvas);
 });
+

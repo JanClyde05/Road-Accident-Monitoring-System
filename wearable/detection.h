@@ -19,6 +19,7 @@
 
 #include <Arduino.h>
 #include "sensors.h"
+#include "../shared/protocol.h"
 
 // ── FSM States ──────────────────────────────────────────────────────────────
 

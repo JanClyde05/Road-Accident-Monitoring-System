@@ -121,11 +121,11 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
                 {/* Header Row */}
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-0.5 flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-0.5 flex-shrink-0 overflow-hidden">
                       <img
                         src={event.photoUrl || "/logo.png"}
                         alt={event.deviceName || "RAMS Wearable"}
-                        className="w-full h-full object-contain rounded"
+                        className="w-full h-full object-cover rounded-full"
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           if (img.src.endsWith('/logo.png')) {

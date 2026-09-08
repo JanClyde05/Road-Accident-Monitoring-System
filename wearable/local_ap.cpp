@@ -70,8 +70,8 @@ static const char REGISTRATION_HTML[] PROGMEM = R"rawliteral(
       gap: 12px; margin-bottom: 6px;
     }
     .brand-logo {
-      width: 38px; height: 38px; border-radius: 8px;
-      border: 1px solid #3f3f46; object-fit: contain; background: #000; padding: 2px;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid #52525b; object-fit: cover; background: #000; padding: 1px;
     }
     h1 { font-size: 15px; font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase; color: #ffffff; }
     .subtitle { text-align: center; font-size: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 20px; }
@@ -110,16 +110,16 @@ static const char REGISTRATION_HTML[] PROGMEM = R"rawliteral(
 <body>
   <div class="card">
     <div class="brand-header">
-      <img src="data:image/jpeg;base64, )rawliteral" LOGO_DATA R"rawliteral(" id="logoImg" class="brand-logo" alt="RAMS Logo">
+      <img src="/logo.jpg" id="logoImg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.png'">
       <h1>Road Accident Monitoring</h1>
     </div>
-    <p class="subtitle">Wearable Device Registration — Setup Mode</p>
+    <p class="subtitle">Wearable Safety Device — Setup Mode</p>
 
-    <label for="name">Rider Full Name</label>
-    <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" maxlength="23" required>
+    <label for="name">Road User Full Name</label>
+    <input type="text" id="name" placeholder="Input your name here" maxlength="23" required>
 
-    <label for="driveLink">Photo (Google Drive Share Link)</label>
-    <input type="url" id="driveLink" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+    <label for="driveLink">Photo (Google Drive 2x2 Picture Link)</label>
+    <input type="url" id="driveLink" placeholder="Input you GDrive 2x2 Picture here">
     <div class="photo-preview">
       <img id="photoPreview" alt="Photo preview">
     </div>
@@ -232,7 +232,7 @@ static const char TELEMETRY_HTML[] PROGMEM = R"rawliteral(
     body{font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;background:#09090b;color:#f4f4f5;
       padding:16px;min-height:100vh}
     .header-bar{display:flex;align-items:center;gap:12px;margin-bottom:4px}
-    .brand-logo{width:36px;height:36px;border-radius:6px;border:1px solid #3f3f46;object-fit:cover}
+    .brand-logo{width:36px;height:36px;border-radius:50%;border:1.5px solid #52525b;object-fit:cover;background:#000;padding:1px;clip-path:circle(50% at 50% 50%);-webkit-clip-path:circle(50% at 50% 50%)}
     h1{font-size:16px;font-weight:900;letter-spacing:-.025em;text-transform:uppercase;color:#fff}
     .sub{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a1a1aa;margin-bottom:12px}
     .conn{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;
@@ -439,9 +439,9 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
 
       // Check for registration request
       if (msg.indexOf("\"type\":\"register\"") >= 0) {
-        // Extract name and driveLink from JSON (simple parsing, no ArduinoJson dependency)
         String name = "";
         String driveLink = "";
+        String userType = "Pedestrian";
 
         int nameIdx = msg.indexOf("\"name\":\"");
         if (nameIdx >= 0) {
@@ -457,8 +457,15 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
           if (end > start) driveLink = msg.substring(start, end);
         }
 
+        int typeIdx = msg.indexOf("\"userType\":\"");
+        if (typeIdx >= 0) {
+          int start = typeIdx + 12;
+          int end = msg.indexOf("\"", start);
+          if (end > start) userType = msg.substring(start, end);
+        }
+
         // Process registration
-        bool success = registrationProcess(name, driveLink);
+        bool success = registrationProcess(name, driveLink, userType);
 
         // Send result back to client
         String response;
@@ -470,9 +477,26 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
           String photoUrl = registrationGetPhotoUrl();
           loraSendRegister(token.c_str(), name.c_str(), photoUrl.c_str());
         } else {
-          response = "{\"type\":\"register_result\",\"success\":false,\"error\":\"Invalid Drive link or registration failed\"}";
+          response = "{\"type\":\"register_result\",\"success\":false,\"error\":\"Registration failed\"}";
         }
         _wsServer.sendTXT(clientNum, response);
+      } else if (msg.indexOf("\"type\":\"user_type\"") >= 0) {
+        // Dynamic road user toggle anytime
+        int typeIdx = msg.indexOf("\"userType\":\"");
+        if (typeIdx >= 0) {
+          int start = typeIdx + 12;
+          int end = msg.indexOf("\"", start);
+          if (end > start) {
+            String uType = msg.substring(start, end);
+            registrationSetUserType(uType);
+            String token = registrationGetToken();
+            String name = registrationGetName();
+            String photoUrl = registrationGetPhotoUrl();
+            if (token.length() > 0) {
+              loraSendRegister(token.c_str(), name.c_str(), photoUrl.c_str());
+            }
+          }
+        }
       } else if (msg.indexOf("\"type\":\"ping\"") >= 0) {
         // WebSocket latency probe
         _wsServer.sendTXT(clientNum, "{\"type\":\"pong\"}");
@@ -498,16 +522,19 @@ void localApStart() {
     Serial.println(F("[AP] LittleFS mounted successfully"));
   }
 
-  // Start SoftAP
+  // Start SoftAP cleanly
+  WiFi.disconnect(true);
+  delay(50);
   WiFi.mode(WIFI_AP);
-  WiFi.softAP(SETUP_AP_SSID, nullptr, SETUP_AP_CHANNEL);
+  bool apOk = WiFi.softAP(SETUP_AP_SSID);
   delay(100);
 
   IPAddress apIP = WiFi.softAPIP();
-  Serial.print(F("[AP] SoftAP started: "));
-  Serial.print(SETUP_AP_SSID);
-  Serial.print(F(" IP: "));
-  Serial.println(apIP);
+  if (apOk) {
+    Serial.printf("[AP] SoftAP '%s' started! IP: %s\n", SETUP_AP_SSID, apIP.toString().c_str());
+  } else {
+    Serial.printf("[AP] [ERROR] Failed to start SoftAP '%s'!\n", SETUP_AP_SSID);
+  }
 
   // Start captive portal DNS redirect
   _dnsServer.start(53, "*", apIP);

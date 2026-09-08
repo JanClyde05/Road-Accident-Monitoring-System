@@ -46,11 +46,11 @@ export const Header: React.FC<HeaderProps> = ({
           
           {/* Brand Mark & Identity */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg border border-neutral-300 dark:border-neutral-700 flex items-center justify-center bg-white dark:bg-neutral-900 overflow-hidden shadow-xs flex-shrink-0 p-0.5">
+            <div className="w-9 h-9 rounded-full border border-neutral-300 dark:border-neutral-700 flex items-center justify-center bg-white dark:bg-neutral-900 overflow-hidden shadow-xs flex-shrink-0 p-0.5">
               <img
                 src="/logo.png"
                 alt="RAMS Logo"
-                className="w-full h-full object-contain rounded"
+                className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src.endsWith('/logo.png')) {
@@ -103,10 +103,10 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={onPurgeEsp32}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-mono uppercase tracking-wider rounded text-neutral-800 dark:text-neutral-200 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 transition-colors shadow-xs"
-                title="Purge ESP32 Receiver Upload Queue"
+                title="Purge Receiver Upload Queue"
               >
                 <Zap className="w-3.5 h-3.5" />
-                <span>Purge ESP32</span>
+                <span>Purge Queue</span>
               </button>
 
               <button
@@ -173,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold font-mono uppercase tracking-wider rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
               >
                 <Zap className="w-4 h-4 text-amber-500" />
-                <span>Purge ESP32</span>
+                <span>Purge Queue</span>
               </button>
 
               <button

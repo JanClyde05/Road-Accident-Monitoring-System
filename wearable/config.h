@@ -37,7 +37,8 @@
 
 // ── Button — False-alarm / Re-arm / Setup-mode toggle ───────────────────────
 // GPIO2 chosen instead of GPIO0 to avoid boot-strapping conflicts.
-#define BUTTON_PIN        2
+//#define BUTTON_PIN        2
+#define BUTTON_PIN        0   //Temporary Button since it is onboard
 #define BUTTON_DEBOUNCE_MS    50     // Debounce window
 #define BUTTON_LONG_PRESS_MS  3000   // Hold duration to enter/exit setup mode
 
@@ -47,7 +48,7 @@
 
 // ── NeoPixel — Onboard status LED ───────────────────────────────────────────
 // Most ESP32-S3 SuperMini clones use GPIO48 for the onboard NeoPixel.
-// ⚠ Verify against your specific board's silkscreen — clone boards vary.
+// [NOTE] Verify against your specific board's silkscreen — clone boards vary.
 #define NEOPIXEL_PIN      48
 #define NEOPIXEL_COUNT    1     // Single onboard LED
 

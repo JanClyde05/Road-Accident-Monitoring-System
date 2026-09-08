@@ -120,7 +120,7 @@ bool loraRxUpdate() {
     case PKT_ALERT: {
       if (bytesRead < (int)sizeof(AlertPacket)) break;
       AlertPacket* pkt = (AlertPacket*)buf;
-      Serial.printf("[LORA-RX] ⚠ ALERT token=%s type=%s lat=%.6f lon=%.6f aMag=%.2f\n",
+      Serial.printf("[LORA-RX] [ALERT] token=%s type=%s lat=%.6f lon=%.6f aMag=%.2f\n",
                     token, _eventTypeName(pkt->eventType),
                     pkt->latitude, pkt->longitude, pkt->aMag);
 

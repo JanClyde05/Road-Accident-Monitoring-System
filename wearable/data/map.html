@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RAMS Wearable — Offline Radar Map</title>
+  <title>RAMS Wearable — Tuguegarao City Map</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,14 +11,13 @@
     <div class="header">
       <div class="brand-header">
         <img src="/logo.jpg" class="brand-logo" alt="RAMS Logo" onerror="this.src='/logo.png'">
-        <h1>Offline Radar Map</h1>
+        <h1>Tuguegarao City Map</h1>
       </div>
-      <p class="subtitle">Autonomous GPS Locator &bull; WebSocket Port 81</p>
+      <p class="subtitle">Wearable Safety Device &bull; Autonomous Uplink</p>
     </div>
 
     <div class="ws-pill disconnected" id="wsPill">
-      <span><span class="dot"></span><span id="wsStatusText">CONNECTING TO WEBSOCKET...</span></span>
-      <span>PORT 81</span>
+      <span class="ws-pill-inner"><span class="dot"></span><span id="wsStatusText">WEBSOCKET: DISCONNECTED</span></span>
     </div>
 
     <!-- Navigation Tabs (Top Position) -->
@@ -33,48 +32,83 @@
       </a>
       <a href="/map" class="tab-btn active" style="text-decoration:none;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-        <span>Radar</span>
+        <span>Map</span>
       </a>
     </div>
 
-    <div class="radar-stage">
-      <div class="radar-ring" style="width:160px;height:160px;"></div>
-      <div class="radar-ring" style="width:110px;height:110px;"></div>
-      <div class="radar-ring" style="width:60px;height:60px;"></div>
-      <div style="position:absolute;width:100%;height:1px;background:#27272a;"></div>
-      <div style="position:absolute;height:100%;width:1px;background:#27272a;"></div>
-      
-      <div class="radar-pin">
-        <div class="pin-dot"></div>
-        <span class="pin-label">Road User</span>
+    <div class="map-stage" id="mapStage">
+      <!-- SVG Map of Tuguegarao City -->
+      <svg class="tuguegarao-svg" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#18181b"/>
+        <!-- Grid Lines -->
+        <line x1="0" y1="60" x2="400" y2="60" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="0" y1="120" x2="400" y2="120" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="0" y1="180" x2="400" y2="180" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="100" y1="0" x2="100" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="200" y1="0" x2="200" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="300" y1="0" x2="300" y2="240" stroke="#27272a" stroke-width="1" stroke-dasharray="2,2"/>
+
+        <!-- Cagayan River (West boundary) -->
+        <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#1e3a8a" stroke-width="14" opacity="0.6"/>
+        <path d="M 50 0 Q 75 80 40 160 T 60 240" fill="none" stroke="#3b82f6" stroke-width="3" opacity="0.4"/>
+
+        <!-- Main Roads -->
+        <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#52525b" stroke-width="5"/>
+        <path d="M 230 0 L 225 70 L 220 140 L 210 240" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+        <path d="M 40 120 L 140 120 L 220 125" fill="none" stroke="#52525b" stroke-width="4"/>
+        <path d="M 225 70 L 370 40" fill="none" stroke="#3f3f46" stroke-width="3"/>
+        <path d="M 220 125 L 360 170" fill="none" stroke="#3f3f46" stroke-width="3"/>
+        <path d="M 170 40 L 225 70" fill="none" stroke="#3f3f46" stroke-width="2.5"/>
+        <path d="M 140 120 L 170 190 L 210 240" fill="none" stroke="#3f3f46" stroke-width="2.5"/>
+
+        <!-- Key Landmark Badges -->
+        <text x="55" y="112" fill="#60a5fa" font-size="7" font-family="'JetBrains Mono',monospace" font-weight="700">BUNTUN BRIDGE</text>
+        <text x="235" y="115" fill="#f4f4f5" font-size="8" font-family="'JetBrains Mono',monospace" font-weight="800">CENTRO / POBLACION</text>
+        <text x="240" y="45" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace" font-weight="700">CARIG (GOV CENTER)</text>
+        <text x="120" y="70" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">CARITAN</text>
+        <text x="240" y="175" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">PENGUE-RUYU</text>
+        <text x="175" y="225" fill="#a1a1aa" font-size="7" font-family="'JetBrains Mono',monospace">CAGGAY</text>
+      </svg>
+
+      <!-- Dynamic GPS Pin (Hidden until valid GPS lock is acquired) -->
+      <div class="map-pin" id="mapPin" style="display:none;">
+        <div class="pin-pulse"></div>
+        <div class="pin-marker">
+          <div class="pin-core"></div>
+        </div>
+        <span class="pin-name-tag" id="mapPinLabel">ROAD USER</span>
       </div>
 
-      <div style="position:absolute;top:8px;left:8px;font-size:9px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;background:#09090b;padding:2px 6px;border-radius:4px;border:1px solid #27272a;">
-        Tuguegarao Sector 17&deg;N
+      <div class="map-sector-badge">
+        TUGUEGARAO CITY &bull; 17.613&deg;N, 121.727&deg;E
+      </div>
+
+      <div class="no-fix-overlay" id="noFixNotice">
+        <span>NO GPS FIX &bull; TUGUEGARAO OVERVIEW (NO PIN PLACED)</span>
       </div>
     </div>
 
-    <div id="radarCoords" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
-      LAT: 17.613240  LON: 121.726910 (9 SATELLITES LOCKED)
+    <div id="mapCoordsText" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;text-align:center;padding:4px;">
+      GPS STATUS: WAITING FOR SATELLITE FIX
     </div>
 
     <div class="grid-3" style="margin-top:12px;">
       <div class="metric-card">
         <div class="metric-label">Latitude</div>
-        <div class="metric-val" id="vlat" style="font-size:10px;">17.6132&deg; N</div>
+        <div class="metric-val" id="vlat" style="font-size:10px;">No GPS fix</div>
       </div>
       <div class="metric-card">
         <div class="metric-label">Longitude</div>
-        <div class="metric-val" id="vlon" style="font-size:10px;">121.7269&deg; E</div>
+        <div class="metric-val" id="vlon" style="font-size:10px;">—</div>
       </div>
       <div class="metric-card">
         <div class="metric-label">Satellites</div>
-        <div class="metric-val" id="vsats" style="font-size:10px;color:#34d399;">9 Sats</div>
+        <div class="metric-val" id="vsats" style="font-size:10px;color:#a1a1aa;">0 Sats</div>
       </div>
     </div>
 
     <div class="footer-text">
-      Autonomous ESP32-S3 SoftAP &bull; Dedicated WebSocket Server (Port 81)
+      Road Accident Monitoring System &bull; Wearable Safety Uplink
     </div>
   </div>
 
