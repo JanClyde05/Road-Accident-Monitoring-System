@@ -455,6 +455,35 @@ class Esp32SyncEngine(
     }
   }
 
+  fun sendCancelAlertPacket(riderProfile: RiderProfile) {
+    scope.launch(Dispatchers.IO) {
+      val cancelJson = JSONObject().apply {
+        put("type", "CANCEL_ALERT")
+        put("token", riderProfile.token)
+        put("rider", riderProfile.riderName)
+        put("plate", riderProfile.plateNumber)
+        put("t", System.currentTimeMillis())
+        put("action", "DISMISS_FALSE_ALARM")
+        put("stop_buzzer", true)
+      }.toString()
+
+      // Send over WebSocket
+      activeWebSocket?.send(cancelJson)
+
+      // Send over Raw Socket / BT if connected
+      val bytes = (cancelJson + "\n").toByteArray(Charsets.UTF_8)
+      try {
+        outputStream?.write(bytes)
+        outputStream?.flush()
+      } catch (_: Exception) {}
+
+      _syncStatus.value = _syncStatus.value.copy(
+        lastTransmittedJson = cancelJson,
+        statusMessage = "FALSE ALARM DISMISSED — SIGNAL TRANSMITTED TO WEARABLE"
+      )
+    }
+  }
+
   private fun buildTelemetryPacket(gps: GpsData, imu: ImuData, profile: RiderProfile): String {
     return JSONObject().apply {
       put("type", "TELEMETRY")

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-      /* Standalone Splash Buffer Overlay Styling */
+      /* Standalone Splash Buffer Overlay Styling — 10s Cinematic Boot */
       #rams-splash {
         position: fixed;
         inset: 0;
@@ -29,14 +29,26 @@
         justify-content: center;
         user-select: none;
         -webkit-user-select: none;
-        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.7s ease;
+      }
+
+      /* Staggered fade-in for splash elements */
+      .splash-fadein-1 { opacity: 0; animation: splash-stagger-in 0.8s ease-out 0.2s forwards; }
+      .splash-fadein-2 { opacity: 0; animation: splash-stagger-in 0.8s ease-out 0.6s forwards; }
+      .splash-fadein-3 { opacity: 0; animation: splash-stagger-in 0.8s ease-out 1.0s forwards; }
+      .splash-fadein-4 { opacity: 0; animation: splash-stagger-in 0.8s ease-out 1.4s forwards; }
+      .splash-fadein-5 { opacity: 0; animation: splash-stagger-in 0.8s ease-out 1.8s forwards; }
+
+      @keyframes splash-stagger-in {
+        0% { opacity: 0; transform: translateY(12px); }
+        100% { opacity: 1; transform: translateY(0); }
       }
 
       .splash-logo-box {
         position: relative;
-        width: 96px;
-        height: 96px;
-        margin-bottom: 24px;
+        width: 110px;
+        height: 110px;
+        margin-bottom: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -44,44 +56,59 @@
 
       .splash-pulse-ring {
         position: absolute;
-        inset: -8px;
+        inset: -10px;
         border-radius: 50%;
         border: 2px solid rgba(239, 68, 68, 0.4);
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-        animation: splash-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+        box-shadow: 0 0 24px rgba(239, 68, 68, 0.3);
+        animation: splash-pulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
       }
 
       .splash-pulse-ring-inner {
         position: absolute;
-        inset: -2px;
+        inset: -3px;
         border-radius: 50%;
         border: 2px solid rgba(16, 185, 129, 0.5);
-        box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
-        animation: splash-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite 0.75s;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+        animation: splash-pulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite 0.75s;
+      }
+
+      .splash-pulse-ring-outer {
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        border: 1px solid rgba(59, 130, 246, 0.25);
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+        animation: splash-pulse 2.8s cubic-bezier(0.24, 0, 0.38, 1) infinite 1.2s;
       }
 
       @keyframes splash-pulse {
         0% { transform: scale(0.92); opacity: 0.8; }
-        70% { transform: scale(1.35); opacity: 0; }
-        100% { transform: scale(1.35); opacity: 0; }
+        70% { transform: scale(1.4); opacity: 0; }
+        100% { transform: scale(1.4); opacity: 0; }
       }
 
       .splash-logo-img {
-        width: 96px;
-        height: 96px;
+        width: 110px;
+        height: 110px;
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid #27272a;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 40px rgba(239, 68, 68, 0.08);
         position: relative;
         z-index: 2;
+        animation: splash-logo-breathe 3s ease-in-out infinite;
+      }
+
+      @keyframes splash-logo-breathe {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
       }
 
       .splash-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 900;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
         color: #fafafa;
         margin: 0 0 6px 0;
@@ -93,7 +120,7 @@
         font-family: 'JetBrains Mono', monospace;
         font-size: 10px;
         font-weight: 700;
-        padding: 2px 8px;
+        padding: 3px 10px;
         border-radius: 4px;
         background: #18181b;
         border: 1px solid #27272a;
@@ -109,18 +136,19 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: #71717a;
-        margin: 0 0 24px 0;
+        margin: 0 0 28px 0;
         text-align: center;
       }
 
+      /* Deterministic progress bar — fills 0% to 100% over 10s */
       .splash-bar-track {
-        width: 260px;
+        width: 300px;
         height: 3px;
         background: #18181b;
         border-radius: 9999px;
         overflow: hidden;
         position: relative;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .splash-bar-fill {
@@ -128,16 +156,35 @@
         top: 0;
         left: 0;
         height: 100%;
-        width: 40%;
+        width: 0%;
         background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444);
         border-radius: 9999px;
-        animation: splash-bar-sweep 1.8s ease-in-out infinite;
+        animation: splash-progress-fill 10s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
       }
 
-      @keyframes splash-bar-sweep {
-        0% { left: -40%; width: 30%; }
-        50% { left: 40%; width: 50%; }
-        100% { left: 100%; width: 30%; }
+      @keyframes splash-progress-fill {
+        0% { width: 0%; }
+        8% { width: 6%; }
+        16% { width: 14%; }
+        24% { width: 24%; }
+        32% { width: 33%; }
+        40% { width: 42%; }
+        50% { width: 53%; }
+        60% { width: 64%; }
+        70% { width: 74%; }
+        80% { width: 84%; }
+        90% { width: 92%; }
+        100% { width: 100%; }
+      }
+
+      .splash-percent-text {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        color: #52525b;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+        text-align: center;
       }
 
       .splash-status-text {
@@ -148,6 +195,29 @@
         text-transform: uppercase;
         color: #a1a1aa;
         text-align: center;
+        min-height: 16px;
+        transition: opacity 0.25s ease;
+      }
+
+      /* Subtle background grid/scan lines effect */
+      #rams-splash::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.008) 2px,
+          rgba(255, 255, 255, 0.008) 4px
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #rams-splash > * {
+        position: relative;
+        z-index: 1;
       }
     </style>
     <script type="module" crossorigin src="/assets/index-B2ONumII.js"></script>
@@ -156,20 +226,24 @@
   <body>
     <!-- Standalone Initializing Buffer Overlay -->
     <div id="rams-splash">
-      <div class="splash-logo-box">
+      <div class="splash-logo-box splash-fadein-1">
+        <div class="splash-pulse-ring-outer"></div>
         <div class="splash-pulse-ring"></div>
         <div class="splash-pulse-ring-inner"></div>
         <img src="/logo.jpg" alt="RAMS Logo" class="splash-logo-img" onerror="this.src='/logo.png'" />
       </div>
 
-      <div class="splash-badge">OPERATIONS STATION • v2.0</div>
-      <h1 class="splash-title">ROAD ACCIDENT MONITORING SYSTEM</h1>
-      <p class="splash-dept">PGC DIGITAL INNOVATION CHALLENGE 2026</p>
+      <div class="splash-badge splash-fadein-2">OPERATIONS STATION • v2.0</div>
+      <h1 class="splash-title splash-fadein-3">ROAD ACCIDENT MONITORING SYSTEM</h1>
+      <p class="splash-dept splash-fadein-4">PGC DIGITAL INNOVATION CHALLENGE 2026</p>
 
-      <div class="splash-bar-track">
-        <div class="splash-bar-fill"></div>
+      <div class="splash-fadein-5" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="splash-bar-track">
+          <div class="splash-bar-fill"></div>
+        </div>
+        <p id="splash-percent" class="splash-percent-text">0%</p>
+        <p id="splash-status" class="splash-status-text">INITIALIZING TELEMETRY UPLINK...</p>
       </div>
-      <p id="splash-status" class="splash-status-text">INITIALIZING TELEMETRY UPLINK...</p>
     </div>
 
     <!-- Main React App Container -->
@@ -180,34 +254,53 @@
       (function() {
         var splash = document.getElementById('rams-splash');
         var status = document.getElementById('splash-status');
+        var percent = document.getElementById('splash-percent');
         if (!splash) return;
 
         var messages = [
           'INITIALIZING TELEMETRY UPLINK...',
-          'CALIBRATING TUGUEGARAO MAP COORDINATES...',
+          'CALIBRATING GPS MODULE & TUGUEGARAO SECTOR...',
+          'ESTABLISHING LoRa 915MHz FREQUENCY CHANNEL...',
           'SYNCHRONIZING BASE STATION RECEIVER...',
+          'LOADING HIGH-PRECISION MAP TILE CACHE...',
+          'CONNECTING RESCUE INCIDENT DATABASE...',
+          'INITIALIZING CRASH DETECTION & AI LOGIC...',
+          'VERIFYING RIDER REGISTRATION RECORDS...',
+          'CONFIGURING EMERGENCY DISPATCH NETWORK...',
+          'PERFORMING MULTI-SENSOR WEARABLE DIAGNOSTICS...',
+          'FINALIZING COMMAND & RESCUER OPERATIONS CENTER...',
           'RESCUER OPERATIONS CENTER READY'
         ];
         var msgIdx = 0;
+        var minBufferMs = 10000; // 10s cinematic boot buffer
+        var startTime = Date.now();
+
+        var msgIntervalMs = Math.floor(minBufferMs / messages.length);
         var msgTimer = setInterval(function() {
           msgIdx = (msgIdx + 1) % messages.length;
           if (status) status.textContent = messages[msgIdx];
-        }, 450);
+        }, msgIntervalMs);
 
-        var minBufferMs = 1600; // Professional smooth buffer timing
-        var startTime = Date.now();
+        var percentTimer = setInterval(function() {
+          var elapsed = Date.now() - startTime;
+          var pct = Math.min(100, Math.floor((elapsed / minBufferMs) * 100));
+          if (percent) percent.textContent = pct + '%';
+          if (pct >= 100) clearInterval(percentTimer);
+        }, 50);
 
         function dismissSplash() {
           var elapsed = Date.now() - startTime;
           var remaining = Math.max(0, minBufferMs - elapsed);
           setTimeout(function() {
             clearInterval(msgTimer);
+            clearInterval(percentTimer);
+            if (percent) percent.textContent = '100%';
             if (status) status.textContent = 'RESCUER OPERATIONS CENTER READY';
             splash.style.opacity = '0';
             splash.style.pointerEvents = 'none';
             setTimeout(function() {
               splash.remove();
-            }, 550);
+            }, 750);
           }, remaining);
         }
 

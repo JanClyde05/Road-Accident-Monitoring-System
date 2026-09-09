@@ -130,6 +130,7 @@ fun RamsDashboardScreen(
   val usePhoneSensors by viewModel.usePhoneSensors.collectAsStateWithLifecycle()
   val riderProfile by viewModel.riderProfile.collectAsStateWithLifecycle()
   val discoveredDevices by viewModel.discoveredWearables.collectAsStateWithLifecycle()
+  val bondedDevices by viewModel.bondedDevices.collectAsStateWithLifecycle()
   val isScanningBluetooth by viewModel.isScanningBluetooth.collectAsStateWithLifecycle()
   val isBluetoothEnabled by viewModel.isBluetoothEnabled.collectAsStateWithLifecycle()
 
@@ -305,6 +306,7 @@ fun RamsDashboardScreen(
             imu = imu,
             riderProfile = riderProfile,
             discoveredDevices = discoveredDevices,
+            bondedDevices = bondedDevices,
             isScanningBluetooth = isScanningBluetooth,
             isBluetoothEnabled = isBluetoothEnabled,
             onStartBluetoothScan = { viewModel.startBluetoothDiscovery() },
@@ -313,7 +315,8 @@ fun RamsDashboardScreen(
             onRequestEnableBluetooth = {
               val enableBtIntent = android.content.Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE)
               bluetoothEnableLauncher.launch(enableBtIntent)
-            }
+            },
+            onCancelFalseAlarm = { viewModel.cancelFalseAlarm() }
           )
         }
         RamsNavTab.SETTINGS -> {

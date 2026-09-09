@@ -28,7 +28,7 @@ design_system: Bold Typography & Minimalist (Zero-Emoji)
 ## 🗺️ Master System Architecture & Dual-Generation Separation
 
 The repository is organized into two clearly delineated architectural sections (see [[00_SYSTEM_ARCHITECTURE.md]]):
-- **Section 1: Original Hardware Baseline (OG Concept)**: Dedicated hardware sensor breakout boards (`MPU-6050`, `ATGM336H` GPS), ESP32 firmware, and captive portal web applications (`wearable/`, `receiver/`, `Mobile App/`, `backend/`, `shared/`). **All original code is 100% preserved.**
+- **Section 1: Original Hardware Baseline (OG Concept)**: Dedicated hardware sensor breakout boards (`MPU-6050`, `ATGM336H` GPS), ESP32 firmware, and captive portal web applications (`wearable_withApp/`, `receiver_withDesktop/`, `data_logger_standalone/`, `Mobile App/`, `backend/`, `shared/`). **All original code is 100% preserved.**
 - **Section 2: Modern Apps Ecosystem (V2 Software Node System)**: Native client software leveraging smartphones for 100Hz fused IMU + Dual-Band GNSS (`android_app/`) and dedicated Windows command center executable (`desktop_app/`). Quick access available via `[[apps/]]`.
 
 ---
@@ -59,24 +59,24 @@ graph TD
     end
 
     %% Wearable Subsystem
-    subgraph Wearable_System["[[wearable/wearable.ino]]"]
-        W_SENS["[[wearable/sensors.cpp]]<br/>MPU-6050 100Hz DLPF"]
-        W_GPS["[[wearable/gps.cpp]]<br/>ATGM336H GPS (UART1) + Ext Sync"]
-        W_DET["[[wearable/detection.cpp]]<br/>FSM: Fall / Skid / Impact / Shock"]
-        W_LORA["[[wearable/lora_tx.cpp]]<br/>SX1278 LoRa TX (SPI)"]
-        W_WS["[[wearable/local_ap.cpp]]<br/>SoftAP + WebSocket Server"]
-        W_REG["[[wearable/registration.cpp]]<br/>FNV-1a Hash Token + NVS Storage"]
-        W_BTN["[[wearable/button.cpp]]<br/>GPIO2 Debounced / FSM Cancel"]
-        W_DATA["[[wearable/data/]] LittleFS<br/>index.html | app.js | style.css | map.html"]
+    subgraph Wearable_System["[[wearable_withApp/wearable_withApp.ino]]"]
+        W_SENS["[[wearable_withApp/sensors.cpp]]<br/>MPU-6050 100Hz DLPF"]
+        W_GPS["[[wearable_withApp/gps.cpp]]<br/>ATGM336H GPS (UART1) + Ext Sync"]
+        W_DET["[[wearable_withApp/detection.cpp]]<br/>FSM: Fall / Skid / Impact / Shock"]
+        W_LORA["[[wearable_withApp/lora_tx.cpp]]<br/>SX1278 LoRa TX (SPI)"]
+        W_WS["[[wearable_withApp/local_ap.cpp]]<br/>SoftAP + WebSocket Server"]
+        W_REG["[[wearable_withApp/registration.cpp]]<br/>FNV-1a Hash Token + NVS Storage"]
+        W_BTN["[[wearable_withApp/button.cpp]]<br/>GPIO2 Debounced / FSM Cancel"]
+        W_DATA["[[wearable_withApp/data/]] LittleFS<br/>index.html | app.js | style.css | map.html"]
     end
 
     %% Receiver Subsystem
-    subgraph Receiver_System["[[receiver/receiver.ino]]"]
-        R_LORA["[[receiver/lora_rx.cpp]]<br/>SX1278 LoRa RX (SPI)"]
-        R_QUEUE["[[receiver/local_queue.cpp]]<br/>LittleFS Store-and-Retry Buffer"]
-        R_HTTP["[[receiver/http_upload.cpp]]<br/>WiFiClientSecure HTTPS POST"]
-        R_WIFI["[[receiver/wifi_manager.cpp]]<br/>Captive Portal WiFi Setup"]
-        R_NVS["[[receiver/nvs_store.cpp]]<br/>Preferences WiFi Creds"]
+    subgraph Receiver_System["[[receiver_withDesktop/receiver_withDesktop.ino]]"]
+        R_LORA["[[receiver_withDesktop/lora_rx.cpp]]<br/>SX1278 LoRa RX (SPI)"]
+        R_QUEUE["[[receiver_withDesktop/local_queue.cpp]]<br/>LittleFS Store-and-Retry Buffer"]
+        R_HTTP["[[receiver_withDesktop/http_upload.cpp]]<br/>WiFiClientSecure HTTPS POST"]
+        R_WIFI["[[receiver_withDesktop/wifi_manager.cpp]]<br/>Captive Portal WiFi Setup"]
+        R_NVS["[[receiver_withDesktop/nvs_store.cpp]]<br/>Preferences WiFi Creds"]
     end
 
     %% Cloud Subsystem
@@ -172,25 +172,25 @@ graph TD
 - **[[shared/protocol.h]]**: Single source of truth for all binary LoRa packet structures. Packed with `#pragma pack(push, 1)`.
 - **[[shared/logo_data.h]]**: Circular RAMS logo bitmap data embedded into ESP32 flash memory.
 
-### Layer 3: Wearable Sensor Node Firmware (`wearable/`)
-- **[[wearable/wearable.ino]]**: Main setup and 100Hz acquisition loop.
-- **[[wearable/sensors.h]]** & **[[wearable/sensors.cpp]]**: MPU-6050 hardware driver.
-- **[[wearable/gps.h]]** & **[[wearable/gps.cpp]]**: ATGM336H hardware GPS driver + `gpsSetExternalLocation(...)` phone telemetry sync.
-- **[[wearable/detection.h]]** & **[[wearable/detection.cpp]]**: 5-state Finite State Machine (Freefall, Impact, Stillness, Alarm).
-- **[[wearable/lora_tx.h]]** & **[[wearable/lora_tx.cpp]]**: SX1278 LoRa radio transmitter.
-- **[[wearable/local_ap.h]]** & **[[wearable/local_ap.cpp]]**: SoftAP + dedicated WebSocket server on TCP port 81. Accepts incoming phone telemetry.
-- **[[wearable/registration.h]]** & **[[wearable/registration.cpp]]**: NVS token persistence and FNV-1a generator.
+### Layer 3: Wearable Sensor Node Firmware (`wearable_withApp/`)
+- **[[wearable_withApp/wearable_withApp.ino]]**: Main setup and 100Hz acquisition loop.
+- **[[wearable_withApp/sensors.h]]** & **[[wearable_withApp/sensors.cpp]]**: MPU-6050 hardware driver.
+- **[[wearable_withApp/gps.h]]** & **[[wearable_withApp/gps.cpp]]**: ATGM336H hardware GPS driver + `gpsSetExternalLocation(...)` phone telemetry sync.
+- **[[wearable_withApp/detection.h]]** & **[[wearable_withApp/detection.cpp]]**: 5-state Finite State Machine (Freefall, Impact, Stillness, Alarm).
+- **[[wearable_withApp/lora_tx.h]]** & **[[wearable_withApp/lora_tx.cpp]]**: SX1278 LoRa radio transmitter.
+- **[[wearable_withApp/local_ap.h]]** & **[[wearable_withApp/local_ap.cpp]]**: SoftAP + dedicated WebSocket server on TCP port 81. Accepts incoming phone telemetry.
+- **[[wearable_withApp/registration.h]]** & **[[wearable_withApp/registration.cpp]]**: NVS token persistence and FNV-1a generator.
 
-### Layer 4: Original Captive Portal Web App (`Mobile App/` & `wearable/data/`)
+### Layer 4: Original Captive Portal Web App (`Mobile App/` & `wearable_withApp/data/`)
 - **[[Mobile App/]]**: Original captive portal web application preserved 100% untouched.
-- **[[wearable/data/index.html]]**: LittleFS captive portal SPA served by ESP32 SoftAP.
-- **[[wearable/data/app.js]]**: WebSocket protocol client running on rider browser.
+- **[[wearable_withApp/data/index.html]]**: LittleFS captive portal SPA served by ESP32 SoftAP.
+- **[[wearable_withApp/data/app.js]]**: WebSocket protocol client running on rider browser.
 
-### Layer 5: Receiver Base Station Firmware (`receiver/`)
-- **[[receiver/receiver.ino]]**: Main receiver loop polling LoRa RX and processing upload retry queues.
-- **[[receiver/lora_rx.h]]** & **[[receiver/lora_rx.cpp]]**: Continuous LoRa packet listening and deserialization.
-- **[[receiver/http_upload.h]]** & **[[receiver/http_upload.cpp]]**: Uploads JSON event payloads to emergency server (`/api/upload`).
-- **[[receiver/local_queue.h]]** & **[[receiver/local_queue.cpp]]**: LittleFS store-and-retry buffer for offline resilience.
+### Layer 5: Receiver Base Station Firmware (`receiver_withDesktop/`)
+- **[[receiver_withDesktop/receiver_withDesktop.ino]]**: Main receiver loop polling LoRa RX and processing upload retry queues.
+- **[[receiver_withDesktop/lora_rx.h]]** & **[[receiver_withDesktop/lora_rx.cpp]]**: Continuous LoRa packet listening and deserialization.
+- **[[receiver_withDesktop/http_upload.h]]** & **[[receiver_withDesktop/http_upload.cpp]]**: Uploads JSON event payloads to emergency server (`/api/upload`).
+- **[[receiver_withDesktop/local_queue.h]]** & **[[receiver_withDesktop/local_queue.cpp]]**: LittleFS store-and-retry buffer for offline resilience.
 
 ### Layer 6: Netlify Web Dashboard & Reusable Design Library (`backend/`)
 - **[[backend/src/RAMSDesignTokens.ts]]**: Centralized design system library containing dark slate color tokens (`#09090b` canvas, `#121214` surface, `#18181b` elevated, `#27272a` hairline), typography, box shadows, and map filter tokens.
@@ -237,11 +237,11 @@ graph TD
 | **Where is the Standalone Desktop Rescuer App source?**| [[desktop_app/Program.cs]] | `Main()`, `StartServer()`, `HandlePostUpload()` |
 | **How to build the Desktop .exe?** | [[desktop_app/build_exe.bat]] | Uses native Windows `csc.exe` |
 | **Where is the Android build & USB deploy script?** | [[android_app/build_and_install.bat]] | Automated ADB + Gradle tool |
-| **Where is the fall/skid detection logic?** | [[wearable/detection.cpp]] | `detectionUpdate()` |
-| **Where are detection thresholds defined?** | [[wearable/config.h]] | `FALL_FREEFALL_G`, `FALL_IMPACT_G` |
+| **Where is the fall/skid detection logic?** | [[wearable_withApp/detection.cpp]] | `detectionUpdate()` |
+| **Where are detection thresholds defined?** | [[wearable_withApp/config.h]] | `FALL_FREEFALL_G`, `FALL_IMPACT_G` |
 | **Where are LoRa packet structs defined?** | [[shared/protocol.h]] | `AlertPacket`, `TelemetryPacket` |
-| **How is the compact token generated?** | [[wearable/registration.cpp]] & [[android_app/.../RiderProfile.kt]] | `registrationGenerateToken()`, `generateFriendlyToken()` |
-| **Where is the wearable WebSocket handler?** | [[wearable/local_ap.cpp]] | `_onWsEvent()`, `WebSocketsServer` |
-| **Where is external GPS injected into wearable?** | [[wearable/gps.cpp]] | `gpsSetExternalLocation()` |
+| **How is the compact token generated?** | [[wearable_withApp/registration.cpp]] & [[android_app/.../RiderProfile.kt]] | `registrationGenerateToken()`, `generateFriendlyToken()` |
+| **Where is the wearable WebSocket handler?** | [[wearable_withApp/local_ap.cpp]] | `_onWsEvent()`, `WebSocketsServer` |
+| **Where is external GPS injected into wearable?** | [[wearable_withApp/gps.cpp]] | `gpsSetExternalLocation()` |
 | **Where is the custom teardrop map pin?** | [[backend/src/components/RAMSMapView.tsx]] | `createAestheticMarkerIcon()` |
 | **Where are the UI design & zero-emoji rules?**| [[DESIGN_RULES.md]] | Master Design Rules Document |

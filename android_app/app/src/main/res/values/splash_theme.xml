@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RAMS.Splash" parent="android:Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/rams_canvas</item>
+        <item name="android:navigationBarColor">@color/rams_canvas</item>
+    </style>
+</resources>

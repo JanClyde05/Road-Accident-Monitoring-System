@@ -165,10 +165,14 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   private val _isScanningBluetooth = MutableStateFlow(false)
   val isScanningBluetooth: StateFlow<Boolean> = _isScanningBluetooth.asStateFlow()
 
+  private val _bondedDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+  val bondedDevices: StateFlow<List<BluetoothDevice>> = _bondedDevices.asStateFlow()
+
   private val _discoveredWearables = MutableStateFlow<List<BluetoothDevice>>(emptyList())
   val discoveredWearables: StateFlow<List<BluetoothDevice>> = _discoveredWearables.asStateFlow()
 
   private var isReceiverRegistered = false
+  private var scanCycleCount = 0
 
   private fun sortWearables(devices: List<BluetoothDevice>): List<BluetoothDevice> {
     return devices.sortedWith(compareByDescending { device ->
@@ -183,6 +187,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     val enabled = bluetoothAdapter?.isEnabled == true
     _isBluetoothEnabled.value = enabled
     if (enabled) {
+      queryBondedWearableDevices()
       startBluetoothDiscovery()
     }
   }
@@ -195,11 +200,13 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
           val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
           if (state == BluetoothAdapter.STATE_ON) {
             _isBluetoothEnabled.value = true
+            queryBondedWearableDevices()
             startBluetoothDiscovery()
           } else if (state == BluetoothAdapter.STATE_OFF) {
             _isBluetoothEnabled.value = false
             _isScanningBluetooth.value = false
             _discoveredWearables.value = emptyList()
+            _bondedDevices.value = emptyList()
           }
         }
         BluetoothDevice.ACTION_FOUND -> {
@@ -213,7 +220,16 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
           }
         }
         BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-          _isScanningBluetooth.value = false
+          if (_isScanningBluetooth.value && scanCycleCount < 2) {
+            scanCycleCount++
+            try {
+              bluetoothAdapter?.startDiscovery()
+            } catch (_: Exception) {
+              _isScanningBluetooth.value = false
+            }
+          } else {
+            _isScanningBluetooth.value = false
+          }
         }
       }
     }
@@ -294,7 +310,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   fun queryBondedWearableDevices() {
     try {
       val bonded = bluetoothAdapter?.bondedDevices ?: emptySet()
-      _discoveredWearables.value = sortWearables(bonded.toList())
+      _bondedDevices.value = sortWearables(bonded.toList())
     } catch (_: Exception) {}
   }
 
@@ -319,6 +335,10 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       // Check bonded devices first
       queryBondedWearableDevices()
 
+      // Reset discovered list and cycle counter for fresh scan
+      _discoveredWearables.value = emptyList()
+      scanCycleCount = 0
+
       if (bluetoothAdapter?.isDiscovering == true) {
         bluetoothAdapter.cancelDiscovery()
       }
@@ -332,11 +352,36 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   @SuppressLint("MissingPermission")
   fun stopBluetoothDiscovery() {
     try {
+      scanCycleCount = 99
       if (bluetoothAdapter?.isDiscovering == true) {
         bluetoothAdapter.cancelDiscovery()
       }
       _isScanningBluetooth.value = false
     } catch (_: Exception) {}
+  }
+
+  fun cancelFalseAlarm() {
+    val currentRider = _riderProfile.value
+    esp32SyncEngine.sendCancelAlertPacket(currentRider)
+
+    val cancelEvent = IncidentEvent(
+      id = "CLR-${System.currentTimeMillis() % 100000}",
+      title = "FALSE ALARM DISMISSED",
+      type = IncidentType.FALSE_ALARM,
+      timestamp = System.currentTimeMillis(),
+      lat = gpsState.value.latitude,
+      lon = gpsState.value.longitude,
+      aMag = imuState.value.aMag,
+      speedKmh = gpsState.value.speedKmh,
+      batteryPct = 94,
+      riderName = currentRider.riderName,
+      plateNumber = currentRider.plateNumber,
+      deviceToken = currentRider.token,
+      vehicleModel = currentRider.vehicleModel,
+      locationAddress = gpsState.value.locationAddress.ifBlank { "Maharlika Highway, Tuguegarao City" },
+      notes = "False alarm signal cancelled by rider via mobile app. Wearable emergency status cleared."
+    )
+    _events.value = listOf(cancelEvent) + _events.value
   }
 
   fun connectWearableDevice(device: BluetoothDevice) {

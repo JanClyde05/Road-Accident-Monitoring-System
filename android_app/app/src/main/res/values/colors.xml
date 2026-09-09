@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="rams_canvas">#FF09090B</color>
+    <color name="rams_surface">#FF18181B</color>
+    <color name="rams_border">#FF27272A</color>
+    <color name="rams_emerald">#FF10B981</color>
+    <color name="rams_red">#FFEF4444</color>
+    <color name="rams_blue">#FF3B82F6</color>
 </resources>
