@@ -24,6 +24,7 @@
 #include "registration.h"
 #include "offline_map.h"
 #include "lora_tx.h"
+#include "gps.h"
 #include "../shared/logo_data.h"
 #include <WiFi.h>
 #include <WebServer.h>
@@ -496,6 +497,38 @@ static void _onWebSocketEvent(uint8_t clientNum, WStype_t type, uint8_t* payload
               loraSendRegister(token.c_str(), name.c_str(), photoUrl.c_str());
             }
           }
+        }
+      } else if (msg.indexOf("\"type\":\"TELEMETRY\"") >= 0 || msg.indexOf("\"type\":\"phone_telemetry\"") >= 0) {
+        // Incoming phone telemetry frame (Phone IMU + Precision Dual-Band GPS)
+        StaticJsonDocument<512> doc;
+        DeserializationError err = deserializeJson(doc, msg);
+        if (!err) {
+          float lat = doc["lat"] | 0.0f;
+          float lon = doc["lon"] | 0.0f;
+          float amag = doc["amag"] | 1.0f;
+          int shock = doc["shock"] | 0;
+          const char* token = doc["token"] | "";
+          if (lat != 0.0f || lon != 0.0f) {
+            gpsSetExternalLocation(lat, lon, 10, true);
+          }
+          if (shock == 1) {
+            // Forward high-G impact alert immediately via SX1278 LoRa
+            loraSendAlert(token, lat, lon, PKT_ALERT, amag);
+          }
+        }
+      } else if (msg.indexOf("\"type\":\"CRASH_EMERGENCY\"") >= 0) {
+        // High-priority phone crash broadcast -> Transmit SX1278 LoRa alert packet
+        StaticJsonDocument<512> doc;
+        DeserializationError err = deserializeJson(doc, msg);
+        if (!err) {
+          float lat = doc["lat"] | 0.0f;
+          float lon = doc["lon"] | 0.0f;
+          float amag = doc["amag"] | 3.5f;
+          const char* token = doc["token"] | "";
+          if (lat != 0.0f || lon != 0.0f) {
+            gpsSetExternalLocation(lat, lon, 10, true);
+          }
+          loraSendAlert(token, lat, lon, PKT_ALERT, amag);
         }
       } else if (msg.indexOf("\"type\":\"ping\"") >= 0) {
         // WebSocket latency probe

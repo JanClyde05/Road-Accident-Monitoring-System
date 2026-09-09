@@ -23,6 +23,13 @@ static float _lastLat = 0.0f;
 static float _lastLon = 0.0f;
 static bool  _everHadFix = false;
 
+// External GPS from Phone (via WebSocket sync)
+static float _extLat = 0.0f;
+static float _extLon = 0.0f;
+static uint8_t _extSats = 0;
+static bool _extHasFix = false;
+static uint32_t _extFixTimestamp = 0;
+
 void gpsInit() {
   // Begin UART1 with the GPS module's baud rate.
   // RX/TX pin assignment uses ESP32's flexible UART matrix.
@@ -49,8 +56,23 @@ void gpsUpdate() {
   }
 }
 
+void gpsSetExternalLocation(float lat, float lon, uint8_t satellites, bool hasFix) {
+  _extLat = lat;
+  _extLon = lon;
+  _extSats = satellites;
+  _extHasFix = hasFix;
+  _extFixTimestamp = millis();
+  if (hasFix) {
+    _lastLat = lat;
+    _lastLon = lon;
+    _everHadFix = true;
+  }
+}
+
 float gpsGetLatitude() {
-  // Return current fix if valid, otherwise fall back to last known
+  if (_extHasFix && (millis() - _extFixTimestamp < 5000)) {
+    return _extLat;
+  }
   if (_gps.location.isValid()) {
     return _gps.location.lat();
   }
@@ -58,6 +80,9 @@ float gpsGetLatitude() {
 }
 
 float gpsGetLongitude() {
+  if (_extHasFix && (millis() - _extFixTimestamp < 5000)) {
+    return _extLon;
+  }
   if (_gps.location.isValid()) {
     return _gps.location.lng();
   }
@@ -65,13 +90,22 @@ float gpsGetLongitude() {
 }
 
 bool gpsHasFix() {
+  if (_extHasFix && (millis() - _extFixTimestamp < 5000)) {
+    return true;
+  }
   return _gps.location.isValid() && _gps.location.age() < 5000;
 }
 
 uint32_t gpsGetAge() {
+  if (_extHasFix && (millis() - _extFixTimestamp < 5000)) {
+    return (millis() - _extFixTimestamp);
+  }
   return _gps.location.age();
 }
 
 uint8_t gpsGetSatellites() {
+  if (_extHasFix && (millis() - _extFixTimestamp < 5000)) {
+    return _extSats;
+  }
   return (uint8_t)_gps.satellites.value();
 }

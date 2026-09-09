@@ -6,10 +6,28 @@
     --font-mono: 'JetBrains Mono', monospace;
   }
 
+  html, body, #root {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
   body {
     font-family: var(--font-sans);
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     letter-spacing: -0.01em;
+  }
+
+  /* Completely remove Leaflet / OpenStreetMap attribution as per GPS-Audio specification */
+  .leaflet-control-attribution {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   code, pre, .font-mono {

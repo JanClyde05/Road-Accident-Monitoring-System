@@ -14,6 +14,7 @@ interface MapViewProps {
   onEventSelect: (event: EventData) => void;
   theme: ThemeMode;
   onOpenProfile?: (event: EventData) => void;
+  refreshTrigger?: number;
 }
 
 function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivIcon {
@@ -163,7 +164,7 @@ function getHighestSeverityColor(colors: string[]): string {
   return max;
 }
 
-export default function RAMSMapView({ events, selectedEvent, onEventSelect, theme, onOpenProfile }: MapViewProps) {
+export default function RAMSMapView({ events, selectedEvent, onEventSelect, theme, onOpenProfile, refreshTrigger }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
@@ -198,10 +199,11 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
       center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
       zoomControl: true,
+      attributionControl: false,
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      attribution: '',
       maxZoom: 19,
     }).addTo(map);
 
@@ -219,6 +221,13 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
       mapRef.current = null;
     };
   }, []);
+
+  // Invalidate and refresh map size on refreshTrigger
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.invalidateSize();
+    }
+  }, [refreshTrigger]);
 
   // Update clusters and markers on map viewport change or events change
   useEffect(() => {

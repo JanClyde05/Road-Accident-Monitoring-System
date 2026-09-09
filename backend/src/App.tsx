@@ -1,9 +1,9 @@
 /*
- * Road Accident Monitoring System (RAMS) — Redesigned Dashboard App
- * =================================================================
- * Main React application integrating modern aesthetic design rules,
+ * Road Accident Monitoring System (RAMS) — Standalone Rescuer Dashboard
+ * =====================================================================
+ * Main React application integrating dark slate aesthetic design rules,
  * Leaflet teardrop markers with pulse rings, rider profile drawer,
- * and live crash alert telemetry filtering.
+ * and live crash alert telemetry stream from receiver base stations.
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -16,7 +16,7 @@ import { DesignRulesModal } from './components/DesignRulesModal';
 
 const POLL_INTERVAL = 2500; // 2.5 seconds
 
-// Rich Initial Sample Demo Incidents across Tuguegarao City & Cagayan Valley
+// Initial Tactical Rescuer Incidents across Tuguegarao City & Cagayan Valley
 const INITIAL_DEMO_EVENTS: EventData[] = [
   {
     id: 'RAMS-ALERT-9901',
@@ -129,27 +129,16 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(new Date());
   const [isConnected, setIsConnected] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // Theme Mode (Dark by default as requested in aesthetic spec)
-  const [theme, setTheme] = useState<ThemeMode>(() => {
-    const saved = localStorage.getItem('rams_theme');
-    return (saved === 'light' || saved === 'dark') ? saved : 'dark';
-  });
+  // Always dark mode across the entire application
+  const theme: ThemeMode = 'dark';
 
-  // Sync theme with HTML document root for CSS selectors
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('rams_theme', theme);
-  }, [theme]);
-
-  const handleToggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    root.classList.add('dark');
+    localStorage.setItem('rams_theme', 'dark');
+  }, []);
 
   // Fetch events from backend API & merge with initial demo pins
   const fetchEvents = useCallback(async () => {
@@ -176,6 +165,7 @@ export default function App() {
       setIsConnected(true); // Keep UI online status active for local monitor
     } finally {
       setIsLoading(false);
+      setRefreshTrigger((prev) => prev + 1);
     }
   }, []);
 
@@ -200,68 +190,22 @@ export default function App() {
     setIsProfileOpen(true);
   }, []);
 
-  // Simulate a test crash sensor trigger
-  const handleTestIncident = useCallback(async () => {
-    const unitNum = Math.floor(Math.random() * 9) + 1;
-    const gForce = +(3.5 + Math.random() * 3.2).toFixed(1);
-    
-    const mockTestEvent: EventData = {
-      id: `SIM-${Date.now()}`,
-      deviceToken: `RAMS-UNIT-0${unitNum}`,
-      deviceName: `Tuguegarao RAMS Wearable-0${unitNum}`,
-      riderName: `Patrol Rider 0${unitNum}`,
-      riderRole: 'Motorcycle Patrol Unit',
-      bloodType: 'O+',
-      allergies: 'None',
-      emergencyContactName: 'Dispatch Command Unit',
-      emergencyContactPhone: '+63 78 844 1000',
-      emergencyRelationship: 'Command HQ',
-      vehicleModel: 'Yamaha NMAX 155 (Black)',
-      plateNumber: `BG-${1000 + Math.floor(Math.random() * 9000)}`,
-      locationAddress: 'Maharlika Highway, Tuguegarao City',
-      title: `Simulated High-G Crash Test Uplink (${gForce}g)`,
-      type: 'test',
-      lat: 17.6132 + (Math.random() - 0.5) * 0.018,
-      lon: 121.7270 + (Math.random() - 0.5) * 0.018,
-      createdAt: new Date().toISOString(),
-      aMag: gForce,
-      battPct: 92,
-      photoUrl: '/logo.png',
-    };
-
-    setEvents((prev) => [mockTestEvent, ...prev]);
-    setSelectedEvent(mockTestEvent);
-
-    try {
-      await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(mockTestEvent)
-      });
-    } catch {
-      // Ignored - already set in local state
-    }
-  }, []);
-
   // Derived statistics for header status
   const alertCount = events.filter((e) => e.type === 'alert').length;
   const deviceTokens = new Set(events.map((e) => e.deviceToken || e.deviceName).filter(Boolean));
   const deviceCount = deviceTokens.size;
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-200 select-none">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-neutral-950 text-neutral-100 transition-colors duration-200 select-none">
       
-      {/* Top RAMS Header */}
+      {/* Top RAMS Operations Header */}
       <RAMSHeader
         alertCount={alertCount}
         deviceCount={deviceCount}
         lastUpdate={lastUpdate}
         isConnected={isConnected}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
         onRefresh={fetchEvents}
         isLoading={isLoading}
-        onTestIncident={handleTestIncident}
         onOpenDesignRules={() => setIsDesignRulesOpen(true)}
       />
 
@@ -275,6 +219,7 @@ export default function App() {
           onEventSelect={handleEventSelect}
           theme={theme}
           onOpenProfile={handleOpenProfile}
+          refreshTrigger={refreshTrigger}
         />
 
         {/* Right Event & Telemetry Log Sidebar */}
@@ -294,7 +239,7 @@ export default function App() {
         onClose={() => setIsProfileOpen(false)}
       />
 
-      {/* Aesthetic Specification Modal */}
+      {/* Aesthetic Specification Modal (Kept in code for developer reference) */}
       <DesignRulesModal
         isOpen={isDesignRulesOpen}
         onClose={() => setIsDesignRulesOpen(false)}

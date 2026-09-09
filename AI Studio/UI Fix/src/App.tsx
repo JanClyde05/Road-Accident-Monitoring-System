@@ -12,9 +12,34 @@ import { DesignRulesModal } from './components/DesignRulesModal';
 import { ShieldCheck, ExternalLink, Github } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const getInitialTab = (): string => {
+    const hash = window.location.hash.replace('#', '').toLowerCase();
+    if (hash === 'wearable_ui' || hash === 'mobile' || hash === 'android' || hash === 'phone') return 'wearable_ui';
+    if (hash === 'receiver_ui' || hash === 'receiver') return 'receiver_ui';
+    if (hash === 'simulator' || hash === 'fsm') return 'simulator';
+    if (hash === 'architecture') return 'architecture';
+    if (hash === 'findings') return 'findings';
+    if (hash === 'patches') return 'patches';
+    if (hash === 'hardware') return 'hardware';
+    return 'overview';
+  };
+
+  const [activeTab, setActiveTab] = useState<string>(getInitialTab);
   const [selectedFindingId, setSelectedFindingId] = useState<string>('FIND-01');
   const [isDesignRulesOpen, setIsDesignRulesOpen] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      setActiveTab(getInitialTab());
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleTabChange = (tab: string) => {
+    window.location.hash = tab;
+    setActiveTab(tab);
+  };
 
   const handleSelectFindingFromOverview = (id: string) => {
     setSelectedFindingId(id);
@@ -26,7 +51,7 @@ export default function App() {
       {/* Top Application Header */}
       <Header 
         activeTab={activeTab} 
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
         onOpenDesignRules={() => setIsDesignRulesOpen(true)}
       />
 
@@ -34,7 +59,7 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'overview' && (
           <ScorecardOverview 
-            onSelectTab={setActiveTab}
+            onSelectTab={handleTabChange}
             onSelectFinding={handleSelectFindingFromOverview}
           />
         )}

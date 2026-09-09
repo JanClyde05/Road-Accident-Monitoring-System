@@ -1,17 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Road Accident Monitoring System — Live Dashboard</title>
+    <title>Road Accident Monitoring System — Live Operations Center</title>
     <meta name="description" content="Real-time road accident monitoring dashboard with clustered map view, color-coded event pins, and device profile popups. PGC Digital Innovation Challenge 2026." />
+    
+    <!-- Application Icons using RAMS Logo -->
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.jpg" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+      /* Standalone Splash Buffer Overlay Styling */
+      #rams-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background-color: #09090b;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        -webkit-user-select: none;
+        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+      }
+
+      .splash-logo-box {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .splash-pulse-ring {
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 2px solid rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        animation: splash-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+      }
+
+      .splash-pulse-ring-inner {
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        border: 2px solid rgba(16, 185, 129, 0.5);
+        box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+        animation: splash-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite 0.75s;
+      }
+
+      @keyframes splash-pulse {
+        0% { transform: scale(0.92); opacity: 0.8; }
+        70% { transform: scale(1.35); opacity: 0; }
+        100% { transform: scale(1.35); opacity: 0; }
+      }
+
+      .splash-logo-img {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #27272a;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        position: relative;
+        z-index: 2;
+      }
+
+      .splash-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #fafafa;
+        margin: 0 0 6px 0;
+        text-align: center;
+      }
+
+      .splash-badge {
+        display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: #18181b;
+        border: 1px solid #27272a;
+        color: #10b981;
+        letter-spacing: 0.08em;
+        margin-bottom: 16px;
+      }
+
+      .splash-dept {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #71717a;
+        margin: 0 0 24px 0;
+        text-align: center;
+      }
+
+      .splash-bar-track {
+        width: 260px;
+        height: 3px;
+        background: #18181b;
+        border-radius: 9999px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 12px;
+      }
+
+      .splash-bar-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 40%;
+        background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444);
+        border-radius: 9999px;
+        animation: splash-bar-sweep 1.8s ease-in-out infinite;
+      }
+
+      @keyframes splash-bar-sweep {
+        0% { left: -40%; width: 30%; }
+        50% { left: 40%; width: 50%; }
+        100% { left: 100%; width: 30%; }
+      }
+
+      .splash-status-text {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #a1a1aa;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
+    <!-- Standalone Initializing Buffer Overlay -->
+    <div id="rams-splash">
+      <div class="splash-logo-box">
+        <div class="splash-pulse-ring"></div>
+        <div class="splash-pulse-ring-inner"></div>
+        <img src="/logo.jpg" alt="RAMS Logo" class="splash-logo-img" onerror="this.src='/logo.png'" />
+      </div>
+
+      <div class="splash-badge">OPERATIONS STATION • v2.0</div>
+      <h1 class="splash-title">ROAD ACCIDENT MONITORING SYSTEM</h1>
+      <p class="splash-dept">PGC DIGITAL INNOVATION CHALLENGE 2026</p>
+
+      <div class="splash-bar-track">
+        <div class="splash-bar-fill"></div>
+      </div>
+      <p id="splash-status" class="splash-status-text">INITIALIZING TELEMETRY UPLINK...</p>
+    </div>
+
+    <!-- Main React App Container -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Splash Buffer Dismissal Script -->
+    <script>
+      (function() {
+        var splash = document.getElementById('rams-splash');
+        var status = document.getElementById('splash-status');
+        if (!splash) return;
+
+        var messages = [
+          'INITIALIZING TELEMETRY UPLINK...',
+          'CALIBRATING TUGUEGARAO MAP COORDINATES...',
+          'SYNCHRONIZING BASE STATION RECEIVER...',
+          'RESCUER OPERATIONS CENTER READY'
+        ];
+        var msgIdx = 0;
+        var msgTimer = setInterval(function() {
+          msgIdx = (msgIdx + 1) % messages.length;
+          if (status) status.textContent = messages[msgIdx];
+        }, 450);
+
+        var minBufferMs = 1600; // Professional smooth buffer timing
+        var startTime = Date.now();
+
+        function dismissSplash() {
+          var elapsed = Date.now() - startTime;
+          var remaining = Math.max(0, minBufferMs - elapsed);
+          setTimeout(function() {
+            clearInterval(msgTimer);
+            if (status) status.textContent = 'RESCUER OPERATIONS CENTER READY';
+            splash.style.opacity = '0';
+            splash.style.pointerEvents = 'none';
+            setTimeout(function() {
+              splash.remove();
+            }, 550);
+          }, remaining);
+        }
+
+        if (document.readyState === 'complete') {
+          dismissSplash();
+        } else {
+          window.addEventListener('load', dismissSplash);
+        }
+      })();
+    </script>
   </body>
 </html>

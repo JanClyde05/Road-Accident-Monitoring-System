@@ -45,7 +45,7 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
   };
 
   return (
-    <aside className="w-full md:w-[380px] lg:w-[410px] h-full flex flex-col border-l border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md z-30 transition-colors">
+    <aside className="w-full md:w-[380px] lg:w-[410px] h-full flex flex-col border-l border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md z-30 transition-colors overflow-hidden">
       
       {/* Sidebar Header & Filters */}
       <div className="p-3.5 border-b border-neutral-200 dark:border-neutral-800 space-y-3">
@@ -92,7 +92,7 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
       </div>
 
       {/* Scrollable Event Feed */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-3 space-y-2">
         {displayEvents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <Radio className="w-8 h-8 text-neutral-400 dark:text-neutral-600 mb-2 stroke-[1.5]" />

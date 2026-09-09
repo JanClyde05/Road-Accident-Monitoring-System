@@ -100,4 +100,8 @@
 #define TOKEN_LENGTH      8     // 8-char alphanumeric device token
 #define NVS_NAMESPACE     "rams"
 
+// ── Bluetooth Configuration ────────────────────────────────────────────────
+#define RAMS_BT_DEVICE_NAME "RAMS Bluetooth Connection"
+
 #endif // RAMS_WEARABLE_CONFIG_H
+

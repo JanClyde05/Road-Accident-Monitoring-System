@@ -1,0 +1,6 @@
+{
+  "name": "RAMS Monitor",
+  "description": "Real-time ESP32 GPS location and IMU motion telemetry streaming dashboard with low-latency Bluetooth and WiFi socket connectivity, live 3D attitude visualization, and CSV export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

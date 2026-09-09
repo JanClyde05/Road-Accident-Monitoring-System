@@ -35,4 +35,7 @@ uint32_t gpsGetAge();
 // Number of satellites used in the current fix.
 uint8_t gpsGetSatellites();
 
+// Set external location from phone WebSocket sync
+void gpsSetExternalLocation(float lat, float lon, uint8_t satellites, bool hasFix);
+
 #endif // RAMS_GPS_H
