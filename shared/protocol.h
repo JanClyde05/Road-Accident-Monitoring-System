@@ -24,7 +24,9 @@ enum PacketType : uint8_t {
   PKT_ALERT       = 1,  // Confirmed fall/skid/impact/environmental event
   PKT_FALSE_ALARM = 2,  // Physical-button cancel of an active alert
   PKT_TEST        = 3,  // Simulation/demo-mode trigger (safe, repeatable)
-  PKT_REGISTER    = 4   // One-time, sent when setup-mode registration completes
+  PKT_REGISTER    = 4,  // One-time, sent when setup-mode registration completes
+  PKT_USER_TYPE   = 5,  // Dynamic road-user category update (from phone app)
+  PKT_RIDER_PROFILE = 6 // Live rider profile synced from phone BLE (name, plate, phone, blood)
 };
 
 // ── Event Sub-Types (for AlertPacket.eventType) ─────────────────────────────
@@ -91,6 +93,34 @@ struct __attribute__((packed)) RegisterPacket {
   PacketHeader header;       // packetType = PKT_REGISTER
   char    name[24];          // User's display name (null-terminated, truncated if longer)
   char    driveLinkConverted[96]; // https://lh3.googleusercontent.com/d/FILE_ID
+};
+
+// ── User Type Packet ────────────────────────────────────────────────────────
+// Sent when the user dynamically changes their road-user category via the
+// phone app (e.g. Pedestrian → Cyclist). Updates the dashboard in real time.
+
+struct __attribute__((packed)) UserTypePacket {
+  PacketHeader header;       // packetType = PKT_USER_TYPE
+  char    userType[16];      // Road user category (null-terminated)
+};
+
+// ── Rider Profile Packet (233 bytes) ────────────────────────────────────────
+// Broadcast by the wearable when companion mobile app syncs profile over BLE.
+// Delivers the wearer's full identification, medical info, vehicle credentials,
+// and Google Drive direct 2x2 photo URL directly to the base station receiver.
+
+struct __attribute__((packed)) RiderProfilePacket {
+  PacketHeader header;       // packetType = PKT_RIDER_PROFILE (13 bytes)
+  char    name[24];          // Rider's full name (null-terminated)
+  char    plate[12];         // Vehicle license plate (null-terminated)
+  char    contact[16];       // Primary rider phone number (null-terminated)
+  char    blood[4];          // Blood type e.g. "O+", "A+" (null-terminated)
+  char    category[16];      // Road user category e.g. "Motorcycle" (null-terminated)
+  char    emergencyPhone[16];// Emergency contact phone number (null-terminated)
+  char    emergencyName[20]; // Emergency contact person's name (null-terminated)
+  char    vehicleModel[20];  // Vehicle details e.g. "Yamaha NMAX 155" (null-terminated)
+  char    allergies[20];     // Allergies & medical notes (null-terminated)
+  char    photoUrl[72];      // Google Drive CDN URL e.g. https://lh3.googleusercontent.com/d/FILE_ID
 };
 
 // ── Timing Constants ────────────────────────────────────────────────────────

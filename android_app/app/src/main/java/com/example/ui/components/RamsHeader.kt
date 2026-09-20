@@ -106,7 +106,9 @@ fun RamsHeader(
               color = MaterialTheme.colorScheme.onSurface,
               fontWeight = FontWeight.Black,
               letterSpacing = (-0.3).sp,
-              maxLines = 1
+              maxLines = 1,
+              softWrap = false,
+              overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
               val categoryName = riderProfile?.category?.ifBlank { "PEDESTRIAN" } ?: "PEDESTRIAN"
@@ -122,7 +124,8 @@ fun RamsHeader(
                   fontWeight = FontWeight.Bold,
                   fontFamily = FontFamily.Monospace,
                   color = RamsSyncBlue,
-                  softWrap = false
+                  softWrap = false,
+                  maxLines = 1
                 )
               }
               Spacer(modifier = Modifier.width(6.dp))
@@ -133,7 +136,9 @@ fun RamsHeader(
                 fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.Bold,
                 fontSize = 8.5.sp,
-                maxLines = 1
+                maxLines = 1,
+                softWrap = false,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
               )
             }
           }

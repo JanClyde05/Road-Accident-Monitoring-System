@@ -3,6 +3,7 @@ package com.example.ui.screens
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,13 +28,11 @@ import androidx.compose.material.icons.filled.BluetoothConnected
 import androidx.compose.material.icons.filled.BluetoothSearching
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Emergency
-import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -51,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.DeviceLinkStatus
@@ -62,6 +62,13 @@ import com.example.sync.Esp32SyncStatus
 import com.example.ui.theme.RamsAlertRed
 import com.example.ui.theme.RamsSuccessEmerald
 import com.example.ui.theme.RamsSyncBlue
+import com.example.ui.theme.ZincBorderHairlineDark
+import com.example.ui.theme.ZincDeepCanvasDark
+import com.example.ui.theme.ZincElevatedLayerDark
+import com.example.ui.theme.ZincInkHighContrastDark
+import com.example.ui.theme.ZincInkMutedDark
+import com.example.ui.theme.ZincInkTertiaryDark
+import com.example.ui.theme.ZincSurfaceBaseDark
 
 private enum class SimpleConnectionTab {
   BLUETOOTH,
@@ -112,7 +119,7 @@ fun WearableScreen(
   var ipInput by remember { mutableStateOf(syncStatus.esp32Ip.ifBlank { "192.168.4.1" }) }
 
   val isConnected = syncStatus.isSyncActive
-  val statusColor = if (isConnected) RamsSuccessEmerald else Color(0xFF71717A)
+  val isConnecting = syncStatus.isConnecting
 
   // Cache device info once per list change to avoid repeated BT API calls during recomposition
   val cachedDiscovered by remember(discoveredDevices) {
@@ -129,23 +136,22 @@ fun WearableScreen(
     }
   }
 
-  // Use LazyColumn as the root scrolling container for efficient device list rendering
   LazyColumn(
     modifier = Modifier
       .fillMaxSize()
       .padding(horizontal = 16.dp),
-    contentPadding = PaddingValues(vertical = 14.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp)
+    contentPadding = PaddingValues(top = 16.dp, bottom = 28.dp),
+    verticalArrangement = Arrangement.spacedBy(14.dp)
   ) {
 
-    // Bluetooth OFF Banner
+    // ── 1. Bluetooth OFF Banner ──────────────────────────────────────────────
     if (!isBluetoothEnabled) {
       item(key = "bt_off_banner") {
         Surface(
           modifier = Modifier.fillMaxWidth(),
           shape = RoundedCornerShape(12.dp),
-          color = RamsAlertRed.copy(alpha = 0.10f),
-          border = androidx.compose.foundation.BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.5f))
+          color = RamsAlertRed.copy(alpha = 0.08f),
+          border = BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.5f))
         ) {
           Row(
             modifier = Modifier
@@ -156,132 +162,367 @@ fun WearableScreen(
           ) {
             Row(
               verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.spacedBy(10.dp),
+              horizontalArrangement = Arrangement.spacedBy(12.dp),
               modifier = Modifier.weight(1f)
             ) {
-              Icon(
-                imageVector = Icons.Default.Bluetooth,
-                contentDescription = null,
-                tint = RamsAlertRed,
-                modifier = Modifier.size(22.dp)
-              )
-              Column {
+              Box(
+                modifier = Modifier
+                  .size(38.dp)
+                  .clip(CircleShape)
+                  .background(RamsAlertRed.copy(alpha = 0.18f)),
+                contentAlignment = Alignment.Center
+              ) {
+                Icon(
+                  imageVector = Icons.Default.Bluetooth,
+                  contentDescription = null,
+                  tint = RamsAlertRed,
+                  modifier = Modifier.size(20.dp)
+                )
+              }
+              Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+              ) {
                 Text(
-                  text = "BLUETOOTH IS OFF",
+                  text = "BLUETOOTH IS DISABLED",
                   fontSize = 12.sp,
                   fontWeight = FontWeight.Black,
                   fontFamily = FontFamily.Monospace,
                   color = RamsAlertRed,
-                  letterSpacing = 0.5.sp
+                  letterSpacing = 0.5.sp,
+                  maxLines = 1,
+                  softWrap = false,
+                  overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                  text = "Turn on Bluetooth to scan for your Safety Wearable",
-                  fontSize = 10.5.sp,
-                  color = Color(0xFFA1A1AA)
+                  text = "Turn on Bluetooth to scan & sync your wearable.",
+                  fontSize = 11.sp,
+                  color = ZincInkMutedDark,
+                  maxLines = 2,
+                  softWrap = true,
+                  overflow = TextOverflow.Ellipsis
                 )
               }
             }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
             Button(
               onClick = onRequestEnableBluetooth,
               shape = RoundedCornerShape(8.dp),
               colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF18181B),
+                containerColor = ZincElevatedLayerDark,
                 contentColor = RamsSyncBlue
               ),
-              border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A)),
+              border = BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.5f)),
+              contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
               modifier = Modifier.height(36.dp)
             ) {
-              Text("TURN ON", fontWeight = FontWeight.Black, fontSize = 10.sp, fontFamily = FontFamily.Monospace)
+              Text(
+                text = "TURN ON",
+                fontWeight = FontWeight.Black,
+                fontSize = 11.sp,
+                fontFamily = FontFamily.Monospace,
+                maxLines = 1,
+                softWrap = false
+              )
             }
           }
         }
       }
     }
 
-    // 1. Clean Wearable Status Card
+    // ── 2. Wearable Connection Status Card (The Live Hero) ───────────────────
     item(key = "status_card") {
+      val cardBorderColor = when {
+        isConnected -> RamsSuccessEmerald.copy(alpha = 0.6f)
+        isConnecting -> RamsSyncBlue.copy(alpha = 0.6f)
+        else -> ZincBorderHairlineDark
+      }
+      val iconTint = when {
+        isConnected -> RamsSuccessEmerald
+        isConnecting -> RamsSyncBlue
+        else -> ZincInkTertiaryDark
+      }
+
       Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = androidx.compose.foundation.BorderStroke(1.dp, if (isConnected) RamsSuccessEmerald.copy(alpha = 0.5f) else Color(0xFF27272A))
+        color = ZincSurfaceBaseDark,
+        border = BorderStroke(1.dp, cardBorderColor)
       ) {
-        Row(
+        Column(
           modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-          horizontalArrangement = Arrangement.SpaceBetween,
-          verticalAlignment = Alignment.CenterVertically
+          verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+          // Top Row: Avatar + Device Status Info + Disconnect Action
           Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
           ) {
-            Box(
-              modifier = Modifier
-                .size(42.dp)
-                .clip(CircleShape)
-                .background(statusColor.copy(alpha = 0.15f))
-                .border(1.5.dp, statusColor.copy(alpha = 0.6f), CircleShape),
-              contentAlignment = Alignment.Center
+            Row(
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.spacedBy(12.dp),
+              modifier = Modifier.weight(1f)
             ) {
-              Icon(
-                imageVector = if (isConnected) Icons.Default.CheckCircle else Icons.Default.Radio,
-                contentDescription = null,
-                tint = statusColor,
-                modifier = Modifier.size(22.dp)
-              )
-            }
-            Column {
-              Text(
-                text = if (isConnected) "WEARABLE CONNECTED" else "NOT CONNECTED",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Black,
-                color = if (isConnected) RamsSuccessEmerald else Color.White,
-                fontFamily = FontFamily.Monospace,
-                letterSpacing = 0.5.sp
-              )
-              Text(
-                text = if (isConnected) {
-                  syncStatus.btDeviceName.ifBlank { "RAMS Safety Wearable" }
+              Box(
+                modifier = Modifier
+                  .size(42.dp)
+                  .clip(CircleShape)
+                  .background(iconTint.copy(alpha = 0.12f))
+                  .border(1.dp, iconTint.copy(alpha = 0.5f), CircleShape),
+                contentAlignment = Alignment.Center
+              ) {
+                if (isConnecting) {
+                  CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    color = RamsSyncBlue,
+                    strokeWidth = 2.dp
+                  )
                 } else {
-                  "Select Bluetooth or Wi-Fi to sync"
+                  Icon(
+                    imageVector = if (isConnected) Icons.Default.CheckCircle else Icons.Default.Bluetooth,
+                    contentDescription = null,
+                    tint = iconTint,
+                    modifier = Modifier.size(22.dp)
+                  )
+                }
+              }
+
+              Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier
+                  .weight(1f)
+                  .fillMaxWidth()
+              ) {
+                Row(
+                  modifier = Modifier.fillMaxWidth(),
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                  Text(
+                    text = when {
+                      isConnecting -> "CONNECTING..."
+                      isConnected -> "WEARABLE CONNECTED"
+                      else -> "NOT CONNECTED"
+                    },
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Black,
+                    color = when {
+                      isConnecting -> RamsSyncBlue
+                      isConnected -> RamsSuccessEmerald
+                      else -> ZincInkHighContrastDark
+                    },
+                    fontFamily = FontFamily.Monospace,
+                    letterSpacing = 0.5.sp,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
+                  )
+                  if (isConnected) {
+                    Surface(
+                      shape = RoundedCornerShape(4.dp),
+                      color = RamsSuccessEmerald.copy(alpha = 0.18f)
+                    ) {
+                      Text(
+                        text = "LIVE",
+                        fontSize = 8.sp,
+                        fontWeight = FontWeight.Black,
+                        fontFamily = FontFamily.Monospace,
+                        color = RamsSuccessEmerald,
+                        maxLines = 1,
+                        softWrap = false,
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)
+                      )
+                    }
+                  }
+                }
+
+                Text(
+                  text = when {
+                    isConnecting -> syncStatus.statusMessage.ifBlank { "Establishing BLE GATT link..." }
+                    isConnected -> {
+                      val devName = syncStatus.btDeviceName.ifBlank { "RAMS Safety Wearable" }
+                      val mac = syncStatus.btMacAddress
+                      if (mac.isNotBlank()) "$devName • $mac" else devName
+                    }
+                    else -> "Pair your ESP32-S3 wearable to stream phone GPS & IMU"
+                  },
+                  fontSize = 11.sp,
+                  color = if (isConnecting) RamsSyncBlue else ZincInkMutedDark,
+                  maxLines = 1,
+                  softWrap = false,
+                  overflow = TextOverflow.Ellipsis
+                )
+              }
+            }
+
+            if (isConnected) {
+              Spacer(modifier = Modifier.width(10.dp))
+              Button(
+                onClick = {
+                  syncEngine.stopSync()
+                  Toast.makeText(context, "Wearable Disconnected", Toast.LENGTH_SHORT).show()
                 },
-                fontSize = 11.sp,
-                color = Color(0xFFA1A1AA)
-              )
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = RamsAlertRed.copy(alpha = 0.15f),
+                  contentColor = RamsAlertRed
+                ),
+                border = BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.4f)),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
+                modifier = Modifier.height(34.dp)
+              ) {
+                Text(
+                  text = "DISCONNECT",
+                  fontWeight = FontWeight.Black,
+                  fontSize = 10.sp,
+                  fontFamily = FontFamily.Monospace,
+                  maxLines = 1,
+                  softWrap = false
+                )
+              }
             }
           }
 
+          // Bottom Strip (Shown when connected): 3 Robust Telemetry Pills
           if (isConnected) {
-            Button(
-              onClick = {
-                syncEngine.stopSync()
-                Toast.makeText(context, "Wearable Disconnected", Toast.LENGTH_SHORT).show()
-              },
-              shape = RoundedCornerShape(8.dp),
-              colors = ButtonDefaults.buttonColors(
-                containerColor = RamsAlertRed.copy(alpha = 0.15f),
-                contentColor = RamsAlertRed
-              ),
-              border = androidx.compose.foundation.BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.5f)),
-              modifier = Modifier.height(36.dp)
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-              Text("DISCONNECT", fontWeight = FontWeight.Bold, fontSize = 10.sp, fontFamily = FontFamily.Monospace)
+              TelemetryPill(label = "LINK", value = "BLE GATT", color = RamsSuccessEmerald, modifier = Modifier.weight(1f))
+              TelemetryPill(label = "RELAY", value = "LORA 433M", color = RamsSyncBlue, modifier = Modifier.weight(1f))
+              TelemetryPill(label = "SYNC", value = "10 Hz", color = Color(0xFFA1A1AA), modifier = Modifier.weight(1f))
             }
           }
         }
       }
     }
 
-    // 2. Simple Tab Selector: Bluetooth vs Wi-Fi
+    // ── 3. Connected Wearable Controls (Prominent When Connected) ────────────
+    if (isConnected) {
+      item(key = "active_hardware_controls") {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+          Text(
+            text = "SAFETY WEARABLE HARDWARE CONTROLS",
+            fontSize = 10.5.sp,
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Bold,
+            color = ZincInkMutedDark,
+            letterSpacing = 0.5.sp,
+            maxLines = 1,
+            softWrap = false
+          )
+
+          Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            color = ZincSurfaceBaseDark,
+            border = BorderStroke(1.dp, ZincBorderHairlineDark)
+          ) {
+            Column(
+              modifier = Modifier.padding(12.dp),
+              verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+              // Cancel False Alarm Button
+              Button(
+                onClick = {
+                  onCancelFalseAlarm()
+                  Toast.makeText(context, "False Alarm Dismissed — Stop Signal Sent to Wearable", Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .height(44.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = ZincElevatedLayerDark,
+                  contentColor = RamsSuccessEmerald
+                ),
+                border = BorderStroke(1.dp, RamsSuccessEmerald.copy(alpha = 0.5f)),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp)
+              ) {
+                Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.Center
+                ) {
+                  Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = RamsSuccessEmerald,
+                    modifier = Modifier.size(16.dp)
+                  )
+                  Spacer(modifier = Modifier.width(8.dp))
+                  Text(
+                    text = "CANCEL FALSE ALARM (DISMISS BUZZER)",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                  )
+                }
+              }
+
+              // Trigger SOS Button
+              Button(
+                onClick = {
+                  syncEngine.sendEmergencyCrashPacket(gps, imu, riderProfile)
+                  onTriggerEmergencySOS()
+                  Toast.makeText(context, "Emergency SOS Alert Broadcasted!", Toast.LENGTH_LONG).show()
+                },
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .height(44.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = RamsAlertRed.copy(alpha = 0.18f),
+                  contentColor = Color.White
+                ),
+                border = BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.7f)),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp)
+              ) {
+                Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.Center
+                ) {
+                  Icon(
+                    imageVector = Icons.Default.Emergency,
+                    contentDescription = null,
+                    tint = RamsAlertRed,
+                    modifier = Modifier.size(16.dp)
+                  )
+                  Spacer(modifier = Modifier.width(8.dp))
+                  Text(
+                    text = "TRIGGER EMERGENCY SOS OVER LORA",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    letterSpacing = 0.5.sp,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis
+                  )
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // ── 4. Connection Mode Selector (Segmented Bar) ──────────────────────────
     item(key = "tab_selector") {
       Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        color = Color(0xFF09090B),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+        color = ZincDeepCanvasDark,
+        border = BorderStroke(1.dp, ZincBorderHairlineDark)
       ) {
         Row(
           modifier = Modifier
@@ -294,19 +535,32 @@ fun WearableScreen(
             onClick = { activeTab = SimpleConnectionTab.BLUETOOTH },
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(8.dp),
-            color = if (isBtSelected) RamsSyncBlue.copy(alpha = 0.18f) else Color.Transparent,
-            border = if (isBtSelected) androidx.compose.foundation.BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.6f)) else null
+            color = if (isBtSelected) RamsSyncBlue.copy(alpha = 0.16f) else Color.Transparent,
+            border = if (isBtSelected) BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.6f)) else null
           ) {
             Row(
               modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .padding(vertical = 9.dp),
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically
             ) {
-              Icon(Icons.Default.Bluetooth, null, tint = if (isBtSelected) RamsSyncBlue else Color(0xFF71717A), modifier = Modifier.size(18.dp))
+              Icon(
+                imageVector = Icons.Default.Bluetooth,
+                contentDescription = null,
+                tint = if (isBtSelected) RamsSyncBlue else ZincInkTertiaryDark,
+                modifier = Modifier.size(16.dp)
+              )
               Spacer(modifier = Modifier.width(8.dp))
-              Text("BLUETOOTH", fontSize = 11.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, color = if (isBtSelected) Color.White else Color(0xFF71717A))
+              Text(
+                text = "BLUETOOTH BLE",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace,
+                color = if (isBtSelected) Color.White else ZincInkTertiaryDark,
+                maxLines = 1,
+                softWrap = false
+              )
             }
           }
 
@@ -315,67 +569,122 @@ fun WearableScreen(
             onClick = { activeTab = SimpleConnectionTab.WIFI },
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(8.dp),
-            color = if (isWifiSelected) RamsSyncBlue.copy(alpha = 0.18f) else Color.Transparent,
-            border = if (isWifiSelected) androidx.compose.foundation.BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.6f)) else null
+            color = if (isWifiSelected) RamsSyncBlue.copy(alpha = 0.16f) else Color.Transparent,
+            border = if (isWifiSelected) BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.6f)) else null
           ) {
             Row(
               modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .padding(vertical = 9.dp),
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically
             ) {
-              Icon(Icons.Default.Wifi, null, tint = if (isWifiSelected) RamsSyncBlue else Color(0xFF71717A), modifier = Modifier.size(18.dp))
+              Icon(
+                imageVector = Icons.Default.Wifi,
+                contentDescription = null,
+                tint = if (isWifiSelected) RamsSyncBlue else ZincInkTertiaryDark,
+                modifier = Modifier.size(16.dp)
+              )
               Spacer(modifier = Modifier.width(8.dp))
-              Text("WI-FI", fontSize = 11.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, color = if (isWifiSelected) Color.White else Color(0xFF71717A))
+              Text(
+                text = "WI-FI / IP",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace,
+                color = if (isWifiSelected) Color.White else ZincInkTertiaryDark,
+                maxLines = 1,
+                softWrap = false
+              )
             }
           }
         }
       }
     }
 
-    // 3. Tab Content
+    // ── 5. Tab Content ───────────────────────────────────────────────────────
     when (activeTab) {
       SimpleConnectionTab.BLUETOOTH -> {
-        // Scan Button
+        // Bluetooth Scan Bar
         item(key = "bt_scan_btn") {
           Button(
-            onClick = { if (isScanningBluetooth) onStopBluetoothScan() else onStartBluetoothScan() },
+            onClick = {
+              if (isScanningBluetooth) onStopBluetoothScan() else onStartBluetoothScan()
+            },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(
-              containerColor = Color(0xFF18181B),
+              containerColor = ZincSurfaceBaseDark,
               contentColor = if (isScanningBluetooth) RamsAlertRed else Color.White
             ),
-            border = androidx.compose.foundation.BorderStroke(1.dp, if (isScanningBluetooth) RamsAlertRed.copy(alpha = 0.5f) else Color(0xFF27272A)),
-            modifier = Modifier.fillMaxWidth().height(48.dp)
+            border = BorderStroke(
+              1.dp,
+              if (isScanningBluetooth) RamsAlertRed.copy(alpha = 0.6f) else ZincBorderHairlineDark
+            ),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(46.dp)
           ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Row(
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.Center
+            ) {
               if (isScanningBluetooth) {
-                CircularProgressIndicator(modifier = Modifier.size(16.dp), color = RamsAlertRed, strokeWidth = 2.dp)
+                CircularProgressIndicator(
+                  modifier = Modifier.size(16.dp),
+                  color = RamsAlertRed,
+                  strokeWidth = 2.dp
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("SEARCHING FOR WEARABLE...", fontWeight = FontWeight.Black, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
+                Text(
+                  text = "SEARCHING FOR WEARABLE... TAP TO STOP",
+                  fontWeight = FontWeight.Black,
+                  fontSize = 11.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = RamsAlertRed,
+                  maxLines = 1,
+                  softWrap = false,
+                  overflow = TextOverflow.Ellipsis
+                )
               } else {
-                Icon(Icons.Default.BluetoothSearching, null, tint = RamsSyncBlue, modifier = Modifier.size(18.dp))
+                Icon(
+                  imageVector = Icons.Default.BluetoothSearching,
+                  contentDescription = null,
+                  tint = RamsSyncBlue,
+                  modifier = Modifier.size(18.dp)
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("SCAN FOR WEARABLE", fontWeight = FontWeight.Black, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
+                Text(
+                  text = "SCAN FOR WEARABLE & BLE DEVICES",
+                  fontWeight = FontWeight.Black,
+                  fontSize = 11.sp,
+                  fontFamily = FontFamily.Monospace,
+                  maxLines = 1,
+                  softWrap = false,
+                  overflow = TextOverflow.Ellipsis
+                )
               }
             }
           }
         }
 
-        // Priority Match Card
+        // Priority Match Card (Hero Wearable Match)
         val target = priorityTarget
         if (target != null) {
           item(key = "priority_match_${target.address}") {
-            val isTargetConnected = isConnected && syncStatus.btDeviceName == target.displayName
+            val isTargetConnected = isConnected &&
+                (syncStatus.btDeviceName == target.displayName || syncStatus.btMacAddress == target.address)
+            val isPriorityConnecting = isConnecting && syncStatus.connectingDeviceAddress == target.address
+
             Surface(
               modifier = Modifier.fillMaxWidth(),
               shape = RoundedCornerShape(12.dp),
-              color = RamsSuccessEmerald.copy(alpha = 0.10f),
-              border = androidx.compose.foundation.BorderStroke(1.5.dp, RamsSuccessEmerald.copy(alpha = 0.7f))
+              color = RamsSuccessEmerald.copy(alpha = 0.08f),
+              border = BorderStroke(1.5.dp, RamsSuccessEmerald.copy(alpha = 0.65f))
             ) {
               Row(
-                modifier = Modifier.fillMaxWidth().padding(14.dp),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(14.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
               ) {
@@ -385,95 +694,263 @@ fun WearableScreen(
                   modifier = Modifier.weight(1f)
                 ) {
                   Box(
-                    modifier = Modifier.size(38.dp).clip(CircleShape).background(RamsSuccessEmerald.copy(alpha = 0.2f)),
+                    modifier = Modifier
+                      .size(40.dp)
+                      .clip(RoundedCornerShape(10.dp))
+                      .background(RamsSuccessEmerald.copy(alpha = 0.2f))
+                      .border(1.dp, RamsSuccessEmerald.copy(alpha = 0.5f), RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                   ) {
-                    Icon(Icons.Default.Bluetooth, null, tint = RamsSuccessEmerald, modifier = Modifier.size(20.dp))
+                    Icon(
+                      imageVector = Icons.Default.BluetoothConnected,
+                      contentDescription = null,
+                      tint = RamsSuccessEmerald,
+                      modifier = Modifier.size(22.dp)
+                    )
                   }
-                  Column {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                      Text(target.displayName, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Black, fontSize = 12.5.sp, color = Color.White)
-                      Surface(shape = RoundedCornerShape(4.dp), color = RamsSuccessEmerald.copy(alpha = 0.2f)) {
-                        Text("PRIORITY MATCH", fontSize = 8.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = RamsSuccessEmerald, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+
+                  Column(
+                    verticalArrangement = Arrangement.spacedBy(3.dp),
+                    modifier = Modifier
+                      .weight(1f)
+                      .fillMaxWidth()
+                  ) {
+                    Row(
+                      modifier = Modifier.fillMaxWidth(),
+                      verticalAlignment = Alignment.CenterVertically,
+                      horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                      Text(
+                        text = target.displayName,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 13.sp,
+                        color = Color.White,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                      )
+                      Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = RamsSuccessEmerald.copy(alpha = 0.25f)
+                      ) {
+                        Text(
+                          text = "RAMS WEARABLE",
+                          fontSize = 8.5.sp,
+                          fontFamily = FontFamily.Monospace,
+                          fontWeight = FontWeight.Black,
+                          color = RamsSuccessEmerald,
+                          maxLines = 1,
+                          softWrap = false,
+                          modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
                       }
                     }
-                    Text("${target.address} • Ready to sync", fontSize = 9.5.sp, fontFamily = FontFamily.Monospace, color = RamsSuccessEmerald)
+
+                    Row(
+                      modifier = Modifier.fillMaxWidth(),
+                      verticalAlignment = Alignment.CenterVertically,
+                      horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                      Text(
+                        text = target.address,
+                        fontSize = 10.5.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = ZincInkMutedDark,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis
+                      )
+                      Text(
+                        text = "•",
+                        fontSize = 10.5.sp,
+                        color = ZincInkTertiaryDark,
+                        maxLines = 1,
+                        softWrap = false
+                      )
+                      Text(
+                        text = if (isTargetConnected) "Syncing" else "Ready to pair",
+                        fontSize = 10.5.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = RamsSuccessEmerald,
+                        maxLines = 1,
+                        softWrap = false
+                      )
+                    }
                   }
                 }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
                 Button(
                   onClick = { onConnectDevice(target.device) },
+                  enabled = !isConnecting,
                   shape = RoundedCornerShape(8.dp),
                   colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isTargetConnected) Color(0xFF27272A) else RamsSuccessEmerald,
-                    contentColor = if (isTargetConnected) Color.White else Color.Black
+                    containerColor = when {
+                      isTargetConnected -> ZincElevatedLayerDark
+                      isPriorityConnecting -> RamsSyncBlue
+                      else -> RamsSuccessEmerald
+                    },
+                    contentColor = when {
+                      isTargetConnected -> RamsSuccessEmerald
+                      isPriorityConnecting -> Color.White
+                      else -> Color.Black
+                    }
                   ),
+                  contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
                   modifier = Modifier.height(36.dp)
                 ) {
-                  Text(if (isTargetConnected) "CONNECTED" else "CONNECT", fontWeight = FontWeight.Black, fontSize = 11.sp)
+                  if (isPriorityConnecting) {
+                    CircularProgressIndicator(
+                      modifier = Modifier.size(13.dp),
+                      color = Color.White,
+                      strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                      text = "SYNCING",
+                      fontWeight = FontWeight.Black,
+                      fontSize = 10.sp,
+                      fontFamily = FontFamily.Monospace,
+                      maxLines = 1,
+                      softWrap = false
+                    )
+                  } else {
+                    Text(
+                      text = if (isTargetConnected) "CONNECTED" else "CONNECT",
+                      fontWeight = FontWeight.Black,
+                      fontSize = 11.sp,
+                      fontFamily = FontFamily.Monospace,
+                      maxLines = 1,
+                      softWrap = false
+                    )
+                  }
                 }
               }
             }
           }
         }
 
-        // Discovered Nearby header
+        // Discovered Devices Header
         item(key = "discovered_header") {
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ) {
-            Text("DISCOVERED NEARBY (${cachedDiscovered.size})", fontSize = 10.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = Color(0xFF71717A), letterSpacing = 0.5.sp)
+            Text(
+              text = "DISCOVERED NEARBY (${cachedDiscovered.size})",
+              fontSize = 10.5.sp,
+              fontFamily = FontFamily.Monospace,
+              fontWeight = FontWeight.Bold,
+              color = ZincInkMutedDark,
+              letterSpacing = 0.5.sp,
+              maxLines = 1,
+              softWrap = false
+            )
             if (isScanningBluetooth) {
-              Text("SCANNING...", fontSize = 9.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = RamsAlertRed, letterSpacing = 0.5.sp)
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+              ) {
+                CircularProgressIndicator(
+                  modifier = Modifier.size(10.dp),
+                  color = RamsAlertRed,
+                  strokeWidth = 1.5.dp
+                )
+                Text(
+                  text = "SCANNING",
+                  fontSize = 9.5.sp,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Black,
+                  color = RamsAlertRed,
+                  letterSpacing = 0.5.sp,
+                  maxLines = 1,
+                  softWrap = false
+                )
+              }
             }
           }
         }
 
-        // Empty state or device list
+        // Empty State or Discovered Devices List
         if (cachedDiscovered.isEmpty()) {
           item(key = "discovered_empty") {
             Surface(
               modifier = Modifier.fillMaxWidth(),
               shape = RoundedCornerShape(10.dp),
-              color = Color(0xFF09090B),
-              border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+              color = ZincSurfaceBaseDark,
+              border = BorderStroke(1.dp, ZincBorderHairlineDark)
             ) {
               Row(
-                modifier = Modifier.fillMaxWidth().padding(14.dp),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
               ) {
                 if (isScanningBluetooth) {
-                  CircularProgressIndicator(modifier = Modifier.size(16.dp), color = RamsAlertRed, strokeWidth = 2.dp)
-                  Text("Searching nearby for all Bluetooth & BLE devices...", fontSize = 11.sp, color = Color(0xFFA1A1AA))
+                  CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = RamsAlertRed,
+                    strokeWidth = 2.dp
+                  )
+                  Text(
+                    text = "Listening for nearby Bluetooth & BLE wearable beacons...",
+                    fontSize = 11.5.sp,
+                    color = ZincInkMutedDark
+                  )
                 } else {
-                  Icon(Icons.Default.Bluetooth, null, tint = Color(0xFF71717A), modifier = Modifier.size(20.dp))
-                  Text("No nearby devices discovered. Tap SCAN FOR WEARABLE above.", fontSize = 11.sp, color = Color(0xFF71717A))
+                  Icon(
+                    imageVector = Icons.Default.Bluetooth,
+                    contentDescription = null,
+                    tint = ZincInkTertiaryDark,
+                    modifier = Modifier.size(18.dp)
+                  )
+                  Text(
+                    text = "No devices found yet. Tap 'SCAN FOR WEARABLE & BLE DEVICES' above.",
+                    fontSize = 11.sp,
+                    color = ZincInkTertiaryDark
+                  )
                 }
               }
             }
           }
         } else {
           items(items = cachedDiscovered, key = { "disc_${it.address}" }) { cached ->
-            DiscoveredDeviceCard(
+            UnifiedDeviceCard(
               cached = cached,
-              isConnected = isConnected && syncStatus.btDeviceName == cached.displayName,
+              isConnected = isConnected && (syncStatus.btDeviceName == cached.displayName || syncStatus.btMacAddress == cached.address),
+              isConnecting = isConnecting && syncStatus.connectingDeviceAddress == cached.address,
+              badgeLabel = if (cached.isRamsWearable) "WEARABLE" else null,
               onConnect = { onConnectDevice(cached.device) }
             )
           }
         }
 
-        // Paired / Saved Devices header + list
+        // Paired / Bonded Devices
         if (cachedBonded.isNotEmpty()) {
           item(key = "bonded_header") {
-            Text("SAVED PHONE DEVICES (${cachedBonded.size})", fontSize = 10.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = Color(0xFF71717A), letterSpacing = 0.5.sp)
+            Text(
+              text = "SAVED PHONE DEVICES (${cachedBonded.size})",
+              fontSize = 10.5.sp,
+              fontFamily = FontFamily.Monospace,
+              fontWeight = FontWeight.Bold,
+              color = ZincInkMutedDark,
+              letterSpacing = 0.5.sp,
+              maxLines = 1,
+              softWrap = false
+            )
           }
 
           items(items = cachedBonded, key = { "bond_${it.address}" }) { cached ->
-            BondedDeviceCard(
+            UnifiedDeviceCard(
               cached = cached,
-              isConnected = isConnected && syncStatus.btDeviceName == cached.displayName,
+              isConnected = isConnected && (syncStatus.btDeviceName == cached.displayName || syncStatus.btMacAddress == cached.address),
+              isConnecting = isConnecting && syncStatus.connectingDeviceAddress == cached.address,
+              badgeLabel = "PAIRED",
               onConnect = { onConnectDevice(cached.device) }
             )
           }
@@ -485,16 +962,29 @@ fun WearableScreen(
           Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            color = MaterialTheme.colorScheme.surface,
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+            color = ZincSurfaceBaseDark,
+            border = BorderStroke(1.dp, ZincBorderHairlineDark)
           ) {
             Column(
               modifier = Modifier.padding(16.dp),
               verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
               Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("SAFETY WEARABLE WI-FI SYNC", fontSize = 11.sp, fontWeight = FontWeight.Black, fontFamily = FontFamily.Monospace, color = Color(0xFFA1A1AA), letterSpacing = 0.5.sp)
-                Text("Connect phone to the Wearable Wi-Fi network, then tap Connect.", fontSize = 11.5.sp, color = Color(0xFF71717A))
+                Text(
+                  text = "DIRECT WI-FI / TCP SYNC",
+                  fontSize = 11.sp,
+                  fontWeight = FontWeight.Black,
+                  fontFamily = FontFamily.Monospace,
+                  color = ZincInkHighContrastDark,
+                  letterSpacing = 0.5.sp,
+                  maxLines = 1,
+                  softWrap = false
+                )
+                Text(
+                  text = "Connect phone to wearable Wi-Fi SoftAP, then input IP and connect.",
+                  fontSize = 11.5.sp,
+                  color = ZincInkMutedDark
+                )
               }
 
               OutlinedTextField(
@@ -504,24 +994,54 @@ fun WearableScreen(
                 placeholder = { Text("192.168.4.1", fontSize = 12.sp) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = RamsSyncBlue, unfocusedBorderColor = Color(0xFF27272A))
+                colors = OutlinedTextFieldDefaults.colors(
+                  focusedBorderColor = RamsSyncBlue,
+                  unfocusedBorderColor = ZincBorderHairlineDark
+                )
               )
 
               Button(
                 onClick = {
                   val targetIp = ipInput.trim().ifBlank { "192.168.4.1" }
-                  syncEngine.startWifiSync(ip = targetIp, port = 8080, getGps = { gps }, getImu = { imu }, getRiderProfile = { riderProfile })
+                  syncEngine.startWifiSync(
+                    ip = targetIp,
+                    port = 8080,
+                    getGps = { gps },
+                    getImu = { imu },
+                    getRiderProfile = { riderProfile }
+                  )
                   Toast.makeText(context, "Connecting to Wearable at $targetIp...", Toast.LENGTH_SHORT).show()
                 },
-                modifier = Modifier.fillMaxWidth().height(46.dp),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .height(44.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF18181B), contentColor = Color.White),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = ZincElevatedLayerDark,
+                  contentColor = Color.White
+                ),
+                border = BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.5f)),
+                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp)
               ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                  Icon(Icons.Default.Wifi, null, tint = RamsSyncBlue, modifier = Modifier.size(18.dp))
+                Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.Center
+                ) {
+                  Icon(
+                    imageVector = Icons.Default.Wifi,
+                    contentDescription = null,
+                    tint = RamsSyncBlue,
+                    modifier = Modifier.size(16.dp)
+                  )
                   Spacer(modifier = Modifier.width(8.dp))
-                  Text("CONNECT VIA WI-FI", fontWeight = FontWeight.Black, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
+                  Text(
+                    text = "CONNECT VIA WI-FI",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    maxLines = 1,
+                    softWrap = false
+                  )
                 }
               }
             }
@@ -530,71 +1050,173 @@ fun WearableScreen(
       }
     }
 
-    // Spacer
-    item(key = "controls_spacer") { Spacer(modifier = Modifier.height(6.dp)) }
+    // ── 6. Fallback Offline Emergency Controls (When Disconnected) ───────────
+    if (!isConnected) {
+      item(key = "offline_controls_header") {
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+          text = "OFFLINE EMULATION & EMERGENCY CONTROLS",
+          fontSize = 10.5.sp,
+          fontFamily = FontFamily.Monospace,
+          fontWeight = FontWeight.Bold,
+          color = ZincInkTertiaryDark,
+          letterSpacing = 0.5.sp,
+          maxLines = 1,
+          softWrap = false
+        )
+      }
 
-    // 4. Safety Wearable Device Controls
-    item(key = "controls_header") {
-      Text("SAFETY WEARABLE DEVICE CONTROLS", fontSize = 10.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = Color(0xFF71717A), letterSpacing = 0.5.sp)
-    }
-
-    item(key = "btn_cancel_alarm") {
-      Button(
-        onClick = {
-          onCancelFalseAlarm()
-          Toast.makeText(context, "False Alarm Dismissed — Stop Signal Sent to Wearable", Toast.LENGTH_SHORT).show()
-        },
-        modifier = Modifier.fillMaxWidth().height(46.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF18181B), contentColor = RamsSuccessEmerald),
-        border = androidx.compose.foundation.BorderStroke(1.dp, RamsSuccessEmerald.copy(alpha = 0.6f))
-      ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-          Icon(Icons.Default.CheckCircle, null, tint = RamsSuccessEmerald, modifier = Modifier.size(18.dp))
-          Spacer(modifier = Modifier.width(8.dp))
-          Text("CANCEL FALSE ALARM (DISMISS BUZZER)", fontWeight = FontWeight.Black, fontSize = 11.sp, fontFamily = FontFamily.Monospace, letterSpacing = 0.5.sp)
+      item(key = "offline_btn_cancel_alarm") {
+        Button(
+          onClick = {
+            onCancelFalseAlarm()
+            Toast.makeText(context, "False Alarm Dismissed", Toast.LENGTH_SHORT).show()
+          },
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp),
+          shape = RoundedCornerShape(10.dp),
+          colors = ButtonDefaults.buttonColors(
+            containerColor = ZincSurfaceBaseDark,
+            contentColor = RamsSuccessEmerald
+          ),
+          border = BorderStroke(1.dp, RamsSuccessEmerald.copy(alpha = 0.4f)),
+          contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp)
+        ) {
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+          ) {
+            Icon(
+              imageVector = Icons.Default.CheckCircle,
+              contentDescription = null,
+              tint = RamsSuccessEmerald,
+              modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = "CANCEL FALSE ALARM",
+              fontWeight = FontWeight.Black,
+              fontSize = 11.sp,
+              fontFamily = FontFamily.Monospace,
+              letterSpacing = 0.5.sp,
+              maxLines = 1,
+              softWrap = false,
+              overflow = TextOverflow.Ellipsis
+            )
+          }
         }
       }
-    }
 
-    item(key = "btn_emergency_sos") {
-      Button(
-        onClick = {
-          syncEngine.sendEmergencyCrashPacket(gps, imu, riderProfile)
-          onTriggerEmergencySOS()
-          Toast.makeText(context, "Emergency SOS Alert Broadcasted!", Toast.LENGTH_LONG).show()
-        },
-        modifier = Modifier.fillMaxWidth().height(48.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF18181B), contentColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.5f))
-      ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-          Icon(Icons.Default.Emergency, null, tint = RamsAlertRed, modifier = Modifier.size(18.dp))
-          Spacer(modifier = Modifier.width(8.dp))
-          Text("TRIGGER EMERGENCY SOS BROADCAST", fontWeight = FontWeight.Black, fontSize = 11.5.sp, fontFamily = FontFamily.Monospace, letterSpacing = 0.5.sp)
+      item(key = "offline_btn_emergency_sos") {
+        Button(
+          onClick = {
+            syncEngine.sendEmergencyCrashPacket(gps, imu, riderProfile)
+            onTriggerEmergencySOS()
+            Toast.makeText(context, "Emergency SOS Alert Broadcasted!", Toast.LENGTH_LONG).show()
+          },
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp),
+          shape = RoundedCornerShape(10.dp),
+          colors = ButtonDefaults.buttonColors(
+            containerColor = ZincSurfaceBaseDark,
+            contentColor = Color.White
+          ),
+          border = BorderStroke(1.dp, RamsAlertRed.copy(alpha = 0.4f)),
+          contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp)
+        ) {
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+          ) {
+            Icon(
+              imageVector = Icons.Default.Emergency,
+              contentDescription = null,
+              tint = RamsAlertRed,
+              modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = "TRIGGER EMERGENCY SOS BROADCAST",
+              fontWeight = FontWeight.Black,
+              fontSize = 11.sp,
+              fontFamily = FontFamily.Monospace,
+              letterSpacing = 0.5.sp,
+              maxLines = 1,
+              softWrap = false,
+              overflow = TextOverflow.Ellipsis
+            )
+          }
         }
       }
     }
   }
 }
 
-// ─── Extracted Device Cards (isolated recomposition) ────────────────────────
+// ─── Reusable Components ─────────────────────────────────────────────────────
 
 @Composable
-private fun DiscoveredDeviceCard(
+private fun TelemetryPill(label: String, value: String, color: Color, modifier: Modifier = Modifier) {
+  Surface(
+    modifier = modifier,
+    shape = RoundedCornerShape(6.dp),
+    color = color.copy(alpha = 0.10f),
+    border = BorderStroke(0.5.dp, color.copy(alpha = 0.35f))
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 6.dp, vertical = 6.dp),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = "$label: ",
+        fontSize = 9.sp,
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.Bold,
+        color = color.copy(alpha = 0.8f),
+        maxLines = 1,
+        softWrap = false
+      )
+      Text(
+        text = value,
+        fontSize = 9.sp,
+        fontFamily = FontFamily.Monospace,
+        fontWeight = FontWeight.Black,
+        color = color,
+        maxLines = 1,
+        softWrap = false
+      )
+    }
+  }
+}
+
+@Composable
+private fun UnifiedDeviceCard(
   cached: CachedBtDevice,
   isConnected: Boolean,
+  isConnecting: Boolean = false,
+  badgeLabel: String? = null,
   onConnect: () -> Unit
 ) {
+  val cardBorder = when {
+    isConnected -> RamsSuccessEmerald.copy(alpha = 0.6f)
+    cached.isRamsWearable -> RamsSuccessEmerald.copy(alpha = 0.35f)
+    else -> ZincBorderHairlineDark
+  }
+
   Surface(
     modifier = Modifier.fillMaxWidth(),
     shape = RoundedCornerShape(10.dp),
-    color = MaterialTheme.colorScheme.surface,
-    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+    color = ZincSurfaceBaseDark,
+    border = BorderStroke(1.dp, cardBorder)
   ) {
     Row(
-      modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp, vertical = 10.dp),
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically
     ) {
@@ -603,72 +1225,140 @@ private fun DiscoveredDeviceCard(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.weight(1f)
       ) {
-        Icon(Icons.Default.Bluetooth, null, tint = if (isConnected) RamsSuccessEmerald else RamsSyncBlue, modifier = Modifier.size(18.dp))
-        Column {
-          Text(cached.displayName, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
-          Text(cached.address, fontSize = 9.5.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF71717A))
+        Box(
+          modifier = Modifier
+            .size(38.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(
+              when {
+                isConnected -> RamsSuccessEmerald.copy(alpha = 0.15f)
+                cached.isRamsWearable -> RamsSuccessEmerald.copy(alpha = 0.12f)
+                else -> ZincElevatedLayerDark
+              }
+            ),
+          contentAlignment = Alignment.Center
+        ) {
+          Icon(
+            imageVector = if (isConnected) Icons.Default.BluetoothConnected else Icons.Default.Bluetooth,
+            contentDescription = null,
+            tint = when {
+              isConnected -> RamsSuccessEmerald
+              cached.isRamsWearable -> RamsSuccessEmerald
+              else -> RamsSyncBlue
+            },
+            modifier = Modifier.size(18.dp)
+          )
         }
-      }
-      Button(
-        onClick = onConnect,
-        shape = RoundedCornerShape(6.dp),
-        colors = ButtonDefaults.buttonColors(
-          containerColor = if (isConnected) Color(0xFF27272A) else RamsSyncBlue,
-          contentColor = Color.White
-        ),
-        modifier = Modifier.height(32.dp)
-      ) {
-        Text(if (isConnected) "CONNECTED" else "CONNECT", fontSize = 10.sp, fontWeight = FontWeight.Bold)
-      }
-    }
-  }
-}
 
-@Composable
-private fun BondedDeviceCard(
-  cached: CachedBtDevice,
-  isConnected: Boolean,
-  onConnect: () -> Unit
-) {
-  Surface(
-    modifier = Modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(10.dp),
-    color = Color(0xFF141416),
-    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
-  ) {
-    Row(
-      modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.weight(1f)
-      ) {
-        Icon(Icons.Default.BluetoothConnected, null, tint = Color(0xFFA1A1AA), modifier = Modifier.size(18.dp))
-        Column {
-          Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(cached.displayName, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            Surface(shape = RoundedCornerShape(3.dp), color = Color(0xFF27272A)) {
-              Text("PAIRED", fontSize = 7.5.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = Color(0xFFA1A1AA), modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp))
+        Column(
+          verticalArrangement = Arrangement.spacedBy(2.dp),
+          modifier = Modifier
+            .weight(1f)
+            .fillMaxWidth()
+        ) {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+          ) {
+            Text(
+              text = cached.displayName,
+              fontSize = 13.sp,
+              fontWeight = FontWeight.SemiBold,
+              color = Color.White,
+              maxLines = 1,
+              softWrap = false,
+              overflow = TextOverflow.Ellipsis,
+              modifier = Modifier.weight(1f, fill = false)
+            )
+            if (badgeLabel != null) {
+              Surface(
+                shape = RoundedCornerShape(3.dp),
+                color = if (cached.isRamsWearable) RamsSuccessEmerald.copy(alpha = 0.2f) else ZincElevatedLayerDark
+              ) {
+                Text(
+                  text = badgeLabel,
+                  fontSize = 8.sp,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Black,
+                  color = if (cached.isRamsWearable) RamsSuccessEmerald else ZincInkMutedDark,
+                  maxLines = 1,
+                  softWrap = false,
+                  modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                )
+              }
             }
           }
-          Text(cached.address, fontSize = 9.5.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF71717A))
+
+          Text(
+            text = cached.address,
+            fontSize = 10.5.sp,
+            fontFamily = FontFamily.Monospace,
+            color = ZincInkTertiaryDark,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis
+          )
         }
       }
+
+      Spacer(modifier = Modifier.width(10.dp))
+
       Button(
         onClick = onConnect,
+        enabled = !isConnecting,
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
-          containerColor = Color(0xFF27272A),
-          contentColor = if (isConnected) RamsSuccessEmerald else Color.White
+          containerColor = when {
+            isConnected -> ZincElevatedLayerDark
+            isConnecting -> RamsSyncBlue
+            cached.isRamsWearable -> RamsSuccessEmerald.copy(alpha = 0.18f)
+            else -> ZincElevatedLayerDark
+          },
+          contentColor = when {
+            isConnected -> RamsSuccessEmerald
+            isConnecting -> Color.White
+            cached.isRamsWearable -> RamsSuccessEmerald
+            else -> Color.White
+          }
         ),
-        modifier = Modifier.height(32.dp)
+        border = BorderStroke(
+          1.dp,
+          when {
+            isConnected -> RamsSuccessEmerald.copy(alpha = 0.4f)
+            cached.isRamsWearable -> RamsSuccessEmerald.copy(alpha = 0.5f)
+            else -> ZincBorderHairlineDark
+          }
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
+        modifier = Modifier.height(34.dp)
       ) {
-        Text(if (isConnected) "CONNECTED" else "CONNECT", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        if (isConnecting) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(12.dp),
+            color = Color.White,
+            strokeWidth = 1.5.dp
+          )
+          Spacer(modifier = Modifier.width(5.dp))
+          Text(
+            text = "SYNCING",
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Black,
+            fontFamily = FontFamily.Monospace,
+            maxLines = 1,
+            softWrap = false
+          )
+        } else {
+          Text(
+            text = if (isConnected) "CONNECTED" else "CONNECT",
+            fontSize = 10.5.sp,
+            fontWeight = FontWeight.Black,
+            fontFamily = FontFamily.Monospace,
+            maxLines = 1,
+            softWrap = false
+          )
+        }
       }
     }
   }
 }
-

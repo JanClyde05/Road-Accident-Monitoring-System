@@ -13,14 +13,12 @@
 enum BuzzerPattern : uint8_t {
   BZR_OFF,         // Buzzer silent
   BZR_ALERT,       // Continuous pulsing tone for active alert
-  BZR_CONFIRM,     // Short chirp for button acknowledgment
-  BZR_SETUP_ENTER, // Double chirp on entering setup mode
-  BZR_SETUP_EXIT   // Triple chirp on exiting setup mode
+  BZR_CONFIRM      // Short chirp for button acknowledgment / connect
 };
 
 void buzzerInit();
 void buzzerSetPattern(BuzzerPattern pattern);
-void buzzerUpdate();  // Call every loop() iteration
-void buzzerOff();     // Immediate silence
+void buzzerUpdate();
+void buzzerOff();
 
 #endif // RAMS_BUZZER_H

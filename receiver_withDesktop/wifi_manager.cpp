@@ -50,15 +50,21 @@ static void    _setupRoutes();
 static void    _setState(WifiState newState);
 static String  _scanNetworksJson();
 
+static bool _littleFsOk = false;
+
 // ── Public API ──────────────────────────────────────────────────────────────
 
 void wifiManagerInit() {
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
 
-  // Initialize LittleFS for captive portal assets
-  if (!LittleFS.begin(true)) {
-    Serial.println(F("[WIFI] LittleFS mount failed!"));
+  // Initialize LittleFS for captive portal assets (graceful fallback if partition full/unavailable)
+  _littleFsOk = LittleFS.begin(false);
+  if (!_littleFsOk) {
+    _littleFsOk = LittleFS.begin(true); // Attempt format if needed
+  }
+  if (!_littleFsOk) {
+    Serial.println(F("[WIFI] LittleFS unavailable. Using inline memory assets for portal."));
   }
 
   // 1. Try NVS-saved credentials
@@ -224,7 +230,7 @@ static void _stopAP() {
 static void _setupRoutes() {
   // Serve captive portal page
   _server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    if (LittleFS.exists("/index.html")) {
+    if (_littleFsOk && LittleFS.exists("/index.html")) {
       request->send(LittleFS, "/index.html", "text/html");
     } else {
       // Inline fallback if LittleFS data isn't uploaded
@@ -266,12 +272,14 @@ static void _setupRoutes() {
     }
   });
 
-  _server.serveStatic("/", LittleFS, "/");
+  if (_littleFsOk) {
+    _server.serveStatic("/", LittleFS, "/");
+  }
 
   _server.on("/logo.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
-    if (LittleFS.exists("/logo.jpg")) {
+    if (_littleFsOk && LittleFS.exists("/logo.jpg")) {
       request->send(LittleFS, "/logo.jpg", "image/jpeg");
-    } else if (LittleFS.exists("/logo.png")) {
+    } else if (_littleFsOk && LittleFS.exists("/logo.png")) {
       request->send(LittleFS, "/logo.png", "image/png");
     } else {
       request->redirect(LOGO_BASE64);
@@ -279,9 +287,9 @@ static void _setupRoutes() {
   });
 
   _server.on("/logo.png", HTTP_GET, [](AsyncWebServerRequest *request) {
-    if (LittleFS.exists("/logo.png")) {
+    if (_littleFsOk && LittleFS.exists("/logo.png")) {
       request->send(LittleFS, "/logo.png", "image/png");
-    } else if (LittleFS.exists("/logo.jpg")) {
+    } else if (_littleFsOk && LittleFS.exists("/logo.jpg")) {
       request->send(LittleFS, "/logo.jpg", "image/jpeg");
     } else {
       request->redirect(LOGO_BASE64);

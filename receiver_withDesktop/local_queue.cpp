@@ -21,6 +21,7 @@
 
 static uint32_t _lastRetryMs = 0;
 static uint8_t  _queueCount  = 0;
+static bool     _fsReady     = false;
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -30,6 +31,7 @@ static String _filePath(uint8_t idx) {
 
 static void _recount() {
   _queueCount = 0;
+  if (!_fsReady) return;
   for (uint8_t i = 0; i < MAX_QUEUED; i++) {
     if (LittleFS.exists(_filePath(i))) {
       _queueCount++;
@@ -40,6 +42,11 @@ static void _recount() {
 // ── Public API ──────────────────────────────────────────────────────────────
 
 void localQueueInit() {
+  _fsReady = LittleFS.begin(false);
+  if (!_fsReady) {
+    Serial.println(F("[QUEUE] LittleFS not available, offline retry queue disabled"));
+    return;
+  }
   if (!LittleFS.exists(QUEUE_DIR)) {
     LittleFS.mkdir(QUEUE_DIR);
   }
@@ -51,6 +58,8 @@ bool localQueueAdd(const char* deviceToken, const char* packetType,
                    float lat, float lon, uint8_t eventType,
                    uint8_t battPct, float aMag,
                    const char* name, const char* photoUrl) {
+
+  if (!_fsReady) return false;
 
   // Find an empty slot
   int slot = -1;
@@ -102,6 +111,60 @@ bool localQueueAdd(const char* deviceToken, const char* packetType,
   return true;
 }
 
+bool localQueueAddRiderProfile(const char* deviceToken, const char* name,
+                              const char* plate, const char* contact,
+                              const char* blood, const char* category,
+                              const char* emergencyPhone) {
+  if (!_fsReady) return false;
+
+  // Find an empty slot
+  int slot = -1;
+  for (uint8_t i = 0; i < MAX_QUEUED; i++) {
+    if (!LittleFS.exists(_filePath(i))) {
+      slot = i;
+      break;
+    }
+  }
+
+  if (slot < 0) {
+    // Queue full — drop oldest (slot 0) and shift
+    Serial.println(F("[QUEUE] Queue full! Dropping oldest for rider profile..."));
+    LittleFS.remove(_filePath(0));
+    for (uint8_t i = 1; i < MAX_QUEUED; i++) {
+      if (LittleFS.exists(_filePath(i))) {
+        LittleFS.rename(_filePath(i), _filePath(i - 1));
+      }
+    }
+    slot = _queueCount - 1;
+    if (slot < 0) slot = 0;
+  }
+
+  // Build JSON payload for rider profile
+  JsonDocument doc;
+  doc["deviceToken"] = deviceToken;
+  doc["packetType"] = "rider_profile";
+  doc["name"] = name;
+  doc["plate"] = plate;
+  doc["contact"] = contact;
+  doc["blood"] = blood;
+  doc["category"] = category;
+  doc["emergencyPhone"] = emergencyPhone;
+  doc["timestamp"] = millis();
+
+  // Write to file
+  File f = LittleFS.open(_filePath(slot), "w");
+  if (!f) {
+    Serial.println(F("[QUEUE] Failed to write rider profile queue file!"));
+    return false;
+  }
+  serializeJson(doc, f);
+  f.close();
+
+  _recount();
+  Serial.printf("[QUEUE] Queued rider profile item %d. Total: %u\n", slot, _queueCount);
+  return true;
+}
+
 void localQueueUpdate() {
   if (_queueCount == 0) return;
   if (!wifiIsConnected()) return;
@@ -127,26 +190,38 @@ void localQueueUpdate() {
       continue;
     }
 
-    // Extract fields and attempt upload
     const char* token = doc["deviceToken"] | "";
     const char* pType = doc["packetType"] | "";
-    float lat = doc["lat"] | 0.0f;
-    float lon = doc["lon"] | 0.0f;
-    uint8_t eventType = doc["eventType"] | 0;
-    uint8_t battPct = doc["battPct"] | 0;
-    float aMag = doc["aMag"] | 0.0f;
-    const char* name = doc["name"] | (const char*)nullptr;
-    const char* photoUrl = doc["driveLinkConverted"] | (const char*)nullptr;
+    bool success = false;
 
-    bool success = httpUploadEvent(token, pType, lat, lon,
-                                   eventType, battPct, aMag,
-                                   name, photoUrl);
+    if (strcmp(pType, "rider_profile") == 0) {
+      const char* name = doc["name"] | "";
+      const char* plate = doc["plate"] | "";
+      const char* contact = doc["contact"] | "";
+      const char* blood = doc["blood"] | "";
+      const char* category = doc["category"] | "";
+      const char* emergencyPhone = doc["emergencyPhone"] | "";
+      success = httpUploadRiderProfile(token, name, plate, contact, blood, category, emergencyPhone);
+    } else {
+      // Extract fields and attempt upload for normal event
+      float lat = doc["lat"] | 0.0f;
+      float lon = doc["lon"] | 0.0f;
+      uint8_t eventType = doc["eventType"] | 0;
+      uint8_t battPct = doc["battPct"] | 0;
+      float aMag = doc["aMag"] | 0.0f;
+      const char* name = doc["name"] | (const char*)nullptr;
+      const char* photoUrl = doc["driveLinkConverted"] | (const char*)nullptr;
+
+      success = httpUploadEvent(token, pType, lat, lon,
+                                     eventType, battPct, aMag,
+                                     name, photoUrl);
+    }
 
     if (success) {
       LittleFS.remove(_filePath(i));
-      Serial.printf("[QUEUE] Item %d uploaded and removed\n", i);
+      Serial.printf("[QUEUE] Item %d (%s) uploaded and removed\n", i, pType);
     } else {
-      Serial.printf("[QUEUE] Item %d retry failed\n", i);
+      Serial.printf("[QUEUE] Item %d (%s) retry failed\n", i, pType);
       // Don't purge on failure — will retry next cycle
     }
   }

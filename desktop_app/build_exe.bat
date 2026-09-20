@@ -19,6 +19,9 @@ exit /b 1
 
 :COMPILE
 echo [INFO] Found Native Windows Compiler: %CSC_EXE%
+echo [INFO] Closing any running instances of RAMS_Rescuer_Desktop.exe...
+taskkill /f /im RAMS_Rescuer_Desktop.exe >nul 2>&1
+ping 127.0.0.1 -n 2 >nul
 echo [INFO] Compiling RAMS_Rescuer_Desktop.exe...
 echo.
 

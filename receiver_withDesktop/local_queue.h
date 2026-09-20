@@ -24,6 +24,12 @@ bool    localQueueAdd(const char* deviceToken, const char* packetType,
                       uint8_t battPct, float aMag,
                       const char* name, const char* photoUrl);
 
+// Queue a rider profile update when offline
+bool    localQueueAddRiderProfile(const char* deviceToken, const char* name,
+                                 const char* plate, const char* contact,
+                                 const char* blood, const char* category,
+                                 const char* emergencyPhone);
+
 // Attempt to flush queued items. Call periodically in loop().
 void    localQueueUpdate();
 

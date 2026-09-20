@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import L from 'leaflet';
-import Supercluster from 'supercluster';
 import { createRoot } from 'react-dom/client';
 import { EventData, ThemeMode, getMarkerColor } from '../types';
 import RAMSEventPopup from './RAMSEventPopup';
@@ -19,6 +18,7 @@ function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivI
   const isAlert = event.type === 'alert';
   const isTest = event.type === 'test';
   const isFalseAlarm = event.type === 'false_alarm';
+  const isRegister = event.type === 'register' || event.type === 'rider_profile';
 
   let pinColor = '#3b82f6';
   let pinShadow = '0 6px 14px rgba(59, 130, 246, 0.45)';
@@ -46,6 +46,14 @@ function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivI
     // Shield check glyph
     glyphSvg = `
       <path d="M8 12l2.5 2.5 5.5-5.5" stroke="#10b981" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    `;
+  } else if (isRegister) {
+    pinColor = '#8b5cf6';
+    pinShadow = '0 6px 14px rgba(139, 92, 246, 0.50)';
+    // User / rider profile glyph
+    glyphSvg = `
+      <circle cx="12" cy="9" r="3" stroke="#8b5cf6" stroke-width="2.2" fill="none"/>
+      <path d="M6 19c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#8b5cf6" stroke-width="2.2" stroke-linecap="round" fill="none" transform="translate(0, -1)"/>
     `;
   } else {
     // Navigation / GPS beacon glyph
@@ -103,7 +111,8 @@ function createClusterIcon(count: number, color: string, size = 36): L.DivIcon {
     red: '#ef4444',
     amber: '#f59e0b',
     green: '#10b981',
-    blue: '#3b82f6'
+    blue: '#3b82f6',
+    purple: '#8b5cf6'
   };
   const hex = bgColors[color] || '#3b82f6';
 
@@ -122,7 +131,7 @@ function createClusterIcon(count: number, color: string, size = 36): L.DivIcon {
   });
 }
 
-const COLOR_PRIORITY: Record<string, number> = { red: 4, amber: 3, green: 2, blue: 1 };
+const COLOR_PRIORITY: Record<string, number> = { red: 5, amber: 4, purple: 3, green: 2, blue: 1 };
 
 function getHighestSeverityColor(colors: string[]): string {
   let max = 'blue';
@@ -143,26 +152,21 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
   const geoEvents = useMemo(
-    () => events.filter((e) => e.lat && e.lon && (e.lat !== 0 || e.lon !== 0)),
+    () => events
+      .filter((e) => e.lat && e.lon && (e.lat !== 0 || e.lon !== 0))
+      .filter((e) => {
+        if (e.type === 'test') return false;
+        const name = (e.riderName || '').toLowerCase();
+        const token = (e.deviceToken || '').toLowerCase();
+        const id = (e.id || '').toLowerCase();
+        const title = (e.title || '').toLowerCase();
+        if (name.includes('test') || token.includes('test') || id.includes('test') || title.includes('test')) return false;
+        return true;
+      }),
     [events]
   );
 
-  const clusterIndex = useMemo(() => {
-    const sc = new Supercluster({
-      radius: 60,
-      maxZoom: 17,
-    });
-    const points = geoEvents.map((event) => ({
-      type: 'Feature' as const,
-      geometry: {
-        type: 'Point' as const,
-        coordinates: [event.lon, event.lat],
-      },
-      properties: { event },
-    }));
-    sc.load(points);
-    return sc;
-  }, [geoEvents]);
+
 
   // Initialize Map
   useEffect(() => {
@@ -189,7 +193,7 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
     };
   }, []);
 
-  // Update clusters and markers on map viewport change or events change
+  // Render individual markers directly — no supercluster grouping
   useEffect(() => {
     const map = mapRef.current;
     const layerGroup = layerGroupRef.current;
@@ -197,60 +201,30 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
 
     const updateMarkers = () => {
       layerGroup.clearLayers();
-      const b = map.getBounds();
-      const zoom = Math.floor(map.getZoom());
-      const bbox: [number, number, number, number] = [
-        b.getWest(), b.getSouth(), b.getEast(), b.getNorth()
-      ];
 
-      const clusters = clusterIndex.getClusters(bbox, zoom);
+      geoEvents.forEach((event) => {
+        const isSelected = selectedEvent?.id === event.id;
 
-      clusters.forEach((feature) => {
-        const [lng, lat] = feature.geometry.coordinates;
-        const isCluster = feature.properties.cluster;
+        const marker = L.marker([event.lat, event.lon], {
+          icon: createAestheticMarkerIcon(event, isSelected),
+          zIndexOffset: isSelected ? 1000 : (event.type === 'alert' ? 500 : 10),
+        });
 
-        if (isCluster) {
-          const count = feature.properties.point_count;
-          const clusterSize = Math.min(48, 28 + count * 2);
-          const leaves = clusterIndex.getLeaves(feature.properties.cluster_id, Infinity);
-          const colors = leaves.map((l: any) => getMarkerColor(l.properties.event));
-          const clusterColor = getHighestSeverityColor(colors);
+        marker.on('click', () => {
+          onEventSelect(event);
+        });
 
-          const marker = L.marker([lat, lng], {
-            icon: createClusterIcon(count, clusterColor, clusterSize),
-          });
+        // Bind React popup for in-map hover/click tooltip
+        const popupDiv = document.createElement('div');
+        const root = createRoot(popupDiv);
+        root.render(<RAMSEventPopup event={event} />);
 
-          marker.on('click', () => {
-            const expansionZoom = clusterIndex.getClusterExpansionZoom(feature.properties.cluster_id);
-            map.flyTo([lat, lng], expansionZoom, { duration: 0.5 });
-          });
+        marker.bindPopup(popupDiv, {
+          className: 'custom-leaflet-popup',
+          maxWidth: 320,
+        });
 
-          layerGroup.addLayer(marker);
-        } else {
-          const event: EventData = feature.properties.event;
-          const isSelected = selectedEvent?.id === event.id;
-
-          const marker = L.marker([lat, lng], {
-            icon: createAestheticMarkerIcon(event, isSelected),
-            zIndexOffset: isSelected ? 1000 : 10,
-          });
-
-          marker.on('click', () => {
-            onEventSelect(event);
-          });
-
-          // Bind React popup for in-map hover/click tooltip
-          const popupDiv = document.createElement('div');
-          const root = createRoot(popupDiv);
-          root.render(<RAMSEventPopup event={event} />);
-
-          marker.bindPopup(popupDiv, {
-            className: 'custom-leaflet-popup',
-            maxWidth: 320,
-          });
-
-          layerGroup.addLayer(marker);
-        }
+        layerGroup.addLayer(marker);
       });
     };
 
@@ -263,7 +237,7 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
       map.off('moveend', updateMarkers);
       map.off('zoomend', updateMarkers);
     };
-  }, [clusterIndex, onEventSelect, selectedEvent]);
+  }, [geoEvents, onEventSelect, selectedEvent]);
 
   // Center on selected event
   useEffect(() => {

@@ -12,7 +12,6 @@ import RAMSHeader from './components/RAMSHeader';
 import RAMSMapView from './components/RAMSMapView';
 import RAMSEventSidebar from './components/RAMSEventSidebar';
 import RAMSWearableProfileOverlay from './components/RAMSWearableProfileOverlay';
-import { DesignRulesModal } from './components/DesignRulesModal';
 
 export default function App() {
   const [events, setEvents] = useState<GuardianEvent[]>([]);
@@ -27,7 +26,6 @@ export default function App() {
 
   // Active view: 'rams' (default for requested preview) or 'guardiantrack'
   const [activeDashboard, setActiveDashboard] = useState<'rams' | 'guardiantrack'>('rams');
-  const [isDesignRulesOpen, setIsDesignRulesOpen] = useState<boolean>(false);
 
   // Theme Management (Light / Dark)
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -125,7 +123,13 @@ export default function App() {
       fetchEvents(true);
     }, 3000);
 
-    return () => clearInterval(interval);
+    const handleRefresh = () => fetchEvents(true);
+    window.addEventListener('rams-refresh-events', handleRefresh);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('rams-refresh-events', handleRefresh);
+    };
   }, [fetchEvents]);
 
   // Select event & update URL hash
@@ -217,8 +221,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'alert',
-          deviceName: `Rider Unit 0${unitNum}`,
-          deviceToken: `DEV-${Math.floor(1000 + Math.random() * 9000)}`,
+          deviceToken: 'RAMS0001',
           lat: baseLat,
           lon: baseLon,
           aMag: gForce,
@@ -228,7 +231,7 @@ export default function App() {
       });
 
       if (res.ok) {
-        addToast('error', 'CRASH SIMULATED', `Rider Unit 0${unitNum} reported ${gForce}g impact at ${baseLat.toFixed(4)}, ${baseLon.toFixed(4)}`);
+        addToast('error', 'CRASH ALERT INGESTED', `Device RAMS0001 reported ${gForce}g impact at ${baseLat.toFixed(4)}, ${baseLon.toFixed(4)}`);
         await fetchEvents(true);
       }
     } catch {
@@ -251,21 +254,35 @@ export default function App() {
   };
 
   // Convert events to RAMS EventData with full Wearable Registration details
-  const ramsEvents: EventData[] = events.map((e) => ({
+  // Filter out test events and invalid coordinates (0, 0) so they never appear on the map
+  const ramsEvents: EventData[] = events
+    .filter((e) => {
+      if (e.type === 'test') return false;
+      // Discard routine telemetry pings without valid GPS coordinates (0, 0)
+      // Real emergency alerts must ALWAYS be preserved and shown in the dispatch stream!
+      if (e.type === 'telemetry' && Math.abs(e.lat) < 0.0001 && Math.abs(e.lon) < 0.0001) return false;
+      const name = (e.riderName || '').toLowerCase();
+      const token = (e.deviceToken || '').toLowerCase();
+      const id = (e.id || '').toLowerCase();
+      const title = (e.title || '').toLowerCase();
+      if (name.includes('test') || token.includes('test') || id.includes('test') || title.includes('test')) return false;
+      return true;
+    })
+    .map((e) => ({
     id: e.id,
     deviceName: e.deviceName || (e.isTelemetry ? 'GPS Tracker' : 'Audio Beacon'),
-    deviceToken: e.deviceToken || e.id.substring(0, 8).toUpperCase(),
+    deviceToken: e.deviceToken || '',
     lat: e.lat,
     lon: e.lon,
     type: e.type,
     title: e.title || (e.type === 'alert' ? 'High G Impact Alert' : e.isTelemetry ? 'Live GPS Pin' : 'Wearable Capture'),
     eventTypeName: e.eventTypeName || (e.type === 'alert' ? 'Impact Trigger' : 'Telemetry Beacon'),
-    aMag: e.aMag || (e.type === 'alert' ? 4.2 : 0.8),
+    aMag: typeof e.aMag === 'number' ? e.aMag : 0,
     battPct: e.battPct || (typeof e.batt === 'number' ? e.batt : 85),
     photoUrl: e.photoUrl,
     createdAt: typeof e.createdAt === 'string' ? e.createdAt : new Date().toISOString(),
     status: e.status,
-    riderName: e.riderName || e.deviceName,
+    riderName: e.riderName || '',
     riderRole: e.riderRole,
     contactNumber: e.contactNumber,
     emergencyContactName: e.emergencyContactName,
@@ -288,7 +305,7 @@ export default function App() {
   const latestEvent = events[0] || null;
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 flex flex-col font-sans transition-colors duration-200">
+    <div className="h-screen w-screen overflow-hidden bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 flex flex-col font-sans transition-colors duration-200">
       
       {/* ── View 1: RAMS Dashboard (Revised with GPS-Audio Design Rules) ── */}
       {activeDashboard === 'rams' ? (
@@ -298,14 +315,8 @@ export default function App() {
             deviceCount={ramsDeviceCount}
             lastUpdate={lastUpdated}
             isConnected={isOnline}
-            theme={theme}
-            onToggleTheme={toggleTheme}
             onRefresh={() => fetchEvents(false)}
             isLoading={isLoading}
-            onTestIncident={handleTestCrashIncident}
-            activeView="rams"
-            onToggleView={() => setActiveDashboard('guardiantrack')}
-            onOpenDesignRules={() => setIsDesignRulesOpen(true)}
           />
 
           <div className="flex flex-1 overflow-hidden relative">
@@ -333,6 +344,7 @@ export default function App() {
             event={ramsSelectedEvent}
             isOpen={showProfileOverlay}
             onClose={() => setShowProfileOverlay(false)}
+            onProfileUpdated={() => fetchEvents(true)}
           />
         </div>
       ) : (
@@ -422,11 +434,7 @@ export default function App() {
         </div>
       )}
 
-      {/* GPS-Audio Design Rules Modal */}
-      <DesignRulesModal
-        isOpen={isDesignRulesOpen}
-        onClose={() => setIsDesignRulesOpen(false)}
-      />
+
 
       {/* Toast Notification Stream */}
       <Toast

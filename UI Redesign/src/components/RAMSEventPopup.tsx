@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import { EventData, getStatusLabel, formatTimestamp } from '../types';
 import { 
   Activity, 
   Battery, 
@@ -10,8 +8,10 @@ import {
   Check, 
   Cpu, 
   UserCheck, 
-  ExternalLink 
+  ExternalLink,
+  User
 } from 'lucide-react';
+import { EventData, getStatusLabel, formatTimestamp, formatDirectDriveUrl } from '../types';
 
 interface EventPopupProps {
   event: EventData;
@@ -45,8 +45,13 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
   };
 
   // Profile display name: user registration name or device identification
-  const registeredName = event.deviceName || 'Registered Wearable Unit';
+  const hasRealName = Boolean(event.riderName && 
+    !event.riderName.startsWith('RAMS-') && 
+    !event.riderName.startsWith('Rider RAMS-') && 
+    event.riderName !== event.deviceToken);
+  const registeredName = hasRealName ? event.riderName : (event.title || `RAMS Device (${event.deviceToken})`);
   const deviceToken = event.deviceToken || event.id.substring(0, 8).toUpperCase();
+  const directPhoto = formatDirectDriveUrl(event.photoUrl);
 
   return (
     <div className="p-4 w-[285px] sm:w-[310px] font-sans text-neutral-900 dark:text-neutral-100 select-none">
@@ -54,29 +59,19 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
       {/* Wearable Profile Header */}
       <div className="flex items-start gap-3 pb-3.5 border-b border-neutral-200 dark:border-neutral-800">
         
-        {/* Profile Photo / Wearable Emblem */}
+        {/* Profile Photo / Wearable Avatar */}
         <div className="relative flex-shrink-0">
-          {event.photoUrl && !imageFailed ? (
+          {directPhoto && directPhoto !== '/logo.png' && directPhoto !== '/logo.jpg' && !imageFailed ? (
             <img
               referrerPolicy="no-referrer"
               className="w-12 h-12 rounded-lg object-cover border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 shadow-xs"
-              src={event.photoUrl}
+              src={directPhoto}
               alt={registeredName}
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <div className="w-12 h-12 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-1 shadow-xs">
-              <img
-                src="/logo.png"
-                alt="RAMS Emblem"
-                className="w-full h-full object-contain"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (target.src.endsWith('/logo.png')) {
-                    target.src = '/logo.jpg';
-                  }
-                }}
-              />
+            <div className="w-12 h-12 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-1 shadow-xs text-neutral-400">
+              <User className="w-6 h-6 text-neutral-400" />
             </div>
           )}
           <span 

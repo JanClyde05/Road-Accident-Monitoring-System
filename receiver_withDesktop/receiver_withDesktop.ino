@@ -1,21 +1,26 @@
 /*
  * Road Accident Monitoring System — Receiver Main Sketch
  * ========================================================
- * ESP32-S3 SuperMini receiver station.
+ * ESP32-S3 SuperMini receiver base station.
  *
  * Boot sequence:
- *   1. Init NVS, WiFi manager, LoRa RX, local queue, HTTP upload
- *   2. WiFi manager tries saved creds → fallback to captive portal
- *   3. Main loop: WiFi update + LoRa RX + queue flush + status LED
+ *   1. Init Onboard NeoPixel (GPIO48) & Legacy Status LED (GPIO2)
+ *   2. Init NVS, WiFi manager, LoRa RX (Ra-02 SX1278), local queue, HTTP upload
+ *   3. WiFi manager tries saved creds → fallback to captive portal AP
+ *   4. Main loop: WiFi update + LoRa RX + queue flush + NeoPixel animation
  *
- * The receiver is a fixed-install device (USB/wall powered), sitting
- * at a barangay hall, rural health station, or monitoring center.
- * It bridges the LoRa network to the internet backbone.
+ * Features & Hardware:
+ *   - Ra-02 LoRa on ESP32-S3 SuperMini (NSS:10, MOSI:11, SCK:12, MISO:13, RST:9, DIO0:8)
+ *   - Onboard WS2812B NeoPixel RGB LED (GPIO48)
+ *   - Real-time LoRa packet decode & JSON serial streaming over USB COM port
+ *   - Direct upload to RAMS Rescuer Desktop / Netlify Cloud
+ *   - LittleFS offline retry queue buffer
  *
  * GitHub: https://github.com/JanClyde05/Road-Accident-Monitoring-System
  */
 
 #include "config.h"
+#include "neopixel.h"
 #include "nvs_store.h"
 #include "wifi_manager.h"
 #include "lora_rx.h"
@@ -26,36 +31,29 @@
 static bool _loraOk = false;
 static uint32_t _lastLedToggle = 0;
 static bool _ledState = false;
+static uint32_t _lastHeartbeatMs = 0;
+static const uint32_t HEARTBEAT_INTERVAL_MS = 15000;
 
-// ── Status LED Patterns ─────────────────────────────────────────────────────
-// Solid ON = WiFi connected + LoRa OK
-// Slow blink (1Hz) = WiFi connected, no LoRa
-// Fast blink (4Hz) = AP mode (captive portal active)
-// Off = error
-
+// ── Legacy Status LED Patterns (GPIO2) ──────────────────────────────────────
 static void _updateStatusLED() {
   uint32_t now = millis();
   WifiState ws = wifiGetState();
 
   if (ws == WIFI_CONNECTED && _loraOk) {
-    // Solid on — everything operational
     digitalWrite(STATUS_LED_PIN, HIGH);
   } else if (ws == WIFI_CONNECTED) {
-    // Slow blink — WiFi ok but LoRa failed
     if (now - _lastLedToggle >= 500) {
       _lastLedToggle = now;
       _ledState = !_ledState;
       digitalWrite(STATUS_LED_PIN, _ledState);
     }
   } else if (ws == WIFI_AP_MODE) {
-    // Fast blink — captive portal active, waiting for WiFi config
     if (now - _lastLedToggle >= 125) {
       _lastLedToggle = now;
       _ledState = !_ledState;
       digitalWrite(STATUS_LED_PIN, _ledState);
     }
   } else if (ws == WIFI_CONNECTING) {
-    // Medium blink — connecting
     if (now - _lastLedToggle >= 250) {
       _lastLedToggle = now;
       _ledState = !_ledState;
@@ -72,54 +70,65 @@ void setup() {
   Serial.begin(SERIAL_BAUD);
   delay(500);
 
-  Serial.println(F("\n╔══════════════════════════════════════════════╗"));
-  Serial.println(F("║   Road Accident Monitoring System — Receiver  ║"));
-  Serial.println(F("║   PGC Digital Innovation Challenge 2026       ║"));
-  Serial.println(F("╚══════════════════════════════════════════════╝\n"));
+  Serial.println(F("\n╔════════════════════════════════════════════════════════╗"));
+  Serial.println(F("║   Road Accident Monitoring System — Receiver Station   ║"));
+  Serial.println(F("║   ESP32-S3 SuperMini + Ra-02 LoRa (433MHz Base)       ║"));
+  Serial.println(F("╚════════════════════════════════════════════════════════╝\n"));
 
-  // Status LED
+  // 1. Initialize Visual Indicators
+  neopixelInit();
+  neopixelSetState(NEO_RX_BOOT);
+
   pinMode(STATUS_LED_PIN, OUTPUT);
   digitalWrite(STATUS_LED_PIN, LOW);
 
-  // Initialize NVS (must be first — WiFi manager depends on it)
+  // 2. Initialize NVS
   nvsStoreInit();
 
-  // Initialize WiFi (tries saved creds, fallback to captive portal)
+  // 3. Initialize LoRa receiver (Ra-02 SX1278) - CRITICAL PRIORITY: must start before network
+  Serial.println(F("[RECEIVER] Initializing LoRa Radio (433MHz)..."));
+  _loraOk = loraRxInit();
+  if (!_loraOk) {
+    Serial.println(F("[RECEIVER] [ERROR] LoRa init failed! Check SPI wiring on GPIOs 8, 9, 10, 11, 12, 13."));
+    neopixelSetState(NEO_RX_ERROR);
+  } else {
+    Serial.println(F("[RECEIVER] [OK] LoRa receiver active and listening on 433MHz"));
+  }
+
+  // 4. Initialize WiFi (non-blocking captive portal or saved network)
   Serial.println(F("[RECEIVER] Initializing WiFi..."));
   wifiManagerInit();
 
-  // Initialize LoRa receiver
-  _loraOk = loraRxInit();
-  if (!_loraOk) {
-    Serial.println(F("[RECEIVER] [ERROR] LoRa init failed! Cannot receive packets."));
-  }
-
-  // Initialize local queue (LittleFS-backed retry buffer)
+  // 5. Initialize local queue (LittleFS-backed retry buffer)
   localQueueInit();
 
-  // Initialize HTTP upload client
+  // 6. Initialize HTTP upload client
   httpUploadInit();
 
-  Serial.println(F("\n[RECEIVER] Boot complete"));
+  Serial.println(F("\n[RECEIVER] Base station boot complete"));
   Serial.printf("[RECEIVER] WiFi: %s | LoRa: %s | Queue: %d pending\n",
                 wifiIsConnected() ? "Connected" : "Not connected",
-                _loraOk ? "OK" : "FAILED",
+                _loraOk ? "READY" : "FAILED",
                 localQueueCount());
 
   if (wifiIsConnected()) {
-    Serial.print(F("[RECEIVER] IP: "));
+    Serial.print(F("[RECEIVER] Station IP: "));
     Serial.println(wifiGetIP());
-    Serial.printf("[RECEIVER] Backend: %s\n", BACKEND_URL);
+    Serial.printf("[RECEIVER] Target Backend: %s\n", BACKEND_URL);
+  } else if (wifiGetState() == WIFI_AP_MODE) {
+    Serial.printf("[RECEIVER] Captive Portal AP active: Connect to '%s' (IP: 192.168.4.1)\n", WIFI_AP_SSID);
   }
 }
 
 // ── Main Loop ───────────────────────────────────────────────────────────────
 
 void loop() {
+  uint32_t now = millis();
+
   // 1. WiFi connection management (captive portal + auto-reconnect)
   wifiManagerUpdate();
 
-  // 2. Check for incoming LoRa packets
+  // 2. Check for incoming LoRa packets from wearable
   if (_loraOk) {
     loraRxUpdate();
   }
@@ -127,9 +136,35 @@ void loop() {
   // 3. Retry queued uploads when WiFi is available
   localQueueUpdate();
 
-  // 4. Update status LED
+  // 4. Update status visual feedback
   _updateStatusLED();
 
-  // Small delay to prevent watchdog issues
+  // Update onboard NeoPixel state machine (unless in active alert or error)
+  if (neopixelGetState() != NEO_RX_ALERT && neopixelGetState() != NEO_RX_ERROR) {
+    WifiState ws = wifiGetState();
+    if (ws == WIFI_CONNECTED) {
+      neopixelSetState(NEO_RX_ONLINE_IDLE);    // Breathing Green: Ready & Online
+    } else if (ws == WIFI_AP_MODE) {
+      neopixelSetState(NEO_RX_AP_MODE);        // Pulsing Amber: Captive Portal Active
+    } else if (ws == WIFI_CONNECTING) {
+      neopixelSetState(NEO_RX_CONNECTING);     // Pulsing Cyan: Connecting to WiFi
+    } else {
+      neopixelSetState(NEO_RX_OFFLINE_IDLE);   // Breathing Yellow: LoRa Listening (Offline Buffer Mode)
+    }
+  }
+  neopixelUpdate();
+
+  // 5. Periodic Heartbeat in Serial Monitor
+  if (now - _lastHeartbeatMs >= HEARTBEAT_INTERVAL_MS) {
+    _lastHeartbeatMs = now;
+    if (_loraOk) {
+      Serial.printf("[RECEIVER] Heartbeat: LoRa=LISTENING (433MHz) | WiFi=%s | IP=%s | Queue=%d\n",
+                    wifiIsConnected() ? "ONLINE" : "OFFLINE",
+                    wifiIsConnected() ? wifiGetIP().c_str() : "0.0.0.0",
+                    localQueueCount());
+    }
+  }
+
+  // Small delay to prevent watchdog starvation
   delay(5);
 }

@@ -14,16 +14,20 @@
 #define RAMS_RECEIVER_CONFIG_H
 
 // ── SPI — Ra-02 LoRa (SX1278) ──────────────────────────────────────────────
-// Same pin assignment as the wearable for hardware commonality.
+// Pin assignments for ESP32-S3 SuperMini (only GPIOs 1–13 available).
 #define LORA_NSS_PIN      10
 #define LORA_SCK_PIN      12
 #define LORA_MISO_PIN     13
 #define LORA_MOSI_PIN     11
-#define LORA_RST_PIN      14
-#define LORA_DIO0_PIN     16
+#define LORA_RST_PIN      9     // ESP32-S3 SuperMini pin (available: 1 to 13)
+#define LORA_DIO0_PIN     8     // ESP32-S3 SuperMini pin (available: 1 to 13)
 
-// ── Status LED ──────────────────────────────────────────────────────────────
-// Onboard LED if present, otherwise external LED on GPIO2.
+// ── NeoPixel — Onboard status RGB LED (WS2812B) ─────────────────────────────
+#define NEOPIXEL_PIN      48
+#define NEOPIXEL_COUNT    1
+
+// ── Legacy Status LED ───────────────────────────────────────────────────────
+// Optional external LED on GPIO2.
 #define STATUS_LED_PIN    2
 
 // ── Wi-Fi (Captive Portal Provisioning) ─────────────────────────────────────
@@ -34,11 +38,11 @@
 
 // ── Backend API ─────────────────────────────────────────────────────────────
 
-// --- OPTION A: Localhost Dev Server (uncomment for testing) ---
-// #define BACKEND_URL       "http://192.168.1.100:8888"
+// --- OPTION A: Desktop App LAN Bridge (Port 8888) ---
+#define BACKEND_URL       "http://192.168.123.7:8888"
 
 // --- OPTION B: Production Netlify ---
-#define BACKEND_URL       "https://road-accident-monitoring-system.netlify.app"
+//#define BACKEND_URL       "https://road-accident-monitoring-system.netlify.app"
 
 #define UPLOAD_ENDPOINT   "/api/upload"
 

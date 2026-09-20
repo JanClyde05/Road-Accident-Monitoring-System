@@ -250,7 +250,9 @@ fun RamsDashboardScreen(
                   fontSize = 9.sp,
                   fontWeight = if (isSelected) FontWeight.Black else FontWeight.Medium,
                   fontFamily = FontFamily.Monospace,
-                  letterSpacing = 0.5.sp
+                  letterSpacing = 0.5.sp,
+                  maxLines = 1,
+                  softWrap = false
                 )
               },
               colors = NavigationBarItemDefaults.colors(

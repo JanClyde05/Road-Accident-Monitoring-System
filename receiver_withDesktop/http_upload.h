@@ -18,4 +18,11 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
                      uint8_t battPct, float aMag,
                      const char* name, const char* photoUrl);
 
+// Upload a rider profile packet to the backend. Returns true on HTTP 200/201.
+// Sends full identification, vehicle, medical, and emergency contact data.
+bool httpUploadRiderProfile(const char* deviceToken,
+                            const char* riderName, const char* plate,
+                            const char* contact,   const char* blood,
+                            const char* category,  const char* emergencyPhone);
+
 #endif // RAMS_HTTP_UPLOAD_H

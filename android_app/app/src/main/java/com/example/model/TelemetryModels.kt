@@ -44,13 +44,14 @@ data class ImuData(
   val pitchDegrees: Float = -3.2f,
   val rollDegrees: Float = 8.5f,
   val yawDegrees: Float = 45.0f,
-  val temperatureCelsius: Float = 32.4f
+  val temperatureCelsius: Float = 32.4f,
+  val isShockSticky: Boolean = false
 ) {
   val aMag: Float
     get() = sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ)
 
   val isShockAlert: Boolean
-    get() = aMag > 2.8f
+    get() = isShockSticky || aMag > 2.2f
 }
 
 data class DeviceLinkStatus(

@@ -15,18 +15,27 @@
 bool loraTxInit();
 
 // Send a telemetry packet with current GPS position and battery level.
-bool loraSendTelemetry(const char* token, float lat, float lon, uint8_t battPct);
+bool loraSendTelemetry(const char* token, float lat, float lon, uint8_t battPct = 100);
 
-// Send an alert packet when the detection FSM confirms an event.
+// Send an alert packet when an accident / crash event occurs.
 bool loraSendAlert(const char* token, float lat, float lon, uint8_t eventType, float aMag);
 
-// Send a false-alarm packet when the user cancels an active alert.
+// Send a false-alarm packet when an active alert is cancelled.
 bool loraSendFalseAlarm(const char* token, float lat, float lon);
 
-// Send a test/simulation packet for demo purposes.
+// Send a test packet for bench verification.
 bool loraSendTest(const char* token, float lat, float lon);
 
-// Send a registration packet after setup-mode registration completes.
-bool loraSendRegister(const char* token, const char* name, const char* photoUrl);
+// Send a rider profile packet with full identification, vehicle, medical, emergency, and photo data.
+bool loraSendRiderProfile(const char* token, const char* name, const char* plate,
+                          const char* contact, const char* blood,
+                          const char* category, const char* emergencyPhone,
+                          const char* emergencyName = nullptr,
+                          const char* vehicleModel = nullptr,
+                          const char* allergies = nullptr,
+                          const char* photoUrl = nullptr);
+
+// Send a registration packet with display name and converted Google Drive photo URL
+bool loraSendRegister(const char* token, const char* name, const char* driveLinkConverted);
 
 #endif // RAMS_LORA_TX_H

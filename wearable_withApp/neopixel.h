@@ -1,7 +1,7 @@
 /*
  * Road Accident Monitoring System — NeoPixel Status LED
  * =======================================================
- * Onboard NeoPixel (GPIO48) status colors and SOS pattern.
+ * Onboard WS2812B RGB LED on ESP32-S3 SuperMini (GPIO48).
  */
 
 #ifndef RAMS_NEOPIXEL_H
@@ -11,17 +11,16 @@
 
 enum NeoPixelState : uint8_t {
   NEO_OFF,           // LED off
-  NEO_ARMED,         // Solid green — armed, all systems OK
-  NEO_GPS_ACQUIRING, // Pulsing yellow — waiting for GPS fix
-  NEO_ALERT,         // SOS flash pattern in red (3 short, 3 long, 3 short)
-  NEO_SETUP,         // Solid blue — setup mode active
-  NEO_CONNECTING,    // Pulsing cyan — connecting/registering
-  NEO_ERROR          // Solid red — initialization error
+  NEO_CONNECTING,    // Pulsing cyan — BLE advertising, waiting for phone
+  NEO_GPS_ACQUIRING, // Pulsing yellow — phone connected, waiting for GPS fix
+  NEO_ARMED,         // Solid green — armed, BLE connected & GPS valid
+  NEO_ALERT,         // Flashing red SOS pattern — active crash/shock alert
+  NEO_ERROR          // Solid red — hardware/LoRa error
 };
 
 void neopixelInit();
 void neopixelSetState(NeoPixelState state);
-void neopixelUpdate();  // Call every loop() iteration for animations
+void neopixelUpdate();
 void neopixelOff();
 
 #endif // RAMS_NEOPIXEL_H

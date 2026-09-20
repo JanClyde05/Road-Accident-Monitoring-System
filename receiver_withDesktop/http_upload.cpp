@@ -63,6 +63,12 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
   } else if (pType == "register") {
     if (name) doc["name"] = name;
     if (photoUrl) doc["driveLinkConverted"] = photoUrl;
+  } else if (pType == "user_type") {
+    if (name) {
+      doc["userType"] = name;
+      doc["vehicle"] = name;
+      doc["vehicleModel"] = name;
+    }
   }
 
   String jsonBody;
@@ -110,6 +116,70 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
         success = true;
       } else {
         Serial.printf("[HTTP] Upload failed! Code: %d\n", httpCode);
+      }
+      http.end();
+    }
+  }
+
+  return success;
+}
+
+bool httpUploadRiderProfile(const char* deviceToken,
+                            const char* riderName, const char* plate,
+                            const char* contact,   const char* blood,
+                            const char* category,  const char* emergencyPhone) {
+
+  String url = String(BACKEND_URL) + String(UPLOAD_ENDPOINT);
+  Serial.printf("[HTTP] Uploading rider_profile to %s\n", url.c_str());
+
+  // Build JSON body with field names matching desktop Program.cs BuildEventFromJsonOrForm()
+  JsonDocument doc;
+  doc["deviceToken"]            = deviceToken;
+  doc["packetType"]             = "rider_profile";
+  doc["timestamp"]              = millis();
+  if (riderName)       doc["riderName"]             = riderName;
+  if (plate)           doc["plateNumber"]            = plate;
+  if (contact)         doc["contactNumber"]          = contact;
+  if (blood)           doc["bloodType"]              = blood;
+  if (category) {
+    doc["vehicleModel"] = category;
+    doc["vehicle"]      = category;
+  }
+  if (emergencyPhone)  doc["emergencyContactPhone"]  = emergencyPhone;
+
+  String jsonBody;
+  serializeJson(doc, jsonBody);
+
+  // Send HTTPS POST (same transport logic as httpUploadEvent)
+  HTTPClient http;
+  http.setTimeout(HTTP_TIMEOUT_MS);
+  bool success = false;
+
+  if (url.startsWith("https://")) {
+    WiFiClientSecure secureClient;
+    secureClient.setInsecure();
+
+    if (http.begin(secureClient, url)) {
+      http.addHeader("Content-Type", "application/json");
+      int httpCode = http.POST(jsonBody);
+      if (httpCode == 200 || httpCode == 201) {
+        Serial.printf("[HTTP] Rider profile upload success! Code: %d\n", httpCode);
+        success = true;
+      } else {
+        Serial.printf("[HTTP] Rider profile upload failed! Code: %d\n", httpCode);
+      }
+      http.end();
+    }
+  } else {
+    WiFiClient plainClient;
+    if (http.begin(plainClient, url)) {
+      http.addHeader("Content-Type", "application/json");
+      int httpCode = http.POST(jsonBody);
+      if (httpCode == 200 || httpCode == 201) {
+        Serial.printf("[HTTP] Rider profile upload success! Code: %d\n", httpCode);
+        success = true;
+      } else {
+        Serial.printf("[HTTP] Rider profile upload failed! Code: %d\n", httpCode);
       }
       http.end();
     }

@@ -39,8 +39,8 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   // Phone Physical Hardware Sensors
   val phoneSensorEngine = PhoneSensorEngine(application.applicationContext, viewModelScope)
 
-  // Wearable Sync & Emergency Uplink Engine (WebSocket / TCP / Bluetooth)
-  val esp32SyncEngine = Esp32SyncEngine(viewModelScope)
+  // Wearable Sync & Emergency Uplink Engine (WebSocket / TCP / Bluetooth Classic & BLE)
+  val esp32SyncEngine = Esp32SyncEngine(viewModelScope, application.applicationContext)
 
   // Internal Fallback manager
   private val simulatedConnectionManager = Esp32ConnectionManager(viewModelScope)
@@ -172,6 +172,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   val discoveredWearables: StateFlow<List<BluetoothDevice>> = _discoveredWearables.asStateFlow()
 
   private var isReceiverRegistered = false
+  private var leScanCallback: android.bluetooth.le.ScanCallback? = null
   private var scanCycleCount = 0
 
   private fun sortWearables(devices: List<BluetoothDevice>): List<BluetoothDevice> {
@@ -342,8 +343,49 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       if (bluetoothAdapter?.isDiscovering == true) {
         bluetoothAdapter.cancelDiscovery()
       }
-      val started = bluetoothAdapter?.startDiscovery() ?: false
-      _isScanningBluetooth.value = started
+      val startedDiscovery = bluetoothAdapter?.startDiscovery() ?: false
+
+      // Also start BLE scanner for ESP32-S3 and other BLE peripherals
+      val leScanner = bluetoothAdapter?.bluetoothLeScanner
+      var startedBle = false
+      if (leScanner != null) {
+        if (leScanCallback == null) {
+          leScanCallback = object : android.bluetooth.le.ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: android.bluetooth.le.ScanResult?) {
+              result?.device?.let { device ->
+                val currentList = _discoveredWearables.value.toMutableList()
+                if (!currentList.any { it.address == device.address }) {
+                  currentList.add(device)
+                  _discoveredWearables.value = sortWearables(currentList)
+                }
+              }
+            }
+
+            override fun onBatchScanResults(results: MutableList<android.bluetooth.le.ScanResult>?) {
+              results?.forEach { result ->
+                result.device?.let { device ->
+                  val currentList = _discoveredWearables.value.toMutableList()
+                  if (!currentList.any { it.address == device.address }) {
+                    currentList.add(device)
+                    _discoveredWearables.value = sortWearables(currentList)
+                  }
+                }
+              }
+            }
+
+            override fun onScanFailed(errorCode: Int) {}
+          }
+        }
+        try {
+          val settings = android.bluetooth.le.ScanSettings.Builder()
+            .setScanMode(android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .build()
+          leScanner.startScan(null, settings, leScanCallback)
+          startedBle = true
+        } catch (_: Exception) {}
+      }
+
+      _isScanningBluetooth.value = startedDiscovery || startedBle
     } catch (e: Exception) {
       _isScanningBluetooth.value = false
     }
@@ -355,6 +397,11 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       scanCycleCount = 99
       if (bluetoothAdapter?.isDiscovering == true) {
         bluetoothAdapter.cancelDiscovery()
+      }
+      leScanCallback?.let { cb ->
+        try {
+          bluetoothAdapter?.bluetoothLeScanner?.stopScan(cb)
+        } catch (_: Exception) {}
       }
       _isScanningBluetooth.value = false
     } catch (_: Exception) {}
@@ -385,6 +432,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun connectWearableDevice(device: BluetoothDevice) {
+    stopBluetoothDiscovery()
     @SuppressLint("MissingPermission")
     val deviceName = try { device.name ?: TARGET_WEARABLE_NAME } catch (_: SecurityException) { TARGET_WEARABLE_NAME }
     connectBluetoothSync(device.address, deviceName)
@@ -453,6 +501,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun connectBluetoothSync(mac: String, name: String) {
+    stopBluetoothDiscovery()
     esp32SyncEngine.startBluetoothSync(
       mac = mac,
       name = name,

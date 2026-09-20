@@ -64,7 +64,7 @@ export interface EventData {
   deviceToken?: string;
   lat: number;
   lon: number;
-  type: 'alert' | 'test' | 'false_alarm' | 'telemetry' | string;
+  type: 'alert' | 'test' | 'false_alarm' | 'telemetry' | 'register' | 'rider_profile' | string;
   title: string;
   eventTypeName?: string;
   aMag?: number;
@@ -97,7 +97,7 @@ export type EventFilter = 'all' | 'audio' | 'telemetry' | 'alert' | 'test';
 export type ThemeMode = 'dark' | 'light';
 export type ViewDensity = 'comfortable' | 'compact';
 
-export function getMarkerColor(event: EventData): 'red' | 'amber' | 'green' | 'blue' {
+export function getMarkerColor(event: EventData): 'red' | 'amber' | 'green' | 'blue' | 'purple' {
   switch (event.type) {
     case 'alert':
       return 'red';
@@ -105,6 +105,9 @@ export function getMarkerColor(event: EventData): 'red' | 'amber' | 'green' | 'b
       return 'amber';
     case 'false_alarm':
       return 'green';
+    case 'register':
+    case 'rider_profile':
+      return 'purple';
     case 'telemetry':
       return 'blue';
     default:
@@ -120,6 +123,10 @@ export function getStatusLabel(event: EventData): string {
       return 'TEST PIN';
     case 'false_alarm':
       return 'FALSE ALARM';
+    case 'register':
+      return 'REGISTERED';
+    case 'rider_profile':
+      return 'PROFILE SYNC';
     case 'telemetry':
       return 'LIVE TRACKING';
     default:
@@ -139,4 +146,16 @@ export function formatTimestamp(iso: string | number): string {
   } catch {
     return String(iso);
   }
+}
+
+export function formatDirectDriveUrl(url?: string): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (trimmed === '' || trimmed === '/logo.png' || trimmed === '/logo.jpg') return trimmed;
+  if (trimmed.includes('lh3.googleusercontent.com')) return trimmed;
+  const match = trimmed.match(/(?:\/d\/|id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return trimmed;
 }

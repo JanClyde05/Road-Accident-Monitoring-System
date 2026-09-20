@@ -34,7 +34,8 @@ class PhoneSensorEngine(
   companion object {
     private const val GRAVITY_STANDARD = 9.80665f
     private const val RAD_TO_DEG = (180.0 / PI).toFloat()
-    private const val CRASH_THRESHOLD_G = 3.2f
+    private const val CRASH_THRESHOLD_G = 2.5f
+    private const val STICKY_SHOCK_DURATION_MS = 2000L
   }
 
   private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
@@ -70,6 +71,7 @@ class PhoneSensorEngine(
   val crashTriggerFlow: SharedFlow<Pair<GpsData, ImuData>> = _crashTriggerFlow.asSharedFlow()
 
   // Sensor reading buffers
+  private var lastShockTimestampMs = 0L
   private var lastAccelX = 0f
   private var lastAccelY = 0f
   private var lastAccelZ = 1f
@@ -238,18 +240,26 @@ class PhoneSensorEngine(
         val rollRad = atan2(-lastAccelX.toDouble(), lastAccelZ.toDouble()).toFloat()
 
         val aMag = sqrt(lastAccelX * lastAccelX + lastAccelY * lastAccelY + lastAccelZ * lastAccelZ)
+        val now = System.currentTimeMillis()
+
+        // Check for sudden high impact accident shock (> CRASH_THRESHOLD_G)
+        val isShock = aMag > CRASH_THRESHOLD_G
+        if (isShock) {
+          lastShockTimestampMs = now
+        }
+        val isSticky = (now - lastShockTimestampMs) < STICKY_SHOCK_DURATION_MS
 
         val updatedImu = _phoneImuState.value.copy(
           accelX = lastAccelX,
           accelY = lastAccelY,
           accelZ = lastAccelZ,
           pitchDegrees = if (!hasGravity) pitchRad * RAD_TO_DEG else _phoneImuState.value.pitchDegrees,
-          rollDegrees = if (!hasGravity) rollRad * RAD_TO_DEG else _phoneImuState.value.rollDegrees
+          rollDegrees = if (!hasGravity) rollRad * RAD_TO_DEG else _phoneImuState.value.rollDegrees,
+          isShockSticky = isSticky
         )
         _phoneImuState.value = updatedImu
 
-        // Check for sudden high impact accident shock (> CRASH_THRESHOLD_G)
-        if (aMag > CRASH_THRESHOLD_G) {
+        if (isShock) {
           scope.launch {
             _crashTriggerFlow.emit(Pair(_phoneGpsState.value, updatedImu))
           }
@@ -389,6 +399,7 @@ class PhoneSensorEngine(
 
   fun injectTestCrashShock() {
     scope.launch {
+      lastShockTimestampMs = System.currentTimeMillis()
       val shockImu = ImuData(
         accelX = 3.92f,
         accelY = -4.15f,
@@ -398,7 +409,8 @@ class PhoneSensorEngine(
         gyroZ = 75.0f,
         pitchDegrees = -42.0f,
         rollDegrees = 75.0f,
-        yawDegrees = 115.0f
+        yawDegrees = 115.0f,
+        isShockSticky = true
       )
       _phoneImuState.value = shockImu
       val curGps = _phoneGpsState.value.copy(speedKmh = 0.0f)
