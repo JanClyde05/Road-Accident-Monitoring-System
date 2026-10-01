@@ -127,7 +127,11 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
 bool httpUploadRiderProfile(const char* deviceToken,
                             const char* riderName, const char* plate,
                             const char* contact,   const char* blood,
-                            const char* category,  const char* emergencyPhone) {
+                            const char* category,  const char* emergencyPhone,
+                            const char* emergencyContactName,
+                            const char* vehicleModel,
+                            const char* allergies,
+                            const char* photoUrl) {
 
   String url = String(BACKEND_URL) + String(UPLOAD_ENDPOINT);
   Serial.printf("[HTTP] Uploading rider_profile to %s\n", url.c_str());
@@ -137,15 +141,23 @@ bool httpUploadRiderProfile(const char* deviceToken,
   doc["deviceToken"]            = deviceToken;
   doc["packetType"]             = "rider_profile";
   doc["timestamp"]              = millis();
-  if (riderName)       doc["riderName"]             = riderName;
-  if (plate)           doc["plateNumber"]            = plate;
-  if (contact)         doc["contactNumber"]          = contact;
-  if (blood)           doc["bloodType"]              = blood;
+  if (riderName)              doc["riderName"]             = riderName;
+  if (plate)                  doc["plateNumber"]            = plate;
+  if (contact)                doc["contactNumber"]          = contact;
+  if (blood)                  doc["bloodType"]              = blood;
   if (category) {
     doc["vehicleModel"] = category;
     doc["vehicle"]      = category;
   }
-  if (emergencyPhone)  doc["emergencyContactPhone"]  = emergencyPhone;
+  if (emergencyPhone)         doc["emergencyContactPhone"]  = emergencyPhone;
+  if (emergencyContactName && strlen(emergencyContactName) > 0)
+                              doc["emergencyContactName"]   = emergencyContactName;
+  if (vehicleModel && strlen(vehicleModel) > 0)
+                              doc["vehicleModel"]           = vehicleModel;
+  if (allergies && strlen(allergies) > 0)
+                              doc["allergies"]              = allergies;
+  if (photoUrl && strlen(photoUrl) > 0)
+                              doc["photoUrl"]               = photoUrl;
 
   String jsonBody;
   serializeJson(doc, jsonBody);

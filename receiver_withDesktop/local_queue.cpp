@@ -114,7 +114,11 @@ bool localQueueAdd(const char* deviceToken, const char* packetType,
 bool localQueueAddRiderProfile(const char* deviceToken, const char* name,
                               const char* plate, const char* contact,
                               const char* blood, const char* category,
-                              const char* emergencyPhone) {
+                              const char* emergencyPhone,
+                              const char* emergencyContactName,
+                              const char* vehicleModel,
+                              const char* allergies,
+                              const char* photoUrl) {
   if (!_fsReady) return false;
 
   // Find an empty slot
@@ -149,6 +153,10 @@ bool localQueueAddRiderProfile(const char* deviceToken, const char* name,
   doc["blood"] = blood;
   doc["category"] = category;
   doc["emergencyPhone"] = emergencyPhone;
+  if (emergencyContactName && strlen(emergencyContactName) > 0) doc["emergencyContactName"] = emergencyContactName;
+  if (vehicleModel && strlen(vehicleModel) > 0) doc["vehicleModel"] = vehicleModel;
+  if (allergies && strlen(allergies) > 0) doc["allergies"] = allergies;
+  if (photoUrl && strlen(photoUrl) > 0) doc["photoUrl"] = photoUrl;
   doc["timestamp"] = millis();
 
   // Write to file
@@ -201,7 +209,12 @@ void localQueueUpdate() {
       const char* blood = doc["blood"] | "";
       const char* category = doc["category"] | "";
       const char* emergencyPhone = doc["emergencyPhone"] | "";
-      success = httpUploadRiderProfile(token, name, plate, contact, blood, category, emergencyPhone);
+      const char* emerName = doc["emergencyContactName"] | "";
+      const char* vehicle = doc["vehicleModel"] | "";
+      const char* allergies = doc["allergies"] | "";
+      const char* photo = doc["photoUrl"] | "";
+      success = httpUploadRiderProfile(token, name, plate, contact, blood, category, emergencyPhone,
+                                      emerName, vehicle, allergies, photo);
     } else {
       // Extract fields and attempt upload for normal event
       float lat = doc["lat"] | 0.0f;

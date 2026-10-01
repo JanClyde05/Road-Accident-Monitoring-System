@@ -24,6 +24,9 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
   const statusLabel = getStatusLabel(event);
 
   const getBadgeStyle = () => {
+    if (event.status === 'RESCUED' || event.status === 'rescued') {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-900';
+    }
     switch (event.type) {
       case 'alert':
         return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-900';

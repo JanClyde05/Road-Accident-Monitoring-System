@@ -23,6 +23,10 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
 bool httpUploadRiderProfile(const char* deviceToken,
                             const char* riderName, const char* plate,
                             const char* contact,   const char* blood,
-                            const char* category,  const char* emergencyPhone);
+                            const char* category,  const char* emergencyPhone,
+                            const char* emergencyContactName = nullptr,
+                            const char* vehicleModel = nullptr,
+                            const char* allergies = nullptr,
+                            const char* photoUrl = nullptr);
 
 #endif // RAMS_HTTP_UPLOAD_H

@@ -321,10 +321,12 @@ bool loraRxUpdate() {
                     token, rName, rPlate, rContact, rBlood, rCategory, rEmergency, rEmerName, rVehicle, rAllergies, rPhoto, rssi, snr, millis());
 
       if (wifiIsConnected()) {
-        uploaded = httpUploadRiderProfile(token, rName, rPlate, rContact, rBlood, rCategory, rEmergency);
+        uploaded = httpUploadRiderProfile(token, rName, rPlate, rContact, rBlood, rCategory, rEmergency,
+                                          rEmerName, rVehicle, rAllergies, rPhoto);
       }
       if (!uploaded) {
-        localQueueAddRiderProfile(token, rName, rPlate, rContact, rBlood, rCategory, rEmergency);
+        localQueueAddRiderProfile(token, rName, rPlate, rContact, rBlood, rCategory, rEmergency,
+                                  rEmerName, rVehicle, rAllergies, rPhoto);
       }
       break;
     }

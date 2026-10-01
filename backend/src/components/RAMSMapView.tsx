@@ -18,9 +18,10 @@ interface MapViewProps {
 }
 
 function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivIcon {
-  const isAlert = event.type === 'alert';
+  const isRescued = event.status === 'RESCUED' || event.status === 'rescued';
+  const isAlert = event.type === 'alert' && !isRescued;
   const isTest = event.type === 'test';
-  const isFalseAlarm = event.type === 'false_alarm';
+  const isFalseAlarm = event.type === 'false_alarm' || isRescued;
 
   let pinColor = '#3b82f6';
   let pinShadow = '0 6px 14px rgba(59, 130, 246, 0.45)';

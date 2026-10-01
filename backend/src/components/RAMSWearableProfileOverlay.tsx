@@ -38,6 +38,12 @@ export default function RAMSWearableProfileOverlay({
   const [copiedDispatch, setCopiedDispatch] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [markingRescued, setMarkingRescued] = useState(false);
+  const [isRescued, setIsRescued] = useState(event?.status === 'RESCUED' || event?.status === 'rescued');
+
+  useEffect(() => {
+    setIsRescued(event?.status === 'RESCUED' || event?.status === 'rescued');
+  }, [event]);
 
   // Close on Escape key
   useEffect(() => {
@@ -53,22 +59,25 @@ export default function RAMSWearableProfileOverlay({
   if (!isOpen || !event) return null;
 
   const riderName = event.riderName || event.deviceName || 'Registered Wearable Unit';
-  const role = event.riderRole || (event.type === 'alert' ? 'Active Motorist / Courier' : 'Commuter Safety Wearable');
+  const role = event.riderRole || 'Registered Highway User';
   const token = event.deviceToken || event.id.substring(0, 8).toUpperCase();
-  const phone = event.contactNumber || '+63 917 555 2381';
-  const emergencyName = event.emergencyContactName || 'Elena Dela Cruz';
-  const emergencyPhone = event.emergencyContactPhone || '+63 928 444 8920';
-  const emergencyRel = event.emergencyRelationship || 'Next of Kin / Spouse';
-  const bloodType = event.bloodType || 'O+';
-  const allergies = event.allergies || 'Penicillin, NSAIDs (Alert First Responders)';
-  const vehicle = event.vehicleModel || 'Yamaha Sniper 155cc';
-  const plate = event.plateNumber || 'NCR-8821';
-  const address = event.locationAddress || 'Maharlika Highway cor. Caritan Norte, Tuguegarao City';
-  const formFactor = event.formFactor || 'Belt Clip Wearable';
-  const firmware = event.firmware || 'v2.4.1 LoRa 433MHz';
-  const statusLabel = getStatusLabel(event);
+  const phone = event.contactNumber || 'Not Specified';
+  const emergencyName = event.emergencyContactName || 'None Listed';
+  const emergencyPhone = event.emergencyContactPhone || 'Not Specified';
+  const emergencyRel = event.emergencyRelationship || 'Emergency Contact';
+  const bloodType = event.bloodType || 'Not Specified';
+  const allergies = event.allergies || 'None Reported';
+  const vehicle = event.vehicleModel || 'Not Specified';
+  const plate = event.plateNumber || 'Not Specified';
+  const address = event.locationAddress || ((event.lat && event.lon && (event.lat !== 0 || event.lon !== 0)) ? `GPS Coordinates: ${event.lat.toFixed(5)}, ${event.lon.toFixed(5)}` : 'GPS Signal Unacquired');
+  const formFactor = event.formFactor || 'RAMS Wearable Unit';
+  const firmware = event.firmware || 'RAMS LoRa Telemetry';
+  const statusLabel = isRescued ? 'RESCUED / CLEARED' : getStatusLabel(event);
 
   const getStatusBadge = () => {
+    if (isRescued) {
+      return 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30';
+    }
     switch (event.type) {
       case 'alert':
         return 'bg-rose-600 text-white border-rose-500 shadow-rose-900/30';
@@ -78,6 +87,27 @@ export default function RAMSWearableProfileOverlay({
         return 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30';
       default:
         return 'bg-blue-600 text-white border-blue-500 shadow-blue-900/30';
+    }
+  };
+
+  const handleMarkRescued = async () => {
+    if (!event) return;
+    setMarkingRescued(true);
+    try {
+      const res = await fetch('/api/events/rescue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: event.id, deviceToken: event.deviceToken }),
+      });
+      if (res.ok) {
+        setIsRescued(true);
+        event.status = 'RESCUED';
+        window.dispatchEvent(new CustomEvent('rams-refresh-events'));
+      }
+    } catch (err) {
+      console.error('Failed to mark rescued:', err);
+    } finally {
+      setMarkingRescued(false);
     }
   };
 
@@ -348,22 +378,41 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
 
         {/* Action Toolbar Footer */}
         <div className="px-5 py-3.5 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-100/90 dark:bg-neutral-900/90 flex flex-wrap items-center justify-between gap-2">
-          <button
-            onClick={handleCopyDispatch}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-950 text-xs font-bold font-mono uppercase tracking-wider transition-colors shadow-xs"
-          >
-            {copiedDispatch ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-400 dark:text-emerald-600" />
-                <span>Copied Dispatch Info!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Copy EMT Dispatch Text</span>
-              </>
+          <div className="flex flex-wrap items-center gap-2 flex-1 sm:flex-none">
+            {/* Mark Rescued Clearance Button */}
+            {event.type === 'alert' && (
+              <button
+                onClick={handleMarkRescued}
+                disabled={isRescued || markingRescued}
+                className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all shadow-xs ${
+                  isRescued
+                    ? 'bg-emerald-600/90 text-white border border-emerald-500 cursor-default'
+                    : 'bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-500 cursor-pointer active:scale-95'
+                }`}
+                title={isRescued ? 'Emergency incident cleared' : 'Mark this accident incident as resolved and rescued'}
+              >
+                <Check className="w-3.5 h-3.5 text-white" />
+                <span>{isRescued ? 'Incident Rescued' : (markingRescued ? 'Clearing...' : 'Mark Rescued')}</span>
+              </button>
             )}
-          </button>
+
+            <button
+              onClick={handleCopyDispatch}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-950 text-xs font-bold font-mono uppercase tracking-wider transition-colors shadow-xs"
+            >
+              {copiedDispatch ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400 dark:text-emerald-600" />
+                  <span>Copied Dispatch Info!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Copy EMT Dispatch Text</span>
+                </>
+              )}
+            </button>
+          </div>
 
           <button
             onClick={onClose}

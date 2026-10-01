@@ -425,7 +425,10 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       plateNumber = currentRider.plateNumber,
       deviceToken = currentRider.token,
       vehicleModel = currentRider.vehicleModel,
-      locationAddress = gpsState.value.locationAddress.ifBlank { "Maharlika Highway, Tuguegarao City" },
+      locationAddress = gpsState.value.locationAddress.ifBlank {
+        if (gpsState.value.hasFix) "GPS: %.5f, %.5f".format(gpsState.value.latitude, gpsState.value.longitude)
+        else "Location Pending (GPS Searching)"
+      },
       notes = "False alarm signal cancelled by rider via mobile app. Wearable emergency status cleared."
     )
     _events.value = listOf(cancelEvent) + _events.value
@@ -454,7 +457,10 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       plateNumber = currentRider.plateNumber,
       deviceToken = currentRider.token,
       vehicleModel = currentRider.vehicleModel,
-      locationAddress = "Maharlika Highway cor. Caritan Norte, Tuguegarao City",
+      locationAddress = gps.locationAddress.ifBlank {
+        if (gps.hasFix) "GPS: %.5f, %.5f".format(gps.latitude, gps.longitude)
+        else "Location Pending (GPS Searching)"
+      },
       notes = "$note: Peak ${imu.aMag} G shock. Device Token: ${currentRider.token}. Dispatched to Rescue Network via Safety Wearable."
     )
     _events.value = listOf(newAlert) + _events.value

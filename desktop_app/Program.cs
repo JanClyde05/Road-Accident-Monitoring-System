@@ -159,20 +159,56 @@ namespace RamsRescuerDesktop
             }
             catch { }
 
+            // Attempt to also bind HttpListener on LAN IPs so receiver ESP32 can reach /api/upload directly
+            // This requires either admin rights or an existing URL ACL reservation; gracefully skip if it fails
+            foreach (string lanIp in _localLanIPs)
+            {
+                try
+                {
+                    _listener.Prefixes.Add(string.Format("http://{0}:{1}/", lanIp, port));
+                }
+                catch { }
+            }
+
+            // Also try wildcard '+' prefix (requires admin / URL ACL) as fallback for any-interface binding
+            try
+            {
+                _listener.Prefixes.Add(string.Format("http://+:{0}/", port));
+            }
+            catch { }
+
             try
             {
                 _listener.Start();
                 _listener.BeginGetContext(OnRequest, null);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show(
-                    "Failed to start RAMS Local Operations Server:\n" + ex.Message,
-                    "RAMS Rescuer Operations - Error",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Error
-                );
-                Environment.Exit(1);
+                // If wildcard or LAN prefix causes Access Denied, fall back to loopback only
+                try
+                {
+                    _listener.Close();
+                }
+                catch { }
+
+                _listener = new HttpListener();
+                _listener.Prefixes.Add(string.Format("http://127.0.0.1:{0}/", port));
+                _listener.Prefixes.Add(string.Format("http://localhost:{0}/", port));
+                try
+                {
+                    _listener.Start();
+                    _listener.BeginGetContext(OnRequest, null);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(
+                        "Failed to start RAMS Local Operations Server:\n" + ex.Message,
+                        "RAMS Rescuer Operations - Error",
+                        System.Windows.Forms.MessageBoxButtons.OK,
+                        System.Windows.Forms.MessageBoxIcon.Error
+                    );
+                    Environment.Exit(1);
+                }
             }
         }
 
@@ -569,8 +605,8 @@ namespace RamsRescuerDesktop
                 using (client)
                 using (NetworkStream stream = client.GetStream())
                 {
-                    stream.ReadTimeout = 4000;
-                    stream.WriteTimeout = 4000;
+                    stream.ReadTimeout = 5000;
+                    stream.WriteTimeout = 5000;
                     byte[] buffer = new byte[8192];
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead > 0)
@@ -593,7 +629,7 @@ namespace RamsRescuerDesktop
                                     if (int.TryParse(clStr, out contentLength))
                                     {
                                         int bodyBytesRead = Encoding.UTF8.GetByteCount(body);
-                                        while (bodyBytesRead < contentLength && stream.DataAvailable)
+                                        while (bodyBytesRead < contentLength)
                                         {
                                             int readMore = stream.Read(buffer, 0, Math.Min(buffer.Length, contentLength - bodyBytesRead));
                                             if (readMore <= 0) break;
@@ -606,16 +642,22 @@ namespace RamsRescuerDesktop
 
                             if (req.IndexOf("POST", StringComparison.OrdinalIgnoreCase) >= 0 && !string.IsNullOrEmpty(body.Trim()))
                             {
+                                _lastActivity = DateTime.UtcNow;
+                                Console.WriteLine("[LAN-BRIDGE] Ingested packet from receiver: {0} chars", body.Length);
                                 ProcessIncomingPayload(body, "RAMS-ALERT-");
                             }
                         }
 
-                        byte[] resp = Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: 15\r\n\r\n{\"status\":\"OK\"}");
+                        byte[] resp = Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nConnection: close\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: 15\r\n\r\n{\"status\":\"OK\"}");
                         stream.Write(resp, 0, resp.Length);
+                        stream.Flush();
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[LAN-BRIDGE] Client error: {0}", ex.Message);
+            }
         }
 
         #endregion
@@ -752,6 +794,14 @@ namespace RamsRescuerDesktop
                 return;
             }
 
+            // Route: POST /api/events/rescue or POST /api/rescue (Clearance protocol)
+            if ((rawUrl.Equals("/api/events/rescue", StringComparison.OrdinalIgnoreCase) || rawUrl.Equals("/api/rescue", StringComparison.OrdinalIgnoreCase)) 
+                && req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                HandlePostRescue(req, res);
+                return;
+            }
+
             // Route: GET /api/registrations
             if (rawUrl.Equals("/api/registrations", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
             {
@@ -796,6 +846,62 @@ namespace RamsRescuerDesktop
             res.ContentType = "application/json; charset=utf-8";
             res.StatusCode = 200;
             string responseMsg = "{\"status\":\"OK\",\"message\":\"Payload processed successfully\"}";
+            byte[] responseBytes = Encoding.UTF8.GetBytes(responseMsg);
+            res.OutputStream.Write(responseBytes, 0, responseBytes.Length);
+            res.Close();
+        }
+
+        private static void HandlePostRescue(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            string body = "";
+            using (var reader = new StreamReader(req.InputStream, req.ContentEncoding))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            string eventId = ExtractField(body, "id") ?? ExtractField(body, "eventId") ?? req.QueryString["id"] ?? "";
+            string token = ExtractField(body, "deviceToken") ?? ExtractField(body, "token") ?? req.QueryString["token"] ?? "";
+
+            bool found = false;
+            lock (_lock)
+            {
+                for (int i = 0; i < _eventsJsonList.Count; i++)
+                {
+                    string ev = _eventsJsonList[i];
+                    string curId = ExtractField(ev, "id");
+                    string curToken = ExtractField(ev, "deviceToken");
+
+                    bool match = (!string.IsNullOrEmpty(eventId) && eventId.Equals(curId, StringComparison.OrdinalIgnoreCase)) ||
+                                 (!string.IsNullOrEmpty(token) && token.Equals(curToken, StringComparison.OrdinalIgnoreCase));
+
+                    if (match)
+                    {
+                        found = true;
+                        string updated = ev;
+                        if (updated.Contains("\"status\":"))
+                        {
+                            updated = System.Text.RegularExpressions.Regex.Replace(
+                                updated,
+                                "\"status\":\\s*\"[^\"]*\"",
+                                "\"status\":\"RESCUED\""
+                            );
+                        }
+                        else
+                        {
+                            updated = updated.TrimEnd('}') + ",\"status\":\"RESCUED\"}";
+                        }
+                        _eventsJsonList[i] = updated;
+                    }
+                }
+                if (found)
+                {
+                    SaveIncidents();
+                }
+            }
+
+            res.ContentType = "application/json; charset=utf-8";
+            res.StatusCode = 200;
+            string responseMsg = found ? "{\"status\":\"OK\",\"message\":\"Incident marked as RESCUED\"}" : "{\"status\":\"NOT_FOUND\",\"message\":\"No incident found matching identifier\"}";
             byte[] responseBytes = Encoding.UTF8.GetBytes(responseMsg);
             res.OutputStream.Write(responseBytes, 0, responseBytes.Length);
             res.Close();

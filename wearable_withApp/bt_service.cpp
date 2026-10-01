@@ -49,13 +49,23 @@ class RamsRxCallbacks : public BLECharacteristicCallbacks {
     if (chunk.length() > 0) {
       _rxBuffer += chunk;
 
-      // Process any complete messages terminated by newline or braces
+      // Resynchronize: If buffer has leading garbage before '{', strip it
+      int firstBrace = _rxBuffer.indexOf('{');
+      if (firstBrace > 0) {
+        _rxBuffer = _rxBuffer.substring(firstBrace);
+      }
+
+      // Process any complete messages terminated by newline
       int newlineIdx = _rxBuffer.indexOf('\n');
       while (newlineIdx >= 0) {
         String completeMsg = _rxBuffer.substring(0, newlineIdx);
         _rxBuffer = _rxBuffer.substring(newlineIdx + 1);
         completeMsg.trim();
         if (completeMsg.length() > 0) {
+          int bIdx = completeMsg.indexOf('{');
+          if (bIdx > 0) {
+            completeMsg = completeMsg.substring(bIdx);
+          }
           Serial.printf("[BT-RX] Ingested message (%d bytes)\n", completeMsg.length());
           _processIncomingMessage(completeMsg);
         }
@@ -70,7 +80,7 @@ class RamsRxCallbacks : public BLECharacteristicCallbacks {
       }
 
       // Safety: clear buffer if it grows too large without valid delimiter
-      if (_rxBuffer.length() > 1024) {
+      if (_rxBuffer.length() > 2048) {
         _rxBuffer = "";
       }
     }
@@ -104,7 +114,7 @@ static void _processIncomingMessage(const String& msg) {
 
   // 2. Phone GPS & IMU Telemetry Stream / Emergency Alert
   if (msg.indexOf("\"lat\":") >= 0 || msg.indexOf("TELEMETRY") >= 0 || msg.indexOf("EMERGENCY") >= 0 || msg.indexOf("\"type\":\"TEL\"") >= 0) {
-    StaticJsonDocument<1024> doc;
+    DynamicJsonDocument doc(3072);
     DeserializationError err = deserializeJson(doc, msg);
     if (!err) {
       // Sync rider token from mobile app
@@ -225,7 +235,7 @@ static void _processIncomingMessage(const String& msg) {
         loraSendAlert(_deviceToken, lat, lon, PKT_ALERT, amag);
       }
     } else {
-      Serial.printf("[BT] JSON parse error: %s\n", err.c_str());
+      Serial.printf("[BT] JSON parse error: %s (len=%d: %.80s)\n", err.c_str(), msg.length(), msg.c_str());
     }
     return;
   }

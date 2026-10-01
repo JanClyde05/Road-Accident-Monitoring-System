@@ -60,6 +60,7 @@ export type MarkerColor = 'red' | 'amber' | 'green' | 'blue';
 export type ThemeMode = 'dark' | 'light';
 
 export function getMarkerColor(event: EventData): MarkerColor {
+  if (event.status === 'RESCUED' || event.status === 'rescued') return 'green';
   switch (event.type) {
     case 'alert':       return 'red';
     case 'test':        return 'amber';
@@ -70,6 +71,7 @@ export function getMarkerColor(event: EventData): MarkerColor {
 }
 
 export function getStatusLabel(event: EventData): string {
+  if (event.status === 'RESCUED' || event.status === 'rescued') return 'RESCUED / CLEARED';
   switch (event.type) {
     case 'alert':       return 'CRASH ALERT';
     case 'test':        return 'TEST PIN';

@@ -386,7 +386,9 @@ fun SettingsScreen(
                 value = riderName,
                 onValueChange = {
                   riderName = it
-                  generatedToken = RiderProfile.generateFriendlyToken(riderName, selectedCategory)
+                  if (generatedToken.isBlank()) {
+                    generatedToken = RiderProfile.generateFriendlyToken(riderName, selectedCategory)
+                  }
                 },
                 label = { Text("Full Name", fontSize = 12.sp) },
                 placeholder = { Text("Input your name here", color = Color(0xFF71717A), fontSize = 13.sp) },

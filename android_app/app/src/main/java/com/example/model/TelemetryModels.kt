@@ -20,15 +20,15 @@ enum class IncidentType {
 }
 
 data class GpsData(
-  val latitude: Double = 17.613210,
-  val longitude: Double = 121.727040,
-  val altitudeMeters: Float = 28.4f,
-  val speedKmh: Float = 42.5f,
-  val headingDegrees: Float = 45.0f,
-  val satellites: Int = 11,
-  val accuracyMeters: Float = 1.8f,
-  val fixStatus: String = "3D FIX",
-  val locationAddress: String = "Maharlika Highway cor. Caritan Norte, Tuguegarao City"
+  val latitude: Double = 0.0,
+  val longitude: Double = 0.0,
+  val altitudeMeters: Float = 0.0f,
+  val speedKmh: Float = 0.0f,
+  val headingDegrees: Float = 0.0f,
+  val satellites: Int = 0,
+  val accuracyMeters: Float = 0.0f,
+  val fixStatus: String = "NO FIX",
+  val locationAddress: String = ""
 ) {
   val hasFix: Boolean
     get() = (latitude != 0.0 || longitude != 0.0) && fixStatus != "NO FIX" && fixStatus != "SEARCHING"

@@ -494,7 +494,7 @@ class Esp32SyncEngine(
 
   @SuppressLint("MissingPermission")
   private suspend fun writeBleBytes(gatt: BluetoothGatt, rxChar: BluetoothGattCharacteristic, bytes: ByteArray) {
-    val mtuPayload = (negotiatedMtu - 3).coerceIn(20, 240)
+    val mtuPayload = (negotiatedMtu - 3).coerceIn(20, 509)
     var offset = 0
     while (offset < bytes.size) {
       val chunkSize = Math.min(mtuPayload, bytes.size - offset)
@@ -508,7 +508,7 @@ class Esp32SyncEngine(
       }
       offset += chunkSize
       if (offset < bytes.size) {
-        delay(12L) // Inter-chunk pacing to avoid BLE buffer congestion
+        delay(25L) // Inter-chunk pacing to avoid BLE buffer congestion
       }
     }
   }

@@ -31,7 +31,10 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [events, filterType, searchQuery]);
 
-  const getBadgeClass = (type: string) => {
+  const getBadgeClass = (type: string, status?: string) => {
+    if (status === 'RESCUED' || status === 'rescued') {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-900';
+    }
     switch (type) {
       case 'alert':
         return 'bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-900';
@@ -123,6 +126,7 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center p-0.5 flex-shrink-0 overflow-hidden">
                       <img
+                        referrerPolicy="no-referrer"
                         src={event.photoUrl || "/logo.png"}
                         alt={event.deviceName || "RAMS Wearable"}
                         className="w-full h-full object-cover rounded-full"
@@ -148,7 +152,7 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
                   </div>
 
                   <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider border ${getBadgeClass(event.type)}`}>
+                    <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider border ${getBadgeClass(event.type, event.status)}`}>
                       {statusLabel}
                     </span>
                     {onOpenProfile && (

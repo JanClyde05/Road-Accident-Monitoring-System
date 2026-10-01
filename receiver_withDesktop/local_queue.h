@@ -28,7 +28,11 @@ bool    localQueueAdd(const char* deviceToken, const char* packetType,
 bool    localQueueAddRiderProfile(const char* deviceToken, const char* name,
                                  const char* plate, const char* contact,
                                  const char* blood, const char* category,
-                                 const char* emergencyPhone);
+                                 const char* emergencyPhone,
+                                 const char* emergencyContactName = nullptr,
+                                 const char* vehicleModel = nullptr,
+                                 const char* allergies = nullptr,
+                                 const char* photoUrl = nullptr);
 
 // Attempt to flush queued items. Call periodically in loop().
 void    localQueueUpdate();
