@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { EventData, getStatusLabel, formatTimestamp, formatDirectDriveUrl } from '../types';
+import React, { useState, useEffect, useMemo } from 'react';
+import { EventData, getStatusLabel, formatTimestamp, formatDirectDriveUrl, isEventFalseAlarm, isEventRescued, isEventActiveAlert } from '../types';
 import { 
   X, 
   UserCheck, 
@@ -10,6 +10,7 @@ import {
   MapPin, 
   Clock, 
   ShieldAlert, 
+  ShieldCheck,
   Copy, 
   Check, 
   ExternalLink, 
@@ -21,27 +22,38 @@ import {
   User,
   Edit3,
   Save,
+  Navigation,
+  History,
   Link as LinkIcon
 } from 'lucide-react';
 
 interface WearableProfileOverlayProps {
   event: EventData | null;
+  allEvents?: EventData[];
   isOpen: boolean;
   onClose: () => void;
   onProfileUpdated?: () => void;
+  onLocateIncident?: (event: EventData) => void;
 }
 
 export default function RAMSWearableProfileOverlay({
   event,
+  allEvents = [],
   isOpen,
   onClose,
-  onProfileUpdated
+  onProfileUpdated,
+  onLocateIncident
 }: WearableProfileOverlayProps) {
   const [copiedCoords, setCopiedCoords] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedDispatch, setCopiedDispatch] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [historyFilter, setHistoryFilter] = useState<'all' | 'alerts' | 'telemetry'>('all');
   
+  // Rescue & clearance action state
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  const [actionSuccessMsg, setActionSuccessMsg] = useState<string | null>(null);
+
   // Edit Profile Modal State
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
@@ -86,7 +98,39 @@ export default function RAMSWearableProfileOverlay({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, isEditing, onClose]);
 
+  // Compute full accident & incident history for this specific person
+  const personHistory = useMemo(() => {
+    if (!allEvents || !event) return [];
+    const token = (event.deviceToken || '').toLowerCase().trim();
+    const name = (event.riderName || '').toLowerCase().trim();
+    return allEvents
+      .filter((e) => {
+        if (e.type === 'test') return false;
+        const eToken = (e.deviceToken || '').toLowerCase().trim();
+        const eName = (e.riderName || '').toLowerCase().trim();
+        const tokenMatch = Boolean(token && eToken && (token === eToken || token.includes(eToken) || eToken.includes(token)));
+        const nameMatch = Boolean(name && eName && name === eName);
+        return tokenMatch || nameMatch;
+      })
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [allEvents, event]);
+
+  const filteredHistory = useMemo(() => {
+    if (historyFilter === 'alerts') {
+      return personHistory.filter((e) => e.type === 'alert' || isEventFalseAlarm(e));
+    } else if (historyFilter === 'telemetry') {
+      return personHistory.filter((e) => e.type === 'telemetry');
+    }
+    return personHistory;
+  }, [personHistory, historyFilter]);
+
   if (!isOpen || !event) return null;
+
+  // Crucial fix: Properly declare address variable to resolve ReferenceError crash
+  const address = event.locationAddress || 
+    ((Math.abs(event.lat) > 0.0001 || Math.abs(event.lon) > 0.0001) 
+      ? `GPS Coordinates: ${event.lat.toFixed(5)}°, ${event.lon.toFixed(5)}°` 
+      : 'GPS Signal Unacquired');
 
   const hasRealName = Boolean(event.riderName && 
     !event.riderName.startsWith('RAMS-') && 
@@ -105,12 +149,17 @@ export default function RAMSWearableProfileOverlay({
   const allergies = event.allergies || 'None';
   const vehicle = event.vehicleModel || 'Motorcycle';
   const plate = event.plateNumber || 'EMERGENCY';
-  const address = event.locationAddress || 'GPS Coordinate Location';
+  const isFa = isEventFalseAlarm(event);
+  const isRescued = isEventRescued(event);
+  const isAlert = isEventActiveAlert(event);
   const statusLabel = getStatusLabel(event);
 
   const directPhotoUrl = formatDirectDriveUrl(event.photoUrl);
 
   const getStatusBadge = () => {
+    if (isRescued || isFa) {
+      return 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30';
+    }
     switch (event.type) {
       case 'alert':
         return 'bg-rose-600 text-white border-rose-500 shadow-rose-900/30';
@@ -120,6 +169,53 @@ export default function RAMSWearableProfileOverlay({
         return 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30';
       default:
         return 'bg-blue-600 text-white border-blue-500 shadow-blue-900/30';
+    }
+  };
+
+  const handleMarkRescued = async () => {
+    if (!event) return;
+    setIsActionLoading(true);
+    try {
+      const res = await fetch('/api/events/rescue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: event.id, deviceToken: event.deviceToken || token })
+      });
+      if (!res.ok) {
+        await fetch('/api/rescue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: event.id, deviceToken: event.deviceToken || token })
+        });
+      }
+      setActionSuccessMsg('Incident marked as RESCUED!');
+      setTimeout(() => setActionSuccessMsg(null), 3000);
+      if (onProfileUpdated) onProfileUpdated();
+      window.dispatchEvent(new CustomEvent('rams-refresh-events'));
+    } catch (err) {
+      console.error('Failed to mark rescued:', err);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleMarkFalseAlarm = async () => {
+    if (!event) return;
+    setIsActionLoading(true);
+    try {
+      await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'false_alarm', deviceToken: event.deviceToken || token })
+      });
+      setActionSuccessMsg('Alert marked as FALSE ALARM');
+      setTimeout(() => setActionSuccessMsg(null), 3000);
+      if (onProfileUpdated) onProfileUpdated();
+      window.dispatchEvent(new CustomEvent('rams-refresh-events'));
+    } catch (err) {
+      console.error('Failed to mark false alarm:', err);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -373,6 +469,70 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
             </form>
           ) : null}
 
+          {/* Incident Clearance & Triage Action Banner */}
+          {isAlert && (
+            <div className="p-3.5 rounded-xl border border-rose-500/40 bg-rose-500/10 dark:bg-rose-950/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-xs animate-pulse">
+                  <ShieldAlert className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-rose-700 dark:text-rose-300">
+                    Active Emergency Collision Broadcast
+                  </h4>
+                  <p className="text-[10px] text-rose-600/80 dark:text-rose-400 font-mono">
+                    Wearable broadcasting live crash alert. Clear or triage once EMT team responds.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                <button
+                  type="button"
+                  disabled={isActionLoading}
+                  onClick={handleMarkRescued}
+                  className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 shadow-xs disabled:opacity-50"
+                  title="Mark incident as Rescued / Patient cleared"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>{isActionLoading ? 'Updating...' : 'Mark Rescued'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isActionLoading}
+                  onClick={handleMarkFalseAlarm}
+                  className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 text-xs font-mono font-bold uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 shadow-xs disabled:opacity-50"
+                  title="Cancel active alert as False Alarm"
+                >
+                  <span>False Alarm</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isRescued && (
+            <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 dark:bg-emerald-950/20 flex items-center gap-2.5 text-xs text-emerald-700 dark:text-emerald-300 font-mono">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span className="font-bold">INCIDENT RESOLVED:</span>
+              <span>Rider marked as RESCUED and secured by dispatch triage team.</span>
+            </div>
+          )}
+
+          {isFa && !isRescued && (
+            <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 dark:bg-emerald-950/20 flex items-center gap-2.5 text-xs text-emerald-700 dark:text-emerald-300 font-mono">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span className="font-bold">STAND DOWN:</span>
+              <span>Alert cancelled as FALSE ALARM via wearable device or dispatch.</span>
+            </div>
+          )}
+
+          {actionSuccessMsg && (
+            <div className="p-2.5 rounded-lg bg-emerald-600 text-white font-mono text-xs font-bold text-center animate-in fade-in">
+              ✓ {actionSuccessMsg}
+            </div>
+          )}
+
           {/* Section 1: User & Registration Identity Card */}
           <div className="flex flex-col sm:flex-row items-start gap-4 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/50">
             {/* User Photo */}
@@ -393,9 +553,9 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
               )}
               <span 
                 className={`absolute -bottom-1.5 -right-1.5 w-4 h-4 rounded-full border-2 border-white dark:border-neutral-900 flex items-center justify-center ${
-                  event.type === 'alert' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'
+                  (isFa || isRescued) ? 'bg-emerald-500' : (isAlert ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500')
                 }`}
-                title={event.type === 'alert' ? 'Emergency Collision' : 'Normal Operation'}
+                title={isFa ? 'Alert Cancelled (False Alarm)' : (isRescued ? 'Patient Rescued & Cleared' : (isAlert ? 'Emergency Collision' : 'Normal Operation'))}
               />
             </div>
 
@@ -515,6 +675,158 @@ TIMESTAMP: ${new Date(event.createdAt).toLocaleString('en-PH')}`;
                 Rider Contact: {phone}
               </div>
             </div>
+          </div>
+
+          {/* Section 2.5: Rider Accident & Incident History Timeline */}
+          <div className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/40 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-neutral-200 dark:border-neutral-800">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center border border-rose-500/20">
+                  <Activity className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                    Rider Incident & Accident History
+                  </h4>
+                  <span className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
+                    {personHistory.length} Recorded Timeline Events for {displayRiderName.split(' ')[0]}
+                  </span>
+                </div>
+              </div>
+
+              {/* History Sub-Filter Pills */}
+              <div className="flex items-center gap-1 bg-white dark:bg-neutral-950 p-1 rounded-lg border border-neutral-200 dark:border-neutral-800 text-[10px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => setHistoryFilter('all')}
+                  className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                    historyFilter === 'all'
+                      ? 'bg-neutral-900 dark:bg-neutral-800 text-white'
+                      : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
+                  }`}
+                >
+                  All ({personHistory.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHistoryFilter('alerts')}
+                  className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                    historyFilter === 'alerts'
+                      ? 'bg-rose-600 text-white'
+                      : 'text-neutral-500 hover:text-rose-500'
+                  }`}
+                >
+                  Accidents ({personHistory.filter(e => e.type === 'alert' || isEventFalseAlarm(e)).length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHistoryFilter('telemetry')}
+                  className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                    historyFilter === 'telemetry'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-neutral-500 hover:text-blue-500'
+                  }`}
+                >
+                  Pings ({personHistory.filter(e => e.type === 'telemetry').length})
+                </button>
+              </div>
+            </div>
+
+            {filteredHistory.length === 0 ? (
+              <div className="text-center py-6 text-xs text-neutral-500 font-mono">
+                No incident events match the selected filter.
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                {filteredHistory.map((item) => {
+                  const isItemFa = isEventFalseAlarm(item);
+                  const isItemRescued = isEventRescued(item);
+                  const isItemAlert = isEventActiveAlert(item);
+                  const isCurrent = item.id === event.id;
+
+                  return (
+                    <div
+                      key={item.id}
+                      className={`p-2.5 rounded-lg border transition-all text-xs relative ${
+                        isCurrent
+                          ? 'ring-1 ring-blue-500/50 bg-blue-50/20 dark:bg-blue-950/20 border-blue-400 dark:border-blue-800'
+                          : isItemAlert
+                          ? 'bg-rose-950/15 border-rose-800/40 hover:bg-rose-950/25'
+                          : (isItemRescued || isItemFa)
+                          ? 'bg-emerald-950/15 border-emerald-800/40 hover:bg-emerald-950/25'
+                          : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className={`w-2 h-2 rounded-full shrink-0 ${
+                            isItemAlert ? 'bg-rose-500 animate-pulse' : (isItemRescued || isItemFa) ? 'bg-emerald-500' : 'bg-sky-500'
+                          }`} />
+                          <span className="font-bold text-neutral-900 dark:text-neutral-100 truncate">
+                            {item.title || (isItemAlert ? 'Impact Collision Alert' : (isItemRescued ? 'Rescued Collision' : (isItemFa ? 'Impact False Alarm' : 'GPS Beacon')))}
+                          </span>
+                          {isCurrent && (
+                            <span className="px-1.5 py-0.2 rounded text-[8px] font-mono font-black uppercase bg-blue-600 text-white">
+                              CURRENT
+                            </span>
+                          )}
+                        </div>
+
+                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase shrink-0 border ${
+                          isItemAlert
+                            ? 'bg-rose-950/80 text-rose-300 border-rose-800/60'
+                            : isItemRescued
+                            ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60'
+                            : isItemFa
+                            ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60'
+                            : 'bg-neutral-800 text-neutral-300 border-neutral-700'
+                        }`}>
+                          {isItemAlert ? 'ACCIDENT ALERT' : isItemRescued ? 'RESCUED' : isItemFa ? 'FALSE ALARM' : 'TELEMETRY'}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-neutral-400" />
+                          {new Date(item.createdAt).toLocaleString('en-US', {
+                            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+                          })}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          {item.aMag !== undefined && item.aMag > 0 && (
+                            <span className="text-rose-500 font-bold flex items-center gap-0.5">
+                              <Activity className="w-3 h-3" />
+                              {item.aMag.toFixed(1)}g
+                            </span>
+                          )}
+                          {item.battPct !== undefined && item.battPct > 0 && (
+                            <span className="text-emerald-500 flex items-center gap-0.5">
+                              <Battery className="w-3 h-3" />
+                              {item.battPct}%
+                            </span>
+                          )}
+                          {item.lat && item.lon && (item.lat !== 0 || item.lon !== 0) && onLocateIncident && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onLocateIncident(item);
+                                onClose();
+                              }}
+                              className="px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 hover:bg-blue-600 hover:text-white text-neutral-700 dark:text-neutral-300 transition-colors flex items-center gap-1 font-bold"
+                              title="Focus this incident on map"
+                            >
+                              <Navigation className="w-2.5 h-2.5 text-blue-400" />
+                              LOCATE
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Section 3: Geolocation Coordinates & Nav */}

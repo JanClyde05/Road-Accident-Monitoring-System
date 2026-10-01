@@ -5,52 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>RAMS Receiver — WiFi Setup Portal Preview</title>
   <link rel="stylesheet" href="data/style.css">
-  <style>
-    /* Standalone preview overrides ensuring circular crop and zero layout shifts */
-    body {
-      background: #09090b;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .brand-logo-wrap {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
-      min-height: 40px;
-      border-radius: 50% !important;
-      overflow: hidden !important;
-      border: 1.5px solid #52525b;
-      background: #000;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1px;
-      box-sizing: border-box;
-      flex-shrink: 0;
-      clip-path: circle(50% at 50% 50%) !important;
-      -webkit-clip-path: circle(50% at 50% 50%) !important;
-    }
-    .brand-logo {
-      width: 100%;
-      height: 100%;
-      border-radius: 50% !important;
-      object-fit: cover !important;
-      display: block;
-      clip-path: circle(50% at 50% 50%) !important;
-      -webkit-clip-path: circle(50% at 50% 50%) !important;
-    }
-  </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
       <div class="brand-header">
         <div class="brand-logo-wrap">
-          <img src="data/logo.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='../Pictures/LOGO/LOGO.jpg'">
+          <img src="data/logo.jpg" class="brand-logo" alt="RAMS Logo" onError="this.src='data/logo.png'">
         </div>
         <h1>RAMS RECEIVER SETUP</h1>
       </div>
@@ -65,21 +26,33 @@
     <div class="section">
       <h2>Available Networks</h2>
       <div id="networks" class="network-list">
-        <div class="network-item" onclick="selectNetwork('Brgy-SanJose-CommandCenter')">
-          <span class="network-ssid">Brgy-SanJose-CommandCenter</span>
-          <span class="network-meta">-54dBm &nbsp; [SEC]</span>
+        <div class="net-item" onclick="selectNetwork('Brgy-SanJose-CommandCenter')">
+          <span class="net-name">Brgy-SanJose-CommandCenter</span>
+          <span class="net-meta">
+            <span class="signal-icon">▂▄▆█</span>
+            <span>-54dBm [SEC]</span>
+          </span>
         </div>
-        <div class="network-item" onclick="selectNetwork('RHU-Emergency-Uplink')">
-          <span class="network-ssid">RHU-Emergency-Uplink</span>
-          <span class="network-meta">-62dBm &nbsp; [SEC]</span>
+        <div class="net-item" onclick="selectNetwork('RHU-Emergency-Uplink')">
+          <span class="net-name">RHU-Emergency-Uplink</span>
+          <span class="net-meta">
+            <span class="signal-icon">▂▄▆░</span>
+            <span>-62dBm [SEC]</span>
+          </span>
         </div>
-        <div class="network-item" onclick="selectNetwork('MDRRMO-Rescue-Station')">
-          <span class="network-ssid">MDRRMO-Rescue-Station</span>
-          <span class="network-meta">-71dBm &nbsp; [SEC]</span>
+        <div class="net-item" onclick="selectNetwork('MDRRMO-Rescue-Station')">
+          <span class="net-name">MDRRMO-Rescue-Station</span>
+          <span class="net-meta">
+            <span class="signal-icon">▂▄░░</span>
+            <span>-71dBm [SEC]</span>
+          </span>
         </div>
-        <div class="network-item" onclick="selectNetwork('Barangay_Public_FreeWiFi')">
-          <span class="network-ssid">Barangay_Public_FreeWiFi</span>
-          <span class="network-meta">-86dBm &nbsp; [OPEN]</span>
+        <div class="net-item" onclick="selectNetwork('Barangay_Public_FreeWiFi')">
+          <span class="net-name">Barangay_Public_FreeWiFi</span>
+          <span class="net-meta">
+            <span class="signal-icon">▂░░░</span>
+            <span>-86dBm [OPEN]</span>
+          </span>
         </div>
       </div>
       <button class="btn btn-outline" onclick="rescan()">
@@ -131,6 +104,12 @@
     function selectNetwork(name) {
       document.getElementById('ssid').value = name;
       document.getElementById('pass').focus();
+
+      // Highlight selection
+      var items = document.querySelectorAll('.net-item');
+      items.forEach(function(el) {
+        el.classList.toggle('selected', el.querySelector('.net-name').textContent.trim() === name);
+      });
     }
     function togglePass() {
       var p = document.getElementById('pass');
@@ -140,7 +119,6 @@
       var box = document.getElementById('msgBox');
       box.className = 'msg info';
       box.textContent = 'Scanning 2.4GHz spectrum for Wi-Fi beacons...';
-      box.classList.remove('hidden');
       setTimeout(function() {
         box.className = 'msg success';
         box.textContent = 'Found 4 Wi-Fi networks within range.';
@@ -152,19 +130,26 @@
       if (!s) {
         box.className = 'msg error';
         box.textContent = 'Please choose or type a Wi-Fi network SSID.';
-        box.classList.remove('hidden');
         return;
       }
       box.className = 'msg info';
       box.textContent = 'Connecting to ' + s + '... Please wait 15s.';
-      box.classList.remove('hidden');
+      var btn = document.getElementById('btnConnect');
+      btn.disabled = true;
+      btn.textContent = 'Connecting…';
+
+      var stat = document.getElementById('connStatus');
+      stat.className = 'status connecting';
+      document.getElementById('statusText').textContent = 'CONNECTING TO ' + s + '…';
+
       setTimeout(function() {
-        var stat = document.getElementById('connStatus');
         stat.className = 'status connected';
         document.getElementById('statusText').textContent = 'CONNECTED (192.168.1.135)';
         document.getElementById('ipAddr').textContent = '192.168.1.135';
         box.className = 'msg success';
         box.textContent = 'Connected successfully! Netlify cloud uplink active.';
+        btn.disabled = false;
+        btn.textContent = 'CONNECT';
       }, 1500);
     }
     function clearQueue() {
@@ -172,7 +157,6 @@
       var box = document.getElementById('msgBox');
       box.className = 'msg success';
       box.textContent = 'Offline flash queue purged successfully.';
-      box.classList.remove('hidden');
     }
   </script>
 </body>

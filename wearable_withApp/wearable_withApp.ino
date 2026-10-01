@@ -23,6 +23,7 @@
 #include "buzzer.h"
 #include "neopixel.h"
 #include "bt_service.h"
+#include "battery.h"
 #include "../shared/protocol.h"
 
 static uint32_t _lastTelemetryMs = 0;
@@ -47,18 +48,21 @@ void setup() {
   // 2. Initialize Physical Button
   buttonInit();
 
-  // 3. Initialize Detection & GPS subsystem
+  // 3. Initialize Battery Monitor (100k/100k divider on GPIO2)
+  batteryInit();
+
+  // 4. Initialize Detection & GPS subsystem
   detectionInit();
   gpsInit();
 
-  // 4. Initialize LoRa Radio (Ra-02 SX1278)
+  // 5. Initialize LoRa Radio (Ra-02 SX1278)
   _loraOk = loraTxInit();
   if (!_loraOk) {
     Serial.println(F("[WEARABLE] [ERROR] LoRa initialization failed! Check SPI wiring."));
     neopixelSetState(NEO_ERROR);
   }
 
-  // 5. Initialize Bluetooth Low Energy (BLE Peripheral)
+  // 6. Initialize Bluetooth Low Energy (BLE Peripheral)
   btServiceInit();
 
   Serial.println(F("[WEARABLE] Ready. Connect mobile app via BLE to start telemetry feed."));
@@ -72,6 +76,7 @@ void loop() {
   buzzerUpdate();
   neopixelUpdate();
   btServiceUpdate();
+  batteryUpdate();
 
   // ── Button Event Handling ─────────────────────────────────────────────────
   ButtonEvent btn = buttonUpdate();
@@ -124,7 +129,7 @@ void loop() {
       btServiceGetDeviceToken(),
       gpsGetLatitude(),
       gpsGetLongitude(),
-      100 // Battery %
+      batteryGetPercent()
     );
   }
 

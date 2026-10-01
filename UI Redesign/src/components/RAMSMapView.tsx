@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import L from 'leaflet';
 import { createRoot } from 'react-dom/client';
-import { EventData, ThemeMode, getMarkerColor } from '../types';
+import { EventData, ThemeMode, getMarkerColor, isEventFalseAlarm, isEventRescued, isEventActiveAlert } from '../types';
 import RAMSEventPopup from './RAMSEventPopup';
 
 const DEFAULT_CENTER: [number, number] = [17.6132, 121.7270];
@@ -15,9 +15,10 @@ interface MapViewProps {
 }
 
 function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivIcon {
-  const isAlert = event.type === 'alert';
+  const isFalseAlarm = isEventFalseAlarm(event);
+  const isRescued = isEventRescued(event);
+  const isAlert = isEventActiveAlert(event);
   const isTest = event.type === 'test';
-  const isFalseAlarm = event.type === 'false_alarm';
   const isRegister = event.type === 'register' || event.type === 'rider_profile';
 
   let pinColor = '#3b82f6';
@@ -40,7 +41,7 @@ function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivI
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" 
         stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="scale(0.85) translate(2, 2)"/>
     `;
-  } else if (isFalseAlarm) {
+  } else if (isRescued || isFalseAlarm) {
     pinColor = '#10b981';
     pinShadow = '0 6px 14px rgba(16, 185, 129, 0.45)';
     // Shield check glyph
@@ -92,7 +93,7 @@ function createAestheticMarkerIcon(event: EventData, isSelected = false): L.DivI
 
       <!-- Attached Monospace Label Pill -->
       <div class="absolute -bottom-1 px-1.5 py-0.5 rounded font-mono font-bold text-[9px] uppercase tracking-wider text-white bg-neutral-900/90 dark:bg-black/90 border border-neutral-700/80 shadow-md whitespace-nowrap pointer-events-none transition-all">
-        ${isAlert ? `⚠ ${shortName}` : shortName}
+        ${isAlert ? `⚠ ${shortName}` : ((isRescued || isFalseAlarm) ? `✓ ${shortName}` : shortName)}
       </div>
     </div>
   `;
@@ -151,8 +152,8 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
   const mapRef = useRef<L.Map | null>(null);
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
-  const geoEvents = useMemo(
-    () => events
+  const geoEvents = useMemo(() => {
+    const valid = events
       .filter((e) => e.lat && e.lon && (e.lat !== 0 || e.lon !== 0))
       .filter((e) => {
         if (e.type === 'test') return false;
@@ -162,9 +163,31 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
         const title = (e.title || '').toLowerCase();
         if (name.includes('test') || token.includes('test') || id.includes('test') || title.includes('test')) return false;
         return true;
-      }),
-    [events]
-  );
+      });
+
+    // Deduplicate by person / wearable: show each person once at their latest known position
+    const personMap = new Map<string, EventData>();
+    for (const ev of valid) {
+      const key = (ev.deviceToken && ev.deviceToken.trim()) || (ev.riderName && ev.riderName.trim()) || ev.id;
+      if (!personMap.has(key)) {
+        personMap.set(key, ev);
+      } else {
+        const existing = personMap.get(key)!;
+        const isThisAlert = ev.type === 'alert' && !isEventFalseAlarm(ev);
+        const isExistingAlert = existing.type === 'alert' && !isEventFalseAlarm(existing);
+        if (isThisAlert && !isExistingAlert) {
+          personMap.set(key, ev);
+        }
+      }
+    }
+
+    // Always include selected event if chosen from history
+    if (selectedEvent && selectedEvent.lat && selectedEvent.lon && !Array.from(personMap.values()).some((e) => e.id === selectedEvent.id)) {
+      personMap.set(selectedEvent.id, selectedEvent);
+    }
+
+    return Array.from(personMap.values());
+  }, [events, selectedEvent]);
 
 
 
@@ -207,7 +230,7 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
 
         const marker = L.marker([event.lat, event.lon], {
           icon: createAestheticMarkerIcon(event, isSelected),
-          zIndexOffset: isSelected ? 1000 : (event.type === 'alert' ? 500 : 10),
+          zIndexOffset: isSelected ? 1000 : (event.type === 'alert' && !isEventFalseAlarm(event) ? 500 : 10),
         });
 
         marker.on('click', () => {

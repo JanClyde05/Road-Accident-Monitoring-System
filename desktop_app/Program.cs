@@ -506,17 +506,78 @@ namespace RamsRescuerDesktop
             {
                 lock (_lock)
                 {
+                    bool matched = false;
+                    string cleanToken = (token ?? "").Trim();
+
+                    // Pass 1: Match by device token (exact or prefix/contains)
                     for (int i = 0; i < _eventsJsonList.Count; i++)
                     {
                         string ev = _eventsJsonList[i];
-                        if (token.Equals(ExtractField(ev, "deviceToken"), StringComparison.OrdinalIgnoreCase))
+                        string evToken = (ExtractField(ev, "deviceToken") ?? "").Trim();
+                        string evStatus = (ExtractField(ev, "status") ?? "").Trim();
+                        string evType = (ExtractField(ev, "type") ?? "").Trim();
+
+                        bool isAlert = evType.Equals("alert", StringComparison.OrdinalIgnoreCase) || 
+                                       evStatus.IndexOf("ALERT", StringComparison.OrdinalIgnoreCase) >= 0;
+
+                        bool tokenMatch = !string.IsNullOrEmpty(cleanToken) && !string.IsNullOrEmpty(evToken) && (
+                            cleanToken.Equals(evToken, StringComparison.OrdinalIgnoreCase) ||
+                            (cleanToken.Length >= 3 && evToken.IndexOf(cleanToken, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                            (evToken.Length >= 3 && cleanToken.IndexOf(evToken, StringComparison.OrdinalIgnoreCase) >= 0)
+                        );
+
+                        if (tokenMatch && isAlert)
                         {
-                            _eventsJsonList[i] = System.Text.RegularExpressions.Regex.Replace(
+                            string updated = System.Text.RegularExpressions.Regex.Replace(
                                 ev,
                                 "\"status\":\\s*\"[^\"]*\"",
                                 "\"status\":\"FALSE ALARM\""
                             );
+                            updated = System.Text.RegularExpressions.Regex.Replace(
+                                updated,
+                                "\"type\":\\s*\"[^\"]*\"",
+                                "\"type\":\"false_alarm\""
+                            );
+                            _eventsJsonList[i] = updated;
+                            matched = true;
                         }
+                    }
+
+                    // Pass 2 Fallback: If token had minor transmission noise, cancel the most recent ACTIVE ALERT on the network
+                    if (!matched)
+                    {
+                        for (int i = 0; i < _eventsJsonList.Count; i++)
+                        {
+                            string ev = _eventsJsonList[i];
+                            string evStatus = (ExtractField(ev, "status") ?? "").Trim();
+                            string evType = (ExtractField(ev, "type") ?? "").Trim();
+
+                            if (evType.Equals("alert", StringComparison.OrdinalIgnoreCase) || 
+                                evStatus.IndexOf("ALERT", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                string updated = System.Text.RegularExpressions.Regex.Replace(
+                                    ev,
+                                    "\"status\":\\s*\"[^\"]*\"",
+                                    "\"status\":\"FALSE ALARM\""
+                                );
+                                updated = System.Text.RegularExpressions.Regex.Replace(
+                                    updated,
+                                    "\"type\":\\s*\"[^\"]*\"",
+                                    "\"type\":\"false_alarm\""
+                                );
+                                _eventsJsonList[i] = updated;
+                                matched = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Only insert a new false alarm record if there was never any prior alert in the system
+                    if (!matched && !string.IsNullOrEmpty(cleanToken) && cleanToken.Length >= 3 && (Math.Abs(lat) > 0.0001 || Math.Abs(lon) > 0.0001))
+                    {
+                        string eventId = "RAMS-FA-" + DateTime.Now.ToString("yyyyMMdd-HHmmss-fff");
+                        string formatted = BuildEventFromJsonOrForm(payload, eventId);
+                        _eventsJsonList.Insert(0, formatted);
                     }
                     SaveIncidents();
                 }

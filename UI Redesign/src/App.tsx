@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { GuardianEvent, EventData, ThemeMode } from './types';
+import { GuardianEvent, EventData, ThemeMode, isEventFalseAlarm, isEventActiveAlert } from './types';
 import { Header } from './components/Header';
 import { TelemetryBar } from './components/TelemetryBar';
 import { MapContainer } from './components/MapContainer';
@@ -298,7 +298,7 @@ export default function App() {
     audioUrl: e.audioUrl
   }));
 
-  const ramsAlertCount = ramsEvents.filter((e) => e.type === 'alert').length;
+  const ramsAlertCount = ramsEvents.filter((e) => isEventActiveAlert(e)).length;
   const ramsDeviceCount = new Set(ramsEvents.map((e) => e.deviceToken).filter(Boolean)).size;
 
   const audioAlertCount = events.filter((e) => !e.isTelemetry && e.type === 'audio').length;
@@ -336,15 +336,22 @@ export default function App() {
                 setRamsSelectedEvent(evt);
                 setShowProfileOverlay(true);
               }}
+              onLocate={(evt) => {
+                setRamsSelectedEvent(evt);
+              }}
             />
           </div>
 
           {/* Wearable Registration Profile Overlay Showcase Modal */}
           <RAMSWearableProfileOverlay
             event={ramsSelectedEvent}
+            allEvents={ramsEvents}
             isOpen={showProfileOverlay}
             onClose={() => setShowProfileOverlay(false)}
             onProfileUpdated={() => fetchEvents(true)}
+            onLocateIncident={(evt) => {
+              setRamsSelectedEvent(evt);
+            }}
           />
         </div>
       ) : (

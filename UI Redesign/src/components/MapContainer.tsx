@@ -25,6 +25,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   const activeFixEvt = events.find((e) => e.lat && e.lon && !(e.lat === 0 && e.lon === 0)) || null;
   const activeEvt = activeFixEvt;
+  const latestEvent = activeEvt || events[0] || null;
 
   // Initialize Leaflet Map once
   useEffect(() => {

@@ -1,9 +1,11 @@
+import React, { useState } from 'react';
 import { 
   Activity, 
   Battery, 
   MapPin, 
   Clock, 
   ShieldAlert, 
+  ShieldCheck,
   Copy, 
   Check, 
   Cpu, 
@@ -11,7 +13,7 @@ import {
   ExternalLink,
   User
 } from 'lucide-react';
-import { EventData, getStatusLabel, formatTimestamp, formatDirectDriveUrl } from '../types';
+import { EventData, getStatusLabel, formatTimestamp, formatDirectDriveUrl, isEventFalseAlarm, isEventRescued, isEventActiveAlert } from '../types';
 
 interface EventPopupProps {
   event: EventData;
@@ -21,9 +23,15 @@ interface EventPopupProps {
 export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps) {
   const [copied, setCopied] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
+  const isFa = isEventFalseAlarm(event);
+  const isRescued = isEventRescued(event);
+  const isAlert = isEventActiveAlert(event);
   const statusLabel = getStatusLabel(event);
 
   const getBadgeStyle = () => {
+    if (isRescued || isFa) {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-900';
+    }
     switch (event.type) {
       case 'alert':
         return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-900';
@@ -76,9 +84,9 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
           )}
           <span 
             className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-neutral-900 flex items-center justify-center ${
-              event.type === 'alert' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'
+              (isFa || isRescued) ? 'bg-emerald-500' : (isAlert ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500')
             }`}
-            title={event.type === 'alert' ? 'Active Alert Broadcast' : 'Wearable Armed'}
+            title={isFa ? 'Alert Cancelled (False Alarm)' : (isRescued ? 'Patient Rescued & Cleared' : (isAlert ? 'Active Alert Broadcast' : 'Wearable Armed'))}
           />
         </div>
 
@@ -105,7 +113,11 @@ export default function RAMSEventPopup({ event, onOpenProfile }: EventPopupProps
       {/* Incident Status Banner */}
       <div className="py-2.5 flex items-center justify-between gap-2 border-b border-neutral-100 dark:border-neutral-800/80">
         <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border ${getBadgeStyle()}`}>
-          {event.type === 'alert' && <ShieldAlert className="w-3 h-3 text-rose-500" />}
+          {(isFa || isRescued) ? (
+            <ShieldCheck className="w-3 h-3 text-emerald-500" />
+          ) : (
+            isAlert && <ShieldAlert className="w-3 h-3 text-rose-500" />
+          )}
           {statusLabel}
         </span>
         {event.eventTypeName && (

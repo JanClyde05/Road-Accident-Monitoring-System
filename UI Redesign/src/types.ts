@@ -97,7 +97,35 @@ export type EventFilter = 'all' | 'audio' | 'telemetry' | 'alert' | 'test';
 export type ThemeMode = 'dark' | 'light';
 export type ViewDensity = 'comfortable' | 'compact';
 
+export function isEventFalseAlarm(event: EventData | null | undefined): boolean {
+  if (!event) return false;
+  if (event.type === 'false_alarm') return true;
+  if (event.status && event.status.trim().toUpperCase() === 'FALSE ALARM') return true;
+  return false;
+}
+
+export function isEventRescued(event: EventData | null | undefined): boolean {
+  if (!event) return false;
+  if (event.type === 'rescued') return true;
+  if (event.status && event.status.trim().toUpperCase() === 'RESCUED') return true;
+  return false;
+}
+
+export function isEventActiveAlert(event: EventData | null | undefined): boolean {
+  if (!event) return false;
+  if (event.type !== 'alert') return false;
+  if (isEventFalseAlarm(event)) return false;
+  if (isEventRescued(event)) return false;
+  return true;
+}
+
 export function getMarkerColor(event: EventData): 'red' | 'amber' | 'green' | 'blue' | 'purple' {
+  if (isEventRescued(event)) {
+    return 'green';
+  }
+  if (isEventFalseAlarm(event)) {
+    return 'green';
+  }
   switch (event.type) {
     case 'alert':
       return 'red';
@@ -116,6 +144,12 @@ export function getMarkerColor(event: EventData): 'red' | 'amber' | 'green' | 'b
 }
 
 export function getStatusLabel(event: EventData): string {
+  if (isEventRescued(event)) {
+    return 'RESCUED';
+  }
+  if (isEventFalseAlarm(event)) {
+    return 'FALSE ALARM';
+  }
   switch (event.type) {
     case 'alert':
       return 'CRASH ALERT';

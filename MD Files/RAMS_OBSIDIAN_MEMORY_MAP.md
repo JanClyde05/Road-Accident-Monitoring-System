@@ -175,8 +175,8 @@ graph TD
 - **[[desktop_app/build_exe.bat]]**: Native C# compilation script using Microsoft .NET Framework `csc.exe`.
 - **[[desktop_app/launch_desktop.bat]]**: One-click desktop launcher.
 - **[[desktop_app/registrations.json]]**: Local persistent database of registered rider credentials and photos.
-- **[[desktop_app/incidents.json]]**: Clean, mock-free persistent incident and telemetry log.
-- **[[desktop_app/www/]]**: High-performance React 19 + Vite dashboard featuring Leaflet maps, animated radar pins, accident cards with `referrerPolicy="no-referrer"` Google Drive photo loading, and comprehensive emergency triage inspection modals.
+- **[[desktop_app/incidents.json]]**: Clean, mock-free persistent incident and telemetry log with status and type tracking (e.g. `FALSE ALARM` state).
+- **[[desktop_app/www/]]**: High-performance React 19 + Vite dashboard featuring Leaflet maps, animated radar pins, false-alarm emerald green pins & cards, accident cards with `referrerPolicy="no-referrer"` Google Drive photo loading, and comprehensive emergency triage inspection modals.
 
 ---
 
@@ -190,5 +190,8 @@ graph TD
 | **Where is the BLE GATT JSON parsed on wearable?** | [[wearable_withApp/bt_service.cpp]] | `_onBleDataReceived()`, `btServiceSendText()` |
 | **Where is the crash sensitivity threshold set?** | [[android_app/.../PhoneSensorEngine.kt]] | `CRASH_THRESHOLD_G = 2.5f`, `STICKY_SHOCK_MS = 2000` |
 | **Where is the desktop COM port reader implemented?** | [[desktop_app/Program.cs]] | `ListenToSerialPort()`, `ProcessIncomingPayload()` |
+| **Where is false alarm cancellation handled on desktop?** | [[desktop_app/Program.cs]] & [[UI Redesign/src/types.ts]] | `ProcessIncomingPayload()`, `isEventFalseAlarm()` |
+| **How does false alarm turn green on map & sidebar?** | [[UI Redesign/src/components/RAMSMapView.tsx]] & [[UI Redesign/src/components/RAMSEventSidebar.tsx]] | `createAestheticMarkerIcon()`, `getTypeBadge()` |
+| **Where is the RESCUED triage clearance API defined?** | [[desktop_app/Program.cs]] & [[UI Redesign/src/components/RAMSWearableProfileOverlay.tsx]] | `HandlePostRescue()`, `handleMarkRescued()`, `isEventRescued()` |
 | **How to rebuild the Windows Desktop executable?** | [[desktop_app/build_exe.bat]] | `csc.exe /target:winexe /win32icon:app.ico` |
 | **Where are the custom SVG teardrop map pins?** | [[UI Redesign/src/components/RAMSMapView.tsx]] | `createAestheticMarkerIcon()` |

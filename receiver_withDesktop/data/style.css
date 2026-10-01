@@ -1,4 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap');
+/*
+ * RAMS Receiver — Captive Portal Styles (Embedded, No External Dependencies)
+ * =============================================================================
+ * All styles are self-contained for offline captive portal operation.
+ * No Google Fonts or CDN imports — uses system font stacks for reliability.
+ *
+ * Design: Dark zinc theme with monospace accents, matching RAMS desktop UI.
+ */
+
+/* ── Reset ───────────────────────────────────────────────────── */
 
 *, *::before, *::after {
   margin: 0;
@@ -6,20 +15,48 @@
   box-sizing: border-box;
 }
 
+/* ── Typography — System Fallbacks (No External Fonts) ─────── */
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", "Cascadia Code", "Fira Code", "JetBrains Mono", "Consolas", "Courier New", monospace;
+
+  --bg-base: #09090b;
+  --bg-card: #121214;
+  --bg-elevated: #18181b;
+  --border: #27272a;
+  --border-hover: #3f3f46;
+  --text-primary: #ffffff;
+  --text-secondary: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+
+  --success: #10b981;
+  --success-light: #34d399;
+  --danger: #ef4444;
+  --danger-light: #f87171;
+  --warning: #f59e0b;
+  --warning-light: #fbbf24;
+  --info: #3b82f6;
+  --info-light: #60a5fa;
+}
+
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #09090b;
-  color: #f4f4f5;
+  font-family: var(--font-sans);
+  background-color: var(--bg-base);
+  color: var(--text-secondary);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
   letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 /* ── Card Container ───────────────────────────────────────────── */
@@ -27,8 +64,8 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
 .card {
   width: 100%;
   max-width: 440px;
-  background: #121214;
-  border: 1px solid #27272a;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 28px 24px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -40,7 +77,7 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   text-align: left;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid var(--border);
 }
 
 .brand-header {
@@ -82,15 +119,16 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
 .header h1 {
   font-size: 15px;
   font-weight: 900;
-  color: #ffffff;
+  color: var(--text-primary);
   letter-spacing: -0.025em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .subtitle {
   font-size: 10px;
   font-weight: 700;
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-top: 2px;
@@ -111,45 +149,46 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 20px;
-  border: 1px solid #27272a;
-  background: #18181b;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
 }
 
 .status .dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .status.connected {
   background: rgba(16, 185, 129, 0.1);
   border-color: rgba(16, 185, 129, 0.3);
-  color: #34d399;
+  color: var(--success-light);
 }
 
 .status.connected .dot {
-  background: #10b981;
+  background: var(--success);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
 }
 
 .status.disconnected {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  color: var(--danger-light);
 }
 
 .status.disconnected .dot {
-  background: #ef4444;
+  background: var(--danger);
 }
 
 .status.connecting {
   background: rgba(245, 158, 11, 0.1);
   border-color: rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+  color: var(--warning-light);
 }
 
 .status.connecting .dot {
-  background: #f59e0b;
+  background: var(--warning);
   animation: blink 0.8s ease-in-out infinite;
 }
 
@@ -165,10 +204,10 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
 }
 
 .section h2 {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 10px;
@@ -177,17 +216,21 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
 /* ── Network List ─────────────────────────────────────────────── */
 
 .network-list {
-  max-height: 180px;
+  max-height: 200px;
   overflow-y: auto;
   margin-bottom: 10px;
   border-radius: 10px;
-  border: 1px solid #27272a;
-  background: #18181b;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
   padding: 4px;
 }
 
 .network-list::-webkit-scrollbar {
   width: 4px;
+}
+
+.network-list::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .network-list::-webkit-scrollbar-thumb {
@@ -202,34 +245,66 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   padding: 9px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   margin-bottom: 2px;
   border: 1px solid transparent;
 }
 
+.net-item:last-child {
+  margin-bottom: 0;
+}
+
 .net-item:hover {
-  background: #27272a;
-  border-color: #3f3f46;
+  background: var(--border);
+  border-color: var(--border-hover);
 }
 
 .net-item.selected {
-  background: #27272a;
-  border-color: #ffffff;
+  background: var(--border);
+  border-color: var(--text-primary);
 }
 
-.net-name {
+/* Legacy class for preview_receiver.html */
+.network-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+}
+
+.network-item:hover {
+  background: var(--border);
+  border-color: var(--border-hover);
+}
+
+.net-name, .network-ssid {
   font-size: 13px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
 }
 
-.net-meta {
+.net-meta, .network-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
-  color: #a1a1aa;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.signal-icon {
+  letter-spacing: -1px;
 }
 
 .scanning {
@@ -238,8 +313,8 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   justify-content: center;
   gap: 10px;
   padding: 20px;
-  color: #a1a1aa;
-  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
   font-size: 12px;
 }
 
@@ -247,7 +322,7 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   width: 16px;
   height: 16px;
   border: 2px solid #3f3f46;
-  border-top-color: #ffffff;
+  border-top-color: var(--text-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -266,7 +341,7 @@ code, pre, .font-mono, .btn, label, .info-label, .subtitle, .status {
   display: block;
   font-size: 10px;
   font-weight: 700;
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin-bottom: 6px;
@@ -276,22 +351,22 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 10px 14px;
-  background: #18181b;
-  border: 1px solid #27272a;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 13px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease;
 }
 
 input:focus {
-  border-color: #ffffff;
+  border-color: var(--text-primary);
 }
 
 input::placeholder {
-  color: #71717a;
+  color: var(--text-dim);
 }
 
 .pass-wrap {
@@ -311,14 +386,16 @@ input::placeholder {
   border: none;
   cursor: pointer;
   font-size: 14px;
-  color: #a1a1aa;
+  color: var(--text-muted);
   opacity: 0.7;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s ease;
+  padding: 4px;
+  line-height: 1;
 }
 
 .btn-icon:hover {
   opacity: 1;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* ── Buttons ──────────────────────────────────────────────────── */
@@ -331,13 +408,13 @@ input::placeholder {
   padding: 11px 18px;
   border: 1px solid transparent;
   border-radius: 10px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
 }
 
 .btn:hover {
@@ -355,9 +432,9 @@ input::placeholder {
 }
 
 .btn-primary {
-  background: #ffffff;
-  color: #09090b;
-  border-color: #ffffff;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  border-color: var(--text-primary);
 }
 
 .btn-primary:hover {
@@ -365,27 +442,27 @@ input::placeholder {
 }
 
 .btn-outline {
-  background: #18181b;
-  color: #f4f4f5;
-  border-color: #3f3f46;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border-color: var(--border-hover);
   font-size: 11px;
   padding: 8px 14px;
 }
 
 .btn-outline:hover {
-  background: #27272a;
-  border-color: #ffffff;
+  background: var(--border);
+  border-color: var(--text-primary);
 }
 
 .btn-danger {
   background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
+  color: var(--danger-light);
   border-color: rgba(239, 68, 68, 0.4);
 }
 
 .btn-danger:hover {
   background: rgba(239, 68, 68, 0.25);
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .btn-sm {
@@ -404,8 +481,8 @@ input::placeholder {
 }
 
 .info-item {
-  background: #18181b;
-  border: 1px solid #27272a;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -413,17 +490,17 @@ input::placeholder {
 .info-label {
   display: block;
   font-size: 9px;
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin-bottom: 2px;
 }
 
 .info-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* ── Message Box ──────────────────────────────────────────────── */
@@ -432,10 +509,11 @@ input::placeholder {
   margin-top: 12px;
   padding: 10px 14px;
   border-radius: 10px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .msg.hidden {
@@ -445,17 +523,37 @@ input::placeholder {
 .msg.info {
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.3);
-  color: #60a5fa;
+  color: var(--info-light);
 }
 
 .msg.success {
   background: rgba(16, 185, 129, 0.15);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34d399;
+  color: var(--success-light);
 }
 
 .msg.error {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  color: var(--danger-light);
+}
+
+/* ── Responsive Tweaks ────────────────────────────────────────── */
+
+@media (max-width: 360px) {
+  .card {
+    padding: 20px 16px;
+  }
+
+  .header h1 {
+    font-size: 13px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .net-name, .network-ssid {
+    max-width: 160px;
+  }
 }

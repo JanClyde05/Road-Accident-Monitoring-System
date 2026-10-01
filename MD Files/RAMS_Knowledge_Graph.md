@@ -359,16 +359,61 @@ graph LR
 
 ---
 
+## 🟢 False Alarm Resolution & Desktop Synchronization (October 2026)
+
+### End-to-End False Alarm Flow
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Rider as Highway Rider / User
+    participant App as Android Companion App
+    participant Wearable as Wearable Node (ESP32)
+    participant Receiver as Base Station Receiver (ESP32)
+    participant Server as Desktop C# Server (Program.cs)
+    participant UI as Desktop Operations Center (React/Vite)
+
+    Rider->>App: Clicks "FALSE ALARM" Button
+    App->>Wearable: BLE GATT text 'CANCEL_ALERT'
+    Wearable->>Wearable: buzzerOff(), NeoPixel armed (green)
+    Wearable->>Receiver: LoRa PKT_FALSE_ALARM (433MHz)
+    Receiver->>Receiver: NeoPixel double-green flash, clear alert
+    Receiver->>Server: Serial: {"event":"LORA_FALSE_ALARM",...} or LAN POST
+    Server->>Server: ProcessIncomingPayload() updates status="FALSE ALARM" & type="false_alarm"
+    Server->>Server: SaveIncidents() persists to incidents.json
+    UI->>Server: Polls /api/events (every 2.5s)
+    UI->>UI: isEventFalseAlarm() switches map pin & sidebar card to Emerald Green with ShieldCheck
+```
+
+### Key Components Modified:
+1. **[desktop_app/Program.cs](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/Program.cs)**:
+   - In `ProcessIncomingPayload()`, false alarm packet handler now updates both `"status":"FALSE ALARM"` and `"type":"false_alarm"` in `_eventsJsonList`.
+   - Adds insert fallback `RAMS-FA-...` if no prior alert event exists for the device token.
+2. **[UI Redesign/src/types.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/types.ts)**:
+   - Added robust `isEventFalseAlarm(event)` checking both `type === 'false_alarm'` and `status === 'FALSE ALARM'`.
+   - `getMarkerColor()` returns `'green'` and `getStatusLabel()` returns `'FALSE ALARM'`.
+3. **[UI Redesign/src/components/RAMSMapView.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSMapView.tsx)**:
+   - Teardrop map pin renders in emerald green (`#10b981`), `ShieldCheck` glyph, `✓` icon label, and removes red pulsing radar ring.
+4. **[UI Redesign/src/components/RAMSEventSidebar.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSEventSidebar.tsx)**:
+   - Sidebar cards display emerald pill (`bg-emerald-950/60 text-emerald-400`), `ShieldCheck` icon, green left stripe, and are excluded from active critical alert counter.
+5. **[UI Redesign/src/components/RAMSEventPopup.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSEventPopup.tsx)** & **[RAMSWearableProfileOverlay.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx)**:
+   - Popup badges and avatar indicators switch to green when marked false alarm.
+6. **[desktop_app/www/](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/www/)** & **[RAMS_Rescuer_Desktop.exe](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/RAMS_Rescuer_Desktop.exe)**:
+   - Bundled Vite production build copied into `desktop_app/www/assets/` and C# standalone binary recompiled.
+
+---
+
 ## 📊 Build Verification Status
 
 | Check | Result |
 |-------|--------|
-| Backend `npm run build` | ✅ 80 modules, 6.57s, 0 errors |
-| TypeScript (`tsc --noEmit`) | ✅ No type errors |
+| Desktop C# Native Compiler (`build_exe.bat`) | ✅ `RAMS_Rescuer_Desktop.exe` built successfully |
+| UI Redesign `npm run build` | ✅ 2092 modules transformed, 0 errors |
+| Frontend Assets Deployment | ✅ Synced to `desktop_app/www/assets/` |
+| Persistent Incident Database (`incidents.json`) | ✅ Verified false alarm type and status |
 | All wearable files present | ✅ 23 files |
 | All receiver files present | ✅ 15 files (incl. data/) |
 | All backend source files present | ✅ 14 files |
 | All data_logger files present | ✅ 5 files |
 | Validation script present | ✅ 1 file |
 | .gitignore | ✅ Created |
-| **Total files** | **46 source files** |
+| **Total files** | **46+ source files** |
