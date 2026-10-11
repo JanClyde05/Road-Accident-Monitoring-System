@@ -40,7 +40,7 @@
 
 // --- OPTION A: Desktop App LAN Bridge (Port 8888) ---
 // #define BACKEND_URL       "http://192.168.123.6:8888"
-#define BACKEND_URL       "http://10.146.164.180:8888"
+#define BACKEND_URL       "http://175.16.3.157:8888"
 
 // --- OPTION B: Production Netlify ---
 //#define BACKEND_URL       "https://road-accident-monitoring-system.netlify.app"

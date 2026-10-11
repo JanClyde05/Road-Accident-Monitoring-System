@@ -1,0 +1,33 @@
+flowchart TD
+    E1[/"💥 Crash Alert Emitted by Rider Sensing Node"/] --> E2["433MHz LoRa RF Transmission\n(Zero dependence on mobile towers or data plans)"]
+    E2 --> E3["Base Station Receiver Hardware (ESP32-S3)"]
+
+    E3 --> CHK_USB{"Is Gateway Connected\nvia USB Cable to PC?"}
+
+    %% USB Path
+    CHK_USB -- "YES (Physical Tether)" --> P_USB[/"Direct Hardware USB-CDC Serial Stream\n115200 Baud JSON Packets (0ms Latency)"/]
+    P_USB --> D_INGEST["Desktop Rescuer Engine Ingestion"]
+
+    %% Network Path
+    CHK_USB -- "NO (Remote Deployment)" --> CHK_WIFI{"Is Gateway WiFi\nOnline & Reachable?"}
+    
+    CHK_WIFI -- "YES (Network Available)" --> P_HTTP[/"HTTP POST /api/upload to Desktop IP:8080"/]
+    P_HTTP --> D_INGEST
+
+    CHK_WIFI -- "NO (Power/Internet Outage)" --> SAVE_QUEUE[("Save Incident Record to LittleFS Flash\n(/queue.bin - Non-Volatile Memory)")]
+    SAVE_QUEUE --> POLL_DAEMON["Gateway Background Timer Daemon\n(Polls WiFi status every 10 seconds)"]
+    POLL_DAEMON --> CHK_RECON{"WiFi Connection\nRestored?"}
+    
+    CHK_RECON -- "NO" --> RETAIN["Retain in Flash (Power-Safe Buffer)"]
+    RETAIN --> POLL_DAEMON
+    
+    CHK_RECON -- "YES" --> FLUSH_QUEUE["Read Queue in FIFO Order\nPost all backlogged incidents to Server"]
+    FLUSH_QUEUE --> P_HTTP
+
+    D_INGEST --> DB_SAVE[("Write Incident to incidents.json\nCross-reference registrations.json for Medical Data")]
+    DB_SAVE --> ALARM_OUT>"🚨 Command Station Audio Siren & Map Strobe\nImmediate Dispatch Notification"]
+
+    style E1 fill:#b91c1c,stroke:#fff,color:#fff
+    style D_INGEST fill:#1e40af,stroke:#fff,color:#fff
+    style SAVE_QUEUE fill:#d97706,stroke:#fff,color:#fff
+    style ALARM_OUT fill:#991b1b,stroke:#fff,color:#fff

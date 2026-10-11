@@ -1,0 +1,294 @@
+# Danger Monitor System V2 — Implementation Plan
+
+Building the complete Danger Monitor System per [DangerMonitor_PGC_Challenge_Build_Spec_v2.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/MD%20Files/DangerMonitor_PGC_Challenge_Build_Spec_v2.md). The system has **5 major components**: shared LoRa protocol, wearable firmware, receiver firmware, Netlify backend, React frontend dashboard, and a standalone data-collection tool + Python validation script.
+
+Patterns from [GuardianTrack](file:///d:/Antigravity/Projects/GPS_Audio/GPS-Audio) (WiFi captive portal, local queue, HTTP upload, Netlify Blobs store) are adapted directly.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **LoRa library choice**: The spec says "RadioLib or arduino-LoRa." I'll use **arduino-LoRa** (`LoRa.h` by Sandeep Mistry) — it's simpler and sufficient for the SX1278 TX/RX in this project. Confirm if you prefer RadioLib instead.
+
+> [!IMPORTANT]
+> **Frontend styling**: The spec doesn't prescribe a CSS framework. I'll use **vanilla CSS** with a dark-mode professional dashboard aesthetic — no Tailwind. The reference project uses Tailwind but the new project will be standalone.
+
+> [!WARNING]
+> **Offline map image**: The spec requires a "static local-area image baked into flash" for the wearable's offline map. I'll create the code infrastructure with a placeholder `map_image.h` (byte array). **You'll need to provide an actual satellite/map screenshot** of your local area (Cagayan), which I'll convert to a C header. I can generate a placeholder for development.
+
+> [!WARNING]
+> **Backend URL**: The Netlify site name needs to be decided. I'll use `danger-monitor` as the placeholder (`https://danger-monitor.netlify.app`). Update in `receiver/config.h` before deployment.
+
+---
+
+## Open Questions
+
+1. **Netlify site name** — Do you have a Netlify site already created, or should I use `danger-monitor` as the project slug?
+2. **Google Fonts preference** — I'll use Inter for the dashboard. Any preference?
+3. **Map center coordinates** — For the frontend Leaflet map, what coordinates should be the default center? I'll use Tuguegarao City (17.6132, 121.7270) as default.
+
+---
+
+## Proposed Changes
+
+The entire project is new. All files below are created from scratch in `d:\Antigravity\Projects\Danger Monitoring System V2\`.
+
+---
+
+### Shared Protocol (used by both wearable + receiver)
+
+#### [NEW] [protocol.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/shared/protocol.h)
+- Exact packet structures from spec §5: `PacketHeader`, `TelemetryPacket`, `AlertPacket`, `FalseAlarmPacket`, `RegisterPacket`
+- `PacketType` enum: `PKT_TELEMETRY`, `PKT_ALERT`, `PKT_FALSE_ALARM`, `PKT_TEST`, `PKT_REGISTER`
+- Radio settings constants (SF9, BW125, CR4:5, 433MHz)
+- `TELEMETRY_INTERVAL_MS = 30000`
+
+---
+
+### Wearable Firmware (ESP32-S3 + MPU-6050 + ATGM336H + LoRa + NeoPixel)
+
+12 files total, matching spec §3.5 exactly.
+
+#### [NEW] [wearable.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/wearable.ino)
+- `setup()` / `loop()` orchestrator
+- Two-mode architecture: **Armed mode** (WiFi off, sensors + LoRa active) vs **Setup mode** (SoftAP + WebSocket for registration + offline map)
+- Long-press button detection to toggle modes
+- Periodic telemetry TX in armed mode
+
+#### [NEW] [config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/config.h)
+- Full pin map from spec §3.4 (SDA=8, SCL=9, MPU_INT=4, GPS_RX=17, GPS_TX=18, LoRa NSS/SCK/MISO/MOSI/RST/DIO0, Button=GPIO2, Buzzer=GPIO1, NeoPixel=GPIO48)
+- Detection thresholds from spec §6
+- Timing constants
+
+#### [NEW] [sensors.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/sensors.h) / [sensors.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/sensors.cpp)
+- MPU-6050 init, calibration, orientation read
+- Raw accel (g) + gyro (°/s) output
+- Magnitude computation `A_m = sqrt(ax² + ay² + az²)`
+
+#### [NEW] [gps.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/gps.h) / [gps.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/gps.cpp)
+- ATGM336H via TinyGPS++ on HardwareSerial
+- `getLatitude()`, `getLongitude()`, `hasFix()`, `getAge()`
+- Last-known-location fallback (stores last valid fix)
+
+#### [NEW] [detection.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/detection.h) / [detection.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/detection.cpp)
+- **Fall FSM**: `FS_IDLE → FS_FREEFALL → FS_WAIT_IMPACT → FS_STILLNESS → FS_CONFIRMED`
+  - Freefall: `A_m < 0.40g` sustained ≥100ms
+  - Impact: `A_m > 3.00g` within 500ms window
+  - Stillness: `σ(A_m) < 0.15g` over 2000ms
+- **Skid detection**: `|ay| > 2.0g AND |gx| > 330°/s` sustained ≥200ms
+- **Direct impact**: `A_m > 4.50g` with 5000ms debounce
+- **Environmental**: 50-sample rolling buffer, σ-based ground-shock vs wave-motion classification
+- All thresholds as `config.h` constants for easy tuning
+
+#### [NEW] [lora_tx.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/lora_tx.h) / [lora_tx.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/lora_tx.cpp)
+- Uses `LoRa.h` (arduino-LoRa library)
+- `sendTelemetry()`, `sendAlert()`, `sendFalseAlarm()`, `sendTest()`, `sendRegister()`
+- Serializes packed structs from `protocol.h`
+
+#### [NEW] [button.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/button.h) / [button.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/button.cpp)
+- Debounced read with 50ms debounce window
+- Short press: false-alarm/re-arm toggle
+- Long press (3s hold): enter/exit setup mode
+
+#### [NEW] [buzzer.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/buzzer.h) / [buzzer.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/buzzer.cpp)
+- Alert tone patterns (continuous for active alert)
+- Confirmation beep (short chirp for button actions)
+- Non-blocking pattern playback via `update()` in loop
+
+#### [NEW] [neopixel.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/neopixel.h) / [neopixel.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/neopixel.cpp)
+- Status colors: Green (armed/OK), Red (alert active), Blue (setup mode), Yellow (GPS acquiring)
+- SOS flash pattern (3 short, 3 long, 3 short) during active alert
+- Uses Adafruit NeoPixel library on GPIO48
+
+#### [NEW] [local_ap.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.h) / [local_ap.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.cpp)
+- SoftAP + WebSocket server (only active in setup mode)
+- Serves registration page and offline map page
+- WebSocket pushes live GPS coordinates for the map pin
+- WiFi radio fully OFF when exiting setup mode
+
+#### [NEW] [registration.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.h) / [registration.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.cpp)
+- Registration form handler (name + Google Drive link)
+- `convertDriveLink()` from spec §3.2
+- Token generation (8-char alphanumeric)
+- Stores token/name/photoUrl in NVS
+- Triggers `PKT_REGISTER` via LoRa after successful registration
+
+#### [NEW] [offline_map.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.h) / [offline_map.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.cpp)
+- Serves static map image from flash (PROGMEM byte array)
+- GPS-to-pixel-offset math (linear interpolation between known corner coordinates and pixel bounds)
+- HTML page with `<canvas>` or `<img>` + absolutely-positioned pin marker
+
+#### [NEW] [map_image.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/map_image.h)
+- Placeholder — PROGMEM byte array for the offline map image (to be replaced with actual screenshot)
+
+---
+
+### Receiver Firmware (ESP32-S3 + LoRa)
+
+6 files total, matching spec §4.4.
+
+#### [NEW] [receiver.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/receiver.ino)
+- Boot sequence: try saved WiFi → fallback to captive portal
+- Main loop: process WiFi manager + LoRa RX + local queue flush + status LED
+
+#### [NEW] [config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/config.h)
+- Pin map from spec §4.3
+- `BACKEND_URL`, `UPLOAD_ENDPOINT`
+- Timing constants
+
+#### [NEW] [wifi_manager.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/wifi_manager.h) / [wifi_manager.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/wifi_manager.cpp)
+- Adapted from GuardianTrack's [wifi_manager.cpp](file:///d:/Antigravity/Projects/GPS_Audio/GPS-Audio/receiver/wifi_manager.cpp)
+- SoftAP captive portal: scan SSIDs, select, enter password, save to NVS
+- Same pattern: NVS try → fallback AP → connect → save → STA mode
+
+#### [NEW] [lora_rx.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/lora_rx.h) / [lora_rx.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/lora_rx.cpp)
+- Listens for incoming LoRa packets
+- Deserializes by `packetType` into the correct struct
+- Calls `httpUpload()` or queues to local queue
+
+#### [NEW] [http_upload.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.h) / [http_upload.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.cpp)
+- HTTPS POST JSON to `/api/upload`
+- Adapted from GuardianTrack's [http_upload.cpp](file:///d:/Antigravity/Projects/GPS_Audio/GPS-Audio/receiver/http_upload.cpp) — switched from multipart audio to JSON body
+- Serializes device token, packet type, lat/lon, event type, etc.
+
+#### [NEW] [local_queue.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.h) / [local_queue.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.cpp)
+- Adapted from GuardianTrack's [local_queue.cpp](file:///d:/Antigravity/Projects/GPS_Audio/GPS-Audio/receiver/local_queue.cpp)
+- Stores JSON event payloads instead of WAV+meta pairs
+- NVS/LittleFS buffer, flush-on-reconnect
+
+#### [NEW] [nvs_store.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/nvs_store.h) / [nvs_store.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/nvs_store.cpp)
+- WiFi credential persistence (same pattern as GuardianTrack)
+
+#### [NEW] [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/index.html), [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/style.css), [data/app.js](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/app.js)
+- Captive portal WiFi setup page (scan networks, select, password, connect)
+- Uploaded to LittleFS via PlatformIO/Arduino IDE data upload
+
+---
+
+### Backend (Netlify Functions + Blobs)
+
+Vite + React + Netlify Functions. Project root: `backend/`.
+
+#### [NEW] [netlify.toml](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify.toml)
+- Build command, publish dir, functions dir, CORS headers, SPA redirect
+
+#### [NEW] [package.json](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/package.json)
+- Dependencies: react, react-dom, react-leaflet, leaflet, supercluster, lucide-react, @netlify/blobs, @netlify/functions, vite, @vitejs/plugin-react
+
+#### [NEW] [netlify/functions/store.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/store.ts)
+- Two Blob stores: `getStore("events")` and `getStore("devices")`
+- CRUD for events (alert, telemetry, false_alarm) and devices (token, name, photoUrl)
+- In-memory fallback for local dev
+
+#### [NEW] [netlify/functions/upload.mts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/upload.mts)
+- `POST /api/upload`
+- Body: `{ deviceToken, packetType, lat, lon, eventType, battPct, name, driveLinkConverted, timestamp }`
+- `packetType="register"` → upsert into devices store
+- `packetType="alert"/"telemetry"/"false_alarm"` → write event, index it
+
+#### [NEW] [netlify/functions/events.mts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/events.mts)
+- `GET /api/events` → returns events joined with device name/photoUrl, newest first
+- Polled every 2-3s by frontend
+
+---
+
+### Frontend Dashboard (React + Leaflet + Supercluster)
+
+#### [NEW] [index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/index.html)
+- Entry point, meta tags, Google Fonts (Inter)
+
+#### [NEW] [src/main.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/main.tsx)
+- React root render
+
+#### [NEW] [src/App.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/App.tsx)
+- 2-3s poll loop against `/api/events`
+- State management for events list
+- Layout: header bar + full-screen map + event sidebar
+
+#### [NEW] [src/components/MapView.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/MapView.tsx)
+- `react-leaflet` + `supercluster` for marker clustering
+- Color-coded pins: 🔴 Red = active alert, 🟡 Amber = test/PKT_TEST, 🟢 Green = false alarm, 🔵 Blue = telemetry
+- Cluster badges colored by highest-severity member
+- Click marker → open `EventPopup`
+
+#### [NEW] [src/components/EventPopup.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/EventPopup.tsx)
+- Profile card: photo (from Google Drive `photoUrl`), name, device token, timestamp, lat/lon, event type
+- Status badge with color
+
+#### [NEW] [src/components/EventSidebar.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/EventSidebar.tsx)
+- Scrollable event feed, newest first
+- Each entry: time, device name, event type badge, location snippet
+- Click to center map on event
+
+#### [NEW] [src/components/Header.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/Header.tsx)
+- System title, connection status indicator, device count
+
+#### [NEW] [src/types.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/types.ts)
+- TypeScript interfaces: `Event`, `Device`, `ClusterFeature`
+
+#### [NEW] [src/index.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/index.css)
+- Dark-mode design system, glassmorphism panels, smooth transitions
+- Custom Leaflet marker/cluster styles
+- Premium dashboard aesthetic
+
+#### [NEW] [vite.config.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/vite.config.ts) / [tsconfig.json](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/tsconfig.json)
+- Standard Vite + React config
+
+---
+
+### Data Collection Tool (Standalone ESP32-S3 + MPU-6050)
+
+Per spec §7.2 — completely standalone, own SoftAP + WebSocket.
+
+#### [NEW] [data_logger.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/data_logger.ino)
+- SoftAP (`DangerMonitor_DataLog`) + WebSocket server
+- 100Hz IMU streaming loop
+- Trial-marker button on GPIO2
+
+#### [NEW] [imu_read.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/imu_read.h) / [imu_read.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/imu_read.cpp)
+- Same MPU-6050 read/calibrate logic as wearable's `sensors.cpp`
+- Ensures datasets are directly comparable
+
+#### [NEW] [ws_stream.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/ws_stream.h) / [ws_stream.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/ws_stream.cpp)
+- 100Hz JSON samples over WebSocket: `{"trial_id":"...","label":"...","t_ms":...,"ax":...,"ay":...,"az":...,"gx":...,"gy":...,"gz":...}`
+- No on-device buffering
+
+#### [NEW] [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/data/index.html)
+- Companion web page served from the rig
+- Set `trial_id` and `label` before each run
+- Live streaming chart (canvas-based)
+- **Download CSV** button (browser Blob API)
+- CSV schema matches what `validate_fsm.py` expects
+
+---
+
+### Validation Script
+
+#### [NEW] [validate_fsm.py](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/validation/validate_fsm.py)
+- Feature extraction mirroring `detection.cpp` math exactly
+- Class separation (positive vs negative)
+- Baseline derivation (ROC + Youden's J per threshold)
+- Leave-one-trial-out cross-validation
+- Full FSM sequence simulation (not just per-sample threshold)
+- Output: confusion matrix, sensitivity/specificity, literature-vs-derived threshold table
+- `--sweep` flag for cost-weighted sensitivity analysis
+
+---
+
+## Verification Plan
+
+### Build Verification
+- All firmware compiles with Arduino IDE / PlatformIO for ESP32-S3
+- Backend builds with `npm run build` (Vite)
+- No TypeScript errors (`tsc --noEmit`)
+
+### Manual Verification
+- Run `npm run dev` for backend → verify dashboard loads, map renders, poll loop works
+- Flash wearable → verify serial output for sensor reads, FSM state transitions, LoRa TX
+- Flash receiver → verify captive portal serves, LoRa RX deserializes, HTTP POST reaches backend
+- End-to-end: wearable alert → receiver → backend → dashboard pin appears
+
+### Validation Script
+- `python validate_fsm.py --help` runs without error
+- Script processes sample CSV data correctly (we'll include a small synthetic test CSV)

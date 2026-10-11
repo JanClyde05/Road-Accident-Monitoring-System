@@ -1,0 +1,56 @@
+flowchart TD
+    W_BOOT(["([START: Wearable Firmware Boot])"]) --> W1["{{Initialize Serial (115200 Baud, 500ms Delay)}}"]
+    W1 --> W2["{{Configure GPIO Pins: NeoPixel=48, Buzzer=4, Button=5, Battery=2}}"]
+    W2 --> W3["[Set NeoPixel → NEO_CONNECTING (Pulsing Cyan)]"]
+    W3 --> W4["[[buzzerSetPattern(BZR_CONFIRM) - Short Chirp]]"]
+    W4 --> W5["[[detectionInit() & gpsInit()]]"]
+    W5 --> W6["{{Initialize SPI Bus for LoRa (SCK=12, MISO=13, MOSI=11, NSS=10)}}"]
+    W6 --> W7{"LoRa.begin(433E6)\nSuccessful?"}
+
+    W7 -- "YES" --> W8["[Set _loraOk = true\nConfigure SF9, BW125kHz, CR4/5, Power 17dBm]"]
+    W7 -- "NO" --> W9["[Set _loraOk = false\nSet NeoPixel → NEO_ERROR (Solid Red)]"]
+
+    W8 --> W10["[[btServiceInit() - Start BLE Peripheral 'RAMS Wearable']]"]
+    W9 --> W10
+    W10 --> W_LOOP(["([ENTER: Main loop() Execution Cycle])"])
+
+    W_LOOP --> L1["[[Execute Background Tasks:\ngpsUpdate(), buzzerUpdate(), neopixelUpdate(),\nbtServiceUpdate(), batteryUpdate()]]"]
+    L1 --> L2["[/buttonUpdate(): Read & Debounce GPIO 5 Pushbutton/]"]
+    L2 --> L3{"Pushbutton\nPressed?"}
+
+    %% Button Pressed
+    L3 -- "YES" --> L4{"Active Crash Alert\nIn Progress?"}
+    L4 -- "YES" --> L5["📵 CANCEL FALSE ALARM\n[[detectionAcknowledgeAlert()]]\n[buzzerOff()]\n[[buzzerSetPattern(BZR_CONFIRM)]]"]
+    L5 --> L6{"_loraOk == true?"}
+    L6 -- "YES" --> L7["[[loraSendFalseAlarm(token, lat, lon)]]"]
+    L6 -- "NO" --> L8
+    L7 --> L8["[/BLE Notify Phone: 'CANCEL_ALERT_ACK'/]"]
+    L8 --> L9
+
+    L4 -- "NO" --> L10["[[buzzerSetPattern(BZR_CONFIRM)]]\n[/Serial Print Status & Battery %/]"]
+    L10 --> L9
+
+    L3 -- "NO" --> L9{"Evaluate NeoPixel\nState"}
+
+    %% NeoPixel Logic
+    L9 -- "Active Alert" --> N1["[Keep NeoPixel in NEO_ALERT (Red Strobe)]"]
+    L9 -- "LoRa Error" --> N2["[Set NeoPixel → NEO_ERROR (Solid Red)]"]
+    L9 -- "BLE Disconnected" --> N3["[Set NeoPixel → NEO_CONNECTING (Pulsing Cyan)]"]
+    L9 -- "BLE Armed" --> N4["[Set NeoPixel → NEO_ARMED (Solid Green)]"]
+
+    N1 --> T1
+    N2 --> T1
+    N3 --> T1
+    N4 --> T1
+
+    %% Telemetry Timer
+    T1{"_loraOk && BLE Connected\n&& (millis() - lastTel >= 30000)?"}
+    T1 -- "YES" --> T2["[[loraSendTelemetry(token, lat, lon, battPct)]]\n[lastTel = millis()]"]
+    T1 -- "NO" --> T3
+    T2 --> T3["[delay(5ms)]"]
+    T3 --> W_LOOP
+
+    style W_BOOT fill:#1e3a8a,stroke:#3b82f6,color:#fff
+    style W_LOOP fill:#065f46,stroke:#10b981,color:#fff
+    style L5 fill:#047857,stroke:#fff,color:#fff
+    style W9 fill:#b91c1c,stroke:#fff,color:#fff

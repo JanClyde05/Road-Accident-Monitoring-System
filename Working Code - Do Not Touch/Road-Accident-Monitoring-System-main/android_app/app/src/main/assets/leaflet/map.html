@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>RAMS Dispatch Map</title>
+  <link rel="stylesheet" href="leaflet.css"/>
+  <script src="leaflet.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #09090B;
+      overflow: hidden;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      background: #09090B !important;
+    }
+    .leaflet-container {
+      background: #09090B !important;
+    }
+    .leaflet-control-attribution, .leaflet-control-zoom {
+      display: none !important;
+    }
+
+    /* Dark mode map tile tone: deep monochromatic slate/zinc matching web dashboard */
+    .leaflet-tile-pane {
+      filter: invert(100%) hue-rotate(180deg) brightness(0.9) contrast(1.2) grayscale(0.85);
+    }
+
+    /* User Marker Root Container */
+    .user-marker-root {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      pointer-events: none;
+    }
+
+    /* Mode Switching: Zoomed In (>= 15) vs Zoomed Out (< 15) */
+    .user-marker-root.show-puck .user-puck-view {
+      display: block;
+    }
+    .user-marker-root.show-puck .user-pin-view {
+      display: none;
+    }
+    .user-marker-root.show-pin .user-puck-view {
+      display: none;
+    }
+    .user-marker-root.show-pin .user-pin-view {
+      display: block;
+    }
+
+    /* Google Maps Direction Beam (Blue Flashlight) */
+    .direction-beam-container {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      top: 0;
+      left: 0;
+      transform-origin: 80px 80px;
+      transition: transform 0.12s linear;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes radar-pulse {
+      0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.85; }
+      100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+    }
+
+    .user-pulse-ring {
+      position: absolute;
+      top: 80px;
+      left: 80px;
+      width: 44px;
+      height: 44px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      background: rgba(59, 130, 246, 0.25);
+      animation: radar-pulse 1.8s infinite ease-out;
+      z-index: 2;
+    }
+
+    /* Google Maps Blue Location Puck */
+    .user-puck {
+      position: absolute;
+      top: 80px;
+      left: 80px;
+      width: 22px;
+      height: 22px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #2563eb;
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.85), 0 2px 6px rgba(0, 0, 0, 0.6);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .puck-center-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .user-label-pill {
+      position: absolute;
+      top: 98px;
+      left: 80px;
+      transform: translateX(-50%);
+      background: rgba(9, 9, 11, 0.95);
+      border: 1px solid #3f3f46;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-weight: 900;
+      font-size: 8px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      z-index: 4;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Earlier Classic Teardrop Pin Graphic for Zoom-Out */
+    .user-pin-view {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .user-pin-svg {
+      position: absolute;
+      top: 34px;
+      left: 62px;
+      width: 36px;
+      height: 46px;
+      filter: drop-shadow(0 6px 14px rgba(37, 99, 235, 0.75));
+      z-index: 3;
+    }
+    .user-pin-pulse {
+      position: absolute;
+      top: 52px;
+      left: 80px;
+      width: 38px;
+      height: 38px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      background: rgba(59, 130, 246, 0.22);
+      animation: radar-pulse 1.8s infinite ease-out;
+      z-index: 2;
+    }
+    .user-pin-label {
+      position: absolute;
+      top: 86px;
+      left: 80px;
+      transform: translateX(-50%);
+      background: rgba(9, 9, 11, 0.95);
+      border: 1px solid #3b82f6;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-weight: 900;
+      font-size: 8px;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      z-index: 4;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    console.log("RAMS: map.html loaded, initializing script...");
+
+    var map = null;
+    var userMarker = null;
+    var nearbyLayer = null;
+    var currentLat = 17.6132;
+    var currentLon = 121.7270;
+    var currentHdg = 0;
+
+    // Continuous 360-degree angle unwrap tracker to eliminate jitter and 359/1 spin
+    var cumulativeHdg = 0;
+    var lastRawHdg = null;
+
+    function applySmoothHeading(rawHdg) {
+      if (typeof rawHdg !== 'number' || isNaN(rawHdg)) return;
+      if (lastRawHdg === null) {
+        lastRawHdg = rawHdg;
+        cumulativeHdg = rawHdg;
+      } else {
+        var delta = (rawHdg - lastRawHdg + 540) % 360 - 180;
+        cumulativeHdg += delta;
+        lastRawHdg = rawHdg;
+      }
+      var beam = document.getElementById('directionBeam');
+      if (beam) {
+        beam.style.transform = 'rotate(' + cumulativeHdg + 'deg)';
+      }
+    }
+
+    function createUserIcon(hdg) {
+      var beamSvg = '<svg class="direction-beam-container" id="directionBeam" viewBox="0 0 160 160" style="transform: rotate(' + hdg + 'deg);">' +
+        '<defs>' +
+        '<radialGradient id="beamGrad" cx="80" cy="80" r="75" fx="80" fy="80" gradientUnits="userSpaceOnUse">' +
+        '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.85"/>' +
+        '<stop offset="35%" stop-color="#3b82f6" stop-opacity="0.45"/>' +
+        '<stop offset="70%" stop-color="#3b82f6" stop-opacity="0.15"/>' +
+        '<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>' +
+        '</radialGradient>' +
+        '</defs>' +
+        '<path d="M 80 80 L 42.5 15.05 A 75 75 0 0 1 117.5 15.05 Z" fill="url(#beamGrad)" />' +
+        '</svg>';
+
+      var puckHtml = '<div class="user-puck-view">' +
+        beamSvg +
+        '<div class="user-pulse-ring"></div>' +
+        '<div class="user-puck"><div class="puck-center-dot"></div></div>' +
+        '<div class="user-label-pill">LIVE • YOU</div>' +
+        '</div>';
+
+      var pinSvg = '<svg class="user-pin-svg" viewBox="0 0 36 46" fill="none">' +
+        '<path d="M18 1C8.611 1 1 8.611 1 18C1 28.5 15.5 42.5 17.2 44.3C17.6 44.8 18.4 44.8 18.8 44.3C20.5 42.5 35 28.5 35 18C35 8.611 27.389 1 18 1Z" fill="#2563eb" stroke="#ffffff" stroke-width="2" />' +
+        '<circle cx="18" cy="18" r="9.5" fill="#ffffff" />' +
+        '<circle cx="18" cy="18" r="5.5" fill="#2563eb" />' +
+        '</svg>';
+
+      var pinHtml = '<div class="user-pin-view">' +
+        '<div class="user-pin-pulse"></div>' +
+        pinSvg +
+        '<div class="user-pin-label">LIVE • YOU</div>' +
+        '</div>';
+
+      var currentZoom = (map && typeof map.getZoom === 'function') ? map.getZoom() : 15;
+      var initModeClass = (currentZoom >= 15) ? 'show-puck' : 'show-pin';
+
+      var innerHtml = '<div id="userMarkerRoot" class="user-marker-root ' + initModeClass + '">' +
+        puckHtml +
+        pinHtml +
+        '</div>';
+
+      return L.divIcon({
+        className: 'custom-user-marker',
+        html: innerHtml,
+        iconSize: [160, 160],
+        iconAnchor: [80, 80]
+      });
+    }
+
+    function createAlertIcon() {
+      var alertSvg = '<svg width="32" height="42" viewBox="0 0 36 46" fill="none" style="filter:drop-shadow(0 6px 14px rgba(239,68,68,0.65));">' +
+        '<path d="M18 1C8.611 1 1 8.611 1 18C1 28.5 15.5 42.5 17.2 44.3C17.6 44.8 18.4 44.8 18.8 44.3C20.5 42.5 35 28.5 35 18C35 8.611 27.389 1 18 1Z" fill="#ef4444" stroke="#ffffff" stroke-width="2" />' +
+        '<circle cx="18" cy="18" r="10.5" fill="#ffffff" />' +
+        '<path d="M18 12v7" stroke="#ef4444" stroke-width="2.6" stroke-linecap="round"/>' +
+        '<circle cx="18" cy="22" r="1.4" fill="#ef4444"/>' +
+        '</svg>';
+
+      var alertHtml = '<div style="position:relative;width:32px;height:42px;margin-left:-16px;margin-top:-42px;display:flex;flex-direction:column;align-items:center;">' +
+        '<div style="position:absolute;top:2px;width:32px;height:32px;border-radius:50%;border:2px solid #ef4444;background:rgba(239,68,68,0.2);animation:radar-pulse 1.8s infinite ease-out;"></div>' +
+        alertSvg +
+        '<div style="position:absolute;bottom:-2px;background:#09090b;border:1px solid #ef4444;border-radius:3px;padding:0 4px;font-family:monospace;font-size:7.5px;font-weight:900;color:#ef4444;white-space:nowrap;">! CRASH</div>' +
+        '</div>';
+
+      return L.divIcon({
+        className: 'alert-pin-marker',
+        html: alertHtml,
+        iconSize: [32, 42],
+        iconAnchor: [16, 42]
+      });
+    }
+
+    function updateMarkerZoomMode() {
+      if (!map) return;
+      var z = map.getZoom();
+      var root = document.getElementById('userMarkerRoot');
+      if (!root) return;
+      if (z >= 15) {
+        root.className = 'user-marker-root show-puck';
+      } else {
+        root.className = 'user-marker-root show-pin';
+      }
+    }
+
+    window.initMap = function(lat, lon, hdg, showNearby, incidents) {
+      console.log("RAMS: initMap called with lat=" + lat + " lon=" + lon + " hdg=" + hdg);
+      currentLat = lat;
+      currentLon = lon;
+      currentHdg = hdg;
+
+      if (!map) {
+        map = L.map('map', {
+          center: [lat, lon],
+          zoom: 14,
+          zoomControl: false,
+          attributionControl: false
+        });
+
+        var darkLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19
+        }).addTo(map);
+
+        darkLayer.on('tileload', function() {
+          console.log("RAMS: Dark OSM tile successfully loaded!");
+        });
+
+        nearbyLayer = L.layerGroup().addTo(map);
+
+        // Adaptive zoom listener: switch between teardrop pin (< 15) and blue puck + flashlight beam (>= 15)
+        map.on('zoom', updateMarkerZoomMode);
+        map.on('zoomend', updateMarkerZoomMode);
+
+        if (window.ResizeObserver) {
+          var ro = new ResizeObserver(function() {
+            if (map) {
+              map.invalidateSize();
+              console.log("RAMS: ResizeObserver triggered, map size=" + map.getSize().x + "x" + map.getSize().y);
+            }
+          });
+          ro.observe(document.getElementById('map'));
+        }
+      }
+
+      // Create or update user live pin
+      if (!userMarker) {
+        userMarker = L.marker([lat, lon], {
+          icon: createUserIcon(hdg)
+        }).addTo(map);
+      } else {
+        userMarker.setLatLng([lat, lon]);
+      }
+
+      applySmoothHeading(hdg);
+      updateMarkerZoomMode();
+
+      // Update nearby markers if enabled
+      if (showNearby && incidents && incidents.length > 0) {
+        window.setNearbyIncidents(incidents);
+      }
+
+      ensureMapSize();
+      console.log("RAMS: initMap completed successfully, size=" + (map ? map.getSize().x + "x" + map.getSize().y : "null"));
+    };
+
+    function ensureMapSize() {
+      if (map) {
+        map.invalidateSize();
+        var size = map.getSize();
+        if (size.x > 0 && size.y > 0) {
+          console.log("RAMS: map verified active at " + size.x + "x" + size.y);
+        }
+      }
+    }
+
+    // Periodic size validator for Compose view transitions
+    setInterval(ensureMapSize, 600);
+
+    window.updateUserPos = function(lat, lon, hdg, showNearby) {
+      currentLat = lat;
+      currentLon = lon;
+      currentHdg = hdg;
+
+      if (!map) {
+        window.initMap(lat, lon, hdg, showNearby, []);
+        return;
+      }
+
+      if (!userMarker) {
+        userMarker = L.marker([lat, lon], {
+          icon: createUserIcon(hdg)
+        }).addTo(map);
+      } else {
+        userMarker.setLatLng([lat, lon]);
+        applySmoothHeading(hdg);
+      }
+      updateMarkerZoomMode();
+      map.panTo([lat, lon], { animate: true, duration: 0.5 });
+    };
+
+    window.setNearbyIncidents = function(incidents) {
+      if (!nearbyLayer) return;
+      nearbyLayer.clearLayers();
+      if (!incidents || incidents.length === 0) return;
+      var alertIcon = createAlertIcon();
+      incidents.forEach(function(item) {
+        var marker = L.marker([item.lat, item.lon], { icon: alertIcon }).addTo(nearbyLayer);
+        if (item.title) {
+          marker.bindTooltip(item.title + (item.token ? " (" + item.token + ")" : ""), { direction: 'top' });
+        }
+      });
+    };
+
+    window.updateUserHeading = function(hdg) {
+      currentHdg = hdg;
+      applySmoothHeading(hdg);
+    };
+
+    window.recenterMap = function(lat, lon) {
+      if (map) {
+        var targetLat = (typeof lat === 'number' && lat !== 0) ? lat : currentLat;
+        var targetLon = (typeof lon === 'number' && lon !== 0) ? lon : currentLon;
+        currentLat = targetLat;
+        currentLon = targetLon;
+        if (userMarker) {
+          userMarker.setLatLng([targetLat, targetLon]);
+        }
+        map.setView([targetLat, targetLon], 16, { animate: true });
+        updateMarkerZoomMode();
+        map.invalidateSize();
+        console.log("RAMS: recenterMap triggered to [" + targetLat + ", " + targetLon + "]");
+      }
+    };
+
+    window.setMapZoom = function(z) {
+      if (map) {
+        map.setZoom(z);
+        updateMarkerZoomMode();
+        console.log("RAMS: setMapZoom triggered to " + z);
+      }
+    };
+  </script>
+</body>
+</html>

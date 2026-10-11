@@ -1,0 +1,90 @@
+flowchart TD
+    %% STAGE 1: SENSING
+    subgraph STAGE1["STAGE 1: INPUT ACQUISITION & SENSING"]
+        GPS_SAT["Multi-GNSS Satellites\n(GPS / BeiDou Constellation)"]
+        PHYS_MOTION["Physical Motion / Crash Event\n(G-Force Shock & Tilt Angle)"]
+        RIDER_IN["Rider Physical Interaction\n(SOS Button / Phone UI)"]
+
+        PHONE_IMU[/"Smartphone 100Hz IMU\n(Accelerometer & Gyroscope)"/]
+        PHONE_GPS[/"Smartphone Dual-Band GNSS\n(Sub-meter Lat / Lon Stream)"/]
+        WEAR_BTN[/"Wearable Physical Pushbutton\n(GPIO 5 Debounced Interrupt)"/]
+
+        PHYS_MOTION --> PHONE_IMU
+        GPS_SAT --> PHONE_GPS
+        RIDER_IN --> WEAR_BTN
+    end
+
+    %% STAGE 2: WEARABLE
+    subgraph STAGE2["STAGE 2: WEARABLE ON-PERSON NODE (ESP32-S3)"]
+        BLE_LINK[/"BLE Nordic UART Service (NUS)\n(2.4GHz High-Speed Wireless)"/]
+        PHONE_GPS --> BLE_LINK
+        PHONE_IMU --> BLE_LINK
+
+        MCU_WEAR["ESP32-S3 Wearable Core\n• Real-Time FSM Crash Classifier\n• Periodic 30s Telemetry Engine\n• False Alarm Grace Window Manager"]
+        BLE_LINK --> MCU_WEAR
+        WEAR_BTN --> MCU_WEAR
+
+        BZR_ALARM>"Active Buzzer Siren (GPIO 4)\nAudible Pre-Alert Warning"]
+        NEO_RING>"WS2812B NeoPixel Ring (GPIO 48)\nVisual State & Red Strobe Indicator"]
+        MCU_WEAR --> BZR_ALARM
+        MCU_WEAR --> NEO_RING
+
+        LORA_TX["Ra-02 LoRa SX1278 Transmitter\n(SPI: SCK=12, MISO=13, MOSI=11, NSS=10)"]
+        MCU_WEAR --> LORA_TX
+    end
+
+    %% STAGE 3: RF TELEMETRY
+    subgraph STAGE3["STAGE 3: WIRELESS RF TELEMETRY CHANNEL"]
+        LORA_CH[/"433 MHz Chirp Spread Spectrum (CSS)\nBW=125kHz | SF=9 | CR=4/5 | Power=17dBm\nLong-Range Penetration (No Cellular Needed)"/]
+        LORA_TX --> LORA_CH
+    end
+
+    %% STAGE 4: BASE STATION
+    subgraph STAGE4["STAGE 4: BASE STATION RECEIVER GATEWAY (ESP32-S3)"]
+        LORA_RX["Ra-02 LoRa SX1278 Receiver\n(SPI: NSS=10, RST=9, DIO0=8)"]
+        LORA_CH --> LORA_RX
+
+        MCU_RX["ESP32-S3 Base Station Controller\n• Binary Packet Demodulator\n• WiFi & LittleFS Queue Manager"]
+        LORA_RX --> MCU_RX
+
+        FS_QUEUE[("LittleFS Non-Volatile Flash\nOffline Queue Buffer (Max 64 Alerts)")]
+        NVS_STORE[("NVS EEPROM Storage\nSaved WiFi Credentials & Config")]
+        MCU_RX <--> FS_QUEUE
+        MCU_RX <--> NVS_STORE
+
+        RX_LED>"NeoPixel Status Indicator (GPIO 48)\nBlue=Flash, Red=Alert, Green=Online"]
+        MCU_RX --> RX_LED
+    end
+
+    %% STAGE 5: INGESTION
+    subgraph STAGE5["STAGE 5: DUAL INGESTION PATHWAYS"]
+        USB_TETHER[/"Hardware USB-CDC Serial Stream\n115200 Baud JSON Output (0ms Latency)"/]
+        WIFI_LAN[/"Local WiFi LAN Network\nHTTP POST :8080/api/upload | TCP :8888"/]
+        MCU_RX --> USB_TETHER
+        MCU_RX --> WIFI_LAN
+    end
+
+    %% STAGE 6: DISPATCH
+    subgraph STAGE6["STAGE 6: RESCUER COMMAND CENTER & TRIAGE"]
+        PC_APP["RAMS Rescuer Desktop App (.exe)\n• C# Multi-Threaded Engine\n• Background Serial COM Scanner\n• Embedded HTTP Server"]
+        USB_TETHER --> PC_APP
+        WIFI_LAN --> PC_APP
+
+        DB_INC[("incidents.json\nActive & Archived Incidents")]
+        DB_REG[("registrations.json\nRider Medical Dossiers")]
+        PC_APP <--> DB_INC
+        PC_APP <--> DB_REG
+
+        RADAR_UI>"Tactical Rescuer Radar Dashboard\n• Real-Time GPS Pinpoint Map\n• Emergency Audio Siren Strobe\n• Blood Type, Allergies & Emergency Contacts"]
+        PC_APP --> RADAR_UI
+
+        RESCUER_ACTION[/"Emergency Rescuer Dispatch\n(Ambulance Deployment / Case Resolution)"/]
+        RADAR_UI --> RESCUER_ACTION
+    end
+
+    style STAGE1 fill:#1e293b,stroke:#475569,stroke-width:2px,color:#fff
+    style STAGE2 fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style STAGE3 fill:#311042,stroke:#a855f7,stroke-width:2px,color:#fff
+    style STAGE4 fill:#1e1e38,stroke:#6366f1,stroke-width:2px,color:#fff
+    style STAGE5 fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+    style STAGE6 fill:#18181b,stroke:#ef4444,stroke-width:2px,color:#fff

@@ -1,0 +1,81 @@
+flowchart TD
+    R_BOOT(["([START: Receiver Firmware Boot])"]) --> R1["{{Initialize Serial 115200 Baud, NeoPixel (GPIO 48), Status LED (GPIO 2)}}"]
+    R1 --> R2["[Set NeoPixel → NEO_RX_BOOT (Blue Pulsing)]"]
+    R2 --> R3["[[nvsStoreInit(): Read Stored WiFi Credentials]]"]
+    R3 --> R4["{{Initialize LoRa Receiver SPI (NSS=10, RST=9, DIO0=8)}}"]
+    R4 --> R5{"LoRa.begin(433E6)\nSuccessful?"}
+
+    R5 -- "YES" --> R6["[Set _loraOk = true\nConfigure 433MHz, SF9, BW125kHz]"]
+    R5 -- "NO" --> R7["[Set _loraOk = false\nSet NeoPixel → NEO_RX_ERROR (Solid Red)]"]
+
+    R6 --> R8["[[wifiManagerInit()]]"]
+    R7 --> R8
+    R8 --> R9{"NVS has WiFi\nCredentials?"}
+    R9 -- "YES" --> R10["[Connect to WiFi STA Mode (15s Timeout)]"]
+    R9 -- "NO" --> R11["[Launch SoftAP 'RAMS_Receiver_Setup' + Captive Portal]"]
+    R10 --> R12{"Connected?"}
+    R12 -- "YES" --> R13["[State: WIFI_CONNECTED (Solid Green LED)]"]
+    R12 -- "NO" --> R11
+
+    R13 --> R14["[[localQueueInit(): Initialize LittleFS Flash Buffer]]"]
+    R11 --> R14
+    R14 --> R15["[[httpUploadInit(): Setup HTTP Client]]"]
+    R15 --> R_LOOP(["([ENTER: Receiver Main loop()])"])
+
+    R_LOOP --> M1["[[wifiManagerUpdate(): Handle DNS & Auto-Reconnect]]"]
+    M1 --> M2{"_loraOk == true?"}
+    M2 -- "NO" --> M_QUEUE
+    M2 -- "YES" --> M3["[/LoRa.parsePacket(): Check RF FIFO Buffer/]"]
+
+    M3 --> M4{"Packet\nReceived?"}
+    M4 -- "NO" --> M_QUEUE
+
+    M4 -- "YES" --> P1["[[neopixelTriggerPacketFlash(): 80ms Blue Blink]]\n[/LoRa.readBytes(rxBuf, len)/]"]
+    P1 --> P2["[Extract packetType = rxBuf[0]\nExtract deviceToken = rxBuf[1..8]]"]
+    
+    P2 --> P_SWITCH{"Evaluate\npacketType"}
+
+    %% Alert
+    P_SWITCH -- "PKT_ALERT (1)" --> A1["🚨 CRASH ALERT DETECTED\n[[neopixelSetAlertState(true) - Red Strobe]]\n[/Output Formatted JSON on USB Serial/]"]
+    A1 --> A2{"WiFi Status ==\nCONNECTED?"}
+    A2 -- "YES" --> A3["[[httpUploadEvent(alertJson)]]"]
+    A2 -- "NO" --> A4["[[localQueueAdd(alertJson)]]\n[Buffer to LittleFS Flash Queue]"]
+    A3 --> M_QUEUE
+    A4 --> M_QUEUE
+
+    %% False Alarm
+    P_SWITCH -- "PKT_FALSE_ALARM (2)" --> FA1["[[neopixelTriggerFalseAlarmFlash(): Cyan Blink]]\n[[neopixelClearAlert(): Reset to Online Green]]\n[/Output Formatted JSON on USB Serial/]"]
+    FA1 --> FA2{"WiFi Status ==\nCONNECTED?"}
+    FA2 -- "YES" --> FA3["[[httpUploadEvent(faJson)]]"]
+    FA2 -- "NO" --> FA4["[[localQueueAdd(faJson)]]"]
+    FA3 --> M_QUEUE
+    FA4 --> M_QUEUE
+
+    %% Telemetry
+    P_SWITCH -- "PKT_TELEMETRY (0)" --> T1["[/Output Formatted JSON on USB Serial/]\n[Extract RSSI, SNR, Battery%]"]
+    T1 --> T2{"WiFi Status ==\nCONNECTED?"}
+    T2 -- "YES" --> T3["[[httpUploadEvent(telJson)]]"]
+    T2 -- "NO" --> T4["[Skip Queue (Transient Telemetry)]"]
+    T3 --> M_QUEUE
+    T4 --> M_QUEUE
+
+    %% Rider Profile
+    P_SWITCH -- "PKT_RIDER_PROFILE (6)" --> PR1["[Unpack 233-Byte Profile:\nName, Plate, Blood, Contacts, PhotoUrl]\n[/Output Formatted JSON on USB Serial/]"]
+    PR1 --> PR2{"WiFi Status ==\nCONNECTED?"}
+    PR2 -- "YES" --> PR3["[[httpUploadRiderProfile(profJson)]]"]
+    PR2 -- "NO" --> PR4["[[localQueueAddRiderProfile(profJson)]]"]
+    PR3 --> M_QUEUE
+    PR4 --> M_QUEUE
+
+    M_QUEUE["[[localQueueUpdate(): If WiFi connected, drain queued items]]"]
+    M_QUEUE --> M_NEO["[[neopixelUpdate(): Refresh status indicator]]"]
+    M_NEO --> M_HB{"(millis() - lastHeartbeat)\n>= 15000?"}
+    M_HB -- "YES" --> HB_OUT["[/Serial Print Heartbeat: LoRa, WiFi IP, Queue Count/]\n[lastHeartbeat = millis()]"]
+    M_HB -- "NO" --> M_DELAY
+    HB_OUT --> M_DELAY["[delay(5ms)]"]
+    M_DELAY --> R_LOOP
+
+    style R_BOOT fill:#1e3a8a,stroke:#3b82f6,color:#fff
+    style R_LOOP fill:#065f46,stroke:#10b981,color:#fff
+    style A1 fill:#b91c1c,stroke:#fff,color:#fff
+    style FA1 fill:#047857,stroke:#fff,color:#fff

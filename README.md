@@ -242,8 +242,13 @@ Danger Monitoring System V2/
 |   |-- build_exe.bat           Native C# compiler script
 |   |-- launch_desktop.bat      One-click launcher
 |-- UI Redesign/                React 19 + Vite dashboard source
+|-- Working Code - Do Not Touch/ Golden baseline reference snapshot archive
+|-- MD Files/                   Obsidian vault specifications, flowcharts, & memory maps
+|-- apps/                       Quick-launch shortcuts & setup runners
+|-- .agents/                    Ponytail token optimization rules & skills
+|-- AGENTS.md                   Agent operating guidelines & Decision Ladder
 |-- DESIGN_RULES.md             UI/UX design system (Zero-Emoji Rule)
-|-- MEMORY_MAP.md               Technical knowledge graph
+|-- MEMORY_MAP.md               Technical knowledge graph & Graphify index
 |-- 00_SYSTEM_ARCHITECTURE.md   Architecture navigation guide
 ```
 

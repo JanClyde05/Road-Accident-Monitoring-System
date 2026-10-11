@@ -262,6 +262,7 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
             const hasAlert = grp.hasActiveAlert;
             const isRescued = !hasAlert && grp.hasRescued;
             const isFa = !hasAlert && !isRescued && grp.hasFalseAlarm;
+            const isRegistered = !hasAlert && !isRescued && !isFa && (ev.type === 'register' || ev.type === 'rider_profile');
 
             // Status Badge configuration
             const badge = hasAlert 
@@ -270,6 +271,8 @@ export default function RAMSEventSidebar({ events, selectedEvent, onEventSelect,
               ? { label: 'RESCUED / CLEARED', className: 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80' }
               : isFa
               ? { label: 'FALSE ALARM (CLEARED)', className: 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80' }
+              : isRegistered
+              ? { label: 'REGISTERED / READY', className: 'bg-purple-950/80 text-purple-300 border-purple-800/80' }
               : { label: 'ACTIVE MONITORING', className: 'bg-neutral-800 text-neutral-300 border-neutral-700/80' };
 
             const handleLocateClick = (e: React.MouseEvent) => {

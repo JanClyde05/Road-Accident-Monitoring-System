@@ -37,13 +37,20 @@ interface WearableProfileOverlayProps {
 }
 
 export default function RAMSWearableProfileOverlay({
-  event,
+  event: propEvent,
   allEvents = [],
   isOpen,
   onClose,
   onProfileUpdated,
   onLocateIncident
 }: WearableProfileOverlayProps) {
+  const [localEvent, setLocalEvent] = useState<EventData | null>(propEvent);
+  const event = localEvent || propEvent;
+
+  useEffect(() => {
+    setLocalEvent(propEvent);
+  }, [propEvent]);
+
   const [copiedCoords, setCopiedCoords] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedDispatch, setCopiedDispatch] = useState(false);
@@ -175,6 +182,11 @@ export default function RAMSWearableProfileOverlay({
   const handleMarkRescued = async () => {
     if (!event) return;
     setIsActionLoading(true);
+    setLocalEvent((prev) => (prev ? { ...prev, status: 'RESCUED', type: 'rescued' } : null));
+    if (propEvent) {
+      propEvent.status = 'RESCUED';
+      propEvent.type = 'rescued';
+    }
     try {
       const res = await fetch('/api/events/rescue', {
         method: 'POST',
@@ -202,12 +214,24 @@ export default function RAMSWearableProfileOverlay({
   const handleMarkFalseAlarm = async () => {
     if (!event) return;
     setIsActionLoading(true);
+    setLocalEvent((prev) => (prev ? { ...prev, status: 'FALSE ALARM', type: 'false_alarm' } : null));
+    if (propEvent) {
+      propEvent.status = 'FALSE ALARM';
+      propEvent.type = 'false_alarm';
+    }
     try {
-      await fetch('/api/upload', {
+      const res = await fetch('/api/events/false-alarm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'false_alarm', deviceToken: event.deviceToken || token })
+        body: JSON.stringify({ id: event.id, deviceToken: event.deviceToken || token })
       });
+      if (!res.ok) {
+        await fetch('/api/false-alarm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: event.id, deviceToken: event.deviceToken || token })
+        });
+      }
       setActionSuccessMsg('Alert marked as FALSE ALARM');
       setTimeout(() => setActionSuccessMsg(null), 3000);
       if (onProfileUpdated) onProfileUpdated();

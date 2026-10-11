@@ -1,0 +1,52 @@
+flowchart TD
+    D_START(["([START: Launch RAMS_Rescuer_Desktop.exe])"]) --> D1["[[LoadRegistrations() from registrations.json]]\n[[LoadIncidents() from incidents.json]]"]
+    D1 --> D2["{{Spawn Thread: StartSerialReceiverBridge()\nScans active COM ports every 2000ms}}"]
+    D2 --> D3["{{Spawn Thread: StartLanReceiverBridge()\nStarts TCP Listener on 0.0.0.0:8888}}"]
+    D3 --> D4["[Find Available HTTP Port in Range 8080-8095]"]
+    D4 --> D5["[[StartServer(port): Initialize HttpListener with Wildcard & Loopback]]"]
+    D5 --> D6["[[LaunchEdgeApp(http://127.0.0.1:port/)\nExecute msedge.exe --app=url (Chromeless Mode)]]"]
+
+    D6 --> D_WATCH{"Watchdog Loop\nEvery 1000ms"}
+    D_WATCH -- "_exitRequested == true\nOR inactive > 15s" --> D_CLEAN["[Stop HttpListener & TCP Listener]\n[Set _serialRunning = false]\n[Close Open COM Ports]"]
+    D_WATCH -- "App Active" --> D_WATCH
+    D_CLEAN --> D_END(["([TERMINATE: Process Exit 0])"])
+
+    %% INGESTION LOGIC
+    subgraph INGESTION["ProcessIncomingPayload(payload, defaultPrefix)"]
+        direction TB
+        IN_START(["([INVOKE: Incoming Payload Received])"]) --> P1["[Extract keys: event, packetType, token, lat, lon]"]
+        P1 --> P_TYPE{"Evaluate\npacketType"}
+
+        %% Profile
+        P_TYPE -- "rider_profile / register" --> R1["[Extract Name, Plate, Blood, Phone, PhotoUrl]\n[Merge into _registrations[token]]\n[[SaveRegistrations() → registrations.json]]"]
+        R1 --> R2["[Retroactively update all existing events matching token with name & photo]\n[[SaveIncidents() → incidents.json]]"]
+
+        %% False Alarm
+        P_TYPE -- "false_alarm" --> F1{"Search incidents for active alert\nmatching deviceToken?"}
+        F1 -- "YES" --> F2["[Update incident status → 'FALSE ALARM']\n[Update event type → 'false_alarm']"]
+        F1 -- "NO" --> F3{"Any recent active alert\nwithin 5 minutes?"}
+        F3 -- "YES" --> F4["[Update most recent active alert → 'FALSE ALARM']"]
+        F3 -- "NO" --> F5["[Insert new false_alarm record at index 0]"]
+        F2 --> F_SAVE["[[SaveIncidents() → incidents.json]]"]
+        F4 --> F_SAVE
+        F5 --> F_SAVE
+
+        %% Alert
+        P_TYPE -- "alert / test" --> A1{"lat != 0.0 &&\nlon != 0.0?"}
+        A1 -- "NO" --> A2["[Lookup last-known valid lat/lon for token]"]
+        A1 -- "YES" --> A3
+        A2 --> A3["[Generate ID: 'RAMS-ALERT-yyyyMMdd-HHmmss-fff']\n[Hydrate with profile from _registrations[token]]\n[Insert Incident at Index 0 of _eventsJsonList]"]
+        A3 --> A_SAVE["[[SaveIncidents() → incidents.json]]"]
+
+        %% Telemetry
+        P_TYPE -- "telemetry" --> T1{"lat != 0.0 &&\nlon != 0.0?"}
+        T1 -- "NO" --> T2["[Discard Telemetry (No Fix)]"]
+        T1 -- "YES" --> T3["[Remove previous telemetry for this token]\n[Insert updated telemetry at index 0]"]
+        T3 --> T_SAVE["[[SaveIncidents() → incidents.json]]"]
+    end
+
+    style D_START fill:#1e3a8a,stroke:#3b82f6,color:#fff
+    style D_END fill:#b91c1c,stroke:#fff,color:#fff
+    style IN_START fill:#065f46,stroke:#10b981,color:#fff
+    style A3 fill:#b91c1c,stroke:#fff,color:#fff
+    style F2 fill:#047857,stroke:#fff,color:#fff

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAMS — Official System & Program Flowchart Viewer</title>
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --bg-card: #121824;
+      --border-color: #232d3f;
+      --accent-red: #ef4444;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-purple: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    #sidebar {
+      width: 340px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .brand-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .nav-section {
+      padding: 14px 20px 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: #1e293b;
+    }
+
+    .nav-item.active {
+      background: #1e293b;
+      border-color: var(--accent-blue);
+    }
+
+    .nav-item-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .badge-pill {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-left: auto;
+    }
+
+    .badge-sys { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge-prog { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+    /* MAIN VIEW */
+    #main-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #090d16;
+      overflow: hidden;
+    }
+
+    /* TOP BAR */
+    .top-toolbar {
+      height: 60px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(18, 24, 36, 0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .current-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn:hover {
+      background: #334155;
+    }
+
+    .btn-primary {
+      background: var(--accent-blue);
+      border-color: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+
+    /* CANVAS AREA */
+    .viewport {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: radial-gradient(circle at center, #151d2f 0%, #090d16 100%);
+      position: relative;
+    }
+
+    .chart-container {
+      max-width: 95%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #0d1117;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .chart-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* PRESENTER DRAWER */
+    .presenter-box {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-card);
+      padding: 16px 24px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .presenter-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .presenter-text {
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="brand-header">
+      <div class="brand-badge">RAMS</div>
+      <div>
+        <div class="brand-title">Danger Monitor System</div>
+        <div class="brand-subtitle">PGC Digital Challenge • Flowcharts</div>
+      </div>
+    </div>
+
+    <div class="nav-section">System Flowcharts</div>
+    <ul class="nav-list">
+      <li class="nav-item active" onclick="loadChart(0)">
+        <div class="nav-item-title">
+          <span>🌐 Master System Topology</span>
+          <span class="badge-pill badge-sys">SYSTEM</span>
+        </div>
+        <div class="nav-item-desc">6-stage physical pipeline: sensors, LoRa, gateway, rescuer</div>
+      </li>
+      <li class="nav-item" onclick="loadChart(1)">
+        <div class="nav-item-title">
+          <span>🔄 Routine vs Crash Alert</span>
+          <span class="badge-pill badge-sys">SYSTEM</span>
+        </div>
+        <div class="nav-item-desc">30s telemetry loop vs high-G crash escalation</div>
+      </li>
+      <li class="nav-item" onclick="loadChart(2)">
+        <div class="nav-item-title">
+          <span>🛡️ Offline Flash Failover</span>
+          <span class="badge-pill badge-sys">SYSTEM</span>
+        </div>
+        <div class="nav-item-desc">LittleFS flash queue & zero-cellular resilience</div>
+      </li>
+
+      <div class="nav-section" style="padding-left: 10px; margin-top: 10px;">Program Flowcharts</div>
+      <li class="nav-item" onclick="loadChart(3)">
+        <div class="nav-item-title">
+          <span>⚡ Wearable Firmware</span>
+          <span class="badge-pill badge-prog">FIRMWARE</span>
+        </div>
+        <div class="nav-item-desc">Boot, 5ms loop, button debounce & BLE crash parser</div>
+      </li>
+      <li class="nav-item" onclick="loadChart(4)">
+        <div class="nav-item-title">
+          <span>📥 Receiver Base Station</span>
+          <span class="badge-pill badge-prog">FIRMWARE</span>
+        </div>
+        <div class="nav-item-desc">LoRa RX polling, packet branching & flash queue drain</div>
+      </li>
+      <li class="nav-item" onclick="loadChart(5)">
+        <div class="nav-item-title">
+          <span>💻 Desktop Rescuer App</span>
+          <span class="badge-pill badge-prog">SOFTWARE</span>
+        </div>
+        <div class="nav-item-desc">Background serial worker, LAN TCP bridge & JSON store</div>
+      </li>
+      <li class="nav-item" onclick="loadChart(6)">
+        <div class="nav-item-title">
+          <span>📱 Android Companion App</span>
+          <span class="badge-pill badge-prog">MOBILE</span>
+        </div>
+        <div class="nav-item-desc">100Hz IMU listener, 15s pre-alert dialog & BLE stream</div>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main id="main-view">
+    <header class="top-toolbar">
+      <div class="current-title" id="chart-title">
+        <span>🌐 Master System Topology</span>
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn" onclick="zoomOut()">🔍 Zoom -</button>
+        <button class="btn" onclick="resetZoom()">100%</button>
+        <button class="btn" onclick="zoomIn()">🔍 Zoom +</button>
+        <a id="btn-svg" class="btn" href="" target="_blank" download>Vector SVG</a>
+        <a id="btn-png" class="btn btn-primary" href="" target="_blank" download>💾 Download 300 DPI PNG</a>
+      </div>
+    </header>
+
+    <div class="viewport" id="viewport">
+      <div class="chart-container" id="chart-card">
+        <img id="chart-img" src="" alt="RAMS Graphical Flowchart">
+      </div>
+    </div>
+
+    <!-- PRESENTER NOTES -->
+    <div class="presenter-box">
+      <div class="presenter-title">🎤 Presenter / Defense Script Notes</div>
+      <div class="presenter-text" id="presenter-notes">Loading presentation notes...</div>
+    </div>
+  </main>
+
+  <script>
+    const charts = [
+      {
+        title: "🌐 Master System Architecture & Data Flowchart",
+        file: "System_Flowchart_Master",
+        notes: "Judges and panel members, this System Flowchart illustrates the end-to-end data lifecycle of RAMS across all 6 physical stages: Input Acquisition, Wearable Edge Processing, LoRa Telemetry, Base Station Ingestion, Dual Ingestion Channels (USB + WiFi), and the Rescuer Command Center."
+      },
+      {
+        title: "🔄 Routine Telemetry vs. Emergency Crash Escalation",
+        file: "System_Flowchart_Routine_vs_Crash",
+        notes: "This flowchart demonstrates how RAMS separates low-priority routine tracking (30s interval) from high-priority crash alerts. When a collision occurs, a 15-second grace window activates locally, allowing the rider to dismiss false alarms before LoRa radio transmission."
+      },
+      {
+        title: "🛡️ Zero-Cellular Resilience & Storage Failover",
+        file: "System_Flowchart_Storage_Failover",
+        notes: "Here we demonstrate zero data loss. The LoRa 433MHz signal operates completely off-grid without cellular towers. If the receiver base station loses local WiFi, alerts are saved in a LittleFS non-volatile flash queue and automatically drained upon reconnection."
+      },
+      {
+        title: "⚡ Wearable Firmware Program Flowchart (ESP32-S3)",
+        file: "Program_Flowchart_Wearable",
+        notes: "The Wearable Firmware executes a non-blocking 5ms loop cycle. It manages the NeoPixel RGB ring, active buzzer siren, hardware debounced cancel button, and BLE Nordic UART service with automatic error recovery."
+      },
+      {
+        title: "📥 Receiver Base Station Program Flowchart (ESP32-S3)",
+        file: "Program_Flowchart_Receiver",
+        notes: "The Base Station Receiver continuously polls the LoRa RF FIFO buffer. Upon packet arrival, it decodes the binary header, flashes the NeoPixel blue, and branches on packet type with dual output to USB-CDC serial and local HTTP upload."
+      },
+      {
+        title: "💻 Desktop Rescuer Application Program Flowchart (C# .NET)",
+        file: "Program_Flowchart_Desktop",
+        notes: "The Rescuer Desktop Application runs an embedded HTTP server and a background serial port monitor. It ingests packets from both USB and LAN TCP port 8888, hydratng raw alerts with full medical dossiers from registrations.json."
+      },
+      {
+        title: "📱 Android Companion Application Program Flowchart (Kotlin)",
+        file: "Program_Flowchart_Android",
+        notes: "The Android companion application samples hardware accelerometer and gyroscope registers at 100Hz, calculates acceleration vector magnitude, and launches an emergency countdown modal with audio warning upon severe impact."
+      }
+    ];
+
+    let currentIdx = 0;
+    let currentZoom = 1.0;
+
+    function loadChart(idx) {
+      currentIdx = idx;
+      currentZoom = 1.0;
+      const data = charts[idx];
+
+      document.querySelectorAll('.nav-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+
+      document.getElementById('chart-title').innerHTML = `<span>${data.title}</span>`;
+      document.getElementById('chart-img').src = `graphics/${data.file}.png`;
+      document.getElementById('btn-svg').href = `graphics/${data.file}.svg`;
+      document.getElementById('btn-png').href = `graphics/${data.file}.png`;
+      document.getElementById('btn-png').download = `${data.file}.png`;
+      document.getElementById('presenter-notes').innerText = `"${data.notes}"`;
+      updateZoom();
+    }
+
+    function zoomIn() {
+      currentZoom = Math.min(currentZoom + 0.2, 3.0);
+      updateZoom();
+    }
+
+    function zoomOut() {
+      currentZoom = Math.max(currentZoom - 0.2, 0.4);
+      updateZoom();
+    }
+
+    function resetZoom() {
+      currentZoom = 1.0;
+      updateZoom();
+    }
+
+    function updateZoom() {
+      document.getElementById('chart-card').style.transform = `scale(${currentZoom})`;
+    }
+
+    // Initialize with first chart
+    loadChart(0);
+  </script>
+</body>
+</html>

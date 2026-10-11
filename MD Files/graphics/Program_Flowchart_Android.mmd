@@ -1,0 +1,39 @@
+flowchart TD
+    A_START(["([START: Launch Android Companion App])"]) --> A1["{{Request Runtime Permissions:\nACCESS_FINE_LOCATION, BLUETOOTH_SCAN,\nBLUETOOTH_CONNECT, BODY_SENSORS}}"]
+    A1 --> A2{"All Permissions\nGranted?"}
+    A2 -- "NO" --> A3["[/Show Permission Dialog/]"]
+    A3 --> A1
+
+    A2 -- "YES" --> A4["[[Load Rider Profile from SharedPreferences]]"]
+    A4 --> A5["[[Start BLE Scan for 'RAMS Wearable']]"]
+    A5 --> A6{"Device\nFound?"}
+    A6 -- "NO" --> A7["[Exponential Backoff Retry]"]
+    A7 --> A5
+
+    A6 -- "YES" --> A8["[[BluetoothGatt.connectGatt()]]\n[Discover Nordic UART Service NUS]"]
+    A8 --> A9["{{Register 100Hz Accelerometer & Gyroscope Listener}}\n{{Start FusedLocationProvider Updates (1Hz)}}"]
+
+    A9 --> A_LOOP{"Continuous Sensor Loop\n(Every 10ms)"}
+    A_LOOP --> S1["[/Read ax, ay, az, gx, gy, gz/]"]
+    S1 --> S2["[Compute aMag = sqrt(ax² + ay² + az²)]\n[Compute Tilt & Orientation Angles]"]
+    S2 --> S3{"aMag >= 3.5G\nOR Tilt > 65° with 0 Speed\nOR Manual SOS Tapped?"}
+
+    %% Impact
+    S3 -- "YES" --> C1["🚨 LAUNCH 15-SECOND PRE-ALERT DIALOG\n[Sound Urgent Phone Warning Alarm]\n[/Send BLE TX: {shock:1, type:'PRE_ALERT'}/]"]
+    C1 --> C2{"User Tapped\n'Cancel False Alarm'?"}
+    C2 -- "YES" --> C3["[/Send BLE TX: {type:'CANCEL_ALERT'}/]\n[Dismiss Dialog & Silence Alarm]"]
+    C3 --> A_LOOP
+
+    C2 -- "NO (Timer Hits 0)" --> C4["🚨 CONFIRM EMERGENCY CRASH\n[/Send BLE TX: {shock:1, type:'EMERGENCY_ALERT', aMag: aMag}/]\n[Show Rescuer Dispatched UI Screen]"]
+    C4 --> A_LOOP
+
+    %% Routine Telemetry
+    S3 -- "NO" --> T1{"(millis() - lastBleTel)\n>= 1000ms?"}
+    T1 -- "YES" --> T2["[Build JSON: lat, lon, spd, alt, aMag, token, profile]\n[/Write to BLE NUS RX Characteristic/]\n[lastBleTel = millis()]"]
+    T1 -- "NO" --> A_LOOP
+    T2 --> A_LOOP
+
+    style A_START fill:#1e3a8a,stroke:#3b82f6,color:#fff
+    style C1 fill:#b91c1c,stroke:#fff,color:#fff
+    style C3 fill:#047857,stroke:#fff,color:#fff
+    style C4 fill:#7f1d1d,stroke:#fff,color:#fff

@@ -80,6 +80,28 @@ export default function App() {
         }
         return merged;
       });
+
+      // Synchronize ramsSelectedEvent with newly fetched event state
+      setRamsSelectedEvent((currentSelected) => {
+        if (!currentSelected) return null;
+        const match = eventList.find(
+          (e) => e.id === currentSelected.id || 
+                 (e.deviceToken && currentSelected.deviceToken && e.deviceToken.toLowerCase() === currentSelected.deviceToken.toLowerCase())
+        );
+        if (match) {
+          return {
+            ...currentSelected,
+            ...match,
+            aMag: typeof match.aMag === 'number' ? match.aMag : currentSelected.aMag,
+            battPct: match.battPct || (typeof match.batt === 'number' ? match.batt : currentSelected.battPct),
+            createdAt: typeof match.createdAt === 'string' ? match.createdAt : currentSelected.createdAt,
+            status: match.status || currentSelected.status,
+            type: match.type || currentSelected.type
+          };
+        }
+        return currentSelected;
+      });
+
       setIsOnline(true);
       setLastUpdated(new Date());
 

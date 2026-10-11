@@ -1,0 +1,39 @@
+flowchart TD
+    subgraph ROUTINE["ROUTINE MONITORING PATHWAY (Every 30 Seconds)"]
+        R1[/"Normal Riding Conditions\n(Speed, Heading, Battery %, Lat, Lon)"/] --> R2["Wearable Telemetry Scheduler\n(30s Elapsed & BLE Connected)"]
+        R2 --> R3["Build Binary PKT_TELEMETRY (Type 0)"]
+        R3 --> R4[/"Transmit via 433MHz LoRa"/]
+        R4 --> R5["Receiver Base Station Ingest"]
+        R5 --> R6[/"Forward to Desktop Command Center"/]
+        R6 --> R7>"Update Radar Live Marker & Battery Indicator"]
+    end
+
+    subgraph CRASH["EMERGENCY ACCIDENT ESCALATION PATHWAY"]
+        C1[/"Severe Impact Detected (aMag >= 3.5G)\nOR Sudden Tilt > 65° with Zero Speed"/] --> C2["🚨 TRIGGER 15-SECOND PRE-ALERT GRACE PERIOD\n• Wearable NeoPixel: Fast Red Strobe\n• Wearable Buzzer: High-Decibel Pulsed Warning\n• Smartphone Display: 15s Countdown Dialog"]
+        
+        C2 --> C3{"Rider Presses\nCancel Button?"}
+
+        C3 -- "YES (False Alarm / Minor Bump)" --> C4["📵 SUPPRESS FALSE ALARM\n• Silence Buzzer & Restore Green LED\n• Transmit PKT_FALSE_ALARM (Type 2)\n• Desktop marks incident 'FALSE ALARM'"]
+        
+        C3 -- "NO (Timer Hits 0 / Incapacitated)" --> C5["🚨 CONFIRMED CRASH ESCALATION\n• Lock Alert State on Hardware\n• Compile PKT_ALERT (Type 1) + Coordinates\n• Immediate Emergency 433MHz LoRa Broadcast"]
+        
+        C5 --> C6["Receiver Base Station Demodulation\n(Trigger Blue Flash & Red Strobe)"]
+        
+        C6 --> C7{"Gateway WiFi\nConnected?"}
+        C7 -- "YES" --> C8[/"HTTP POST /api/upload to Command Station"/]
+        C7 -- "NO" --> C9[("Save Alert to LittleFS Offline Queue\n(Auto-drains when WiFi restores)")]
+        C9 -. Drains .-> C8
+        
+        C6 --> C10[/"Direct USB Serial Stream (115200 Baud)"/]
+        
+        C8 --> C11["Desktop Rescuer Application"]
+        C10 --> C11
+        
+        C11 --> C12>"🚨 TRIGGER DISPATCH ALARM\n• Play Urgent Emergency Siren Loop\n• Center Map on Exact GPS Coordinates\n• Populate Rider Medical Dossier (Blood, Allergies)\n• Display Route Navigation to Crash Site"]
+    end
+
+    style ROUTINE fill:#064e3b,stroke:#059669,stroke-width:2px,color:#fff
+    style CRASH fill:#450a0a,stroke:#dc2626,stroke-width:2px,color:#fff
+    style C2 fill:#b91c1c,stroke:#fff,color:#fff
+    style C4 fill:#047857,stroke:#fff,color:#fff
+    style C12 fill:#991b1b,stroke:#fff,color:#fff

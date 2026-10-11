@@ -1,0 +1,58 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": true,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "tag:#rams",
+      "color": {
+        "a": 1,
+        "rgb": 1603522
+      }
+    },
+    {
+      "query": "tag:#rams-log",
+      "color": {
+        "a": 1,
+        "rgb": 3394815
+      }
+    },
+    {
+      "query": "tag:#obsidian-map",
+      "color": {
+        "a": 1,
+        "rgb": 11029497
+      }
+    },
+    {
+      "query": "tag:#ponytail-optimized",
+      "color": {
+        "a": 1,
+        "rgb": 16753920
+      }
+    },
+    {
+      "query": "tag:#lora-sx1278",
+      "color": {
+        "a": 1,
+        "rgb": 15739958
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.2,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.52,
+  "repelStrength": 12,
+  "linkStrength": 1,
+  "linkDistance": 220,
+  "scale": 0.75,
+  "close": false
+}
