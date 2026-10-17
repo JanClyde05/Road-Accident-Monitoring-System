@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RAMS IMU Studio</string>
+    <string name="positive_class_header">Accident Scenarios (Positive)</string>
+    <string name="negative_class_header">ADL &amp; False-Positive Rejection (Negative)</string>
+    <string name="recording_active">Recording Telemetry In Background</string>
+    <string name="recording_idle">Ready to record</string>
+</resources>

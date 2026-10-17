@@ -228,11 +228,12 @@ static void _processIncomingMessage(const String& msg) {
 
       // Check for Shock / Crash / Emergency detection
       if (shock == 1 || strcmp(type, "EMERGENCY_ALERT") == 0 || strcmp(type, "alert") == 0) {
-        Serial.printf("[BT] *** EMERGENCY CRASH ALERT from phone! Peak=%.2fg ***\n", amag);
-        detectionTriggerAlert(PKT_ALERT, amag);
+        uint8_t evtType = doc["eventType"] | doc["event_type"] | (uint8_t)EVT_DIRECT_IMPACT;
+        Serial.printf("[BT] *** EMERGENCY CRASH ALERT from phone! Peak=%.2fg, EventType=%d ***\n", amag, evtType);
+        detectionTriggerAlert(evtType, amag);
         neopixelSetState(NEO_ALERT);
         buzzerSetPattern(BZR_ALERT);
-        loraSendAlert(_deviceToken, lat, lon, PKT_ALERT, amag);
+        loraSendAlert(_deviceToken, lat, lon, evtType, amag);
       }
     } else {
       Serial.printf("[BT] JSON parse error: %s (len=%d: %.80s)\n", err.c_str(), msg.length(), msg.c_str());

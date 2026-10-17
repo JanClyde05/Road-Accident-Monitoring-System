@@ -1,0 +1,38 @@
+** Drc report for RAMS - PCB.kicad_pcb **
+** Created on 2026-10-14T20:58:53 **
+** Report includes: Errors **
+
+** Found 0 DRC violations **
+
+** Found 5 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

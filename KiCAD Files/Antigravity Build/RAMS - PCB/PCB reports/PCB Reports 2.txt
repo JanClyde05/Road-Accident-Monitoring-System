@@ -1,0 +1,1005 @@
+Info: Processing symbol 'ANT1:RF_Antenna:Johanson_2450AT18x100'.
+Info: Processing symbol 'C28:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'FB1:Inductor_SMD:L_0402_1005Metric'.
+Info: Processing symbol 'C11:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'C18:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'R6:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C15:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C21:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C26:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'R5:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C4:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'Q1:Package_TO_SOT_SMD:SOT-23'.
+Info: Processing symbol 'D3:Diode_SMD:D_SOD-123'.
+Info: Processing symbol 'BZ1:rams:Buzzer_SMD_9650_3327'.
+Info: Processing symbol 'C24:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C8:Capacitor_SMD:C_0805_2012Metric'.
+Info: Processing symbol 'J1:rams:USB_C_TYPE_C_31_M_12'.
+Info: Processing symbol 'L1:Inductor_SMD:L_0402_1005Metric'.
+Info: Processing symbol 'C12:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'Q2:Package_TO_SOT_SMD:SOT-23'.
+Info: Processing symbol 'R12:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R11:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C16:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C19:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C5:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'R10:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C29:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C1:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'C22:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C9:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'R9:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R8:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C13:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C27:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'R7:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R2:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'C25:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'D2:Diode_SMD:D_SOD-123'.
+Info: Processing symbol 'C17:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C6:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C2:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'R1:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'LED1:LED_SMD:LED_SK6805_PLCC4_2.4x2.7mm_P1.3mm'.
+Info: Processing symbol 'C10:Capacitor_SMD:C_0805_2012Metric'.
+Info: Processing symbol 'C20:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'J2:Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal'.
+Info: Processing symbol 'C14:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'C23:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'L2:Inductor_SMD:L_0402_1005Metric'.
+Info: Processing symbol 'R4:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R3:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'Q3:Package_SO:TSSOP-8_4.4x3mm_P0.65mm'.
+Info: Processing symbol 'C3:Capacitor_SMD:C_0402_1005Metric'.
+Info: Processing symbol 'D1:Package_TO_SOT_SMD:SOT-23-6'.
+Info: Processing symbol 'C7:Capacitor_SMD:C_0603_1608Metric'.
+Info: Processing symbol 'R13:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R14:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'R15:Resistor_SMD:R_0402_1005Metric'.
+Info: Processing symbol 'SW1:Button_Switch_SMD:SW_SPDT_PCM12'.
+Info: Processing symbol 'SW2:Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2'.
+Info: Processing symbol 'SW3:Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2'.
+Info: Processing symbol 'U1:Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm'.
+Info: Processing symbol 'U2:RF_Module:Ai-Thinker-Ra-01-LoRa'.
+Info: Processing symbol 'U3:Package_TO_SOT_SMD:SOT-23-5'.
+Info: Processing symbol 'U4:Package_TO_SOT_SMD:SOT-23-6'.
+Info: Processing symbol 'U5:Package_TO_SOT_SMD:SOT-23-5'.
+Info: Processing symbol 'Y1:Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm'.
+Added BZ1 (footprint 'rams:Buzzer_SMD_9650_3327').
+Changed REF** reference designator to BZ1.
+Changed BZ1 value from Buzzer_SMD_9650_3327 to SMD-9650-3327.
+Updated BZ1 symbol association from  to /fca8295a-bf22-4ee0-9937-4898cff77e94.
+Updated BZ1 fields.
+Updated BZ1 sheetname to '/'.
+Updated BZ1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated BZ1 footprint filters to '*Buzzer*'.
+Add net /+3V3.
+Connected BZ1 pin 1 to /+3V3.
+Add net /BUZZER_NEG.
+Connected BZ1 pin 2 to /BUZZER_NEG.
+Updated BZ1 unit metadata.
+Added C1 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C1.
+Changed C1 value from C_0603_1608Metric to 10uF 16V.
+Updated C1 symbol association from  to /7ebe6b9f-4a10-4006-8ad0-69cca5b56633.
+Updated C1 fields.
+Updated C1 sheetname to '/'.
+Updated C1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C1 footprint filters to 'C_*'.
+Add net /VBUS.
+Connected C1 pin 1 to /VBUS.
+Connected C1 pin 2 to /GND.
+Updated C1 unit metadata.
+Added C2 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C2.
+Changed C2 value from C_0402_1005Metric to 0.1uF 50V.
+Updated C2 symbol association from  to /2eb061c0-5051-47fd-8512-5c2c6de57ca8.
+Updated C2 fields.
+Updated C2 sheetname to '/'.
+Updated C2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C2 footprint filters to 'C_*'.
+Connected C2 pin 1 to /VBUS.
+Connected C2 pin 2 to /GND.
+Updated C2 unit metadata.
+Added C3 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C3.
+Changed C3 value from C_0402_1005Metric to 1uF.
+Updated C3 symbol association from  to /8b1b4761-4309-44f1-8776-e894444dd426.
+Updated C3 fields.
+Updated C3 sheetname to '/'.
+Updated C3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C3 footprint filters to 'C_*'.
+Connected C3 pin 2 to /GND.
+Connected C3 pin 1 to /VBUS.
+Updated C3 unit metadata.
+Added C4 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C4.
+Changed C4 value from C_0603_1608Metric to 4.7uF.
+Updated C4 symbol association from  to /7d51e891-1136-44e2-9b9d-26c7c57c0db7.
+Updated C4 fields.
+Updated C4 sheetname to '/'.
+Updated C4 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C4 footprint filters to 'C_*'.
+Connected C4 pin 2 to /GND.
+Add net /B_PLUS.
+Connected C4 pin 1 to /B_PLUS.
+Updated C4 unit metadata.
+Added C5 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C5.
+Changed C5 value from C_0402_1005Metric to 0.1uF.
+Updated C5 symbol association from  to /53b35c57-df45-4679-9a72-ce4546512fd3.
+Updated C5 fields.
+Updated C5 sheetname to '/'.
+Updated C5 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C5 footprint filters to 'C_*'.
+Add net /B_MINUS.
+Connected C5 pin 2 to /B_MINUS.
+Add net /DW_VCC.
+Connected C5 pin 1 to /DW_VCC.
+Updated C5 unit metadata.
+Added C6 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C6.
+Changed C6 value from C_0402_1005Metric to 0.1uF.
+Updated C6 symbol association from  to /de98ba7d-4ddd-4ac2-b072-55be7abe1005.
+Updated C6 fields.
+Updated C6 sheetname to '/'.
+Updated C6 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C6 footprint filters to 'C_*'.
+Add net /DW_TD.
+Connected C6 pin 1 to /DW_TD.
+Connected C6 pin 2 to /B_MINUS.
+Updated C6 unit metadata.
+Added C7 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C7.
+Changed C7 value from C_0603_1608Metric to 10uF.
+Updated C7 symbol association from  to /3e90aa8c-6994-4d04-abc1-3450b7516d1e.
+Updated C7 fields.
+Updated C7 sheetname to '/'.
+Updated C7 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C7 footprint filters to 'C_*'.
+Add net /LDO_IN.
+Connected C7 pin 1 to /LDO_IN.
+Connected C7 pin 2 to /GND.
+Updated C7 unit metadata.
+Added C8 (footprint 'Capacitor_SMD:C_0805_2012Metric').
+Changed REF** reference designator to C8.
+Changed C8 value from C_0805_2012Metric to 100uF 10V.
+Updated C8 symbol association from  to /b18dd66e-4f8b-4890-9a64-55974511db2a.
+Updated C8 fields.
+Updated C8 sheetname to '/'.
+Updated C8 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C8 footprint filters to 'C_*'.
+Connected C8 pin 2 to /GND.
+Connected C8 pin 1 to /LDO_IN.
+Updated C8 unit metadata.
+Added C9 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C9.
+Changed C9 value from C_0603_1608Metric to 10uF.
+Updated C9 symbol association from  to /b35a8550-b336-44bd-b02c-41fe66aa868d.
+Updated C9 fields.
+Updated C9 sheetname to '/'.
+Updated C9 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C9 footprint filters to 'C_*'.
+Connected C9 pin 2 to /GND.
+Connected C9 pin 1 to /+3V3.
+Updated C9 unit metadata.
+Added C10 (footprint 'Capacitor_SMD:C_0805_2012Metric').
+Changed REF** reference designator to C10.
+Changed C10 value from C_0805_2012Metric to 47uF 10V.
+Updated C10 symbol association from  to /d35f5be0-a6bc-4ece-88ce-230ebfad3520.
+Updated C10 fields.
+Updated C10 sheetname to '/'.
+Updated C10 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C10 footprint filters to 'C_*'.
+Connected C10 pin 2 to /GND.
+Connected C10 pin 1 to /+3V3.
+Updated C10 unit metadata.
+Added C11 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C11.
+Changed C11 value from C_0603_1608Metric to 10uF.
+Updated C11 symbol association from  to /513d6bad-2eda-401e-98ae-5feede6b18a6.
+Updated C11 sheetname to '/'.
+Updated C11 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C11 footprint filters to 'C_*'.
+Add net /VDD3P3_A.
+Connected C11 pin 1 to /VDD3P3_A.
+Connected C11 pin 2 to /GND.
+Updated C11 unit metadata.
+Added C12 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C12.
+Changed C12 value from C_0402_1005Metric to 1uF.
+Updated C12 symbol association from  to /daf4ea33-f5f2-42b7-9b80-3ba95a48c2cf.
+Updated C12 sheetname to '/'.
+Updated C12 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C12 footprint filters to 'C_*'.
+Connected C12 pin 1 to /VDD3P3_A.
+Connected C12 pin 2 to /GND.
+Updated C12 unit metadata.
+Added C13 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C13.
+Changed C13 value from C_0402_1005Metric to 0.1uF.
+Updated C13 symbol association from  to /d8c9ae32-6a32-43f0-a847-7ba4e039f893.
+Updated C13 sheetname to '/'.
+Updated C13 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C13 footprint filters to 'C_*'.
+Connected C13 pin 2 to /GND.
+Connected C13 pin 1 to /VDD3P3_A.
+Updated C13 unit metadata.
+Added C14 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C14.
+Changed C14 value from C_0402_1005Metric to 0.1uF.
+Updated C14 symbol association from  to /f69718f7-0d71-4f76-b942-c55f572a0db2.
+Updated C14 sheetname to '/'.
+Updated C14 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C14 footprint filters to 'C_*'.
+Connected C14 pin 2 to /GND.
+Connected C14 pin 1 to /VDD3P3_A.
+Updated C14 unit metadata.
+Added C15 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C15.
+Changed C15 value from C_0402_1005Metric to 0.1uF.
+Updated C15 symbol association from  to /2e35e5ae-9c18-4376-b254-e8a0b09105bd.
+Updated C15 fields.
+Updated C15 sheetname to '/'.
+Updated C15 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C15 footprint filters to 'C_*'.
+Connected C15 pin 1 to /+3V3.
+Connected C15 pin 2 to /GND.
+Updated C15 unit metadata.
+Added C16 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C16.
+Changed C16 value from C_0402_1005Metric to 0.1uF.
+Updated C16 symbol association from  to /97ac96e4-347c-4db9-9769-6dfb6cccf3e6.
+Updated C16 fields.
+Updated C16 sheetname to '/'.
+Updated C16 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C16 footprint filters to 'C_*'.
+Connected C16 pin 1 to /+3V3.
+Connected C16 pin 2 to /GND.
+Updated C16 unit metadata.
+Added C17 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C17.
+Changed C17 value from C_0402_1005Metric to 1uF.
+Updated C17 symbol association from  to /95c41b2c-33a3-4f1a-a28a-d4b81cbd04ce.
+Updated C17 fields.
+Updated C17 sheetname to '/'.
+Updated C17 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C17 footprint filters to 'C_*'.
+Connected C17 pin 2 to /GND.
+Add net /VDD_SPI.
+Connected C17 pin 1 to /VDD_SPI.
+Updated C17 unit metadata.
+Added C18 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C18.
+Changed C18 value from C_0402_1005Metric to 2.7pF.
+Updated C18 symbol association from  to /daf64136-c234-4059-8ce6-e66634c63863.
+Updated C18 fields.
+Updated C18 sheetname to '/'.
+Updated C18 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C18 footprint filters to 'C_*'.
+Add net /RF_LNA.
+Connected C18 pin 1 to /RF_LNA.
+Connected C18 pin 2 to /GND.
+Updated C18 unit metadata.
+Added C19 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C19.
+Changed C19 value from C_0402_1005Metric to 2.4pF.
+Updated C19 symbol association from  to /2029ab23-489c-49f9-b184-77eaa270c185.
+Updated C19 fields.
+Updated C19 sheetname to '/'.
+Updated C19 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C19 footprint filters to 'C_*'.
+Add net /RF_MID.
+Connected C19 pin 1 to /RF_MID.
+Connected C19 pin 2 to /GND.
+Updated C19 unit metadata.
+Added C20 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C20.
+Changed C20 value from C_0402_1005Metric to 0.1uF.
+Updated C20 symbol association from  to /37e7f370-f43b-4049-b73c-3c4ec8832681.
+Updated C20 sheetname to '/'.
+Updated C20 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C20 footprint filters to 'C_*'.
+Connected C20 pin 2 to /GND.
+Connected C20 pin 1 to /VDD_SPI.
+Updated C20 unit metadata.
+Added C21 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C21.
+Changed C21 value from C_0402_1005Metric to 10nF.
+Updated C21 symbol association from  to /28bd93e9-dec2-487d-beb4-b8c9caba6427.
+Updated C21 fields.
+Updated C21 sheetname to '/'.
+Updated C21 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C21 footprint filters to 'C_*'.
+Add net /VDDA_PWR.
+Connected C21 pin 1 to /VDDA_PWR.
+Connected C21 pin 2 to /GND.
+Updated C21 unit metadata.
+Added C22 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C22.
+Changed C22 value from C_0402_1005Metric to 1uF.
+Updated C22 symbol association from  to /9e8a9158-5970-4723-a96b-9b4dbaf6fd11.
+Updated C22 sheetname to '/'.
+Updated C22 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C22 footprint filters to 'C_*'.
+Connected C22 pin 2 to /GND.
+Connected C22 pin 1 to /VDDA_PWR.
+Updated C22 unit metadata.
+Added C23 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C23.
+Changed C23 value from C_0402_1005Metric to 1uF.
+Updated C23 symbol association from  to /b6bce3d2-5a86-4bf0-844d-f90576adce25.
+Updated C23 fields.
+Updated C23 sheetname to '/'.
+Updated C23 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C23 footprint filters to 'C_*'.
+Add net /MCU_EN.
+Connected C23 pin 1 to /MCU_EN.
+Connected C23 pin 2 to /GND.
+Updated C23 unit metadata.
+Added C24 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C24.
+Changed C24 value from C_0402_1005Metric to 12pF.
+Updated C24 symbol association from  to /31c110a3-963b-4827-8e64-0f84352bc2e3.
+Updated C24 fields.
+Updated C24 sheetname to '/'.
+Updated C24 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C24 footprint filters to 'C_*'.
+Connected C24 pin 2 to /GND.
+Add net /XTAL_P.
+Connected C24 pin 1 to /XTAL_P.
+Updated C24 unit metadata.
+Added C25 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C25.
+Changed C25 value from C_0402_1005Metric to 12pF.
+Updated C25 symbol association from  to /3633dfee-50c8-41cc-97b7-85fd315225f6.
+Updated C25 fields.
+Updated C25 sheetname to '/'.
+Updated C25 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C25 footprint filters to 'C_*'.
+Add net /XTAL_N.
+Connected C25 pin 1 to /XTAL_N.
+Connected C25 pin 2 to /GND.
+Updated C25 unit metadata.
+Added C26 (footprint 'Capacitor_SMD:C_0603_1608Metric').
+Changed REF** reference designator to C26.
+Changed C26 value from C_0603_1608Metric to 10uF.
+Updated C26 symbol association from  to /989c1ba1-8431-4a7b-af5c-0a0478b55aef.
+Updated C26 fields.
+Updated C26 sheetname to '/'.
+Updated C26 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C26 footprint filters to 'C_*'.
+Connected C26 pin 2 to /GND.
+Add net /LORA_VDD.
+Connected C26 pin 1 to /LORA_VDD.
+Updated C26 unit metadata.
+Added C27 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C27.
+Changed C27 value from C_0402_1005Metric to 0.1uF.
+Updated C27 symbol association from  to /87927ba4-65cb-4b72-a949-17408e67cf43.
+Updated C27 fields.
+Updated C27 sheetname to '/'.
+Updated C27 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C27 footprint filters to 'C_*'.
+Connected C27 pin 2 to /GND.
+Connected C27 pin 1 to /LORA_VDD.
+Updated C27 unit metadata.
+Added C28 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C28.
+Changed C28 value from C_0402_1005Metric to 0.1uF.
+Updated C28 symbol association from  to /082ddfcf-73b1-4155-95fd-1d9dab08952b.
+Updated C28 fields.
+Updated C28 sheetname to '/'.
+Updated C28 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C28 footprint filters to 'C_*'.
+Connected C28 pin 2 to /GND.
+Connected C28 pin 1 to /+3V3.
+Updated C28 unit metadata.
+Added C29 (footprint 'Capacitor_SMD:C_0402_1005Metric').
+Changed REF** reference designator to C29.
+Changed C29 value from C_0402_1005Metric to 0.1uF.
+Updated C29 symbol association from  to /4281d6ad-7ab6-4b2f-a86d-22d75b678da1.
+Updated C29 fields.
+Updated C29 sheetname to '/'.
+Updated C29 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated C29 footprint filters to 'C_*'.
+Add net /VBAT_SENSE.
+Connected C29 pin 1 to /VBAT_SENSE.
+Connected C29 pin 2 to /GND.
+Updated C29 unit metadata.
+Added D1 (footprint 'Package_TO_SOT_SMD:SOT-23-6').
+Changed REF** reference designator to D1.
+Changed D1 value from SOT-23-6 to USBLC6-2SC6.
+Updated D1 symbol association from  to /dea619a3-d616-4abd-ae42-25e79d3ba018.
+Updated D1 fields.
+Updated D1 sheetname to '/'.
+Updated D1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated D1 footprint filters to 'SOT?23*'.
+Updated D1 unit metadata.
+Added D2 (footprint 'Diode_SMD:D_SOD-123').
+Changed REF** reference designator to D2.
+Changed D2 value from D_SOD-123 to SS14.
+Updated D2 symbol association from  to /b1e9b2d3-18a3-41e9-9551-b3118b172ffe.
+Updated D2 fields.
+Updated D2 sheetname to '/'.
+Updated D2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated D2 footprint filters to 'D*SMA*'.
+Updated D2 unit metadata.
+Added D3 (footprint 'Diode_SMD:D_SOD-123').
+Changed REF** reference designator to D3.
+Changed D3 value from D_SOD-123 to 1N4148W.
+Updated D3 symbol association from  to /194d4dd8-831d-4dfb-af9c-0a7aceadce7c.
+Updated D3 fields.
+Updated D3 sheetname to '/'.
+Updated D3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated D3 footprint filters to 'D*SOD?123*'.
+Updated D3 unit metadata.
+Added FB1 (footprint 'Inductor_SMD:L_0402_1005Metric').
+Changed REF** reference designator to FB1.
+Changed FB1 value from L_0402_1005Metric to FerriteBead.
+Updated FB1 symbol association from  to /88825f50-bf0b-4171-85d2-028a74dbf4bd.
+Updated FB1 fields.
+Updated FB1 sheetname to '/'.
+Updated FB1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated FB1 footprint filters to 'Inductor_* L_* *Ferrite*'.
+Connected FB1 pin 1 to /+3V3.
+Connected FB1 pin 2 to /LORA_VDD.
+Updated FB1 unit metadata.
+Added J1 (footprint 'rams:USB_C_TYPE_C_31_M_12').
+Changed REF** reference designator to J1.
+Changed J1 value from USB_C_TYPE_C_31_M_12 to TYPE-C-31-M-12.
+Updated J1 symbol association from  to /f02e5ee7-fe61-434c-97b6-b1d23a781fc7.
+Updated J1 fields.
+Updated J1 sheetname to '/'.
+Updated J1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated J1 footprint filters to 'USB*C*Receptacle*'.
+Add net unconnected-(J1-SBU1-PadA8).
+Connected J1 pin A8 to unconnected-(J1-SBU1-PadA8).
+Add net /USB_CC1.
+Connected J1 pin A5 to /USB_CC1.
+Connected J1 pin B4 to /VBUS.
+Add net /USB_DP_CONN.
+Connected J1 pin B6 to /USB_DP_CONN.
+Connected J1 pin A6 to /USB_DP_CONN.
+Add net /USB_DN_CONN.
+Connected J1 pin A7 to /USB_DN_CONN.
+Add net /USB_CC2.
+Connected J1 pin B5 to /USB_CC2.
+Connected J1 pin A4 to /VBUS.
+Connected J1 pin B7 to /USB_DN_CONN.
+Connected J1 pin A9 to /VBUS.
+Connected J1 pin B1 to /GND.
+Connected J1 pin B12 to /GND.
+Connected J1 pin A12 to /GND.
+Connected J1 pin B9 to /VBUS.
+Connected J1 pin A1 to /GND.
+Add net unconnected-(J1-SBU2-PadB8).
+Connected J1 pin B8 to unconnected-(J1-SBU2-PadB8).
+Updated J1 unit metadata.
+Added J2 (footprint 'Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal').
+Changed REF** reference designator to J2.
+Changed J2 value from JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal to SM02B-SRSS-TB.
+Updated J2 symbol association from  to /e56ba047-99d3-40ee-9959-f0f8d8b72949.
+Updated J2 fields.
+Updated J2 sheetname to '/'.
+Updated J2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated J2 footprint filters to 'Connector*:*_1x??_*'.
+Connected J2 pin 1 to /B_PLUS.
+Connected J2 pin 2 to /B_MINUS.
+Updated J2 unit metadata.
+Added L1 (footprint 'Inductor_SMD:L_0402_1005Metric').
+Changed REF** reference designator to L1.
+Changed L1 value from L_0402_1005Metric to 2nH.
+Updated L1 symbol association from  to /7a6f9f69-b597-44d4-a44b-236152fa6d39.
+Updated L1 fields.
+Updated L1 sheetname to '/'.
+Updated L1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated L1 footprint filters to 'Choke_* *Coil* Inductor_* L_*'.
+Connected L1 pin 2 to /VDD3P3_A.
+Connected L1 pin 1 to /+3V3.
+Updated L1 unit metadata.
+Added L2 (footprint 'Inductor_SMD:L_0402_1005Metric').
+Changed REF** reference designator to L2.
+Changed L2 value from L_0402_1005Metric to 2.4nH.
+Updated L2 symbol association from  to /55982837-d9ff-4072-8cde-60a38ccbf52b.
+Updated L2 fields.
+Updated L2 sheetname to '/'.
+Updated L2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated L2 footprint filters to 'Choke_* *Coil* Inductor_* L_*'.
+Connected L2 pin 1 to /RF_LNA.
+Connected L2 pin 2 to /RF_MID.
+Updated L2 unit metadata.
+Added LED1 (footprint 'LED_SMD:LED_SK6805_PLCC4_2.4x2.7mm_P1.3mm').
+Changed REF** reference designator to LED1.
+Changed LED1 value from LED_SK6805_PLCC4_2.4x2.7mm_P1.3mm to SK6805-EC15.
+Updated LED1 symbol association from  to /45c1ebf3-e5d1-4da5-ad1e-30486610bc32.
+Updated LED1 fields.
+Updated LED1 sheetname to '/'.
+Updated LED1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated LED1 footprint filters to 'LED*SK6805*PLCC*2.4x2.7mm*P1.3mm*'.
+Connected LED1 pin 4 to /+3V3.
+Connected LED1 pin 2 to /GND.
+Add net /NEO_DATA.
+Connected LED1 pin 3 to /NEO_DATA.
+Add net unconnected-(LED1-DOUT-Pad1).
+Connected LED1 pin 1 to unconnected-(LED1-DOUT-Pad1).
+Updated LED1 unit metadata.
+Added Q1 (footprint 'Package_TO_SOT_SMD:SOT-23').
+Changed REF** reference designator to Q1.
+Changed Q1 value from SOT-23 to AO3401A.
+Updated Q1 symbol association from  to /b330abfe-1414-4b30-9b62-0458bbd83105.
+Updated Q1 fields.
+Updated Q1 sheetname to '/'.
+Updated Q1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated Q1 footprint filters to 'SOT?23*'.
+Updated Q1 unit metadata.
+Added Q2 (footprint 'Package_TO_SOT_SMD:SOT-23').
+Changed REF** reference designator to Q2.
+Changed Q2 value from SOT-23 to BC817-25.
+Updated Q2 symbol association from  to /99285ef7-a294-4852-b9a6-d1130197514e.
+Updated Q2 fields.
+Updated Q2 sheetname to '/'.
+Updated Q2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated Q2 footprint filters to 'SOT?23*'.
+Updated Q2 unit metadata.
+Added Q3 (footprint 'Package_SO:TSSOP-8_4.4x3mm_P0.65mm').
+Changed REF** reference designator to Q3.
+Changed Q3 value from TSSOP-8_4.4x3mm_P0.65mm to FS8205A.
+Updated Q3 symbol association from  to /c6c735ee-a6b9-42b9-9e6d-ae2ba8c21438.
+Updated Q3 fields.
+Updated Q3 sheetname to '/'.
+Updated Q3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated Q3 footprint filters to 'TSSOP*8* SOP*8*'.
+Add net unconnected-(Q3-D-Pad7).
+Connected Q3 pin 7 to unconnected-(Q3-D-Pad7).
+Connected Q3 pin 1 to /GND.
+Connected Q3 pin 2 to /GND.
+Connected Q3 pin 5 to /B_MINUS.
+Connected Q3 pin 6 to /B_MINUS.
+Add net unconnected-(Q3-D-Pad8).
+Connected Q3 pin 8 to unconnected-(Q3-D-Pad8).
+Add net /DW_OC.
+Connected Q3 pin 4 to /DW_OC.
+Add net /DW_OD.
+Connected Q3 pin 3 to /DW_OD.
+Updated Q3 unit metadata.
+Added R1 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R1.
+Changed R1 value from R_0402_1005Metric to 5.1k.
+Updated R1 symbol association from  to /c1345350-14ce-4204-8f1b-abbb4def8d66.
+Updated R1 fields.
+Updated R1 sheetname to '/'.
+Updated R1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R1 footprint filters to 'R_*'.
+Connected R1 pin 2 to /GND.
+Connected R1 pin 1 to /USB_CC1.
+Updated R1 unit metadata.
+Added R2 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R2.
+Changed R2 value from R_0402_1005Metric to 5.1k.
+Updated R2 symbol association from  to /246eee14-b851-48f6-a1d9-989cd435b6d3.
+Updated R2 fields.
+Updated R2 sheetname to '/'.
+Updated R2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R2 footprint filters to 'R_*'.
+Connected R2 pin 1 to /USB_CC2.
+Connected R2 pin 2 to /GND.
+Updated R2 unit metadata.
+Added R3 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R3.
+Changed R3 value from R_0402_1005Metric to 4.02k 1%.
+Updated R3 symbol association from  to /19a29044-86bd-4e4b-81c4-21a6545fb995.
+Updated R3 fields.
+Updated R3 sheetname to '/'.
+Updated R3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R3 footprint filters to 'R_*'.
+Connected R3 pin 2 to /GND.
+Add net /CHG_PROG.
+Connected R3 pin 1 to /CHG_PROG.
+Updated R3 unit metadata.
+Added R4 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R4.
+Changed R4 value from R_0402_1005Metric to 330R.
+Updated R4 symbol association from  to /d0630185-45b6-4914-b252-cc3408bca509.
+Updated R4 fields.
+Updated R4 sheetname to '/'.
+Updated R4 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R4 footprint filters to 'R_*'.
+Connected R4 pin 1 to /B_PLUS.
+Connected R4 pin 2 to /DW_VCC.
+Updated R4 unit metadata.
+Added R5 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R5.
+Changed R5 value from R_0402_1005Metric to 1k.
+Updated R5 symbol association from  to /39d9ccec-4296-4ebd-b75d-2fac4346f1c1.
+Updated R5 fields.
+Updated R5 sheetname to '/'.
+Updated R5 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R5 footprint filters to 'R_*'.
+Connected R5 pin 2 to /GND.
+Add net /DW_CS.
+Connected R5 pin 1 to /DW_CS.
+Updated R5 unit metadata.
+Added R6 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R6.
+Changed R6 value from R_0402_1005Metric to 100k.
+Updated R6 symbol association from  to /89fe98a3-714e-46c5-9d43-23b5185d3236.
+Updated R6 fields.
+Updated R6 sheetname to '/'.
+Updated R6 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R6 footprint filters to 'R_*'.
+Connected R6 pin 2 to /GND.
+Connected R6 pin 1 to /VBUS.
+Updated R6 unit metadata.
+Added R7 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R7.
+Changed R7 value from R_0402_1005Metric to 100k.
+Updated R7 symbol association from  to /1034d04f-2501-4241-9040-1329c360ed19.
+Updated R7 fields.
+Updated R7 sheetname to '/'.
+Updated R7 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R7 footprint filters to 'R_*'.
+Connected R7 pin 2 to /GND.
+Add net /LDO_EN.
+Connected R7 pin 1 to /LDO_EN.
+Updated R7 unit metadata.
+Added R8 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R8.
+Changed R8 value from R_0402_1005Metric to 10k.
+Updated R8 symbol association from  to /dc71bacd-6e57-410e-a2c2-7efb8259bfee.
+Updated R8 fields.
+Updated R8 sheetname to '/'.
+Updated R8 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R8 footprint filters to 'R_*'.
+Connected R8 pin 2 to /MCU_EN.
+Connected R8 pin 1 to /+3V3.
+Updated R8 unit metadata.
+Added R9 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R9.
+Changed R9 value from R_0402_1005Metric to 22R.
+Updated R9 symbol association from  to /363d7c92-84d1-4c78-b206-cbb5d9254b00.
+Updated R9 fields.
+Updated R9 sheetname to '/'.
+Updated R9 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R9 footprint filters to 'R_*'.
+Add net /XTAL_P_DRV.
+Connected R9 pin 1 to /XTAL_P_DRV.
+Connected R9 pin 2 to /XTAL_P.
+Updated R9 unit metadata.
+Added R10 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R10.
+Changed R10 value from R_0402_1005Metric to 0R.
+Updated R10 symbol association from  to /4e78cd28-4e94-46d8-aa49-dea51857c964.
+Updated R10 fields.
+Updated R10 sheetname to '/'.
+Updated R10 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R10 footprint filters to 'R_*'.
+Connected R10 pin 2 to /ANT_FEED.
+Connected R10 pin 1 to /RF_MID.
+Updated R10 unit metadata.
+Added R11 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R11.
+Changed R11 value from R_0402_1005Metric to 33R.
+Updated R11 symbol association from  to /0120a9c0-09cf-444c-b87c-373b5cc678fe.
+Updated R11 fields.
+Updated R11 sheetname to '/'.
+Updated R11 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R11 footprint filters to 'R_*'.
+Add net /LORA_SCK_DEV.
+Connected R11 pin 2 to /LORA_SCK_DEV.
+Add net /LORA_SCK.
+Connected R11 pin 1 to /LORA_SCK.
+Updated R11 unit metadata.
+Added R12 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R12.
+Changed R12 value from R_0402_1005Metric to 1k.
+Updated R12 symbol association from  to /f6e38f72-2a28-4487-850f-e7739a976f6c.
+Updated R12 fields.
+Updated R12 sheetname to '/'.
+Updated R12 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R12 footprint filters to 'R_*'.
+Add net /BUZZER_CTRL.
+Connected R12 pin 1 to /BUZZER_CTRL.
+Add net /BUZZER_BASE.
+Connected R12 pin 2 to /BUZZER_BASE.
+Updated R12 unit metadata.
+Added ANT1 (footprint 'RF_Antenna:Johanson_2450AT18x100').
+Added R13 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R13.
+Changed R13 value from R_0402_1005Metric to 100k.
+Updated R13 symbol association from  to /637da8f0-7b34-4b63-b26c-c4c2937fd925.
+Updated R13 fields.
+Updated R13 sheetname to '/'.
+Updated R13 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R13 footprint filters to 'R_*'.
+Connected R13 pin 2 to /GND.
+Connected R13 pin 1 to /BUZZER_BASE.
+Updated R13 unit metadata.
+Changed REF** reference designator to ANT1.
+Added R14 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R14.
+Changed R14 value from R_0402_1005Metric to 330k 1%.
+Updated R14 symbol association from  to /2ad14685-1589-4d71-9a5a-3f374457fb56.
+Updated R14 fields.
+Updated R14 sheetname to '/'.
+Updated R14 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R14 footprint filters to 'R_*'.
+Connected R14 pin 2 to /VBAT_SENSE.
+Connected R14 pin 1 to /B_PLUS.
+Updated R14 unit metadata.
+Changed ANT1 value from Johanson_2450AT18x100 to 2450AT18D0100E.
+Added R15 (footprint 'Resistor_SMD:R_0402_1005Metric').
+Changed REF** reference designator to R15.
+Changed R15 value from R_0402_1005Metric to 180k 1%.
+Updated R15 symbol association from  to /50429195-c1ca-4fff-9ccc-f909776e4bc1.
+Updated R15 fields.
+Updated R15 sheetname to '/'.
+Updated R15 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated R15 footprint filters to 'R_*'.
+Connected R15 pin 2 to /GND.
+Connected R15 pin 1 to /VBAT_SENSE.
+Updated R15 unit metadata.
+Updated ANT1 symbol association from  to /a7e19193-8d56-458c-bfd0-25b580bd667e.
+Added SW1 (footprint 'Button_Switch_SMD:SW_SPDT_PCM12').
+Changed REF** reference designator to SW1.
+Changed SW1 value from SW_SPDT_PCM12 to MSK12C02.
+Updated SW1 symbol association from  to /2371c76d-140b-4673-bc20-93fbdb20ce03.
+Updated SW1 fields.
+Updated SW1 sheetname to '/'.
+Updated SW1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Connected SW1 pin 3 to /GND.
+Connected SW1 pin 2 to /LDO_EN.
+Connected SW1 pin 1 to /LDO_IN.
+Updated SW1 unit metadata.
+Updated ANT1 fields.
+Added SW2 (footprint 'Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2').
+Changed REF** reference designator to SW2.
+Changed SW2 value from SW_Push_1P1T_NO_CK_KMR2 to RESET.
+Updated SW2 symbol association from  to /948ec0e7-8edf-40bf-a075-e076734fe290.
+Updated SW2 fields.
+Updated SW2 sheetname to '/'.
+Updated SW2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Connected SW2 pin 2 to /GND.
+Connected SW2 pin 1 to /MCU_EN.
+Connected SW2 pin 1 to /MCU_EN.
+Connected SW2 pin 2 to /GND.
+Updated SW2 unit metadata.
+Updated ANT1 sheetname to '/'.
+Added SW3 (footprint 'Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2').
+Changed REF** reference designator to SW3.
+Changed SW3 value from SW_Push_1P1T_NO_CK_KMR2 to BOOT.
+Updated SW3 symbol association from  to /6f184428-a048-4bf8-ad65-6d5a8697100c.
+Updated SW3 fields.
+Updated SW3 sheetname to '/'.
+Updated SW3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Connected SW3 pin 2 to /GND.
+Connected SW3 pin 2 to /GND.
+Add net /BOOT_BTN.
+Connected SW3 pin 1 to /BOOT_BTN.
+Connected SW3 pin 1 to /BOOT_BTN.
+Updated SW3 unit metadata.
+Updated ANT1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Added U1 (footprint 'Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm').
+Changed REF** reference designator to U1.
+Changed U1 value from QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm to ESP32-S3FH4R2.
+Updated U1 symbol association from  to /a3fd4bcc-dd78-4cf5-98c1-9c268d42e854.
+Updated U1 fields.
+Updated U1 sheetname to '/'.
+Updated U1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated U1 footprint filters to 'QFN*1EP*7x7mm*P0.4mm*'.
+Connected U1 pin 56 to /VDDA_PWR.
+Add net unconnected-(U1-GPIO4-Pad9).
+Connected U1 pin 9 to unconnected-(U1-GPIO4-Pad9).
+Add net unconnected-(U1-GPIO14-Pad19).
+Connected U1 pin 19 to unconnected-(U1-GPIO14-Pad19).
+Add net unconnected-(U1-GPIO45-Pad51).
+Connected U1 pin 51 to unconnected-(U1-GPIO45-Pad51).
+Connected U1 pin 7 to /VBAT_SENSE.
+Connected U1 pin 1 to /RF_LNA.
+Add net unconnected-(U1-GPIO6-Pad11).
+Connected U1 pin 11 to unconnected-(U1-GPIO6-Pad11).
+Add net unconnected-(U1-MTDO-Pad45).
+Connected U1 pin 45 to unconnected-(U1-MTDO-Pad45).
+Add net unconnected-(U1-GPIO7-Pad12).
+Connected U1 pin 12 to unconnected-(U1-GPIO7-Pad12).
+Connected U1 pin 54 to /XTAL_P_DRV.
+Connected U1 pin 57 to /GND.
+Add net unconnected-(U1-SPICLK_P-Pad37).
+Connected U1 pin 37 to unconnected-(U1-SPICLK_P-Pad37).
+Add net /USB_DP.
+Connected U1 pin 26 to /USB_DP.
+Add net unconnected-(U1-GPIO18-Pad24).
+Connected U1 pin 24 to unconnected-(U1-GPIO18-Pad24).
+Add net unconnected-(U1-SPIQ-Pad34).
+Connected U1 pin 34 to unconnected-(U1-SPIQ-Pad34).
+Add net unconnected-(U1-SPID-Pad35).
+Connected U1 pin 35 to unconnected-(U1-SPID-Pad35).
+Add net /USB_DN.
+Connected U1 pin 25 to /USB_DN.
+Add net unconnected-(U1-GPIO33-Pad38).
+Connected U1 pin 38 to unconnected-(U1-GPIO33-Pad38).
+Connected U1 pin 2 to /VDD3P3_A.
+Connected U1 pin 52 to /NEO_DATA.
+Add net unconnected-(U1-GPIO36-Pad41).
+Connected U1 pin 41 to unconnected-(U1-GPIO36-Pad41).
+Connected U1 pin 20 to /+3V3.
+Add net unconnected-(U1-XTAL_32K_N-Pad22).
+Connected U1 pin 22 to unconnected-(U1-XTAL_32K_N-Pad22).
+Connected U1 pin 3 to /VDD3P3_A.
+Add net /LORA_MISO.
+Connected U1 pin 18 to /LORA_MISO.
+Add net unconnected-(U1-SPIWP-Pad31).
+Connected U1 pin 31 to unconnected-(U1-SPIWP-Pad31).
+Add net unconnected-(U1-SPIHD-Pad30).
+Connected U1 pin 30 to unconnected-(U1-SPIHD-Pad30).
+Add net unconnected-(U1-SPICLK-Pad33).
+Connected U1 pin 33 to unconnected-(U1-SPICLK-Pad33).
+Add net unconnected-(U1-GPIO17-Pad23).
+Connected U1 pin 23 to unconnected-(U1-GPIO17-Pad23).
+Add net /LORA_MOSI.
+Connected U1 pin 16 to /LORA_MOSI.
+Connected U1 pin 55 to /VDDA_PWR.
+Add net unconnected-(U1-U0RXD-Pad50).
+Connected U1 pin 50 to unconnected-(U1-U0RXD-Pad50).
+Connected U1 pin 4 to /MCU_EN.
+Add net unconnected-(U1-GPIO3-Pad8).
+Connected U1 pin 8 to unconnected-(U1-GPIO3-Pad8).
+Add net unconnected-(U1-GPIO34-Pad39).
+Connected U1 pin 39 to unconnected-(U1-GPIO34-Pad39).
+Add net unconnected-(U1-GPIO5-Pad10).
+Connected U1 pin 10 to unconnected-(U1-GPIO5-Pad10).
+Connected U1 pin 53 to /XTAL_N.
+Add net /LORA_RST.
+Connected U1 pin 14 to /LORA_RST.
+Connected U1 pin 29 to /VDD_SPI.
+Add net unconnected-(U1-GPIO35-Pad40).
+Connected U1 pin 40 to unconnected-(U1-GPIO35-Pad40).
+Add net unconnected-(U1-MTMS-Pad48).
+Connected U1 pin 48 to unconnected-(U1-MTMS-Pad48).
+Add net unconnected-(U1-XTAL_32K_P-Pad21).
+Connected U1 pin 21 to unconnected-(U1-XTAL_32K_P-Pad21).
+Connected U1 pin 5 to /BOOT_BTN.
+Add net unconnected-(U1-U0TXD-Pad49).
+Connected U1 pin 49 to unconnected-(U1-U0TXD-Pad49).
+Connected U1 pin 6 to /BUZZER_CTRL.
+Add net /LORA_NSS.
+Connected U1 pin 15 to /LORA_NSS.
+Add net unconnected-(U1-GPIO37-Pad42).
+Connected U1 pin 42 to unconnected-(U1-GPIO37-Pad42).
+Add net unconnected-(U1-GPIO21-Pad27).
+Connected U1 pin 27 to unconnected-(U1-GPIO21-Pad27).
+Add net /LORA_DIO0.
+Connected U1 pin 13 to /LORA_DIO0.
+Add net unconnected-(U1-SPICS0-Pad32).
+Connected U1 pin 32 to unconnected-(U1-SPICS0-Pad32).
+Add net unconnected-(U1-SPICS1-Pad28).
+Connected U1 pin 28 to unconnected-(U1-SPICS1-Pad28).
+Connected U1 pin 17 to /LORA_SCK.
+Add net unconnected-(U1-MTCK-Pad44).
+Connected U1 pin 44 to unconnected-(U1-MTCK-Pad44).
+Add net unconnected-(U1-GPIO38-Pad43).
+Connected U1 pin 43 to unconnected-(U1-GPIO38-Pad43).
+Add net unconnected-(U1-MTDI-Pad47).
+Connected U1 pin 47 to unconnected-(U1-MTDI-Pad47).
+Connected U1 pin 46 to /+3V3.
+Add net unconnected-(U1-SPICLK_N-Pad36).
+Connected U1 pin 36 to unconnected-(U1-SPICLK_N-Pad36).
+Updated U1 unit metadata.
+Add net /ANT_FEED.
+Added U2 (footprint 'RF_Module:Ai-Thinker-Ra-01-LoRa').
+Changed REF** reference designator to U2.
+Changed U2 value from Ai-Thinker-Ra-01-LoRa to Ai-Thinker-Ra-02.
+Updated U2 symbol association from  to /48d85987-a1a1-4cb8-9022-577d2d4ca0cf.
+Updated U2 fields.
+Updated U2 sheetname to '/'.
+Updated U2 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated U2 footprint filters to 'Ai?Thinker?Ra?01*'.
+Connected U2 pin 13 to /LORA_MISO.
+Connected U2 pin 2 to /GND.
+Add net unconnected-(U2-DIO3-Pad8).
+Connected U2 pin 8 to unconnected-(U2-DIO3-Pad8).
+Add net unconnected-(U2-DIO4-Pad10).
+Connected U2 pin 10 to unconnected-(U2-DIO4-Pad10).
+Connected U2 pin 1 to /GND.
+Connected U2 pin 5 to /LORA_DIO0.
+Add net unconnected-(U2-DIO2-Pad7).
+Connected U2 pin 7 to unconnected-(U2-DIO2-Pad7).
+Connected U2 pin 14 to /LORA_MOSI.
+Connected U2 pin 12 to /LORA_SCK_DEV.
+Connected U2 pin 9 to /GND.
+Connected U2 pin 4 to /LORA_RST.
+Connected U2 pin 16 to /GND.
+Connected U2 pin 15 to /LORA_NSS.
+Add net unconnected-(U2-DIO5-Pad11).
+Connected U2 pin 11 to unconnected-(U2-DIO5-Pad11).
+Add net unconnected-(U2-DIO1-Pad6).
+Connected U2 pin 6 to unconnected-(U2-DIO1-Pad6).
+Connected U2 pin 3 to /LORA_VDD.
+Updated U2 unit metadata.
+Connected ANT1 pin 1 to /ANT_FEED.
+Added U3 (footprint 'Package_TO_SOT_SMD:SOT-23-5').
+Changed REF** reference designator to U3.
+Changed U3 value from SOT-23-5 to LTH7R.
+Updated U3 symbol association from  to /0cf9f4ec-0f3d-4d22-ad9b-6bd5fedf41eb.
+Updated U3 fields.
+Updated U3 sheetname to '/'.
+Updated U3 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated U3 footprint filters to 'SOT?23?5*'.
+Add net /CHRG_STAT.
+Connected U3 pin 1 to /CHRG_STAT.
+Connected U3 pin 3 to /B_PLUS.
+Connected U3 pin 2 to /GND.
+Connected U3 pin 4 to /VBUS.
+Connected U3 pin 5 to /CHG_PROG.
+Updated U3 unit metadata.
+Add net /GND.
+Added U4 (footprint 'Package_TO_SOT_SMD:SOT-23-6').
+Changed REF** reference designator to U4.
+Changed U4 value from SOT-23-6 to DW01A.
+Updated U4 symbol association from  to /8a3af4a4-6c48-4f1a-990b-f4462680e096.
+Updated U4 fields.
+Updated U4 sheetname to '/'.
+Updated U4 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated U4 footprint filters to 'SOT?23?6*'.
+Connected U4 pin 5 to /DW_VCC.
+Connected U4 pin 4 to /DW_TD.
+Connected U4 pin 6 to /B_MINUS.
+Connected U4 pin 2 to /DW_CS.
+Connected U4 pin 1 to /DW_OD.
+Connected U4 pin 3 to /DW_OC.
+Updated U4 unit metadata.
+Connected ANT1 pin 2 to /GND.
+Added U5 (footprint 'Package_TO_SOT_SMD:SOT-23-5').
+Changed REF** reference designator to U5.
+Changed U5 value from SOT-23-5 to AP2112K-3.3.
+Updated U5 symbol association from  to /cfa56eb8-97e2-4379-afc0-248c94d38d97.
+Updated U5 fields.
+Updated U5 sheetname to '/'.
+Updated U5 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated U5 footprint filters to 'SOT?23?5*'.
+Updated U5 unit metadata.
+Updated ANT1 unit metadata.
+Added Y1 (footprint 'Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm').
+Changed REF** reference designator to Y1.
+Changed Y1 value from Crystal_SMD_3225-4Pin_3.2x2.5mm to 40MHz.
+Updated Y1 symbol association from  to /36f3d699-97df-4aaa-98f4-5df59c2c1839.
+Updated Y1 fields.
+Updated Y1 sheetname to '/'.
+Updated Y1 sheetfile to 'RAMS - PCB.kicad_sch'.
+Updated Y1 footprint filters to 'Crystal*'.
+Connected Y1 pin 2 to /GND.
+Connected Y1 pin 3 to /XTAL_N.
+Connected Y1 pin 4 to /GND.
+Connected Y1 pin 1 to /XTAL_P.
+Updated Y1 unit metadata.
+Warning: No net found for component Q2 pad 2 (no pin 2 in symbol).
+Warning: No net found for component Q2 pad 1 (no pin 1 in symbol).
+Warning: No net found for component Q2 pad 3 (no pin 3 in symbol).
+Warning: No net found for component D1 pad 2 (no pin 2 in symbol).
+Warning: No net found for component D2 pad 1 (no pin 1 in symbol).
+Warning: No net found for component Q1 pad 2 (no pin 2 in symbol).
+Warning: No net found for component D1 pad 1 (no pin 1 in symbol).
+Warning: No net found for component U5 pad 3 (no pin 3 in symbol).
+Warning: No net found for component U5 pad 2 (no pin 2 in symbol).
+Warning: No net found for component U5 pad 4 (no pin 4 in symbol).
+Warning: No net found for component U5 pad 1 (no pin 1 in symbol).
+Warning: No net found for component U5 pad 5 (no pin 5 in symbol).
+Warning: No net found for component J1 pad S2 (no pin S2 in symbol).
+Warning: No net found for component D2 pad 2 (no pin 2 in symbol).
+Warning: No net found for component Q1 pad 1 (no pin 1 in symbol).
+Warning: No net found for component J1 pad S3 (no pin S3 in symbol).
+Warning: No net found for component D1 pad 6 (no pin 6 in symbol).
+Warning: No net found for component D3 pad 2 (no pin 2 in symbol).
+Warning: No net found for component D3 pad 1 (no pin 1 in symbol).
+Warning: No net found for component D1 pad 3 (no pin 3 in symbol).
+Warning: No net found for component J1 pad S1 (no pin S1 in symbol).
+Warning: No net found for component J2 pad MP (no pin MP in symbol).
+Warning: No net found for component J1 pad S4 (no pin S4 in symbol).
+Warning: No net found for component J2 pad MP (no pin MP in symbol).
+Warning: No net found for component D1 pad 5 (no pin 5 in symbol).
+Warning: No net found for component D1 pad 4 (no pin 4 in symbol).
+Warning: No net found for component Q1 pad 3 (no pin 3 in symbol).
+Error: J1 pad SH not found in rams:USB_C_TYPE_C_31_M_12.
+
+
+Info: Total warnings: 27, errors: 1.

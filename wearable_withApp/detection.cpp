@@ -45,3 +45,4 @@ uint8_t detectionGetEventType() {
 float detectionGetPeakAMag() {
   return _alertPeakAMag;
 }
+

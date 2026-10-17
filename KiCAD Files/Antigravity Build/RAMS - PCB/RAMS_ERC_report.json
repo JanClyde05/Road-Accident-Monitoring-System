@@ -1,0 +1,97 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-15T01:07:27",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/5b9354a1-1c21-409c-952a-40c93b079079",
+            "violations": [
+                {
+                    "description": "Symbol '1N4148W' doesn't match copy in library 'Diode'",
+                    "items": [
+                        {
+                            "description": "Symbol D3 [1N4148W]",
+                            "pos": {
+                                "x": 2.8956,
+                                "y": 2.4892
+                            },
+                            "uuid": "c69cd262-4ca9-468a-8c54-70a21dfbe670"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'BC817' doesn't match copy in library 'Transistor_BJT'",
+                    "items": [
+                        {
+                            "description": "Symbol Q2 [BC817]",
+                            "pos": {
+                                "x": 3.2004,
+                                "y": 2.6416
+                            },
+                            "uuid": "dc95cd28-538b-4e6f-bb03-8b729a175595"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'SS14' doesn't match copy in library 'Diode'",
+                    "items": [
+                        {
+                            "description": "Symbol D2 [SS14]",
+                            "pos": {
+                                "x": 3.556,
+                                "y": 0.4572
+                            },
+                            "uuid": "1773ffe7-9228-46b9-bd87-f930e5fd5fd4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Symbol 'AP2112K-3.3' doesn't match copy in library 'Regulator_Linear'",
+                    "items": [
+                        {
+                            "description": "Symbol U5 [AP2112K-3.3]",
+                            "pos": {
+                                "x": 3.7084,
+                                "y": 1.0414
+                            },
+                            "uuid": "a4ad59d9-b137-44fd-97ae-3c8fdc118c9b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        }
+    ],
+    "source": "RAMS - PCB.kicad_sch"
+}

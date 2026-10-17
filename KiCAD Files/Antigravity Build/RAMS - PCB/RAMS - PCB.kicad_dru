@@ -1,0 +1,21 @@
+(version 1)
+; RAMS Wearable - JLCPCB 4-layer JLC04161H-3313 design rules
+
+(rule "JLC min track/space"
+	(constraint clearance (min 0.09mm))
+	(condition "A.Type == 'track' && B.Type == 'track'")
+)
+
+(rule "JLC min via drill"
+	(constraint hole_size (min 0.2mm))
+	(condition "A.Type == 'via'")
+)
+
+(rule "JLC via to track"
+	(constraint clearance (min 0.254mm))
+	(condition "A.Type == 'via' && B.Type == 'track'")
+)
+
+(rule "Copper to edge"
+	(constraint edge_clearance (min 0.3mm))
+)

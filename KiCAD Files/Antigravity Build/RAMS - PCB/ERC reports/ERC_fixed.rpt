@@ -1,0 +1,24 @@
+ERC report (2026-10-17T16:14:50, Encoding UTF8)
+Report includes: Errors, Warnings, Exclusions
+
+***** Sheet /
+[lib_symbol_mismatch]: Symbol '1N4148W' doesn't match copy in library 'Diode'
+    ; warning
+    @(289.56 mm, 248.92 mm): Symbol D3 [1N4148W]
+[lib_symbol_mismatch]: Symbol 'BC817' doesn't match copy in library 'Transistor_BJT'
+    ; warning
+    @(320.04 mm, 264.16 mm): Symbol Q2 [BC817]
+[lib_symbol_mismatch]: Symbol 'SS14' doesn't match copy in library 'Diode'
+    ; warning
+    @(355.60 mm, 45.72 mm): Symbol D2 [SS14]
+[lib_symbol_mismatch]: Symbol 'AP2112K-3.3' doesn't match copy in library 'Regulator_Linear'
+    ; warning
+    @(370.84 mm, 104.14 mm): Symbol U5 [AP2112K-3.3]
+
+ ** ERC messages: 4  Errors 0  Warnings 4
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

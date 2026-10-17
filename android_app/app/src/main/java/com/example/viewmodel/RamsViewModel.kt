@@ -13,6 +13,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.connectivity.Esp32ConnectionManager
 import com.example.export.CsvExportManager
+import com.example.model.AccidentClassification
 import com.example.model.ConnectionType
 import com.example.model.DeviceLinkStatus
 import com.example.model.GpsData
@@ -140,6 +141,15 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
 
   private val _showCsvDialog = MutableStateFlow(false)
   val showCsvDialog: StateFlow<Boolean> = _showCsvDialog.asStateFlow()
+
+  private val _csvDialogInitialTab = MutableStateFlow("EXPORT")
+  val csvDialogInitialTab: StateFlow<String> = _csvDialogInitialTab.asStateFlow()
+
+  private val _showCsvImportDialog = MutableStateFlow(false)
+  val showCsvImportDialog: StateFlow<Boolean> = _showCsvImportDialog.asStateFlow()
+
+  // IMU Studio Calibration State (Dynamic thresholds & false-alarm cancellation)
+  val imuCalibration: StateFlow<com.example.model.ImuCalibration> = csvExportManager.calibrationState
 
   private val _showDesignRulesDialog = MutableStateFlow(false)
   val showDesignRulesDialog: StateFlow<Boolean> = _showDesignRulesDialog.asStateFlow()
@@ -300,6 +310,17 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       }
     }
 
+    // Observe dynamic IMU Studio calibration profile for motion threshold & false alarm rejection
+    viewModelScope.launch {
+      csvExportManager.calibrationState.collect { cal ->
+        if (cal.isCalibrated && cal.crashThresholdG > 0f) {
+          phoneSensorEngine.setCrashThreshold(cal.crashThresholdG)
+        } else {
+          phoneSensorEngine.setCrashThreshold(0f)
+        }
+      }
+    }
+
     // Populate paired Wearable devices on startup if bluetooth is active
     if (bluetoothAdapter?.isEnabled == true) {
       queryBondedWearableDevices()
@@ -408,6 +429,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun cancelFalseAlarm() {
+    csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed("False alarm dismissed by rider via mobile app")
     val currentRider = _riderProfile.value
     esp32SyncEngine.sendCancelAlertPacket(currentRider)
 
@@ -442,10 +464,47 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   private fun handleCrashShockDetected(gps: GpsData, imu: ImuData, note: String) {
+    val cal = csvExportManager.calibrationState.value
+    // If uncalibrated, no threshold is set: baseline data collection mode (no accident alerts)
+    if (!cal.isCalibrated || cal.crashThresholdG <= 0f) {
+      return
+    }
+
+    // Classify against dynamic baseline derived from IMU Studio correlation data
+    val classification = cal.classifyMotion(
+      aMag = imu.aMag,
+      tiltDeltaDeg = imu.tiltAngleDeg,
+      gyroMagRads = imu.gyroMagRads
+    )
+
+    when (classification) {
+      AccidentClassification.NONE -> return
+      AccidentClassification.NEGATIVE_PHONE_DROP -> {
+        csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed(
+          "Phone drop shock (%.2fg) suppressed below calibrated accident envelope (max phone fall baseline: %.2fg)".format(
+            imu.aMag, cal.phoneFallMaxG
+          )
+        )
+        return
+      }
+      AccidentClassification.NEGATIVE_DATA -> {
+        csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed(
+          "ADL motion (%.2fg) suppressed below calibrated %.2fg crash threshold".format(
+            imu.aMag, cal.crashThresholdG
+          )
+        )
+        return
+      }
+      AccidentClassification.FALL, AccidentClassification.SKID, AccidentClassification.DIRECT_IMPACT -> {
+        // Confirmed accident exceeding negative baseline
+      }
+    }
+
     val currentRider = _riderProfile.value
+    val eventTypeName = classification.displayName
     val newAlert = IncidentEvent(
       id = "ALERT-${UUID.randomUUID().toString().substring(0, 6).uppercase()}",
-      title = "CRASH IMPACT SENSOR SHOCK (%.2fg)".format(imu.aMag),
+      title = "CRASH ALERT: $eventTypeName (%.2fg)".format(imu.aMag),
       type = IncidentType.ALERT,
       timestamp = System.currentTimeMillis(),
       lat = gps.latitude,
@@ -461,15 +520,17 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
         if (gps.hasFix) "GPS: %.5f, %.5f".format(gps.latitude, gps.longitude)
         else "Location Pending (GPS Searching)"
       },
-      notes = "$note: Peak ${imu.aMag} G shock. Device Token: ${currentRider.token}. Dispatched to Rescue Network via Safety Wearable."
+      notes = "$note: Classified as $eventTypeName (Peak ${imu.aMag}g shock). Baseline threshold: ${cal.crashThresholdG}g. Dispatched to Rescue Network via Safety Wearable."
     )
     _events.value = listOf(newAlert) + _events.value
 
-    // Transmit emergency broadcast packet to Wearable
+    // Transmit emergency broadcast packet to Wearable with classified accident type
     esp32SyncEngine.sendEmergencyCrashPacket(
       gps = gps,
       imu = imu,
-      riderProfile = currentRider
+      riderProfile = currentRider,
+      eventType = classification.eventType,
+      eventTypeName = classification.displayName
     )
   }
 
@@ -555,7 +616,8 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     _showRiderLoginDialog.value = visible
   }
 
-  fun setCsvDialogVisible(visible: Boolean) {
+  fun setCsvDialogVisible(visible: Boolean, initialTab: String = "EXPORT") {
+    _csvDialogInitialTab.value = initialTab
     _showCsvDialog.value = visible
   }
 
@@ -585,6 +647,23 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
 
   fun exportCsv() {
     csvExportManager.shareCsv()
+  }
+
+  fun importCsv(uri: android.net.Uri, fileName: String) {
+    csvExportManager.importCsvFromUri(uri, fileName)
+  }
+
+  fun mergeImportedData() {
+    csvExportManager.mergeImportedToRecording()
+  }
+
+  fun clearImportedData() {
+    csvExportManager.clearImportedData()
+  }
+
+  fun setCsvImportDialogVisible(visible: Boolean) {
+    _showCsvImportDialog.value = visible
+    setCsvDialogVisible(visible, "IMPORT")
   }
 
   fun clearLogs() {

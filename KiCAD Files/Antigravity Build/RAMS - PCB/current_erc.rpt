@@ -1,0 +1,33 @@
+ERC report (2026-10-14T23:47:34, Encoding UTF8)
+Report includes: Errors, Warnings, Exclusions
+
+***** Sheet /
+[isolated_pin_label]: Label connected to only one pin
+    ; warning
+    @(167.64 mm, 58.42 mm): Label 'CHRG_STAT'
+[footprint_link_issues]: Footprint 'LED_SK6805_EC20_2.0x2.0mm' not found in library 'LED_SMD'
+    ; warning
+    @(238.76 mm, 248.92 mm): Symbol LED1 [SK6805-EC20]
+[isolated_pin_label]: Label connected to only one pin
+    ; warning
+    @(241.30 mm, 49.53 mm): Label 'DW_TD'
+[lib_symbol_mismatch]: Symbol '1N4148W' doesn't match copy in library 'Diode'
+    ; warning
+    @(269.24 mm, 243.84 mm): Symbol D3 [1N4148W]
+[lib_symbol_mismatch]: Symbol 'BC817' doesn't match copy in library 'Transistor_BJT'
+    ; warning
+    @(294.64 mm, 259.08 mm): Symbol Q2 [BC817]
+[lib_symbol_mismatch]: Symbol 'SS14' doesn't match copy in library 'Diode'
+    ; warning
+    @(325.12 mm, 45.72 mm): Symbol D2 [SS14]
+[lib_symbol_mismatch]: Symbol 'AP2112K-3.3' doesn't match copy in library 'Regulator_Linear'
+    ; warning
+    @(340.36 mm, 99.06 mm): Symbol U5 [AP2112K-3.3]
+
+ ** ERC messages: 7  Errors 0  Warnings 7
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

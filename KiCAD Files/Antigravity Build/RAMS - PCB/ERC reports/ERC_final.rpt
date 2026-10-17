@@ -1,0 +1,72 @@
+ERC report (2026-10-17T16:26:29, Encoding UTF8)
+Report includes: Errors, Warnings, Exclusions
+
+***** Sheet /
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(254.00 mm, 247.65 mm): Symbol LED1 Pin 3 [VDD, Power input, Line]
+[isolated_pin_label]: Label connected to only one pin
+    ; warning
+    @(280.67 mm, 248.92 mm): Label 'BUZZER_NEG'
+[isolated_pin_label]: Label connected to only one pin
+    ; warning
+    @(281.94 mm, 271.78 mm): Label 'BUZZER_NEG'
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(285.75 mm, 248.92 mm): Horizontal Wire, length 5.08 mm
+[lib_symbol_mismatch]: Symbol '1N4148W' doesn't match copy in library 'Diode'
+    ; warning
+    @(289.56 mm, 248.92 mm): Symbol D3 [1N4148W]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(293.37 mm, 248.92 mm): Horizontal Wire, length 5.08 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(314.96 mm, 264.16 mm): Horizontal Wire, length 5.08 mm
+[lib_symbol_mismatch]: Symbol 'BC817' doesn't match copy in library 'Transistor_BJT'
+    ; warning
+    @(320.04 mm, 264.16 mm): Symbol Q2 [BC817]
+[isolated_pin_label]: Label connected to only one pin
+    ; warning
+    @(322.58 mm, 254.00 mm): Label 'BUZZER_NEG'
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(322.58 mm, 259.08 mm): Vertical Wire, length 5.08 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(322.58 mm, 269.24 mm): Vertical Wire, length 5.08 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(355.60 mm, 41.91 mm): Vertical Wire, length 5.08 mm
+[lib_symbol_mismatch]: Symbol 'SS14' doesn't match copy in library 'Diode'
+    ; warning
+    @(355.60 mm, 45.72 mm): Symbol D2 [SS14]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(355.60 mm, 49.53 mm): Vertical Wire, length 5.08 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(363.22 mm, 101.60 mm): Horizontal Wire, length 5.08 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(363.22 mm, 104.14 mm): Horizontal Wire, length 5.08 mm
+[lib_symbol_mismatch]: Symbol 'AP2112K-3.3' doesn't match copy in library 'Regulator_Linear'
+    ; warning
+    @(370.84 mm, 104.14 mm): Symbol U5 [AP2112K-3.3]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(370.84 mm, 111.76 mm): Vertical Wire, length 5.08 mm
+[no_connect_dangling]: Unconnected "no connection" flag
+    ; warning
+    @(375.92 mm, 104.14 mm): No Connect
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(378.46 mm, 101.60 mm): Horizontal Wire, length 5.08 mm
+
+ ** ERC messages: 20  Errors 1  Warnings 19
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

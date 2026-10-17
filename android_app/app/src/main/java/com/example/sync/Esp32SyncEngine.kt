@@ -781,11 +781,16 @@ class Esp32SyncEngine(
   fun sendEmergencyCrashPacket(
     gps: GpsData,
     imu: ImuData,
-    riderProfile: RiderProfile
+    riderProfile: RiderProfile,
+    eventType: Int = 2,
+    eventTypeName: String = "COLLISION / DIRECT IMPACT"
   ) {
     scope.launch(Dispatchers.IO) {
       val emergencyJson = JSONObject().apply {
         put("type", "EMERGENCY_ALERT")
+        put("eventType", eventType)
+        put("event_type", eventType)
+        put("accident_name", eventTypeName)
         put("shock", 1)
         put("token", riderProfile.token)
         put("rider", riderProfile.riderName)

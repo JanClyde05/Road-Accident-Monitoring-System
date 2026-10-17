@@ -1,7 +1,7 @@
 ---
 system: Road Accident Monitoring System (RAMS)
-version: 2.4
-date: 2026-10-11
+version: 2.6
+date: 2026-10-17
 tags:
   - rams
   - road-safety
@@ -11,22 +11,25 @@ tags:
   - websocket-protocol
   - android-jetpack-compose
   - windows-desktop-exe
+  - kicad10-pcb
+  - auto-route-pipeline
   - obsidian-map
   - graphify-indexed
   - ponytail-optimized
-nodes_count: 58
-status: Synchronized with Working Code & Production Ready
+  - icm-jake-van-clief
+nodes_count: 72
+status: Synchronized with Working Code, Schematic ERC Verified (0 Errors), PCB DRC Verified, and DIY SMT Procurement Matrix
 design_system: Bold Typography & Minimalist (Zero-Emoji)
 ---
 
-# 🧠 RAMS Master System Memory Map & Graphify Knowledge Base
+# RAMS Master System Memory Map & Graphify Knowledge Base
 
 > **Obsidian Knowledge Graph & Graphify Machine Memory Index**  
 > *This file serves as the definitive, zero-token-overhead architectural memory map of the entire RAMS codebase. Any AI agent or developer can navigate this system directly via Obsidian `[[wikilinks]]` without re-scanning files.*
 
 ---
 
-## 🗺️ Master System Architecture & Modern Node Ecology
+## Master System Architecture & Modern Node Ecology
 
 The repository encompasses an integrated hardware-software disaster & highway safety ecosystem:
 - **Section 1: Working Code Baseline Snapshot (`Working Code - Do Not Touch/`)**: Golden reference archive preserving verified functional builds and data models.
@@ -34,10 +37,11 @@ The repository encompasses an integrated hardware-software disaster & highway sa
 - **Section 3: Long-Range 433MHz LoRa Uplink**: The wearable broadcasts extended `RiderProfilePacket` (233 bytes) and crash `AlertPacket` payloads across kilometers over 433MHz SX1278 Ra-02 RF links directly to receiver base stations (`receiver_withDesktop/`), completely bypassing cellular network outages.
 - **Section 4: Standalone Windows Rescuer Operations Center (`desktop_app/`)**: High-performance local command center with native C# host (`Program.cs`), embedded HTTP ingestion engine, borderless Microsoft Edge app-mode dashboard, persistent JSON storage, and full Google Drive 2x2 photo rendering.
 - **Section 5: Ponytail Token Optimization System (`.agents/`)**: Enforces a 7-step senior developer Decision Ladder to prevent token bloat and over-engineering across all AI agent interactions.
+- **Section 6: Hardware Engineering & Auto-Routing Pipeline (`KiCAD Files/Antigravity Build/RAMS - PCB/`)**: KiCad 10 production design with verified 0-error schematic ERC, 42.0x32.0mm 2-layer PCB layout with 0 DRC violations, Specctra DSN/SES Freerouting autoroute pipeline (`auto_route_pipeline.py`), and JLCPCB bare board + stencil DIY reflow matrix using Shopee PH components.
 
 ---
 
-## 🕸️ 1. Master System Mermaid Visual Graph (Graphify Compatible)
+## 1. Master System Mermaid Visual Graph (Graphify Compatible)
 
 ```mermaid
 graph TD
@@ -108,6 +112,14 @@ graph TD
         DT_WWW["[[desktop_app/www/]]<br/>Compiled React Frontend + Leaflet Radar Engine"]
     end
 
+    %% Hardware Engineering & Auto-Routing Subsystem
+    subgraph Hardware_PCB["[[KiCAD Files/Antigravity Build/RAMS - PCB/]] Hardware Architecture"]
+        HW_SCH["[[RAMS - PCB.kicad_sch]]<br/>Verified Schematic (0 ERC Errors)<br/>LTH7R, DW01A/FS8205A, AP2112K-3.3"]
+        HW_PCB["[[RAMS - PCB.kicad_pcb]]<br/>42.0x32.0mm 2-Layer Layout<br/>0 Shorting, 0 Clearance Violations"]
+        HW_ROUTE["[[scripts/auto_route_pipeline.py]]<br/>Specctra DSN/SES Freerouting Pipeline<br/>0.15mm Traces, 0.3mm Vias, GND Mesh Stitching"]
+        HW_FAB["[[JLCPCB_ORDER_PACKAGE/]]<br/>Gerber/BOM/CPL Turnkey Package<br/>Shopee PH DIY SMT Reflow Matrix"]
+    end
+
     %% Interconnections & Data Flows
     A_SENS -->|100Hz Kinematics + GPS Vectors| A_SYNC
     A_PROF -->|Credentials, Medical Info & GDrive 2x2 Photo| A_SYNC
@@ -135,11 +147,15 @@ graph TD
     Design_System -.->|Style Standard| DT_WWW
     Ponytail_System -.->|Code Optimization| Android_App
     Ponytail_System -.->|Code Optimization| Desktop_App
+    HW_ROUTE -->|Autoroutes Layout| HW_PCB
+    HW_SCH -->|Netlist & Footprints| HW_PCB
+    HW_PCB -.->|Physical Circuit Board Host| Wearable_System
+    HW_FAB -.->|Bare PCB & Stencil Tooling| HW_PCB
 ```
 
 ---
 
-## 🧭 2. Obsidian Wikilink Core Node Index
+## 2. Obsidian Wikilink Core Node Index
 
 ### Layer 1: Architecture, Navigation & Design Specifications
 - **[[00_SYSTEM_ARCHITECTURE.md]]**: Master directory and architectural guide cleanly separating the OG Hardware Baseline and V2 Modern Apps Ecosystem.
@@ -177,16 +193,26 @@ graph TD
 - **[[receiver_withDesktop/local_queue.h]]** & **[[receiver_withDesktop/local_queue.cpp]]**: LittleFS store-and-retry buffer for offline network resilience.
 
 ### Layer 5: Android Mobile Companion Station (`android_app/`)
-- **[[android_app/app/src/main/java/com/example/MainActivity.kt]]**: Master Jetpack Compose Activity with 4-tab `NavigationBar` (`TELEMETRY`, `MAP`, `WEARABLE`, `SETTINGS`).
-- **[[android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt]]**: Smartphone 100Hz fused IMU (2.5g crash threshold, 2s sticky shock latch) and multi-provider GPS engine (500ms / 0m).
+- **[[android_app/app/src/main/java/com/example/MainActivity.kt]]**: Master Jetpack Compose Activity with 4-tab `NavigationBar` (`TELEMETRY`, `MAP`, `WEARABLE`, `SETTINGS`) and monochrome high-contrast dark theme.
+- **[[android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt]]**: Smartphone 100Hz fused IMU with dynamic crash threshold tuning (`dynamicCrashThresholdG`), 2s sticky shock latch, and multi-provider GPS engine (500ms / 0m).
+- **[[android_app/app/src/main/java/com/example/sensor/ImuCalibrationManager.kt]]**: Automated calibration engine calculating data-driven crash thresholds and ADL shake rejection filters from IMU Studio CSV exports.
+- **[[android_app/app/src/main/java/com/example/export/CsvExportManager.kt]]**: Dual EXPORT and IMPORT telemetry manager supporting column auto-detection, preview, and dataset merging.
+- **[[android_app/app/src/main/java/com/example/ui/components/CsvExportDialog.kt]]**: Monochromatic CSV management dialog with dual EXPORT / IMPORT tabs and live IMU calibration status indicators.
 - **[[android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt]]**: BLE GATT client with 20-240B MTU chunked transmission and 12ms packet pacing.
 - **[[android_app/app/src/main/java/com/example/model/RiderProfile.kt]]**: Base62 friendly token generator (`RAMS-XXXXXXXX`) and Google Drive direct CDN URL converter (`formatDirectDriveUrl`).
 - **[[android_app/app/src/main/java/com/example/ui/components/RiderLoginDialog.kt]]**: Rapid rider registration & device synchronization dialog.
-- **[[android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt]]**: BLE scanning, RSSI telemetry, manual LoRa test triggers, and connection state management.
+- **[[android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt]]**: BLE scanning, RSSI telemetry, manual LoRa test triggers, false alarm cancellation, and connection state management.
 - **[[android_app/app/src/main/java/com/example/ui/screens/SettingsScreen.kt]]**: Complete rider profile settings with medical triage and vehicle credentials.
 - **[[android_app/build_and_install.bat]]**: Automated Gradle compilation and ADB USB deployment tool.
 
-### Layer 6: Standalone Desktop Rescuer Command Center (`desktop_app/`)
+### Layer 6: RAMS IMU Studio Application (`RAMS IMU Studio Application/`)
+- **[[RAMS IMU Studio Application/app/]]**: Standalone high-rate inertial analysis and calibration suite.
+- **[[RAMS IMU Studio Application/build_and_install.bat]]**: Automated ADB probe, APK compilation, and device launch script.
+- **Real-Time 100Hz IMU Waveform Monitor**: High-fidelity sparklines for 3-axis accelerometer, gyroscope, tilt angles, and resultant acceleration magnitude.
+- **Accident vs. ADL Correlation Studio**: Statistical feature extraction and classification rule derivation.
+- **Processed CSV & Calibration Rules Engine**: Exports filtered CSV and JSON thresholds directly ingested by `android_app/` for false alarm cancellation.
+
+### Layer 7: Standalone Desktop Rescuer Command Center (`desktop_app/`)
 - **[[desktop_app/RAMS_Rescuer_Desktop.exe]]**: Native Windows host application with embedded `app.ico` icon, launching Edge in `--start-fullscreen` borderless mode.
 - **[[desktop_app/Program.cs]]**: Multi-threaded C# server with serial COM port listener, dynamic port binding (port 8888), Google Drive CDN converter (`ConvertGoogleDriveUrl`), and incident auto-enrichment engine.
 - **[[desktop_app/build_exe.bat]]**: Native C# compilation script using Microsoft .NET Framework `csc.exe`.
@@ -195,9 +221,32 @@ graph TD
 - **[[desktop_app/incidents.json]]**: Persistent incident and telemetry log with status tracking (including `FALSE ALARM` and `RESCUED` states).
 - **[[desktop_app/www/]]**: High-performance React 19 + Vite dashboard featuring Leaflet maps, animated radar pins, accident cards with `referrerPolicy="no-referrer"` Google Drive photo loading, and comprehensive emergency triage inspection modals.
 
+### Layer 8: Hardware Engineering, Auto-Routing & DIY SMT Assembly (`KiCAD Files/Antigravity Build/RAMS - PCB/`)
+- **[[KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_sch]]**: Verified production schematic (0 Errors, 4 benign lib_mismatch warnings). Key subsystems:
+  - `U3` (`LTH7R` / TP4054): Li-Ion charger with $4.02	ext{ k}\Omega$ resistor ($249	ext{ mA}$ charge current).
+  - Power Path: `Q1` (AO3401A P-FET) + `D2` (SS14W SOD-123FL Schottky) automatic USB/Battery multiplexer.
+  - Soft Power Switch: `SW1` (MSK12C02) switching the Enable pin of `U5` (AP2112K-3.3 600mA LDO).
+  - Battery Protection: `U4` (DW01A) + `Q3` (FS8205A TSSOP-8 dual N-FET) low-side protection.
+  - Battery Sensing: Precision resistor divider `R14` ($330	ext{ k}\Omega$) + `R15` ($180	ext{ k}\Omega$) with $0.1\ \mu	ext{F}$ filter.
+  - Peripheral Alert Drivers: Piezo buzzer `BZ1` driven by `Q2` (BC817) with `D3` (1N4148W flyback), `LED1` (SK6805-EC20 2020 RGB).
+- **[[KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pcb]]**: 42.0 mm x 32.0 mm 2-layer wearable PCB layout:
+  - Complete connectivity: 453 track segments, 46 vias (0.3mm drill), 0 shorting items, 0 clearance errors.
+  - RF Layout: Johanson 2450AT18 ceramic chip antenna with <10mm 45-degree microstrip feed, pi-matching network, and dual-layer ground keepout.
+  - Ra-02 LoRa transceiver mounted on bottom copper with dedicated FB1 LC filtering and solid ground reference.
+- **[[KiCAD Files/Antigravity Build/RAMS - PCB/scripts/auto_route_pipeline.py]]**: Headless autoroute and post-processing pipeline:
+  - Placement corridor optimization (C12, C13, C14 shifted to X=108.80mm; R15/C29 rotated 180°).
+  - Specctra DSN export, automated Freerouting v2.4.1 execution, and SES import.
+  - Ground mesh stitching with 10 dedicated GND vias and perimeter shielding vias.
+  - Zone refill and automated KiCad CLI DRC verification.
+- **[[KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/]]**: Turnkey production & procurement resources:
+  - Bare PCB + Stainless Steel Stencil ordering package (~$15 total from JLCPCB).
+  - `PARTS_LIST_FOR_ORDERING.md`: Sourcing matrix for Shopee Philippines.
+  - Critical Footprint Matches: `FS8205A` (TSSOP-8), `SS14W` (SOD-123FL), `2450AT18B100E` (3216 / 1206), `FB1` (`MGGB1005M800HT-LF` 0402 200mA).
+  - DIY SMT Reflow Protocol: Mechanic IX5 Ultra preheater ($150^\circ	ext{C}$ soak $ightarrow$ $205^\circ	ext{C}$ reflow) + Relife RL-403 ($183^\circ	ext{C}$ Sn63Pb37 leaded paste).
+
 ---
 
-## ⚡ 3. AI Agent Fast Query Index (Zero-Scan Reference)
+## 3. AI Agent Fast Query Index (Zero-Scan Reference)
 
 | Developer Question | Authoritative File Target | Key Function / Symbol |
 | :--- | :--- | :--- |
@@ -210,3 +259,10 @@ graph TD
 | **Where is false alarm cancellation handled on desktop?** | [[desktop_app/Program.cs]] | `ProcessIncomingPayload()`, incident type update |
 | **How to rebuild the Windows Desktop executable?** | [[desktop_app/build_exe.bat]] | `csc.exe /target:winexe /win32icon:app.ico` |
 | **Where is Ponytail token optimization configured?** | [[.agents/skills/ponytail/SKILL.md]] & [[AGENTS.md]] | 7-step Decision Ladder |
+| **Where is ICM (Jake Van Clief protocol) configured?** | [[.agents/rules/icm_methodology.md]] & [[AGENTS.md]] | Interpretable Context Methodology |
+| **Where is the JLCPCB manufacturing order package?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/]] | `1_GERBERS_RAMS_PCB.zip`, `2_BOM_RAMS_PCB.csv`, `3_CPL_RAMS_PCB.csv` |
+| **How to optimize KiCad PCB silkscreen and run DRC?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/scripts/optimize_silkscreen.py]] | `kicad-cli pcb drc` |
+| **Where is the automated PCB routing pipeline?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/scripts/auto_route_pipeline.py]] | Specctra DSN/SES Freerouting, GND stitching |
+| **Where is the Shopee PH DIY SMT parts list & reflow guide?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/PARTS_LIST_FOR_ORDERING.md]] | IX5 Ultra (150°C/205°C) + Relife RL-403 |
+| **Where are the latest KiCad schematic ERC audit logs?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/ERC reports/ERC_current.rpt]] | 0 Errors, 4 benign lib_mismatch warnings |
+

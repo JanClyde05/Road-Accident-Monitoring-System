@@ -22,10 +22,18 @@ Danger Monitoring System V2/
 │   ├── data_logger/                ◄── Serial IMU & Sensor Calibration Suite
 │   └── validation/                 ◄── Hardware Verification & Test Data
 │
-└── ═══ SECTION 2: MODERN APPS ECOSYSTEM (V2 Software Node System) ═══
-    ├── android_app/                ◄── Native Android App (Phone 100Hz IMU + Dual-Band GNSS)
-    ├── desktop_app/                ◄── Standalone Windows Rescuer Station (.exe)
-    └── apps/                       ◄── Unified Apps Hub & Quick-Launch Shortcuts
+├── ═══ SECTION 2: MODERN APPS ECOSYSTEM (V2 Software Node System) ═══
+│   ├── android_app/                ◄── Native Android App (Phone 100Hz IMU + Dual-Band GNSS)
+│   ├── desktop_app/                ◄── Standalone Windows Rescuer Station (.exe)
+│   ├── RAMS IMU Studio Application/◄── Real-Time 100Hz IMU Calibration Suite
+│   └── apps/                       ◄── Unified Apps Hub & Quick-Launch Shortcuts
+│
+└── ═══ SECTION 3: HARDWARE ENGINEERING & CUSTOM PCB ═══
+    └── KiCAD Files/Antigravity Build/RAMS - PCB/
+        ├── RAMS - PCB.kicad_sch    ◄── Schematic Source (0 Errors Verified)
+        ├── RAMS - PCB.kicad_pcb    ◄── 42x32mm 2-Layer Layout (0 DRC Violations)
+        ├── scripts/                ◄── Headless Freerouting Autoroute Pipeline
+        └── JLCPCB_ORDER_PACKAGE/   ◄── Turnkey Gerbers, BOM, CPL & DIY SMT Matrix
 ```
 
 ---
@@ -103,7 +111,12 @@ This section contains the new native applications for smartphones and desktop co
 | **Launch Desktop Rescuer App** | Double-click `desktop_app/launch_desktop.bat` or `apps/Launch_Desktop_Rescuer.bat` |
 | **Instant Mobile App Web Preview** | Double-click `preview_mobile_app.bat` (Hosts local server & opens AI Studio-style simulator) |
 | **Build & Deploy Android App via USB** | Run `android_app/build_and_install.bat` or `apps/Build_And_Install_Android_App.bat` |
+| **Build & Deploy IMU Studio App** | Run `RAMS IMU Studio Application/build_and_install.bat` |
 | **Compile Desktop .exe** | Run `desktop_app/build_exe.bat` |
-| **Flash Wearable Firmware** | Open `wearable/wearable.ino` in Arduino IDE |
-| **Flash Receiver Firmware** | Open `receiver/receiver.ino` in Arduino IDE |
+| **Open Wearable PCB in KiCad** | Open `KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pro` |
+| **Inspect JLCPCB Order Package** | Explore `KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/` |
+| **Run Automated Routing Pipeline** | Run `python "KiCAD Files/Antigravity Build/RAMS - PCB/scripts/auto_route_pipeline.py"` |
+| **Flash Wearable Firmware** | Open `wearable_withApp/wearable_withApp.ino` in Arduino IDE |
+| **Flash Receiver Firmware** | Open `receiver_withDesktop/receiver_withDesktop.ino` in Arduino IDE |
 | **Run Rescuer Web Dev Server** | Run `npm run dev` inside `backend/` |
+

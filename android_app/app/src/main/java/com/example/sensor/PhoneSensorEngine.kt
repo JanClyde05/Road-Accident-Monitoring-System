@@ -34,9 +34,18 @@ class PhoneSensorEngine(
   companion object {
     private const val GRAVITY_STANDARD = 9.80665f
     private const val RAD_TO_DEG = (180.0 / PI).toFloat()
-    private const val CRASH_THRESHOLD_G = 2.5f
     private const val STICKY_SHOCK_DURATION_MS = 2000L
   }
+
+  // Dynamic threshold — 0 means uncalibrated (crash detection disabled)
+  @Volatile
+  private var dynamicCrashThresholdG: Float = 0f
+
+  fun setCrashThreshold(thresholdG: Float) {
+    dynamicCrashThresholdG = thresholdG
+  }
+
+  fun getCrashThreshold(): Float = dynamicCrashThresholdG
 
   private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
   private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
@@ -242,12 +251,13 @@ class PhoneSensorEngine(
         val aMag = sqrt(lastAccelX * lastAccelX + lastAccelY * lastAccelY + lastAccelZ * lastAccelZ)
         val now = System.currentTimeMillis()
 
-        // Check for sudden high impact accident shock (> CRASH_THRESHOLD_G)
-        val isShock = aMag > CRASH_THRESHOLD_G
+        // Crash detection only fires when calibrated (threshold > 0)
+        val thresholdActive = dynamicCrashThresholdG > 0f
+        val isShock = thresholdActive && aMag > dynamicCrashThresholdG
         if (isShock) {
           lastShockTimestampMs = now
         }
-        val isSticky = (now - lastShockTimestampMs) < STICKY_SHOCK_DURATION_MS
+        val isSticky = thresholdActive && (now - lastShockTimestampMs) < STICKY_SHOCK_DURATION_MS
 
         val updatedImu = _phoneImuState.value.copy(
           accelX = lastAccelX,

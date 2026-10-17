@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.LightMode
@@ -83,7 +84,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.model.ImuCalibration
 import com.example.model.RiderProfile
+import com.example.ui.theme.IconImportData
 import com.example.ui.theme.RamsAlertRed
 import com.example.ui.theme.RamsSuccessEmerald
 import com.example.ui.theme.RamsSyncBlue
@@ -95,6 +98,7 @@ fun SettingsScreen(
   onSaveProfile: (RiderProfile) -> Unit,
   onOpenDesignRules: () -> Unit = {},
   onOpenCsvDialog: () -> Unit = {},
+  calibration: ImuCalibration = ImuCalibration(),
   onToggleTheme: () -> Unit = {},
   isDarkTheme: Boolean = true
 ) {
@@ -630,7 +634,155 @@ fun SettingsScreen(
         }
       }
 
-      // 5. Legal & Publishing (Google Play Readiness)
+      // 5. IMU Studio Dataset & Crash Calibration (Dynamic Data-Driven Baseline)
+      Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+      ) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+          verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            Column(modifier = Modifier.weight(1f)) {
+              Text(
+                text = "IMU DATASET & ACCIDENT CALIBRATION",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Black,
+                color = Color(0xFFA1A1AA),
+                letterSpacing = 1.sp
+              )
+              Text(
+                text = "Import processed CSV from RAMS IMU Studio for baseline thresholds & false alarm rejection",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF71717A),
+                fontSize = 11.sp
+              )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Surface(
+              shape = RoundedCornerShape(4.dp),
+              color = if (calibration.isCalibrated) RamsSuccessEmerald.copy(alpha = 0.15f) else Color(0xFF71717A).copy(alpha = 0.15f),
+              border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                if (calibration.isCalibrated) RamsSuccessEmerald.copy(alpha = 0.4f) else Color(0xFF71717A).copy(alpha = 0.4f)
+              )
+            ) {
+              Text(
+                text = if (calibration.isCalibrated) "CALIBRATED" else "UNCALIBRATED",
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = if (calibration.isCalibrated) RamsSuccessEmerald else Color(0xFFA1A1AA),
+                softWrap = false
+              )
+            }
+          }
+
+          // Calibration Metrics & Baseline Overview Card
+          Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            color = Color(0xFF09090B),
+            border = androidx.compose.foundation.BorderStroke(
+              1.dp,
+              if (calibration.isCalibrated) RamsSuccessEmerald.copy(alpha = 0.3f) else Color(0xFF27272A)
+            )
+          ) {
+            Column(
+              modifier = Modifier.padding(12.dp),
+              verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+              if (calibration.isCalibrated) {
+                Text(
+                  text = "Active Profile: ${calibration.sourceName}",
+                  fontSize = 11.sp,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Bold,
+                  color = Color.White
+                )
+                Text(
+                  text = "Crash Threshold: %.2fg  |  Max Negative: %.2fg (Phone Drop: %.2fg)".format(
+                    calibration.crashThresholdG,
+                    calibration.maxNegativeG,
+                    calibration.phoneFallMaxG
+                  ),
+                  fontSize = 10.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = RamsSuccessEmerald
+                )
+                Text(
+                  text = "Samples: %d  |  Sessions: %d  |  False Alarms Suppressed: %d".format(
+                    calibration.totalSamplesImported,
+                    calibration.totalSessionsImported,
+                    calibration.falseAlarmsPreventedCount
+                  ),
+                  fontSize = 9.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = Color(0xFF71717A)
+                )
+              } else {
+                Text(
+                  text = "No baseline calibrated. System operating in raw monitoring mode (no default threshold).",
+                  fontSize = 10.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = Color(0xFFA1A1AA)
+                )
+                Text(
+                  text = "Import positive (Fall/Impact/Skid) and negative (Phone Fall/ADL) datasets to set thresholds.",
+                  fontSize = 9.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = Color(0xFF71717A)
+                )
+              }
+            }
+          }
+
+          // Import CSV Button
+          Button(
+            onClick = onOpenCsvDialog,
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(44.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+              containerColor = IconImportData,
+              contentColor = Color.White
+            )
+          ) {
+            Row(
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.Center
+            ) {
+              Icon(
+                imageVector = Icons.Default.FileUpload,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = Color.White
+              )
+              Spacer(modifier = Modifier.width(8.dp))
+              Text(
+                text = "IMPORT CSV DATASET",
+                fontWeight = FontWeight.Bold,
+                fontSize = 11.sp,
+                fontFamily = FontFamily.Monospace,
+                letterSpacing = 0.5.sp
+              )
+            }
+          }
+        }
+      }
+
+      // 6. Legal & Publishing (Google Play Readiness)
       Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),

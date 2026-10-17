@@ -174,6 +174,8 @@ fun RamsDashboardScreen(
   val showConnectionDialog by viewModel.showConnectionDialog.collectAsStateWithLifecycle()
   val showRiderLoginDialog by viewModel.showRiderLoginDialog.collectAsStateWithLifecycle()
   val showCsvDialog by viewModel.showCsvDialog.collectAsStateWithLifecycle()
+  val csvDialogInitialTab by viewModel.csvDialogInitialTab.collectAsStateWithLifecycle()
+  val imuCalibration by viewModel.imuCalibration.collectAsStateWithLifecycle()
 
   val isRecordingCsv by viewModel.csvExportManager.isRecording.collectAsStateWithLifecycle()
   val recordedCsvCount by viewModel.csvExportManager.recordedCount.collectAsStateWithLifecycle()
@@ -326,7 +328,8 @@ fun RamsDashboardScreen(
             riderProfile = riderProfile,
             onSaveProfile = { viewModel.saveRiderProfile(it) },
             onOpenDesignRules = { viewModel.setDesignRulesDialogVisible(true) },
-            onOpenCsvDialog = { viewModel.setCsvDialogVisible(true) },
+            onOpenCsvDialog = { viewModel.setCsvDialogVisible(true, "IMPORT") },
+            calibration = imuCalibration,
             onToggleTheme = { viewModel.toggleTheme() },
             isDarkTheme = isDarkTheme
           )
@@ -372,6 +375,10 @@ fun RamsDashboardScreen(
       onToggleRecording = { viewModel.toggleRecording() },
       onExportCsv = { viewModel.exportCsv() },
       onClearLogs = { viewModel.clearLogs() },
+      onImportCsv = { uri, name -> viewModel.importCsv(uri, name) },
+      onMergeImported = { viewModel.mergeImportedData() },
+      onClearImported = { viewModel.clearImportedData() },
+      initialTab = csvDialogInitialTab,
       onDismiss = { viewModel.setCsvDialogVisible(false) }
     )
   }

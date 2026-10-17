@@ -1,0 +1,6 @@
+{
+  "name": "RAMS IMU Studio",
+  "description": "Desktop-styled IMU signal collection, real-time telemetry analysis, and accident feature correlation studio for Road Accident Monitoring System (RAMS). Supports background recording, CSV export, and accident vs ADL feature engineering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

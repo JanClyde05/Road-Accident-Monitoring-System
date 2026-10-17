@@ -39,9 +39,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.ImuData
-import com.example.ui.theme.RamsAlertRed
-import com.example.ui.theme.RamsSuccessEmerald
-import com.example.ui.theme.RamsSyncBlue
+import com.example.ui.theme.BackgroundDark
+import com.example.ui.theme.MonoBorder
+import com.example.ui.theme.MonoBorderLight
+import com.example.ui.theme.MonoMediumGray
+import com.example.ui.theme.MonoWhite
+import com.example.ui.theme.WaveAx
+import com.example.ui.theme.WaveAy
+import com.example.ui.theme.WaveAz
+import com.example.ui.theme.WaveGx
+import com.example.ui.theme.WaveGy
+import com.example.ui.theme.WaveGz
+import com.example.ui.theme.WaveSvm
 import java.util.Locale
 
 @Composable
@@ -196,10 +205,10 @@ fun ImuWaveformChart(
                 }
               }
 
-              drawPath(pathX, RamsAlertRed, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
-              drawPath(pathY, RamsSuccessEmerald, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
-              drawPath(pathZ, RamsSyncBlue, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
-              drawPath(pathMag, Color(0xFFFAFAFA), style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round))
+              drawPath(pathX, WaveAx, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
+              drawPath(pathY, WaveAy, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
+              drawPath(pathZ, WaveAz, style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round))
+              drawPath(pathMag, WaveSvm, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round))
             } else {
               // Gyro Scale: -180 deg/s to +180 deg/s
               val maxRate = 180f
@@ -229,9 +238,9 @@ fun ImuWaveformChart(
                 }
               }
 
-              drawPath(pathGx, RamsAlertRed, style = Stroke(width = 1.4.dp.toPx()))
-              drawPath(pathGy, RamsSuccessEmerald, style = Stroke(width = 1.4.dp.toPx()))
-              drawPath(pathGz, RamsSyncBlue, style = Stroke(width = 1.4.dp.toPx()))
+              drawPath(pathGx, WaveGx, style = Stroke(width = 1.4.dp.toPx()))
+              drawPath(pathGy, WaveGy, style = Stroke(width = 1.4.dp.toPx()))
+              drawPath(pathGz, WaveGz, style = Stroke(width = 1.4.dp.toPx()))
             }
           }
         }
@@ -246,14 +255,14 @@ fun ImuWaveformChart(
         verticalAlignment = Alignment.CenterVertically
       ) {
         if (selectedTab == "ACCEL") {
-          WaveformLegendItem("AX", RamsAlertRed, String.format(Locale.US, "%+.2f", latestImu.accelX))
-          WaveformLegendItem("AY", RamsSuccessEmerald, String.format(Locale.US, "%+.2f", latestImu.accelY))
-          WaveformLegendItem("AZ", RamsSyncBlue, String.format(Locale.US, "%+.2f", latestImu.accelZ))
-          WaveformLegendItem("AMAG", Color(0xFFFAFAFA), String.format(Locale.US, "%.2fG", latestImu.aMag))
+          WaveformLegendItem("AX", WaveAx, String.format(Locale.US, "%+.2f", latestImu.accelX))
+          WaveformLegendItem("AY", WaveAy, String.format(Locale.US, "%+.2f", latestImu.accelY))
+          WaveformLegendItem("AZ", WaveAz, String.format(Locale.US, "%+.2f", latestImu.accelZ))
+          WaveformLegendItem("SVM", WaveSvm, String.format(Locale.US, "%.2fG", latestImu.aMag))
         } else {
-          WaveformLegendItem("WX", RamsAlertRed, String.format(Locale.US, "%+.0f°/s", latestImu.gyroX))
-          WaveformLegendItem("WY", RamsSuccessEmerald, String.format(Locale.US, "%+.0f°/s", latestImu.gyroY))
-          WaveformLegendItem("WZ", RamsSyncBlue, String.format(Locale.US, "%+.0f°/s", latestImu.gyroZ))
+          WaveformLegendItem("WX", WaveGx, String.format(Locale.US, "%+.0f°/s", latestImu.gyroX))
+          WaveformLegendItem("WY", WaveGy, String.format(Locale.US, "%+.0f°/s", latestImu.gyroY))
+          WaveformLegendItem("WZ", WaveGz, String.format(Locale.US, "%+.0f°/s", latestImu.gyroZ))
         }
       }
     }

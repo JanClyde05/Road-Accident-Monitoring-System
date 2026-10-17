@@ -77,10 +77,13 @@ RAMS detects road accidents in real time using smartphone-grade 100Hz inertial m
 
 Native Kotlin application built with Android Jetpack Compose Material 3.
 
-- **100Hz fused IMU** with 2.5g crash threshold and 2-second sticky shock latch
-- **Dual-band multi-GNSS** position provider (sub-meter accuracy)
+- **Monochrome High-Contrast Visual Architecture**: Sleek matte-black UI mirroring RAMS IMU Studio with colored functional icons, signal waveforms, and emergency status indicators.
+- **100Hz fused IMU** with dynamic crash threshold calibration and 2-second sticky shock latch
+- **Dual-Band multi-GNSS** position provider (sub-meter accuracy)
 - **BLE GATT client** with MTU-aware chunked transmission (12ms pacing)
 - **Rider Profile** with Base62 token generator and Google Drive 2x2 photo CDN formatter
+- **Dual EXPORT / IMPORT CSV Telemetry Studio**: Full session logging with real-time import of IMU Studio processed CSV datasets.
+- **Dynamic IMU Calibration & False Alarm Cancellation**: Automatically adapts crash shock thresholds and suppresses benign ADL vibrations using imported IMU Studio profiles.
 - **4-tab UI**: Telemetry, Map, Wearable, Settings
 
 **Build and install:**
@@ -136,6 +139,38 @@ cd desktop_app
 cd desktop_app
 .\build_exe.bat
 ```
+
+### 5. RAMS IMU Studio Application (`RAMS IMU Studio Application/`)
+
+Companion Android inertial analysis & calibration suite:
+
+- **100Hz Real-Time IMU Waveform Monitor**: Multi-channel live visualization for acceleration, angular rate, and orientation angles.
+- **Accident vs. ADL Correlation Studio**: Statistical feature extraction and classification rule derivation.
+- **Processed CSV & Calibration Rules Engine**: Exports filtered CSV and JSON thresholds for seamless consumption by `android_app/`.
+- **Automated USB Installer**: Complete build & deploy pipeline via `build_and_install.bat`.
+
+**Build and install:**
+```bash
+cd "RAMS IMU Studio Application"
+.\build_and_install.bat
+```
+
+### 6. Hardware Engineering & Custom Wearable PCB (`KiCAD Files/Antigravity Build/RAMS - PCB/`)
+
+Turnkey custom hardware design for an ultra-compact body-worn sensor relay:
+
+- **Board Specifications**: 42.0 mm x 32.0 mm, 2-layer FR-4, 1.6mm thickness, 0.15mm standard track width, 0.3mm mechanical drill vias.
+- **Core Processing & Radio**: ESP32-S3FH4R2 (QFN-56, 4MB Flash + 2MB PSRAM), Johanson 2450AT18 2.4GHz ceramic chip antenna with <10mm direct 45-degree microstrip feed and dual-layer ground keepout, and bottom-mounted Ai-Thinker Ra-02 (SX1278) 433MHz LoRa module with LC power filtering.
+- **Power Management & Safety**:
+  - `U3` (LTH7R / TP4054): 500mA Li-Ion linear charger ($249\text{ mA}$ charge rate).
+  - Auto Power Multiplexer: `Q1` (AO3401A P-FET) + `D2` (SS14W SOD-123FL Schottky) for seamless, zero-loss battery-to-USB switching.
+  - Soft Power Switch: `SW1` (MSK12C02) driving the high-impedance enable pin of `U5` (AP2112K-3.3 600mA LDO with dual 47uF MLCC sag capacitors).
+  - Battery Protection: `U4` (DW01A) + `Q3` (FS8205A TSSOP-8 dual N-FET) for low-side over-charge, over-discharge, and short-circuit cutoff.
+  - Battery Voltage Monitor: Resistor divider `R14` ($330\text{ k}\Omega$) + `R15` ($180\text{ k}\Omega$) with $0.1\ \mu\text{F}$ noise filter.
+- **Automated Autorouting Pipeline**: Headless Specctra DSN/SES Freerouting v2.4.1 execution script (`scripts/auto_route_pipeline.py`) with perimeter ground shield stitching and zone refills.
+- **Fabrication & DIY Reflow**:
+  - Turnkey Gerber, BOM, and CPL files in `JLCPCB_ORDER_PACKAGE/`.
+  - DIY SMT Reflow Option: Bare PCB + Stainless Stencil from JLCPCB (~$15 / ~₱850) paired with Shopee PH components and 2-stage reflow on a Mechanic IX5 Ultra hotplate ($150^\circ\text{C}$ soak / $205^\circ\text{C}$ reflow) using Relife RL-403 ($183^\circ\text{C}$ Sn63Pb37) paste.
 
 ---
 
@@ -214,17 +249,21 @@ Packets are MTU-aware chunked (20-240 bytes) with 12ms inter-chunk pacing to pre
 
 ### Deployment Steps
 
-1. **Flash the Wearable**: Open `wearable_withApp/wearable_withApp.ino` in Arduino IDE, select ESP32-S3, and upload.
+1. **Hardware Assembly (Custom PCB or Prototyping Breadboard)**:
+   - For custom PCB: Follow `KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/PARTS_LIST_FOR_ORDERING.md` to order bare boards + stencil from JLCPCB and reflow using the Mechanic IX5 Ultra.
+   - For breadboard testing: Wire an ESP32-S3 SuperMini to an SX1278 Ra-02 module using the wiring table above.
 
-2. **Flash the Receiver**: Open `receiver_withDesktop/receiver_withDesktop.ino` in Arduino IDE, select ESP32-S3, and upload. **Close the Serial Monitor after flashing.**
+2. **Flash the Wearable**: Open `wearable_withApp/wearable_withApp.ino` in Arduino IDE, select ESP32-S3, and upload.
 
-3. **Build the Android App**: Run `android_app/build_and_install.bat` with your phone connected via USB.
+3. **Flash the Receiver**: Open `receiver_withDesktop/receiver_withDesktop.ino` in Arduino IDE, select ESP32-S3, and upload. **Close the Serial Monitor after flashing.**
 
-4. **Launch the Desktop App**: Run `desktop_app/launch_desktop.bat`. The status popup will show USB Serial and Wi-Fi LAN bridge status.
+4. **Build the Android App**: Run `android_app/build_and_install.bat` with your phone connected via USB.
 
-5. **Connect**: Open the Android app, connect to the wearable via BLE. The wearable LED turns solid green when armed.
+5. **Launch the Desktop App**: Run `desktop_app/launch_desktop.bat`. The status popup will show USB Serial and Wi-Fi LAN bridge status.
 
-6. **Monitor**: The desktop tactical map displays live rider positions and incident alerts in real time.
+6. **Connect**: Open the Android app, connect to the wearable via BLE. The wearable LED turns solid green when armed.
+
+7. **Monitor**: The desktop tactical map displays live rider positions and incident alerts in real time.
 
 ---
 
@@ -232,15 +271,21 @@ Packets are MTU-aware chunked (20-240 bytes) with 12ms inter-chunk pacing to pre
 
 ```
 Danger Monitoring System V2/
-|-- shared/                     Shared LoRa protocol definitions
+|-- shared/                     Shared LoRa protocol definitions (protocol.h)
 |-- wearable_withApp/           ESP32-S3 wearable firmware (BLE + LoRa TX)
 |-- receiver_withDesktop/       ESP32-S3 receiver firmware (LoRa RX + Serial/WiFi)
-|-- android_app/                Android Jetpack Compose companion app
+|-- android_app/                Android Jetpack Compose companion app (100Hz IMU + GNSS)
 |-- desktop_app/                Windows desktop command center (C# + React)
 |   |-- Program.cs              Embedded HTTP server + serial bridge
 |   |-- www/                    Compiled React dashboard assets
 |   |-- build_exe.bat           Native C# compiler script
 |   |-- launch_desktop.bat      One-click launcher
+|-- RAMS IMU Studio Application/ Standalone Android 100Hz IMU calibration & correlation studio
+|-- KiCAD Files/                KiCad 10 hardware engineering & manufacturing
+|   |-- Antigravity Build/RAMS - PCB/ 42x32mm 2-layer wearable PCB layout & schematics
+|       |-- JLCPCB_ORDER_PACKAGE/ Turnkey Gerbers, BOM, CPL & Shopee PH parts matrix
+|       |-- scripts/            Automated routing & silkscreen optimization pipelines
+|       |-- ERC reports/        Electrical rule check audit logs (0 errors verified)
 |-- UI Redesign/                React 19 + Vite dashboard source
 |-- Working Code - Do Not Touch/ Golden baseline reference snapshot archive
 |-- MD Files/                   Obsidian vault specifications, flowcharts, & memory maps

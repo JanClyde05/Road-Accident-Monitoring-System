@@ -50,8 +50,17 @@ data class ImuData(
   val aMag: Float
     get() = sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ)
 
+  val gyroMagDegS: Float
+    get() = sqrt(gyroX * gyroX + gyroY * gyroY + gyroZ * gyroZ)
+
+  val gyroMagRads: Float
+    get() = (gyroMagDegS * (Math.PI / 180.0)).toFloat()
+
+  val tiltAngleDeg: Float
+    get() = sqrt(pitchDegrees * pitchDegrees + rollDegrees * rollDegrees)
+
   val isShockAlert: Boolean
-    get() = isShockSticky || aMag > 2.2f
+    get() = isShockSticky
 }
 
 data class DeviceLinkStatus(
