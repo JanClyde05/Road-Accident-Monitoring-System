@@ -26,7 +26,8 @@ enum PacketType : uint8_t {
   PKT_TEST        = 3,  // Simulation/demo-mode trigger (safe, repeatable)
   PKT_REGISTER    = 4,  // One-time, sent when setup-mode registration completes
   PKT_USER_TYPE   = 5,  // Dynamic road-user category update (from phone app)
-  PKT_RIDER_PROFILE = 6 // Live rider profile synced from phone BLE (name, plate, phone, blood)
+  PKT_RIDER_PROFILE = 6, // Live rider profile synced from phone BLE (name, plate, phone, blood)
+  PKT_PING        = 7   // Benchmark ping for transmission delay & distance data collection
 };
 
 // ── Event Sub-Types (for AlertPacket.eventType) ─────────────────────────────
@@ -121,6 +122,18 @@ struct __attribute__((packed)) RiderProfilePacket {
   char    vehicleModel[20];  // Vehicle details e.g. "Yamaha NMAX 155" (null-terminated)
   char    allergies[20];     // Allergies & medical notes (null-terminated)
   char    photoUrl[72];      // Google Drive CDN URL e.g. https://lh3.googleusercontent.com/d/FILE_ID
+};
+
+// ── Ping Packet (Transmission Delay & Distance Benchmark) ───────────────────
+// Broadcast by wearable when companion mobile app activates "Ping Distance Mode".
+// Enables ground-truth empirical tracking of packet delay, RSSI, SNR, and GPS range.
+
+struct __attribute__((packed)) PingPacket {
+  PacketHeader header;       // packetType = PKT_PING (13 bytes)
+  float    latitude;         // Degrees, WGS84
+  float    longitude;        // Degrees, WGS84
+  uint32_t pingSequence;     // Monotonic ping sequence index (1, 2, 3...)
+  uint64_t phoneEpochMs;     // Phone system UTC epoch in milliseconds
 };
 
 // ── Timing Constants ────────────────────────────────────────────────────────

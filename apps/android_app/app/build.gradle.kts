@@ -1,4 +1,6 @@
 import com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
   alias(libs.plugins.android.application)
@@ -13,11 +15,12 @@ android {
   namespace = "com.example"
   compileSdk = 36
 
-  val localProps = java.util.Properties().apply {
-    val f = rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
+  val localProps = Properties()
+  val localPropertiesFile = rootProject.file("local.properties")
+  if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProps.load(it) }
   }
-  val geminiKey = localProps.getProperty("gemini.api.key", "")
+  val geminiKey = localProps.getProperty("gemini.api.key") ?: ""
 
   defaultConfig {
     applicationId = "com.aistudio.rams.wkqmzb"

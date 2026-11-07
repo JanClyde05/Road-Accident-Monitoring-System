@@ -91,6 +91,40 @@ private fun isDeviceOnline(context: Context): Boolean {
   return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
 
+/**
+ * Filters incident events so ONLY actively uncancelled, unresolved emergency crash alerts are pinned on the map.
+ */
+private fun filterActiveAccidentsJson(events: List<IncidentEvent>, showNearby: Boolean): String {
+  if (!showNearby) return "[]"
+  val twoHoursAgo = System.currentTimeMillis() - (2 * 60 * 60 * 1000L)
+
+  val cancelledTokens = events.filter {
+    it.type == IncidentType.FALSE_ALARM ||
+    it.title.contains("CANCEL", ignoreCase = true) ||
+    it.title.contains("RESOLVED", ignoreCase = true) ||
+    it.title.contains("DISMISSED", ignoreCase = true) ||
+    it.title.contains("SUPPRESSED", ignoreCase = true) ||
+    it.notes.contains("cancelled", ignoreCase = true) ||
+    it.notes.contains("suppressed", ignoreCase = true) ||
+    it.notes.contains("resolved", ignoreCase = true)
+  }.map { it.deviceToken }.toSet()
+
+  return events.filter { e ->
+    e.type == IncidentType.ALERT &&
+    e.timestamp >= twoHoursAgo &&
+    !cancelledTokens.contains(e.deviceToken) &&
+    !e.title.contains("CANCEL", ignoreCase = true) &&
+    !e.title.contains("RESOLVED", ignoreCase = true) &&
+    !e.title.contains("DISMISSED", ignoreCase = true) &&
+    !e.title.contains("SUPPRESSED", ignoreCase = true) &&
+    !e.notes.contains("cancelled", ignoreCase = true) &&
+    !e.notes.contains("suppressed", ignoreCase = true) &&
+    !e.notes.contains("resolved", ignoreCase = true)
+  }.joinToString(separator = ",", prefix = "[", postfix = "]") { e ->
+    """{"lat":${e.lat},"lon":${e.lon},"title":"${e.title}","token":"${e.deviceToken}"}"""
+  }
+}
+
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun RamsMapView(
@@ -140,22 +174,7 @@ fun RamsMapView(
       val jsPos = "if(window.updateUserPos){ window.updateUserPos($lat, $lon, $heading, $showNearby); }"
       webViewRef?.evaluateJavascript(jsPos, null)
 
-      val nearbyJsonArray = if (showNearby) {
-        events.filter { e ->
-          e.type == IncidentType.ALERT &&
-          !e.title.contains("CANCEL", ignoreCase = true) &&
-          !e.title.contains("RESOLVED", ignoreCase = true) &&
-          !e.title.contains("DISMISSED", ignoreCase = true) &&
-          !e.title.contains("SUPPRESSED", ignoreCase = true) &&
-          !e.notes.contains("cancelled", ignoreCase = true) &&
-          !e.notes.contains("suppressed", ignoreCase = true) &&
-          !e.notes.contains("resolved", ignoreCase = true)
-        }.joinToString(separator = ",", prefix = "[", postfix = "]") { e ->
-          """{"lat":${e.lat},"lon":${e.lon},"title":"${e.title}","token":"${e.deviceToken}"}"""
-        }
-      } else {
-        "[]"
-      }
+      val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
       val jsIncidents = "if(window.setNearbyIncidents){ window.setNearbyIncidents($nearbyJsonArray); }"
       webViewRef?.evaluateJavascript(jsIncidents, null)
     }
@@ -204,12 +223,20 @@ fun RamsMapView(
                 setBackgroundColor(0xFF09090B.toInt())
 
                 setOnTouchListener { v, event ->
-                  when (event.action) {
-                    android.view.MotionEvent.ACTION_DOWN, android.view.MotionEvent.ACTION_MOVE -> {
-                      v.parent?.requestDisallowInterceptTouchEvent(true)
+                  when (event.actionMasked) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                      var p = v.parent
+                      while (p != null) {
+                        p.requestDisallowInterceptTouchEvent(true)
+                        p = p.parent
+                      }
                     }
                     android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
-                      v.parent?.requestDisallowInterceptTouchEvent(false)
+                      var p = v.parent
+                      while (p != null) {
+                        p.requestDisallowInterceptTouchEvent(false)
+                        p = p.parent
+                      }
                     }
                   }
                   false
@@ -227,22 +254,7 @@ fun RamsMapView(
                     val initialLat = if (gps.hasFix) gps.latitude else 17.6132
                     val initialLon = if (gps.hasFix) gps.longitude else 121.7270
                     val initialHdg = heading
-                    val nearbyJsonArray = if (showNearby) {
-                      events.filter { e ->
-                        e.type == IncidentType.ALERT &&
-                        !e.title.contains("CANCEL", ignoreCase = true) &&
-                        !e.title.contains("RESOLVED", ignoreCase = true) &&
-                        !e.title.contains("DISMISSED", ignoreCase = true) &&
-                        !e.title.contains("SUPPRESSED", ignoreCase = true) &&
-                        !e.notes.contains("cancelled", ignoreCase = true) &&
-                        !e.notes.contains("suppressed", ignoreCase = true) &&
-                        !e.notes.contains("resolved", ignoreCase = true)
-                      }.joinToString(separator = ",", prefix = "[", postfix = "]") { e ->
-                        """{"lat":${e.lat},"lon":${e.lon},"title":"${e.title}","token":"${e.deviceToken}"}"""
-                      }
-                    } else {
-                      "[]"
-                    }
+                    val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
                     view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); }", null)
                   }
                 }

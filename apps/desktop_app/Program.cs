@@ -38,6 +38,7 @@ namespace RamsRescuerDesktop
         private static string _registrationsFilePath;
         private static readonly object _lock = new object();
         private static List<string> _eventsJsonList = new List<string>();
+        private static List<string> _pingLogsJsonList = new List<string>();
         private static Dictionary<string, string> _registrations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private static DateTime _lastActivity = DateTime.UtcNow;
         private static volatile bool _exitRequested = false;
@@ -309,6 +310,7 @@ namespace RamsRescuerDesktop
                 else if (eventField.Equals("LORA_FALSE_ALARM", StringComparison.OrdinalIgnoreCase)) packetType = "false_alarm";
                 else if (eventField.Equals("LORA_USER_TYPE", StringComparison.OrdinalIgnoreCase)) packetType = "user_type";
                 else if (eventField.Equals("LORA_TEST", StringComparison.OrdinalIgnoreCase)) packetType = "test";
+                else if (eventField.Equals("LORA_PING", StringComparison.OrdinalIgnoreCase)) packetType = "ping";
             }
             else
             {
@@ -429,6 +431,53 @@ namespace RamsRescuerDesktop
                             SaveRegistrations();
                         }
                     }
+                }
+                return;
+            }
+
+            // 2B. Handle Benchmark Ping Packets (Transmission Delay & Distance Assessment)
+            if (packetType.Equals("ping", StringComparison.OrdinalIgnoreCase))
+            {
+                string seqStr = ExtractField(payload, "seq") ?? "0";
+                string epochStr = ExtractField(payload, "phoneEpoch") ?? "0";
+                string rssiStr = ExtractField(payload, "rssi") ?? "0";
+                string snrStr = ExtractField(payload, "snr") ?? "0";
+                string pLatStr = ExtractField(payload, "lat") ?? "0";
+                string pLonStr = ExtractField(payload, "lon") ?? "0";
+
+                long phoneEpoch = 0;
+                long.TryParse(epochStr, out phoneEpoch);
+                long currentEpoch = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                long delayMs = (phoneEpoch > 0 && currentEpoch >= phoneEpoch) ? (currentEpoch - phoneEpoch) : 0;
+
+                double pLat = 0, pLon = 0;
+                double.TryParse(pLatStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pLat);
+                double.TryParse(pLonStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out pLon);
+
+                // Base Station receiver default reference coordinate (Tuguegarao Centro Command Post)
+                double baseLat = 17.6133, baseLon = 121.7289;
+                double distanceMeters = 0.0;
+                if (Math.Abs(pLat) > 0.0001 && Math.Abs(pLon) > 0.0001)
+                {
+                    double dLat = (pLat - baseLat) * Math.PI / 180.0;
+                    double dLon = (pLon - baseLon) * Math.PI / 180.0;
+                    double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                               Math.Cos(baseLat * Math.PI / 180.0) * Math.Cos(pLat * Math.PI / 180.0) *
+                               Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+                    double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+                    distanceMeters = 6371000.0 * c;
+                }
+
+                string pingJson = string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    "{{\"seq\":{0},\"token\":\"{1}\",\"lat\":{2:F6},\"lon\":{3:F6},\"delayMs\":{4},\"distanceMeters\":{5:F1},\"rssi\":{6},\"snr\":{7},\"timestamp\":\"{8}\"}}",
+                    seqStr, token, pLat, pLon, delayMs, distanceMeters, rssiStr, snrStr, DateTime.UtcNow.ToString("o")
+                );
+
+                lock (_lock)
+                {
+                    _pingLogsJsonList.Add(pingJson);
+                    if (_pingLogsJsonList.Count > 1000) _pingLogsJsonList.RemoveAt(0);
                 }
                 return;
             }
@@ -810,6 +859,37 @@ namespace RamsRescuerDesktop
                 return;
             }
 
+            // Route: GET /api/ping-log (Benchmark Delay & Distance Monitoring)
+            if (rawUrl.Equals("/api/ping-log", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                res.ContentType = "application/json; charset=utf-8";
+                res.StatusCode = 200;
+                string pingsJson;
+                lock (_lock)
+                {
+                    pingsJson = "[" + string.Join(",", _pingLogsJsonList.ToArray()) + "]";
+                }
+                byte[] pingBytes = Encoding.UTF8.GetBytes(pingsJson);
+                res.OutputStream.Write(pingBytes, 0, pingBytes.Length);
+                res.Close();
+                return;
+            }
+
+            // Route: DELETE /api/ping-log
+            if (rawUrl.Equals("/api/ping-log", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("DELETE", StringComparison.OrdinalIgnoreCase))
+            {
+                lock (_lock)
+                {
+                    _pingLogsJsonList.Clear();
+                }
+                res.ContentType = "application/json; charset=utf-8";
+                res.StatusCode = 200;
+                byte[] okBytes = Encoding.UTF8.GetBytes("{\"status\":\"OK\",\"message\":\"Ping logs cleared\"}");
+                res.OutputStream.Write(okBytes, 0, okBytes.Length);
+                res.Close();
+                return;
+            }
+
             // Route: POST /api/register or POST /api/registrations
             if ((rawUrl.Equals("/api/register", StringComparison.OrdinalIgnoreCase) || rawUrl.Equals("/api/registrations", StringComparison.OrdinalIgnoreCase)) 
                 && req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
@@ -1186,6 +1266,7 @@ namespace RamsRescuerDesktop
                 else if (eventField.Equals("LORA_FALSE_ALARM", StringComparison.OrdinalIgnoreCase)) packetType = "false_alarm";
                 else if (eventField.Equals("LORA_USER_TYPE", StringComparison.OrdinalIgnoreCase)) packetType = "user_type";
                 else if (eventField.Equals("LORA_TEST", StringComparison.OrdinalIgnoreCase)) packetType = "test";
+                else if (eventField.Equals("LORA_PING", StringComparison.OrdinalIgnoreCase)) packetType = "ping";
             }
             else
             {

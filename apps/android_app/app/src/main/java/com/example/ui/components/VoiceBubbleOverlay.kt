@@ -258,9 +258,16 @@ fun VoiceBubbleOverlay(
                         }
                     }
 
-                    // Central Animated Mic Orb
+                    // Central Animated Mic Orb (Tappable to re-arm listening)
                     Box(
-                        modifier = Modifier.size(64.dp),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                voiceCanceler.restartListeningForCommand()
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         // Outer pulsating aura (only pulses when hearing speech to prevent jitter)

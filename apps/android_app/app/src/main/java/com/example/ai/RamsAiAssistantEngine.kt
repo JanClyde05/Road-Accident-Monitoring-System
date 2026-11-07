@@ -4,15 +4,32 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import com.example.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.Locale
+
+/**
+ * Distilled reasoning sample captured from Google Gemini for fine-tuning RAMS-1.8B-Edge.
+ */
+data class DistilledKnowledgeSample(
+    val query: String,
+    val normalizedKey: String,
+    val response: String,
+    val timestamp: Long,
+    val speedKmh: Float,
+    val userRole: String,
+    val vehicleModel: String,
+    val source: String = "gemini-2.0-flash-distillation"
+)
 
 /**
  * Snapshot of live vehicle, sensor, and app state for RAMS AI Assistant context.
@@ -76,6 +93,133 @@ class RamsAiAssistantEngine(
     // Counter to prevent repeating the same response consecutively
     private var lastDynamicIndex = -1
 
+    // Multi-turn conversation history for human-like conversational memory
+    private val conversationHistory = mutableListOf<Pair<String, String>>()
+
+    // --- Gemini-to-RAMS Knowledge Distillation Cache ---
+    private val distilledKnowledgeCache = mutableMapOf<String, DistilledKnowledgeSample>()
+    private val DISTILLED_FILE_NAME = "rams_distilled_knowledge.jsonl"
+
+    // Filler words stripped during key normalization for fuzzy cache lookup
+    private val FILLER_WORDS = setOf(
+        "a", "an", "the", "is", "are", "was", "were", "what", "who", "where",
+        "when", "why", "how", "can", "could", "do", "does", "did", "will",
+        "would", "should", "tell", "me", "about", "please", "hey", "rams",
+        "ok", "okay", "just", "really", "very", "much", "some", "my", "your",
+        "i", "you", "it", "that", "this", "to", "of", "in", "for", "on", "with"
+    )
+
+    init {
+        loadDistilledCache()
+    }
+
+    /**
+     * Normalizes a query into a canonical cache key:
+     * lowercase, strip punctuation, remove filler words, sort remaining tokens alphabetically.
+     */
+    private fun normalizeQueryKey(query: String): String {
+        val tokens = query.lowercase(Locale.US)
+            .replace(Regex("[^a-z0-9\\s]"), "")
+            .split(Regex("\\s+"))
+            .filter { it.length > 1 && it !in FILLER_WORDS }
+            .sorted()
+        return tokens.joinToString(" ")
+    }
+
+    /**
+     * Loads distilled knowledge cache from JSONL file on disk into memory.
+     */
+    private fun loadDistilledCache() {
+        try {
+            val file = File(context.filesDir, DISTILLED_FILE_NAME)
+            if (!file.exists()) return
+            file.bufferedReader().useLines { lines ->
+                for (line in lines) {
+                    if (line.isBlank()) continue
+                    try {
+                        val obj = JSONObject(line)
+                        val sample = DistilledKnowledgeSample(
+                            query = obj.optString("query", ""),
+                            normalizedKey = obj.optString("normalizedKey", ""),
+                            response = obj.optString("response", ""),
+                            timestamp = obj.optLong("timestamp", 0L),
+                            speedKmh = obj.optDouble("speedKmh", 0.0).toFloat(),
+                            userRole = obj.optString("userRole", ""),
+                            vehicleModel = obj.optString("vehicleModel", ""),
+                            source = obj.optString("source", "gemini-2.0-flash-distillation")
+                        )
+                        if (sample.normalizedKey.isNotBlank() && sample.response.isNotBlank()) {
+                            distilledKnowledgeCache[sample.normalizedKey] = sample
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Skipping malformed distilled sample: ${e.message}")
+                    }
+                }
+            }
+            Log.d(TAG, "Loaded ${distilledKnowledgeCache.size} distilled knowledge samples from disk.")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to load distilled knowledge cache: ${e.message}")
+        }
+    }
+
+    /**
+     * Persists a single distilled sample to the JSONL file and adds it to in-memory cache.
+     */
+    private fun persistDistilledSample(sample: DistilledKnowledgeSample) {
+        try {
+            distilledKnowledgeCache[sample.normalizedKey] = sample
+            val obj = JSONObject().apply {
+                put("query", sample.query)
+                put("normalizedKey", sample.normalizedKey)
+                put("response", sample.response)
+                put("timestamp", sample.timestamp)
+                put("speedKmh", sample.speedKmh.toDouble())
+                put("userRole", sample.userRole)
+                put("vehicleModel", sample.vehicleModel)
+                put("source", sample.source)
+            }
+            val file = File(context.filesDir, DISTILLED_FILE_NAME)
+            file.appendText(obj.toString() + "\n")
+            Log.d(TAG, "Distilled sample cached: key='${sample.normalizedKey}' (total=${distilledKnowledgeCache.size})")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to persist distilled sample: ${e.message}")
+        }
+    }
+
+    /**
+     * Looks up a cached distilled answer by normalized query key.
+     * Returns null if no cached answer exists for this query.
+     */
+    private fun lookupDistilledAnswer(query: String): String? {
+        val key = normalizeQueryKey(query)
+        if (key.isBlank()) return null
+        val sample = distilledKnowledgeCache[key]
+        if (sample != null) {
+            Log.d(TAG, "Distillation cache HIT for key='$key'")
+            return sample.response
+        }
+        return null
+    }
+
+    /** Returns all distilled Q&A pairs for UI display. */
+    fun getDistilledSamples(): List<DistilledKnowledgeSample> = distilledKnowledgeCache.values.toList()
+
+    /** Returns total number of distilled knowledge samples. */
+    fun getDistilledSampleCount(): Int = distilledKnowledgeCache.size
+
+    /**
+     * Exports the entire distilled knowledge base as JSONL text for clipboard/share.
+     */
+    fun exportDistilledKnowledgeJson(): String {
+        return try {
+            val file = File(context.filesDir, DISTILLED_FILE_NAME)
+            if (file.exists()) file.readText() else ""
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to export distilled knowledge: ${e.message}")
+            ""
+        }
+    }
+
     /**
      * Checks if the device has an active Wi-Fi or cellular internet connection.
      */
@@ -95,7 +239,8 @@ class RamsAiAssistantEngine(
      * Generates a context-aware dynamic spoken response to any user voice query.
      */
     suspend fun generateAssistantResponse(query: String): String = withContext(Dispatchers.IO) {
-        val trimmed = query.trim()
+        val normalized = TuguegaraoOfflineSpatialEngine.normalizeLocalPhonetics(query)
+        val trimmed = normalized.trim()
         val lower = trimmed.lowercase(Locale.US)
         val sys = getSystemContext()
 
@@ -188,13 +333,37 @@ class RamsAiAssistantEngine(
             }
         }
 
-        if (lower.contains("where am i") || lower.contains("location") || lower.contains("coordinates") || lower.contains("address")) {
-            return@withContext if (sys.locationAddress.isNotBlank()) {
-                "You are near ${sys.locationAddress}."
-            } else if (sys.hasGpsFix) {
-                "You are at coordinates latitude %.4f, longitude %.4f.".format(Locale.US, sys.latitude, sys.longitude)
-            } else {
-                "GPS fix is acquiring. Move under an open sky to establish high-precision satellite lock."
+        if (lower.contains("where am i") || lower.contains("location") || lower.contains("coordinates") || lower.contains("address") ||
+            lower.contains("nasaan ako") || lower.contains("asan ako") || lower.contains("where i am")) {
+            val rev = TuguegaraoOfflineSpatialEngine.reverseGeocode(sys.latitude, sys.longitude)
+            return@withContext "You are currently located at $rev."
+        }
+
+        // 4B. TUGUEGARAO TRICYCLE FARE & "CAPACITY" SCAM ADVISORY (ORDINANCE NO. 50-09-2022)
+        // Checked BEFORE directions so destination phrases like "papuntang SM" still trigger fare advisory if user asks about cost/scams
+        val isTricycleFareQuery = lower.contains("pamasahe") || lower.contains("fare") || lower.contains("magkano") ||
+            lower.contains("tricycle") || lower.contains("trike") || lower.contains("capacity") ||
+            lower.contains("sinisingil") || lower.contains("special trip") || lower.contains("overcharge") ||
+            lower.contains("overcharging") || lower.contains("scam") || lower.contains("ordinance") ||
+            lower.contains("singil") || lower.contains("plete") || lower.contains("pamasahi") ||
+            lower.contains("mano ti") || lower.contains("sano i")
+
+        if (isTricycleFareQuery) {
+            return@withContext TuguegaraoOfflineSpatialEngine.getTricycleFareAndScamAdvisory(sys.latitude, sys.longitude, trimmed)
+        }
+
+        // 4C. TUGUEGARAO OFFLINE DIRECTIONS & WAYFINDING (OFFLINE GMAPS REPLACEMENT)
+        val isDirectionQuery = lower.contains("how to go") || lower.contains("how to get to") ||
+            lower.contains("direction") || lower.contains("directions") || lower.contains("take me to") ||
+            lower.contains("way to") || lower.contains("papunta sa") || lower.contains("saan ang") ||
+            lower.contains("saan banda") || lower.contains("paano pumunta") || lower.contains("route to") ||
+            (lower.contains("where is") && !lower.contains("where is my")) ||
+            (TuguegaraoOfflineSpatialEngine.findTargetLandmark(trimmed) != null && (lower.contains("go") || lower.contains("punta") || lower.contains("saan") || lower.contains("where")))
+
+        if (isDirectionQuery) {
+            val directions = TuguegaraoOfflineSpatialEngine.generateOfflineDirections(sys.latitude, sys.longitude, trimmed)
+            if (directions != null) {
+                return@withContext directions
             }
         }
 
@@ -254,8 +423,37 @@ class RamsAiAssistantEngine(
             return@withContext "In a verified collision, RAMS sounds an SOS Morse audio beacon, transmits a LoRa packet to base stations, and automatically sends an SMS with your GPS coordinates and medical token to ${if (sys.emergencyContactName.isNotBlank()) sys.emergencyContactName else "your emergency contact"}."
         }
 
-        // 6. GENERAL ASSISTANT KNOWLEDGE INTENTS (Online DuckDuckGo / Wikipedia API)
+        // 6. DISTILLATION CACHE LOOKUP (Gemini-taught answers, works offline too)
+        val cachedAnswer = lookupDistilledAnswer(trimmed)
+        if (!cachedAnswer.isNullOrBlank()) {
+            return@withContext cachedAnswer
+        }
+
+        // 7. ONLINE INTELLIGENCE: GOOGLE GEMINI 2.0 FLASH WITH MULTI-TURN MEMORY
         if (isOnline()) {
+            try {
+                val geminiReply = queryGeminiChat(trimmed, sys)
+                if (!geminiReply.isNullOrBlank()) {
+                    // Distill: cache this Gemini answer so RAMS can answer offline next time
+                    val normalizedKey = normalizeQueryKey(trimmed)
+                    if (normalizedKey.isNotBlank()) {
+                        persistDistilledSample(DistilledKnowledgeSample(
+                            query = trimmed,
+                            normalizedKey = normalizedKey,
+                            response = geminiReply,
+                            timestamp = System.currentTimeMillis(),
+                            speedKmh = sys.speedKmh,
+                            userRole = sys.userType,
+                            vehicleModel = sys.vehicleModel
+                        ))
+                    }
+                    return@withContext geminiReply
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Gemini online reasoning error: ${e.message}")
+            }
+
+            // Fallback to encyclopedic Wikipedia / DuckDuckGo if Gemini key is unset or unreachable
             try {
                 val instantAnswer = fetchOnlineKnowledge(trimmed)
                 if (!instantAnswer.isNullOrBlank()) {
@@ -266,8 +464,8 @@ class RamsAiAssistantEngine(
             }
         }
 
-        // 7. OFFLINE INTELLIGENT EXPERT KNOWLEDGE
-        return@withContext generateOfflineIntelligentResponse(lower, sys)
+        // 8. OFFLINE COGNITIVE REASONING ENGINE (RICH SITUATIONAL & IN-DEPTH DOMAIN COGNITION)
+        return@withContext generateOfflineIntelligentResponse(lower, trimmed, sys)
     }
 
     /**
@@ -432,19 +630,189 @@ class RamsAiAssistantEngine(
     }
 
     /**
+     * Retrieves the Gemini API key from BuildConfig or SharedPreferences fallback.
+     */
+    private fun getGeminiApiKey(): String {
+        val prefs = context.getSharedPreferences("rams_settings", Context.MODE_PRIVATE)
+        val customKey = prefs.getString("gemini_api_key", null)
+        if (!customKey.isNullOrBlank()) {
+            return customKey.trim()
+        }
+        return BuildConfig.GEMINI_API_KEY.trim()
+    }
+
+    /**
+     * Online Generative Intelligence via Google Gemini REST API.
+     * Uses zero external libraries (native HttpURLConnection + org.json).
+     * Maintains multi-turn conversational context with live vehicular telemetry conditioning.
+     * Features automatic model fallbacks (gemini-3.8-flash -> gemini-2.5-flash-lite -> gemini-flash-latest).
+     */
+    private fun queryGeminiChat(query: String, sys: RamsSystemContext): String? {
+        val apiKey = getGeminiApiKey()
+        if (apiKey.isBlank() || apiKey == "UNSET") {
+            Log.d(TAG, "Gemini API key is unset; falling back to offline cognition.")
+            return null
+        }
+
+        val candidateModels = listOf("gemini-3.8-flash", "gemini-3.5-flash-lite")
+        val role = sys.userType
+        val vehicle = if (sys.vehicleModel.isNotBlank()) sys.vehicleModel else "vehicle"
+        val rider = if (sys.riderName.isNotBlank()) sys.riderName else "Rider"
+        val reverseAddress = TuguegaraoOfflineSpatialEngine.reverseGeocode(sys.latitude, sys.longitude)
+
+        val systemInstructionText = "You are RAMS, an intelligent road safety co-pilot and AI conversational assistant on an Android phone operating in Tuguegarao City, Cagayan, Philippines. " +
+            "You are speaking to $rider who is a $role ($vehicle). " +
+            "Current location: $reverseAddress (Coordinates ${"%.4f".format(Locale.US, sys.latitude)}, ${"%.4f".format(Locale.US, sys.longitude)}). " +
+            "Current telemetry: Speed ${"%.1f".format(Locale.US, sys.speedKmh)} km/h, G-force ${"%.2f".format(Locale.US, sys.liveG)} G, Motion ${sys.aiMotionProfile}, Wearable ${if (sys.isWearableConnected) "Connected (${sys.wearableBatteryPct}%)" else "Disconnected"}. " +
+            "LOCAL TUGUEGARAO KNOWLEDGE: You know local landmarks (SM City Tuguegarao in Caritan Norte, SM Center Downtown, Robinsons Place Tanza, CSU Carig, USL, SPUP, CVMC, Buntun Bridge). Under Tuguegarao City Ordinance No. 50-09-2022, base tricycle shared-ride fare is ₱12 for the first 2 km (₱10 for students/seniors/PWDs with 20% discount) plus ₱2 per succeeding km. Night fare bargaining is permitted 9PM-5AM. Drivers charging lone commuters 'capacity' (₱50 to ₱100+) is an illegal overcharge scam unless the commuter explicitly requested a private charter trip. You understand Tagalog, Ibanag, Ilokano, and Taglish. " +
+            "RULES: 1. Answer like a natural, smart human assistant (like Google Assistant). " +
+            "2. Keep the answer strictly to 1 or 2 spoken sentences (under 35 words) so it is safe to listen to while on the road. " +
+            "3. Do NOT use markdown symbols, asterisks, bullet points, hashtags, or emojis because your response will be read aloud by Android Text-to-Speech. " +
+            "4. Safety invariant: in accidents, never advise removing a helmet unless breathing is obstructed."
+
+        val rootJson = JSONObject()
+
+        // System Instruction
+        val sysInstObj = JSONObject()
+        val sysParts = JSONArray()
+        sysParts.put(JSONObject().put("text", systemInstructionText))
+        sysInstObj.put("parts", sysParts)
+        rootJson.put("system_instruction", sysInstObj)
+
+        // Contents array (Conversation History + Current Query)
+        val contentsArr = JSONArray()
+        synchronized(conversationHistory) {
+            val historySlice = conversationHistory.takeLast(4)
+            for ((userMsg, assistantMsg) in historySlice) {
+                val userTurn = JSONObject()
+                userTurn.put("role", "user")
+                val uParts = JSONArray().put(JSONObject().put("text", userMsg))
+                userTurn.put("parts", uParts)
+                contentsArr.put(userTurn)
+
+                val modelTurn = JSONObject()
+                modelTurn.put("role", "model")
+                val mParts = JSONArray().put(JSONObject().put("text", assistantMsg))
+                modelTurn.put("parts", mParts)
+                contentsArr.put(modelTurn)
+            }
+        }
+
+        // Append current user message
+        val currentTurn = JSONObject()
+        currentTurn.put("role", "user")
+        val currParts = JSONArray().put(JSONObject().put("text", query))
+        currentTurn.put("parts", currParts)
+        contentsArr.put(currentTurn)
+        rootJson.put("contents", contentsArr)
+
+        // Generation Config
+        val genConfig = JSONObject()
+        genConfig.put("temperature", 0.7)
+        genConfig.put("maxOutputTokens", 120)
+        rootJson.put("generationConfig", genConfig)
+
+        val postData = rootJson.toString().toByteArray(Charsets.UTF_8)
+
+        for (model in candidateModels) {
+            try {
+                val endpoint = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
+                val url = URL(endpoint)
+                val conn = (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "POST"
+                    connectTimeout = 8500
+                    readTimeout = 8500
+                    doOutput = true
+                    setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                    setRequestProperty("User-Agent", "RAMS-AI-CoPilot/3.2")
+                }
+
+                conn.outputStream.use { os ->
+                    os.write(postData)
+                    os.flush()
+                }
+
+                val respCode = conn.responseCode
+                if (respCode == 200) {
+                    val respBody = conn.inputStream.bufferedReader().use(BufferedReader::readText)
+                    val respJson = JSONObject(respBody)
+                    val candidates = respJson.optJSONArray("candidates")
+                    if (candidates != null && candidates.length() > 0) {
+                        val candidate = candidates.getJSONObject(0)
+                        val content = candidate.optJSONObject("content")
+                        val parts = content?.optJSONArray("parts")
+                        if (parts != null && parts.length() > 0) {
+                            val rawText = parts.getJSONObject(0).optString("text", "")
+                            val cleaned = cleanAiSpokenText(rawText)
+                            if (cleaned.isNotBlank()) {
+                                synchronized(conversationHistory) {
+                                    conversationHistory.add(Pair(query, cleaned))
+                                    if (conversationHistory.size > 8) {
+                                        conversationHistory.removeAt(0)
+                                    }
+                                }
+                                Log.i(TAG, "Gemini online reasoning success ($model): '$cleaned'")
+                                return cleaned
+                            }
+                        }
+                    }
+                } else {
+                    val errBody = conn.errorStream?.bufferedReader()?.use(BufferedReader::readText)
+                    Log.w(TAG, "Gemini REST API ($model) HTTP $respCode: $errBody")
+                    if (respCode == 404) {
+                        continue // Try next candidate model
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Gemini network call failed for $model: ${e.message}")
+            }
+        }
+        return null
+    }
+
+    /**
+     * Cleans raw AI generation for smooth, natural Text-To-Speech delivery:
+     * - Strips markdown formatting (*, #, _, `, >, -, ~)
+     * - Removes URLs and HTML tags
+     * - Strips non-ASCII emojis and excessive whitespace
+     * - Clamps response length to safe spoken duration
+     */
+    private fun cleanAiSpokenText(raw: String): String {
+        var text = raw.replace(Regex("\\*\\*|\\*|#+|_|`|>|~"), "")
+            .replace(Regex("https?://\\S+"), "")
+            .replace(Regex("<[^>]*>"), "")
+            .replace(Regex("[\\p{So}\\p{Cn}]"), "") // Strip emojis and unassigned symbols
+            .replace(Regex("\\s+"), " ")
+            .trim()
+
+        // Ensure proper end punctuation for TTS cadence
+        if (text.isNotBlank() && !text.endsWith(".") && !text.endsWith("!") && !text.endsWith("?")) {
+            text += "."
+        }
+        return text
+    }
+
+    /**
      * Resilient offline knowledge and conversational response generator.
      */
-    private fun generateOfflineIntelligentResponse(lower: String, sys: RamsSystemContext): String {
+    private fun generateOfflineIntelligentResponse(lower: String, rawQuery: String, sys: RamsSystemContext): String {
         val role = sys.userType.lowercase(Locale.US)
         val vehicle = if (sys.vehicleModel.isNotBlank()) sys.vehicleModel else "vehicle"
-        val name = if (sys.riderName.isNotBlank()) ", ${sys.riderName}" else ""
+        val name = if (sys.riderName.isNotBlank()) sys.riderName else "Rider"
 
         return when {
-            lower.contains("who are you") || lower.contains("what is rams") -> {
-                "I am RAMS, the $MODEL_NAME on-device language model ($MODEL_VERSION). " +
-                "I run $MODEL_PARAMS on a $MODEL_ARCH architecture, quantized to $MODEL_QUANT for real-time edge inference. " +
-                "My domain is $MODEL_DOMAIN: I monitor your 6-axis kinematics at 50 Hertz to guard against accidents, provide intelligent guidance, and suppress false alarms -- 100% offline, 100% on your phone."
+            // IDENTITY, MODEL & ARCHITECTURE
+            lower.contains("who are you") || lower.contains("what is rams") || lower.contains("tell me about yourself") -> {
+                "I am RAMS, your on-device safety co-pilot powered by the $MODEL_NAME model, version $MODEL_VERSION with $MODEL_PARAMS. I run 100 percent offline on your phone to guard against road accidents and answer your riding questions."
             }
+            lower.contains("parameters") || lower.contains("architecture") || lower.contains("qwen") || lower.contains("gemma") || lower.contains("llm") -> {
+                "RAMS runs $MODEL_PARAMS on a $MODEL_ARCH architecture, quantized to $MODEL_QUANT with a $MODEL_CONTEXT context window. It processes 50 Hertz IMU kinematics locally for zero-latency crash cognition."
+            }
+            lower.contains("are you smart") || lower.contains("how smart") || lower.contains("capabilities") -> {
+                "I feature dual-tier edge neural cognition for real-time kinematics and false-alarm suppression, paired with situational reasoning for road safety, vehicle maintenance, and emergency protocols."
+            }
+
+            // GREETINGS & CASUAL RAPPORT
             lower.contains("hello") || lower.contains("hi") || lower.contains("hey") -> {
                 val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
                 val greeting = when {
@@ -452,11 +820,102 @@ class RamsAiAssistantEngine(
                     hour < 18 -> "Good afternoon"
                     else -> "Good evening"
                 }
-                "$greeting$name! All safety systems are armed for your role as ${sys.userType}. How can I assist you today?"
+                if (sys.speedKmh > 10f) {
+                    "$greeting $name! We are rolling at ${"%.1f".format(Locale.US, sys.speedKmh)} km/h. All safety sensors are active. What do you need?"
+                } else {
+                    "$greeting $name! All systems are armed for your $role mode. How can I assist you today?"
+                }
             }
-            lower.contains("thank") -> {
-                "You are welcome$name! Stay alert on the road and stay safe."
+            lower.contains("how are you") || lower.contains("how are you doing") || lower.contains("how's it going") || lower.contains("what's up") -> {
+                val gStr = "%.2f G".format(Locale.US, sys.liveG)
+                if (sys.speedKmh > 5f) {
+                    "Doing excellent, $name! Tracking your ride at ${"%.1f".format(Locale.US, sys.speedKmh)} km/h with baseline acceleration at $gStr. Everything looks smooth."
+                } else {
+                    "All systems nominal, $name! IMU is resting steadily at $gStr. Ready whenever you roll out."
+                }
             }
+            lower.contains("thank") || lower.contains("salamat") -> {
+                "You are very welcome, $name! Keep your eyes on the road and ride safe."
+            }
+            lower.contains("joke") || lower.contains("say something funny") || lower.contains("make me laugh") -> {
+                val jokes = listOf(
+                    "Why did the motorcycle take a nap? Because it was two-tired!",
+                    "Why do motorcycle riders love twisty roads? Because straight lines are just the boring distance between corners!",
+                    "What is a motorcycle rider's favorite drink? High-octane coffee with plenty of kick!",
+                    "Why did the bicycle fall over? Because it couldn't stand on its own two wheels without a kickstand!"
+                )
+                jokes[(System.currentTimeMillis() % jokes.size).toInt()]
+            }
+            lower.contains("bored") || lower.contains("talk to me") || lower.contains("chat with me") -> {
+                if (sys.speedKmh > 20f) {
+                    "At ${"%.1f".format(Locale.US, sys.speedKmh)} km/h, focus on scanning two blocks ahead and picking clean cornering lines. Defensive riding will keep your mind engaged!"
+                } else {
+                    "While we are stationary, feel free to ask about road rules, tire pressures, cornering physics, or how to pair your Safety Wearable."
+                }
+            }
+
+            // SPEED & TRAFFIC RULES (RA 4136)
+            lower.contains("speed limit") || lower.contains("how fast can i go") || lower.contains("overspeeding") || lower.contains("legal speed") || lower.contains("ra 4136") -> {
+                if (sys.speedKmh > 60f) {
+                    "You are currently at ${"%.1f".format(Locale.US, sys.speedKmh)} km/h. Under Philippine RA 4136, city streets are limited to 30 to 40 km/h and highways to 80 km/h. Taper your throttle to stay within safe legal margins."
+                } else if (sys.speedKmh in 20f..60f) {
+                    "At ${"%.1f".format(Locale.US, sys.speedKmh)} km/h you are cruising within standard municipal road limits. Remain alert for merging tricycles and pedestrians."
+                } else {
+                    "Philippine speed limits under RA 4136 are 30 to 40 km/h in urban streets and up to 80 km/h on open highways. Motorcycles below 400cc are restricted from expressways."
+                }
+            }
+
+            // RIDING TECHNIQUE & PHYSICS
+            lower.contains("countersteering") || lower.contains("counter steering") || lower.contains("how to turn") || lower.contains("cornering") || lower.contains("how to corner") -> {
+                "To corner smoothly above 15 km/h, look toward the exit of the turn and push the handlebar forward on the side you want to turn. Countersteering initiates the lean angle cleanly."
+            }
+            lower.contains("abs") || lower.contains("anti lock") || lower.contains("braking") || lower.contains("how to brake") || lower.contains("skid") || lower.contains("stopping distance") -> {
+                "In emergency deceleration, keep the bike upright and apply 70 percent front brake and 30 percent rear brake smoothly without snatching the lever. Progressive pressure prevents wheel tucking."
+            }
+            lower.contains("overtake") || lower.contains("passing") || lower.contains("filter") || lower.contains("filtering") || lower.contains("lane split") || lower.contains("lane splitting") -> {
+                "Always overtake on the left side with a distinct mirror and shoulder check. When lane filtering through slow traffic, keep your speed difference below 15 km/h above surrounding traffic."
+            }
+            lower.contains("blind spot") || lower.contains("mirror") || lower.contains("lane change") -> {
+                "Never linger in vehicle blind spots, especially heavy trucks. Always perform a quick shoulder check over your chin before initiating any lane change."
+            }
+
+            // ROAD HAZARDS & SURFACES
+            lower.contains("pothole") || lower.contains("speed bump") || lower.contains("bump") || lower.contains("rough road") || lower.contains("crater") -> {
+                "RAMS 50 Hertz filters safely reject vertical shocks up to 4.5 G with zero roll delta. When approaching an unavoidable pothole, stand slightly on your pegs and keep handlebars straight without grabbing the front brake."
+            }
+            lower.contains("slick") || lower.contains("white line") || lower.contains("manhole") || lower.contains("slippery road") || lower.contains("metal plate") -> {
+                "Thermoplastic road markings, painted pedestrian lanes, and metal trench plates become ice-slick when wet. Cross them with the vehicle upright and maintain a neutral throttle."
+            }
+            lower.contains("night") || lower.contains("dark") || lower.contains("headlight") || lower.contains("glare") || lower.contains("high beam") -> {
+                "Never look directly into oncoming high beams; instead, guide your trajectory using the white shoulder line on your right side, and keep your helmet visor free of micro-scratches."
+            }
+
+            // RIDER WELLNESS & ERGONOMICS
+            lower.contains("tired") || lower.contains("sleepy") || lower.contains("drowsy") || lower.contains("exhausted") || lower.contains("yawn") || lower.contains("fatigue") -> {
+                "Rider fatigue degrades reaction time by over 50 percent. Pull over at the next safe gas station, hydrate with cold water, and rest for 15 minutes before riding again."
+            }
+            lower.contains("numb") || lower.contains("wrist") || lower.contains("hand hurt") || lower.contains("finger tingling") || lower.contains("vibration") -> {
+                "Hand numbness comes from gripping the bars too tightly and absorbing engine vibration. Relax your grip, support your torso by hugging the tank with your knees, and shake out your hands at stops."
+            }
+            lower.contains("angry") || lower.contains("road rage") || lower.contains("cut me off") || lower.contains("aggressive driver") -> {
+                "Take a slow deep breath and let the aggressive driver pull away. On two wheels, winning a road argument is never worth the physical danger. Arriving safely is your priority."
+            }
+
+            // MECHANICAL TROUBLESHOOTING
+            lower.contains("spongy brake") || lower.contains("soft brake") || lower.contains("brake lever loose") -> {
+                "A spongy brake lever indicates air trapped in your hydraulic line or degraded brake fluid. Bleed the brake system and verify fluid levels before operating the vehicle."
+            }
+            lower.contains("tire pressure") || lower.contains("psi") || lower.contains("flat tire") || lower.contains("tires") -> {
+                "Check tire pressure cold. Recommended pressures for underbone and scooter models are 29 PSI front and 33 PSI rear. Proper inflation prevents rim pinch flats and optimizes cornering grip."
+            }
+            lower.contains("chain") || lower.contains("slack") || lower.contains("chain lube") || lower.contains("chain loose") -> {
+                "Maintain 20 to 30 millimeters of vertical chain slack at the midpoint. Clean and lubricate every 500 kilometers to prevent premature sprocket wear and chain snap."
+            }
+            lower.contains("engine hot") || lower.contains("overheating") || lower.contains("engine smoke") || lower.contains("burning smell") -> {
+                "If your engine is running unusually hot in stop-and-go traffic, pull over to a shaded shoulder, let the engine idle or cool down, and inspect coolant and oil levels."
+            }
+
+            // SAFETY GEAR & FIRST AID INVARIANTS
             lower.contains("gear") || lower.contains("what to wear") || lower.contains("protection") || lower.contains("safety gear") -> {
                 when {
                     role.contains("pedestrian") || role.contains("walk") ->
@@ -477,31 +936,63 @@ class RamsAiAssistantEngine(
             lower.contains("first aid") || lower.contains("injury") || lower.contains("bleeding") -> {
                 "In a road accident, call 911 immediately. Never remove an injured rider's helmet unless their airway is blocked, to avoid exacerbating cervical spine trauma. Apply firm, direct pressure to severe bleeds with clean cloth."
             }
-            lower.contains("countersteering") || lower.contains("counter steering") || lower.contains("how to turn") -> {
-                "Countersteering is the physical technique used to turn a two-wheeler at speeds above 15 km/h: gently push forward on the handlebar in the direction you wish to turn to initiate vehicle lean angle."
-            }
-            lower.contains("abs") || lower.contains("anti lock") || lower.contains("braking") || lower.contains("how to brake") -> {
-                "Anti-lock Braking Systems prevent wheels from locking during emergency deceleration, allowing steering control. In emergencies, apply both front and rear brakes firmly in a straight line without grabbing."
-            }
-            lower.contains("blind spot") || lower.contains("mirror") || lower.contains("lane change") -> {
-                "Never linger in vehicle blind spots, particularly heavy trucks. Always perform a quick shoulder check over your chin before initiating any lane transition."
-            }
-            lower.contains("tire pressure") || lower.contains("psi") || lower.contains("tires") -> {
-                "Check tire pressure when cold. Standard underbone and scooter pressures are 29 PSI front and 33 PSI rear. Correct pressure prevents rim pinch flats on potholes and preserves cornering grip."
-            }
-            lower.contains("chain") || lower.contains("maintenance") -> {
-                "Clean and lubricate your motorcycle chain every 500 kilometers with dedicated chain lube. Maintain 20 to 30 millimeters of vertical chain slack to prevent transmission bearing wear."
-            }
-            lower.contains("pothole") || lower.contains("speed bump") || lower.contains("bump") -> {
-                "RAMS Edge AI filters out vertical pothole shocks up to 4.5 G with zero tilt delta, safely suppressing false 911 alarms while keeping critical crash triggers armed."
-            }
             lower.contains("help") || lower.contains("commands") || lower.contains("what can you do") -> {
-                "You can ask me about your speed, G-force, location, weather, profile details, how to edit your role, where to find credits, or how to connect your Safety Wearable. How can I help?"
+                "You can ask me about speed limits, road physics, cornering, tire pressure, chain care, weather, first aid, or your live G-force and wearable status. What would you like to know?"
             }
+
+            // SITUATIONAL HEURISTIC SYNTHESIZER (NO CANNED REPETITIVE FALLBACK)
             else -> {
-                generateDynamicContextualResponse(sys)
+                synthesizeHeuristicCognition(lower, rawQuery, sys)
             }
         }
+    }
+
+    /**
+     * Synthesizes intelligent situational reasoning when no pre-mapped pattern matches.
+     * Evaluates question intent and grounds the answer in live telemetry, kinematics, and safety physics.
+     */
+    private fun synthesizeHeuristicCognition(lower: String, rawQuery: String, sys: RamsSystemContext): String {
+        val name = if (sys.riderName.isNotBlank()) sys.riderName else "Rider"
+        val vehicle = if (sys.vehicleModel.isNotBlank()) sys.vehicleModel else "vehicle"
+        val speed = sys.speedKmh
+        val g = sys.liveG
+
+        // 1. Question about possibility or safety: "can I", "should I", "is it safe", "okay to"
+        if (lower.contains("can i") || lower.contains("should i") || lower.contains("is it safe") || lower.contains("allowed to")) {
+            return if (speed > 40f) {
+                "At your current speed of ${"%.1f".format(Locale.US, speed)} km/h, avoid any abrupt changes or distractions. Ensure you have clear sightlines and ample following distance before attempting maneuvers."
+            } else if (speed > 5f) {
+                "Proceed with caution. Keep your hands on the controls, scan the road ahead for cross traffic, and maintain a steady lean angle."
+            } else {
+                "While stationary, inspect your surroundings and mirrors first. If conditions are clear and road traction is solid, you can safely proceed."
+            }
+        }
+
+        // 2. Question about location, direction or route: "where", "which way", "route", "direction"
+        if (lower.contains("where") || lower.contains("route") || lower.contains("direction") || lower.contains("way to")) {
+            return if (sys.hasGpsFix && sys.locationAddress.isNotBlank()) {
+                "You are currently near ${sys.locationAddress}. Open the Map tab to review high-risk accident hotspots along your route."
+            } else {
+                "GPS positioning is currently tracking your route. Check the Map tab in RAMS for live incident heatmaps and route safety overlays."
+            }
+        }
+
+        // 3. Question about time, duration or distance: "how long", "when", "time", "distance"
+        if (lower.contains("how long") || lower.contains("when") || lower.contains("distance") || lower.contains("how far")) {
+            return if (speed > 10f) {
+                "At a pace of ${"%.1f".format(Locale.US, speed)} km/h, every 10 kilometers takes approximately ${"%.0f".format(Locale.US, (600f / speed))} minutes. Keep a steady pace and scan ahead."
+            } else {
+                "We are currently stopped. Plan your route with safety stops every 60 to 90 minutes to prevent riding fatigue."
+            }
+        }
+
+        // 4. Question about why or how: "why", "how does", "how do"
+        if (lower.contains("why") || lower.contains("how")) {
+            return "Regarding $rawQuery: on your $vehicle, safety depends on smooth inputs, tire grip, and situational awareness. At ${"%.1f".format(Locale.US, speed)} km/h with baseline G at ${"%.2f".format(Locale.US, g)} G, stability is nominal."
+        }
+
+        // 5. Varied dynamic contextual briefing as smart fallback
+        return generateDynamicContextualResponse(sys)
     }
 
     /**

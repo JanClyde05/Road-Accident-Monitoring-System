@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -108,7 +109,10 @@ fun SettingsScreen(
   onToggleAi: (Boolean) -> Unit = {},
   devTrainingSuite: DeveloperTrainingSuite? = null,
   voiceCanceler: VoiceAlarmCanceler? = null,
-  onCancelFalseAlarm: () -> Unit = {}
+  onCancelFalseAlarm: () -> Unit = {},
+  isPingModeActive: Boolean = false,
+  onTogglePingMode: (Boolean) -> Unit = {},
+  pingCount: Long = 0L
 ) {
   val context = LocalContext.current
   val clipboard = LocalClipboardManager.current
@@ -986,7 +990,155 @@ fun SettingsScreen(
             }
           }
 
-          // C. Developer Training & Simulation Suite
+          // C. RAMS Knowledge Distillation Cache (Gemini-teaches-RAMS)
+          val knowledgeCount = voiceCanceler?.assistantEngine?.getDistilledSampleCount() ?: 0
+          var showKnowledgeDialog by remember { mutableStateOf(false) }
+          Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            color = Color(0xFF09090B),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+          ) {
+            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+              Column {
+                Text(
+                  text = "RAMS Knowledge Base",
+                  fontSize = 12.sp,
+                  fontWeight = FontWeight.Bold,
+                  color = Color.White
+                )
+                Text(
+                  text = "Gemini-to-RAMS distilled reasoning cache",
+                  fontSize = 10.sp,
+                  fontFamily = FontFamily.Monospace,
+                  color = RamsSyncBlue
+                )
+              }
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                Surface(
+                  shape = RoundedCornerShape(4.dp),
+                  color = Color(0xFF18181B),
+                  modifier = Modifier.weight(1f)
+                ) {
+                  Column(modifier = Modifier.padding(6.dp)) {
+                    Text("CACHED Q&A PAIRS", fontSize = 8.sp, color = Color(0xFF71717A), fontFamily = FontFamily.Monospace)
+                    Text("$knowledgeCount", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.Monospace)
+                  }
+                }
+                Surface(
+                  shape = RoundedCornerShape(4.dp),
+                  color = Color(0xFF18181B),
+                  modifier = Modifier.weight(1f)
+                ) {
+                  Column(modifier = Modifier.padding(6.dp)) {
+                    Text("SOURCE", fontSize = 8.sp, color = Color(0xFF71717A), fontFamily = FontFamily.Monospace)
+                    Text("Gemini 2.0", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.White, fontFamily = FontFamily.Monospace)
+                  }
+                }
+              }
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                Button(
+                  onClick = { showKnowledgeDialog = true },
+                  modifier = Modifier.weight(1f).height(36.dp),
+                  shape = RoundedCornerShape(6.dp),
+                  colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF18181B),
+                    contentColor = RamsSyncBlue
+                  ),
+                  border = androidx.compose.foundation.BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.4f)),
+                  enabled = knowledgeCount > 0
+                ) {
+                  Text("VIEW DATA", fontSize = 10.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold)
+                }
+                Button(
+                  onClick = {
+                    val jsonl = voiceCanceler?.assistantEngine?.exportDistilledKnowledgeJson() ?: ""
+                    if (jsonl.isNotBlank()) {
+                      clipboard.setText(androidx.compose.ui.text.AnnotatedString(jsonl))
+                      Toast.makeText(context, "Knowledge base copied to clipboard ($knowledgeCount samples)", Toast.LENGTH_SHORT).show()
+                    }
+                  },
+                  modifier = Modifier.weight(1f).height(36.dp),
+                  shape = RoundedCornerShape(6.dp),
+                  colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF18181B),
+                    contentColor = Color.White
+                  ),
+                  border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A)),
+                  enabled = knowledgeCount > 0
+                ) {
+                  Text("EXPORT JSONL", fontSize = 10.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold)
+                }
+              }
+            }
+          }
+
+          if (showKnowledgeDialog) {
+            val samples = voiceCanceler?.assistantEngine?.getDistilledSamples() ?: emptyList()
+            androidx.compose.ui.window.Dialog(onDismissRequest = { showKnowledgeDialog = false }) {
+              Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = Color(0xFF09090B),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A)),
+                modifier = Modifier.fillMaxWidth().heightIn(max = 480.dp)
+              ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                  Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                  ) {
+                    Text(
+                      text = "DISTILLED KNOWLEDGE ($knowledgeCount)",
+                      fontSize = 12.sp,
+                      fontWeight = FontWeight.Black,
+                      fontFamily = FontFamily.Monospace,
+                      color = Color.White,
+                      letterSpacing = 1.sp
+                    )
+                    IconButton(onClick = { showKnowledgeDialog = false }, modifier = Modifier.size(32.dp)) {
+                      Icon(Icons.Default.Close, "Close", tint = Color(0xFFA1A1AA), modifier = Modifier.size(18.dp))
+                    }
+                  }
+                  Spacer(modifier = Modifier.height(8.dp))
+                  androidx.compose.foundation.lazy.LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                  ) {
+                    items(samples.size) { idx ->
+                      val s = samples[idx]
+                      Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = Color(0xFF18181B),
+                        modifier = Modifier.fillMaxWidth()
+                      ) {
+                        Column(modifier = Modifier.padding(8.dp)) {
+                          Text("Q: ${s.query}", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = RamsSyncBlue, maxLines = 2)
+                          Spacer(modifier = Modifier.height(4.dp))
+                          Text("A: ${s.response}", fontSize = 9.5.sp, color = Color(0xFFD4D4D8), maxLines = 4)
+                          Spacer(modifier = Modifier.height(4.dp))
+                          Text(
+                            text = "${s.userRole} | ${java.text.SimpleDateFormat("MMM dd HH:mm", java.util.Locale.US).format(java.util.Date(s.timestamp))}",
+                            fontSize = 8.sp,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color(0xFF71717A)
+                          )
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // D. Developer Training & Simulation Suite
           Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
@@ -1168,6 +1320,92 @@ fun SettingsScreen(
                   }
                 }
               }
+            }
+          }
+        }
+      }
+
+      // 6B. LoRa Transmission Benchmark & Ping Distance Mode (Propagation Delay & Range Study)
+      Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, if (isPingModeActive) RamsSyncBlue else Color(0xFF27272A))
+      ) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+          verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            Column(modifier = Modifier.weight(1f)) {
+              Text(
+                text = "LORA TRANSMISSION DELAY & PING MODE",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Black,
+                color = if (isPingModeActive) RamsSyncBlue else Color(0xFFA1A1AA),
+                letterSpacing = 1.sp
+              )
+              Text(
+                text = "Emits continuous GPS & clock timing packets to measure air-link delay and range",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF71717A),
+                fontSize = 11.sp
+              )
+            }
+            Switch(
+              checked = isPingModeActive,
+              onCheckedChange = { onTogglePingMode(it) },
+              colors = SwitchDefaults.colors(
+                checkedThumbColor = Color.White,
+                checkedTrackColor = RamsSyncBlue,
+                uncheckedThumbColor = Color(0xFFA1A1AA),
+                uncheckedTrackColor = Color(0xFF27272A)
+              )
+            )
+          }
+
+          if (isPingModeActive) {
+            HorizontalDivider(color = Color(0xFF27272A), thickness = 1.dp)
+
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Text(
+                text = "ACTIVE BENCHMARK RUNNING",
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = RamsSyncBlue
+              )
+              Text(
+                text = "PINGS SENT: $pingCount",
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = Color.White
+              )
+            }
+
+            Surface(
+              modifier = Modifier.fillMaxWidth(),
+              shape = RoundedCornerShape(6.dp),
+              color = Color(0xFF09090B),
+              border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+            ) {
+              Text(
+                text = "Packets: 3000ms interval | Uplink: BLE GATT -> LoRa 433MHz SX1278 (SF9, BW125)\nDesktop Command Center logs delay (ms), distance (m), RSSI, & SNR.",
+                modifier = Modifier.padding(10.dp),
+                fontFamily = FontFamily.Monospace,
+                fontSize = 9.sp,
+                color = Color(0xFFA1A1AA),
+                lineHeight = 13.sp
+              )
             }
           }
         }

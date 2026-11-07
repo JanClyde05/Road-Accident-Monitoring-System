@@ -30,6 +30,8 @@ import com.example.sync.Esp32SyncEngine
 import com.example.sync.Esp32SyncStatus
 import com.example.sync.SyncTransport
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -100,6 +102,11 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     getSystemContext = { systemContext },
     onAlarmCancelledByVoice = { _, _ -> cancelFalseAlarm() }
   )
+
+  // Distilled Knowledge Base accessors (Gemini-teaches-RAMS pipeline)
+  fun getDistilledSampleCount(): Int = voiceAlarmCanceler.assistantEngine.getDistilledSampleCount()
+  fun getDistilledSamples() = voiceAlarmCanceler.assistantEngine.getDistilledSamples()
+  fun exportDistilledKnowledgeJson(): String = voiceAlarmCanceler.assistantEngine.exportDistilledKnowledgeJson()
 
   // Emergency Siren & Vibration Audio Engine (Continuous loop until canceled)
   val alarmSoundEngine = AlarmSoundEngine(application.applicationContext)
@@ -195,6 +202,13 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   // Peak G-force recorder
   private val _peakAMag = MutableStateFlow(1.02f)
   val peakAMag: StateFlow<Float> = _peakAMag.asStateFlow()
+
+  // Benchmark Ping Distance Mode
+  private val _isPingModeActive = MutableStateFlow(false)
+  val isPingModeActive: StateFlow<Boolean> = _isPingModeActive.asStateFlow()
+  private val _pingSequenceCount = MutableStateFlow(0L)
+  val pingSequenceCount: StateFlow<Long> = _pingSequenceCount.asStateFlow()
+  private var pingBenchmarkJob: Job? = null
 
   // Incident Events Stream
   private val _events = MutableStateFlow<List<IncidentEvent>>(createInitialEvents())
@@ -825,6 +839,33 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       getRiderProfile = { _riderProfile.value }
     )
     _showConnectionDialog.value = false
+  }
+
+  fun togglePingDistanceMode(enabled: Boolean) {
+    _isPingModeActive.value = enabled
+    pingBenchmarkJob?.cancel()
+    pingBenchmarkJob = null
+
+    if (enabled) {
+      pingBenchmarkJob = viewModelScope.launch(Dispatchers.IO) {
+        while (isActive && _isPingModeActive.value) {
+          _pingSequenceCount.value += 1
+          val seq = _pingSequenceCount.value
+          val gps = gpsState.value
+          val profile = _riderProfile.value
+          val epoch = System.currentTimeMillis()
+
+          esp32SyncEngine.sendPingBenchmarkPacket(
+            token = profile.token,
+            lat = gps.latitude,
+            lon = gps.longitude,
+            seq = seq,
+            epoch = epoch
+          )
+          delay(3000L) // Ping interval: 3 seconds for continuous propagation benchmarking
+        }
+      }
+    }
   }
 
   fun saveRiderProfile(profile: RiderProfile) {

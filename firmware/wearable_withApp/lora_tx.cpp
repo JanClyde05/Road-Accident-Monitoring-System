@@ -136,3 +136,18 @@ bool loraSendRegister(const char* token, const char* name, const char* driveLink
   Serial.printf("[LORA-TX] REGISTER sent: name='%s' driveLink='%s'\n", pkt.name, pkt.driveLinkConverted);
   return _sendPacket((uint8_t*)&pkt, sizeof(pkt));
 }
+
+bool loraSendPing(const char* token, float lat, float lon, uint32_t seq, uint64_t phoneEpochMs) {
+  PingPacket pkt;
+  memset(&pkt, 0, sizeof(pkt));
+  _fillHeader(pkt.header, PKT_PING, token);
+
+  pkt.latitude = lat;
+  pkt.longitude = lon;
+  pkt.pingSequence = seq;
+  pkt.phoneEpochMs = phoneEpochMs;
+
+  Serial.printf("[LORA-TX] PING benchmark sent: seq=%lu lat=%.6f lon=%.6f epoch=%llu\n",
+                seq, lat, lon, phoneEpochMs);
+  return _sendPacket((uint8_t*)&pkt, sizeof(pkt));
+}

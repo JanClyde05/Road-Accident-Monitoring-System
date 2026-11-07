@@ -139,6 +139,7 @@ class MainActivity : ComponentActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
+    setIntent(intent)
     handleIntent(intent)
   }
 
@@ -146,6 +147,11 @@ class MainActivity : ComponentActivity() {
     if (intent?.getBooleanExtra("OPEN_VOICE_BUBBLE", false) == true) {
       intent.removeExtra("OPEN_VOICE_BUBBLE")
       viewModel.voiceAlarmCanceler.openBubbleUi()
+    }
+    val voiceQuery = intent?.getStringExtra("VOICE_QUERY")
+    if (!voiceQuery.isNullOrBlank()) {
+      intent.removeExtra("VOICE_QUERY")
+      viewModel.voiceAlarmCanceler.injectSimulatedUserQuery(voiceQuery)
     }
     val tabName = intent?.getStringExtra("tab")?.uppercase() ?: return
     try {
@@ -383,6 +389,8 @@ fun RamsDashboardScreen(
         }
         RamsNavTab.SETTINGS -> {
           val isAiEnabled by viewModel.aiClassificationEnabled.collectAsStateWithLifecycle()
+          val isPingModeActive by viewModel.isPingModeActive.collectAsStateWithLifecycle()
+          val pingCount by viewModel.pingSequenceCount.collectAsStateWithLifecycle()
           SettingsScreen(
             riderProfile = riderProfile,
             onSaveProfile = { viewModel.saveRiderProfile(it) },
@@ -395,7 +403,10 @@ fun RamsDashboardScreen(
             onToggleAi = { viewModel.setAiClassificationEnabled(it) },
             devTrainingSuite = viewModel.devTrainingSuite,
             voiceCanceler = viewModel.voiceAlarmCanceler,
-            onCancelFalseAlarm = { viewModel.cancelFalseAlarm() }
+            onCancelFalseAlarm = { viewModel.cancelFalseAlarm() },
+            isPingModeActive = isPingModeActive,
+            onTogglePingMode = { viewModel.togglePingDistanceMode(it) },
+            pingCount = pingCount
           )
         }
       }

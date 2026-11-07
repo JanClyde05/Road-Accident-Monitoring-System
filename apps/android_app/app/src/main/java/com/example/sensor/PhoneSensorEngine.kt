@@ -407,7 +407,7 @@ class PhoneSensorEngine(
       headingDegrees = if (location.hasBearing() && location.bearing != 0.0f) location.bearing else _phoneGpsState.value.headingDegrees,
       accuracyMeters = acc,
       fixStatus = fixLabel,
-      locationAddress = "Lat: %.5f, Lon: %.5f".format(location.latitude, location.longitude)
+      locationAddress = com.example.ai.TuguegaraoOfflineSpatialEngine.reverseGeocode(location.latitude, location.longitude)
     )
   }
 

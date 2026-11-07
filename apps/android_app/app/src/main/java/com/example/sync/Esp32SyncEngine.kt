@@ -905,6 +905,43 @@ class Esp32SyncEngine(
     }
   }
 
+  fun sendPingBenchmarkPacket(token: String, lat: Double, lon: Double, seq: Long, epoch: Long) {
+    scope.launch(Dispatchers.IO) {
+      val pingJson = JSONObject().apply {
+        put("type", "PING")
+        put("token", token)
+        put("lat", lat)
+        put("lon", lon)
+        put("seq", seq)
+        put("epoch", epoch)
+      }.toString()
+
+      // Send over WebSocket if connected
+      activeWebSocket?.send(pingJson)
+
+      // Send over Raw Socket / BT if connected
+      val bytes = (pingJson + "\n").toByteArray(Charsets.UTF_8)
+      try {
+        outputStream?.write(bytes)
+        outputStream?.flush()
+      } catch (_: Exception) {}
+
+      // Send over BLE GATT if connected
+      val gatt = activeBleGatt
+      val rx = activeBleRxChar
+      if (gatt != null && rx != null) {
+        try {
+          writeBleBytes(gatt, rx, bytes)
+        } catch (_: Exception) {}
+      }
+
+      _syncStatus.value = _syncStatus.value.copy(
+        lastTransmittedJson = pingJson,
+        statusMessage = "PING BENCHMARK #$seq DISPATCHED (GPS: %.4f, %.4f)".format(Locale.US, lat, lon)
+      )
+    }
+  }
+
   private fun buildTelemetryPacket(gps: GpsData, imu: ImuData, profile: RiderProfile): String {
     return JSONObject().apply {
       put("type", "TELEMETRY")

@@ -1,15 +1,19 @@
 package com.example.ai
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.media.ToneGenerator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognitionListener
+import android.speech.RecognitionService
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
@@ -259,6 +263,7 @@ class VoiceAlarmCanceler(
     private val dynamicWakeWords = mutableSetOf<String>()
     private val dynamicCancelWords = mutableSetOf<String>()
     private var consecutiveErrorCount = 0
+    private var useFallbackLanguage = false
 
     init {
         loadVoicePatternsFromAssets()
@@ -334,11 +339,15 @@ class VoiceAlarmCanceler(
                 override fun onDone(utteranceId: String?) {
                     isTtsSpeaking = false
                     mainHandler.removeCallbacks(ttsWatchdog)
-                    // Resume listening after TTS finishes
+                    // Resume listening after TTS finishes so follow-up commands are heard
                     mainHandler.postDelayed({
                         if (_engineState.value != VoiceEngineState.DORMANT &&
                             _engineState.value != VoiceEngineState.COMMAND_SPOTTED) {
-                            scheduleRestart()
+                            if (isAwaitingCommandStage) {
+                                _engineState.value = VoiceEngineState.AWAITING_COMMAND
+                                _liveTranscriptFlow.value = "Listening for follow-up..."
+                            }
+                            scheduleRestart(200L)
                         }
                     }, 300)
                 }
@@ -349,7 +358,10 @@ class VoiceAlarmCanceler(
                     mainHandler.postDelayed({
                         if (_engineState.value != VoiceEngineState.DORMANT &&
                             _engineState.value != VoiceEngineState.COMMAND_SPOTTED) {
-                            scheduleRestart()
+                            if (isAwaitingCommandStage) {
+                                _engineState.value = VoiceEngineState.AWAITING_COMMAND
+                            }
+                            scheduleRestart(200L)
                         }
                     }, 300)
                 }
@@ -366,19 +378,43 @@ class VoiceAlarmCanceler(
      * Speaks response aloud. Pauses recognizer first to avoid mic feedback loop.
      * Recognizer resumes automatically via UtteranceProgressListener.onDone().
      */
+    /**
+     * Plays a short ascending two-tone cue (like Google Assistant's "ba-ding")
+     * to indicate RAMS has entered listening/awaiting-command mode.
+     * Uses ToneGenerator on STREAM_NOTIFICATION at low volume to avoid
+     * interfering with the speech recognizer microphone session.
+     */
+    private fun playListeningTone() {
+        try {
+            val toneGen = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 60) // 60% volume
+            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 120) // short ascending beep, 120ms
+            mainHandler.postDelayed({
+                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP2, 100) // second higher beep, 100ms
+                mainHandler.postDelayed({ toneGen.release() }, 200)
+            }, 150)
+            Log.d(TAG, "Listening indicator tone played.")
+        } catch (e: Exception) {
+            Log.w(TAG, "ToneGenerator failed: ${e.message}")
+        }
+    }
+
     fun speak(text: String) {
         if (!isTtsReady || textToSpeech == null) return
         try {
             // Pause recognizer so mic doesn't pick up TTS audio
             isTtsSpeaking = true
             mainHandler.removeCallbacks(ttsWatchdog)
-            mainHandler.postDelayed(ttsWatchdog, 3500L)
+            val watchdogMs = (text.length * 90L).coerceIn(6000L, 22000L)
+            mainHandler.postDelayed(ttsWatchdog, watchdogMs)
             mainHandler.post {
                 try {
                     speechRecognizer?.stopListening()
                 } catch (_: Throwable) {}
             }
-            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "rams_tts_${System.currentTimeMillis()}")
+            val params = Bundle().apply {
+                putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC)
+            }
+            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, params, "rams_tts_${System.currentTimeMillis()}")
         } catch (e: Exception) {
             Log.w(TAG, "TTS speak failed: ${e.message}")
             isTtsSpeaking = false
@@ -452,18 +488,34 @@ class VoiceAlarmCanceler(
      */
     fun openBubbleUi() {
         if (_engineState.value == VoiceEngineState.COMMAND_SPOTTED) return
-        if (_engineState.value == VoiceEngineState.AWAITING_COMMAND && _isBubbleVisible.value) return
 
         _isBubbleVisible.value = true
         isAwaitingCommandStage = true
         _engineState.value = VoiceEngineState.AWAITING_COMMAND
         _promptMessageFlow.value = "Hi, how can I help you?"
-        _liveTranscriptFlow.value = "Say 'Cancel', 'Stop', or ask RAMS anything"
+        _liveTranscriptFlow.value = "Listening..."
         Log.i(TAG, "Assistant bubble activated -> AWAITING_COMMAND.")
 
-        // Do NOT destroy if already active and listening!
-        if (speechRecognizer == null) {
-            scheduleRestart(100L)
+        // Play ascending two-tone cue (like Google Assistant "ba-ding") to indicate listening
+        playListeningTone()
+
+        // Arm listening immediately so user speech is heard without delay
+        restartListeningForCommand()
+    }
+
+    /**
+     * Re-arms speech recognition immediately to listen for user command/question.
+     * Can be tapped manually on the mic orb or triggered programmatically.
+     */
+    fun restartListeningForCommand() {
+        mainHandler.post {
+            pendingQueryJob?.cancel()
+            pendingQueryJob = null
+            isAwaitingCommandStage = true
+            _engineState.value = VoiceEngineState.AWAITING_COMMAND
+            _promptMessageFlow.value = "Listening..."
+            _liveTranscriptFlow.value = "Say your question or 'Cancel'..."
+            scheduleRestart(50L)
         }
     }
 
@@ -504,6 +556,27 @@ class VoiceAlarmCanceler(
         mainHandler.postDelayed(restartRunnable, actualDelay)
     }
 
+    private fun getBestRecognitionServiceComponent(): ComponentName? {
+        return try {
+            val pm = context.packageManager
+            val services = pm.queryIntentServices(Intent(RecognitionService.SERVICE_INTERFACE), 0)
+            if (services.isEmpty()) return null
+
+            // Prioritize Google TTS Speech Recognition Service (Google Speech Services)
+            for (info in services) {
+                val pkg = info.serviceInfo.packageName
+                val cls = info.serviceInfo.name
+                if (pkg == "com.google.android.tts") {
+                    return ComponentName(pkg, cls)
+                }
+            }
+            val first = services.firstOrNull()?.serviceInfo ?: return null
+            ComponentName(first.packageName, first.name)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
     private fun restartSpeechRecognizer() {
         mainHandler.post {
             if (_engineState.value == VoiceEngineState.DORMANT ||
@@ -514,32 +587,36 @@ class VoiceAlarmCanceler(
 
             lastRestartTimestamp = System.currentTimeMillis()
 
+            val primaryLang = if (useFallbackLanguage) Locale.US.toLanguageTag() else "en-PH"
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toLanguageTag())
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.US.toLanguageTag())
-                putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, Locale.US.toLanguageTag())
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, primaryLang)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, primaryLang)
+                putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, primaryLang)
+                if (!useFallbackLanguage) {
+                    putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", arrayOf("fil-PH", "en-US"))
+                }
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
                 putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
                 putExtra("android.speech.extra.PREFER_OFFLINE", true)
-                putExtra("android.speech.extras.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 1500L)
-                putExtra("android.speech.extras.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 1000L)
-                putExtra("android.speech.extras.SPEECH_INPUT_MINIMUM_LENGTH_MILLIS", 400L)
+                putExtra("android.speech.extra.BIASING_STRINGS", TuguegaraoOfflineSpatialEngine.TUGUEGARAO_VOCABULARY_BIASING)
+                putExtra("android.speech.extras.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 3000L)
+                putExtra("android.speech.extras.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 2500L)
+                putExtra("android.speech.extras.SPEECH_INPUT_MINIMUM_LENGTH_MILLIS", 1000L)
             }
 
             // Reuse active instance cleanly without tearing down IPC connection
             val existing = speechRecognizer
             if (existing != null) {
                 try {
-                    existing.stopListening()
+                    existing.cancel()
                     existing.startListening(intent)
                     Log.d(TAG, "SpeechRecognizer: startListening resumed cleanly (state=${_engineState.value})")
                     return@post
                 } catch (t: Throwable) {
                     Log.w(TAG, "Existing recognizer restart failed, recreating fresh: ${t.message}")
                     try {
-                        existing.cancel()
                         existing.destroy()
                     } catch (_: Throwable) {}
                     speechRecognizer = null
@@ -547,21 +624,34 @@ class VoiceAlarmCanceler(
             }
 
             try {
-                // Use applicationContext to avoid Activity context leaks
-                val recognizer = SpeechRecognizer.createSpeechRecognizer(context.applicationContext)
+                val serviceComp = getBestRecognitionServiceComponent()
+                val recognizer = if (serviceComp != null) {
+                    Log.i(TAG, "Binding SpeechRecognizer explicitly to: ${serviceComp.flattenToShortString()}")
+                    SpeechRecognizer.createSpeechRecognizer(context, serviceComp)
+                } else {
+                    Log.i(TAG, "Creating standard SpeechRecognizer for universal compatibility...")
+                    SpeechRecognizer.createSpeechRecognizer(context)
+                }
                 speechRecognizer = recognizer
                 recognizer.setRecognitionListener(createRecognitionListener())
-                recognizer.startListening(intent)
-                Log.d(TAG, "SpeechRecognizer started listening (state=${_engineState.value})")
+                // Allow a brief 150ms window for IPC service binding before calling startListening
+                mainHandler.postDelayed({
+                    try {
+                        recognizer.startListening(intent)
+                        Log.d(TAG, "SpeechRecognizer started listening (state=${_engineState.value})")
+                    } catch (t: Throwable) {
+                        Log.w(TAG, "Deferred startListening error: ${t.message}")
+                    }
+                }, 150L)
             } catch (t: Throwable) {
                 Log.e(TAG, "Failed to start SpeechRecognizer", t)
                 mainHandler.postDelayed({
                     if (_engineState.value != VoiceEngineState.DORMANT &&
                         _engineState.value != VoiceEngineState.COMMAND_SPOTTED &&
                         !isTtsSpeaking) {
-                        scheduleRestart(800L)
+                        scheduleRestart(1000L)
                     }
-                }, 800L)
+                }, 1000L)
             }
         }
     }
@@ -615,6 +705,7 @@ class VoiceAlarmCanceler(
                     SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "ERROR_RECOGNIZER_BUSY(8)"
                     SpeechRecognizer.ERROR_SERVER -> "ERROR_SERVER(4)"
                     SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "ERROR_SPEECH_TIMEOUT(6)"
+                    10 -> "ERROR_TOO_MANY_REQUESTS(10)"
                     11 -> "ERROR_SERVER_DISCONNECTED(11)"
                     12 -> "ERROR_LANGUAGE_NOT_SUPPORTED(12)"
                     13 -> "ERROR_LANGUAGE_UNAVAILABLE(13)"
@@ -623,17 +714,19 @@ class VoiceAlarmCanceler(
                 }
                 Log.d(TAG, "SpeechRecognizer onError: $errMsg (state=${_engineState.value}, consecutive=$consecutiveErrorCount)")
 
-                if (consecutiveErrorCount >= 3 || error == SpeechRecognizer.ERROR_CLIENT || error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || error == 11) {
+                if (error == 12 || error == 13) {
+                    Log.w(TAG, "SpeechRecognizer offline language unavailable; falling back to default locale.")
+                    useFallbackLanguage = true
+                }
+
+                // Only destroy on repeated consecutive failures, NOT single client/busy glitches!
+                if (consecutiveErrorCount >= 4) {
                     try {
                         speechRecognizer?.cancel()
                         speechRecognizer?.destroy()
                     } catch (_: Throwable) {}
                     speechRecognizer = null
                     consecutiveErrorCount = 0
-                } else {
-                    try {
-                        speechRecognizer?.stopListening()
-                    } catch (_: Throwable) {}
                 }
 
                 val shouldRestart = _engineState.value == VoiceEngineState.LISTENING_FOR_WAKE_WORD ||
@@ -642,11 +735,12 @@ class VoiceAlarmCanceler(
 
                 if (shouldRestart && !isTtsSpeaking) {
                     val delay = when (error) {
-                        SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> 650L
+                        10 -> 2500L // System rate-limit backoff window for ERROR_TOO_MANY_REQUESTS
+                        SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> 800L
                         SpeechRecognizer.ERROR_CLIENT -> 600L
                         SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> 250L
-                        SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> 450L
-                        else -> 400L
+                        SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> 600L
+                        else -> 500L
                     }
                     scheduleRestart(delay)
                 }
@@ -701,26 +795,51 @@ class VoiceAlarmCanceler(
 
     private fun checkFuzzyWakeWord(text: String): Boolean {
         val tokens = text.split(" ").filter { it.isNotBlank() }
+        val rawSquashed = text.replace(" ", "")
+
+        if (rawSquashed.contains("heyrams") || rawSquashed.contains("hirams") ||
+            rawSquashed.contains("heirams") || rawSquashed.contains("ayrams") ||
+            rawSquashed.contains("eyrams") || rawSquashed.contains("airams") ||
+            rawSquashed.contains("hermes") || rawSquashed.contains("hyrams") ||
+            rawSquashed.contains("hyram") || rawSquashed.contains("hairams") ||
+            rawSquashed.contains("hairam") || rawSquashed.contains("hoyrams") ||
+            rawSquashed.contains("oyrams") || rawSquashed.contains("uyrams") ||
+            rawSquashed.contains("okrams") || rawSquashed.contains("yoRams") ||
+            rawSquashed.contains("hellorams")) {
+            return true
+        }
+
         for (i in tokens.indices) {
             val t1 = tokens[i]
             if (t1 == "rams" || t1 == "ram" || t1 == "rhams" || t1 == "rham" ||
                 t1 == "roms" || t1 == "rems" || t1 == "rums" || t1 == "arms" ||
                 t1 == "ran" || t1 == "rims" || t1 == "wrams" || t1 == "hermes" ||
                 t1 == "hyram" || t1 == "hyrams" || t1 == "airam" || t1 == "airams" ||
-                t1 == "heyrams" || t1 == "hirams") {
+                t1 == "heyrams" || t1 == "hirams" || t1 == "lamps" || t1 == "ramps" ||
+                t1 == "realms" || t1 == "lance" || t1 == "rance" || t1 == "dance" ||
+                t1 == "rhymes" || t1 == "rooms" || t1 == "rome" || t1 == "roams" ||
+                t1 == "rounds" || t1 == "lambs" || t1 == "rahms" || t1 == "roms" ||
+                t1 == "rans" || t1 == "ramps" || t1 == "romps" || t1 == "rems" ||
+                t1 == "rams!" || t1 == "rahm" || t1 == "rahms" || t1 == "ramz") {
                 return true
             }
-            if (levenshteinDistance(t1, "rams") <= 1) return true
+            if (levenshteinDistance(t1, "rams") <= 2) return true
 
             if (i + 1 < tokens.size) {
                 val pair = "$t1 ${tokens[i + 1]}"
-                if (levenshteinDistance(pair, "hey rams") <= 2 ||
-                    levenshteinDistance(pair, "hi rams") <= 2 ||
-                    levenshteinDistance(pair, "ok rams") <= 1 ||
-                    levenshteinDistance(pair, "yo rams") <= 1 ||
-                    levenshteinDistance(pair, "hoy rams") <= 1 ||
-                    levenshteinDistance(pair, "ay rams") <= 1 ||
-                    levenshteinDistance(pair, "ey rams") <= 1) {
+                if (levenshteinDistance(pair, "hey rams") <= 3 ||
+                    levenshteinDistance(pair, "hi rams") <= 3 ||
+                    levenshteinDistance(pair, "ok rams") <= 2 ||
+                    levenshteinDistance(pair, "yo rams") <= 2 ||
+                    levenshteinDistance(pair, "hoy rams") <= 2 ||
+                    levenshteinDistance(pair, "ay rams") <= 2 ||
+                    levenshteinDistance(pair, "ey rams") <= 2 ||
+                    levenshteinDistance(pair, "hai rams") <= 2 ||
+                    levenshteinDistance(pair, "hey ram") <= 2 ||
+                    levenshteinDistance(pair, "hi ram") <= 2 ||
+                    levenshteinDistance(pair, "uy rams") <= 2 ||
+                    levenshteinDistance(pair, "oi rams") <= 2 ||
+                    levenshteinDistance(pair, "hello rams") <= 3) {
                     return true
                 }
             }
@@ -729,18 +848,43 @@ class VoiceAlarmCanceler(
     }
 
     /**
+     * Extracts direct query following a wake word if the user spoke the entire question in one breath.
+     * E.g. "Hey RAMS what is my speed" -> "what is my speed"
+     */
+    private fun extractQueryAfterWakeWord(text: String): String {
+        val lower = text.lowercase(Locale.US)
+        val wakePrefixes = listOf(
+            "hey rams", "hi rams", "hay rams", "ay rams", "ey rams", "hello rams",
+            "okay rams", "ok rams", "yo rams", "hoy rams", "uy rams", "oy rams",
+            "heirams", "hirams", "hey ram", "hi ram", "rams"
+        )
+        for (prefix in wakePrefixes) {
+            val idx = lower.indexOf(prefix)
+            if (idx != -1) {
+                val after = text.substring(idx + prefix.length).trim(' ', ',', '?', '.', '!')
+                if (after.length > 2) {
+                    return after
+                }
+            }
+        }
+        return ""
+    }
+
+    /**
      * Match priority:
      *   1. CANCEL COMMANDS -- checked FIRST (immediate safety abort even on partial results!)
-     *   2. WAKE WORDS -- only if not already in AWAITING_COMMAND stage
-     *   3. CONVERSATIONAL QUERY -- ONLY on final results with silence debounce so rider is never cut off!
+     *   2. WAKE WORDS -- checked when listening for wake word (with direct question extraction)
+     *   3. CONVERSATIONAL QUERY -- processed immediately on final result when in AWAITING_COMMAND stage
      */
     private fun checkMatchesForTrigger(matches: List<String>?, isPartial: Boolean) {
         if (matches.isNullOrEmpty()) return
 
-        val isAlarmActiveNow = isAlarmActiveContext || getSystemContext().isAlarmActive
+        val sys = getSystemContext()
+        val isAlarmActiveNow = isAlarmActiveContext || sys.isAlarmActive || sys.alarmCountdownSec > 0
 
         for (phrase in matches) {
-            val normalized = normalizeText(phrase)
+            val phoneticallyClean = TuguegaraoOfflineSpatialEngine.normalizeLocalPhonetics(phrase)
+            val normalized = normalizeText(phoneticallyClean)
             if (normalized.isBlank()) continue
 
             // 1. CANCEL COMMANDS -- always checked first, even on partial results! Instant safety abort!
@@ -752,18 +896,20 @@ class VoiceAlarmCanceler(
                 pendingQueryJob?.cancel()
                 pendingQueryJob = null
 
-                // If bubble is open (awaiting command) or alarm is actively counting down, cancel immediately!
-                if (isAwaitingCommandStage || isAlarmActiveNow) {
-                    Log.i(TAG, "Immediate cancel command in active/awaiting stage: '$phrase'")
+                // If alarm is actively counting down/sounding, or bubble is open awaiting command, CANCEL IMMEDIATELY!
+                if (isAlarmActiveNow || isAwaitingCommandStage) {
+                    Log.i(TAG, "Immediate cancel command in active alarm / awaiting stage: '$phrase'")
                     handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
                     return
                 }
-                // If idle background, require "rams" prefix or specific alert phrases
-                if (normalized.contains("rams") || normalized.contains("ram") ||
-                    normalized.contains("stop alarm") || normalized.contains("cancel alarm") ||
-                    normalized.contains("stop alert") || normalized.contains("cancel alert") ||
-                    CANCEL_REGEX.containsMatchIn(normalized)) {
-                    Log.i(TAG, "Global cancel command detected: '$phrase'")
+
+                // If idle in background, cancel command still spotted if it mentions stop/cancel/abort
+                if (normalized.contains("cancel") || normalized.contains("stop") ||
+                    normalized.contains("abort") || normalized.contains("dismiss") ||
+                    normalized.contains("false alarm") || normalized.contains("safe") ||
+                    normalized.contains("tigil") || normalized.contains("hinto") ||
+                    normalized.contains("para") || normalized.contains("tama na")) {
+                    Log.i(TAG, "Background cancel/stop command spotted: '$phrase'")
                     handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
                     return
                 }
@@ -779,21 +925,27 @@ class VoiceAlarmCanceler(
 
                 if (matchesWakeList || matchesWakeRegex || matchesDirectWake || matchesFuzzy) {
                     Log.i(TAG, "Wake word matched ('$phrase' -> '$normalized', fuzzy=$matchesFuzzy)")
+
+                    // Check if user spoke a question along with the wake word in one breath!
+                    val directQuery = extractQueryAfterWakeWord(phoneticallyClean)
+                    if (directQuery.isNotBlank() && directQuery.length > 2) {
+                        Log.i(TAG, "Direct question spotted with wake word: '$directQuery'")
+                        openBubbleUi()
+                        handleConversationalQuery(directQuery)
+                        return
+                    }
+
                     triggerWakeWordAwaitingCommand()
                     return
                 }
             }
 
-            // 3. CONVERSATIONAL QUERY -- NEVER trigger on partial results!
-            // Wait for final sentence and give rider 1500ms of comfortable silence so questions are never cut short!
+            // 3. CONVERSATIONAL QUERY -- Final result in AWAITING_COMMAND stage: process immediately!
             if (!isPartial && isAwaitingCommandStage && normalized.length > 2) {
+                Log.i(TAG, "Conversational query spotted: '$phoneticallyClean' (raw='$phrase')")
                 pendingQueryJob?.cancel()
-                pendingQueryJob = scope.launch(Dispatchers.Main) {
-                    _liveTranscriptFlow.value = "\"$phrase\""
-                    _promptMessageFlow.value = "Listening..."
-                    delay(1500)
-                    handleConversationalQuery(phrase)
-                }
+                pendingQueryJob = null
+                handleConversationalQuery(phoneticallyClean)
                 return
             }
         }
@@ -811,6 +963,14 @@ class VoiceAlarmCanceler(
         _liveTranscriptFlow.value = "\"$userQuery\""
         _engineState.value = VoiceEngineState.CHATTING
 
+        // Pause recognizer and halt prior speech while RAMS is reasoning
+        mainHandler.post {
+            try {
+                speechRecognizer?.stopListening()
+                textToSpeech?.stop()
+            } catch (_: Throwable) {}
+        }
+
         scope.launch(Dispatchers.IO) {
             val reply = assistantEngine.generateAssistantResponse(userQuery)
             withContext(Dispatchers.Main) {
@@ -821,6 +981,15 @@ class VoiceAlarmCanceler(
                 speak(reply)
             }
         }
+    }
+
+    /**
+     * Injects a simulated conversational query for testing or manual prompt dispatch.
+     */
+    fun injectSimulatedUserQuery(query: String = "What is my speed?") {
+        openBubbleUi()
+        val normalized = TuguegaraoOfflineSpatialEngine.normalizeLocalPhonetics(query)
+        handleConversationalQuery(normalized)
     }
 
     private fun handleSpottedCancelCommand(phrase: String, confidence: Float) {

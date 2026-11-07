@@ -15,36 +15,42 @@
     "sample_count": 528,
     "language_coverage": ["en-US", "en-PH", "fil-PH", "tl-PH"],
     "wake_prefixes": [
-      "hey", "hi", "hay", "ay", "ey", "ae", "ai", "high", "he",
+      "hey", "hi", "hay", "ay", "ey", "ae", "ai", "high", "he", "ha",
       "yo", "hoy", "uy", "oy", "aye", "ok", "okay", "hello", "halo",
-      "ui", "oi", "the", "a", "k", "kay"
+      "ui", "oi", "the", "a", "k", "kay", "eyo", "sup"
     ],
     "rams_phonetic_homophones": [
       "rams", "ram", "rhams", "rham", "roms", "rom", "rems", "rem",
       "rums", "rum", "arms", "arm", "ran", "runs", "round", "rounds",
-      "raps", "wrap", "wraps", "wrams", "rims", "rim", "raam", "raams",
+      "raps", "wrap", "wraps", "wrams", "wram", "rims", "rim", "raam", "raams",
       "rahm", "rahms", "rhum", "rhums", "drums", "drum", "france", "lens",
-      "branch", "bronze", "crumbs", "brands", "dance", "chance", "rance"
+      "branch", "bronze", "crumbs", "brands", "dance", "chance", "rance",
+      "lamps", "ramps", "realms", "lance", "rock", "rocks", "robs", "rob",
+      "ross", "ron", "rhon", "ranz", "ramz", "rawms", "rawm"
     ],
     "slurred_contractions": [
       "heyrams", "hirams", "hairams", "hairam", "hayrams", "ayrams",
       "eyrams", "airams", "airam", "hermes", "hyram", "hyrams", "aram",
       "arams", "eyram", "eyrams", "oram", "orams", "iram", "irams",
-      "ayram", "highrams", "highram", "yo-rams", "ok-rams"
+      "ayram", "highrams", "highram", "yo-rams", "ok-rams", "heirams",
+      "heyram", "hye-ram", "hey-rams", "hi-rams"
     ],
     "regional_accent_variations": {
       "tagalog_taglish": [
         "hoy rams", "uy rams", "oy rams", "ey rams", "ay rams",
         "halo rams", "paki cancel rams", "tama na rams", "para rams",
-        "tigil mo rams", "rams paki stop", "rams cancel mo", "okay na rams"
+        "tigil mo rams", "rams paki stop", "rams cancel mo", "okay na rams",
+        "boss rams", "pari rams", "tol rams"
       ],
       "casual_colloquial": [
         "e rams", "a rams", "yo ram", "k rams", "kay rams",
-        "hey there rams", "hi there rams", "rams listen", "rams wake up"
+        "hey there rams", "hi there rams", "rams listen", "rams wake up",
+        "hey r a m s", "hi r a m s"
       ],
       "noisy_wind_buffeting": [
         "ey rms", "ay ranz", "hey rums", "hye ram", "hi rham",
-        "he rom", "ay realms", "hey realms", "ai rams", "ae rams"
+        "he rom", "ay realms", "hey realms", "ai rams", "ae rams",
+        "hey lamps", "hi lamps", "hey lance", "hi lance"
       ]
     },
     "cancel_commands": [
@@ -59,8 +65,31 @@
       "ok na", "okay na", "tama na", "tigil", "hinto", "para", "huwag",
       "ayoko", "patayin", "patayin ang alarm", "cancer", "counsel",
       "council", "cancle", "cancell", "cancelar", "kansel", "consol",
-      "console", "stub", "step"
+      "console", "stub", "step", "cancela", "kansela", "stopp", "stoppa",
+      "stop na", "cancel na", "tama", "ayoko na", "hold", "exit",
+      "basta stop", "wag", "huwag na", "okay lang ako", "ayos lang ako",
+      "safe ako", "ligtas ako", "paki stop", "paki cancel"
     ]
+  },
+  "tuguegarao_spatial_corpus": {
+    "corpus_name": "Tuguegarao-City-Spatial-Offline-Corpus-v1",
+    "landmarks_count": 16,
+    "primary_landmarks": [
+      "SM City Tuguegarao", "SM Center Downtown", "Robinsons Place Tuguegarao",
+      "CSU Carig Campus", "CSU Andrews Campus", "University of Saint Louis (USL)",
+      "St. Paul University Philippines (SPUP)", "Cagayan Valley Medical Center (CVMC)",
+      "Buntun Bridge", "Tuguegarao City Hall", "Cagayan Provincial Capitol",
+      "Tuguegarao Domestic Airport", "Don Domingo Public Market", "Mall of the Valley",
+      "Brickstone Mall", "St. Peter Metropolitan Cathedral"
+    ],
+    "tricycle_regulatory_framework": {
+      "ordinance": "Tuguegarao City Ordinance No. 50-09-2022",
+      "base_fare_php": 12.0,
+      "base_distance_km": 2.0,
+      "succeeding_km_rate_php": 2.0,
+      "student_pwd_senior_base_fare_php": 10.0,
+      "anti_scam_advisory": "Drivers demanding 'capacity' (full vehicle charter fare ₱50-₱100+) from lone commuters on regular routes are violating City Ordinance No. 50-09-2022. Special rates only apply when passenger explicitly requests a chartered trip. Bargaining is only permitted between 9 PM and 5 AM. Violations reportable to TMG/POSO at (078) 304-1111."
+    }
   }
 }
 

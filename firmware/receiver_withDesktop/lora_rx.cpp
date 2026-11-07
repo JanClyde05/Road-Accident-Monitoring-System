@@ -45,6 +45,7 @@ static const char* _packetTypeName(uint8_t pt) {
     case PKT_REGISTER:      return "register";
     case PKT_USER_TYPE:     return "user_type";
     case PKT_RIDER_PROFILE: return "rider_profile";
+    case PKT_PING:          return "ping";
     default: return "unknown";
   }
 }
@@ -328,6 +329,19 @@ bool loraRxUpdate() {
         localQueueAddRiderProfile(token, rName, rPlate, rContact, rBlood, rCategory, rEmergency,
                                   rEmerName, rVehicle, rAllergies, rPhoto);
       }
+      break;
+    }
+
+    case PKT_PING: {
+      if (bytesRead < (int)sizeof(PingPacket)) break;
+      PingPacket* pkt = (PingPacket*)buf;
+
+      Serial.printf("[LORA-RX] 📡 PING BENCHMARK | Token: %-8s | Seq: %lu | Lat: %.6f | Lon: %.6f | RSSI: %d dBm | SNR: %.1f dB\n",
+                    token, pkt->pingSequence, pkt->latitude, pkt->longitude, rssi, snr);
+
+      // JSON output over Serial for Desktop App Ping Monitor
+      Serial.printf("{\"event\":\"LORA_PING\",\"token\":\"%s\",\"seq\":%lu,\"lat\":%.6f,\"lon\":%.6f,\"phoneEpoch\":%llu,\"rssi\":%d,\"snr\":%.1f,\"rxMillis\":%lu}\n",
+                    token, pkt->pingSequence, pkt->latitude, pkt->longitude, pkt->phoneEpochMs, rssi, snr, millis());
       break;
     }
 

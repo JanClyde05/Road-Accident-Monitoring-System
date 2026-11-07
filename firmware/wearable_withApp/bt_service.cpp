@@ -112,6 +112,24 @@ static void _processIncomingMessage(const String& msg) {
     return;
   }
 
+  // 1B. Benchmark Ping Distance Mode Packet
+  if (msg.indexOf("\"type\":\"PING\"") >= 0 || msg.indexOf("\"type\": \"PING\"") >= 0) {
+    DynamicJsonDocument pingDoc(512);
+    DeserializationError pingErr = deserializeJson(pingDoc, msg);
+    if (!pingErr) {
+      const char* pToken = pingDoc["token"] | _deviceToken;
+      float pLat = pingDoc["lat"] | 0.0f;
+      float pLon = pingDoc["lon"] | 0.0f;
+      uint32_t pSeq = pingDoc["seq"] | 0;
+      uint64_t pEpoch = pingDoc["epoch"] | 0ULL;
+
+      Serial.printf("[BT-PING] Received ping request: seq=%lu lat=%.6f lon=%.6f\n", pSeq, pLat, pLon);
+      loraSendPing(pToken, pLat, pLon, pSeq, pEpoch);
+      btServiceSendText(F("{\"type\":\"PING_ACK\",\"status\":\"SENT\"}\n"));
+    }
+    return;
+  }
+
   // 2. Phone GPS & IMU Telemetry Stream / Emergency Alert
   if (msg.indexOf("\"lat\":") >= 0 || msg.indexOf("TELEMETRY") >= 0 || msg.indexOf("EMERGENCY") >= 0 || msg.indexOf("\"type\":\"TEL\"") >= 0) {
     DynamicJsonDocument doc(3072);

@@ -38,4 +38,7 @@ bool loraSendRiderProfile(const char* token, const char* name, const char* plate
 // Send a registration packet with display name and converted Google Drive photo URL
 bool loraSendRegister(const char* token, const char* name, const char* driveLinkConverted);
 
+// Send a benchmark ping packet for delay and distance data collection
+bool loraSendPing(const char* token, float lat, float lon, uint32_t seq, uint64_t phoneEpochMs);
+
 #endif // RAMS_LORA_TX_H

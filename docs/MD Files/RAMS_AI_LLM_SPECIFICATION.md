@@ -78,3 +78,43 @@ When a crash or false alarm countdown is active (`isAlarmActiveContext || getSys
 - **Active-Only Incident Pins**: Map markers filter out all `FALSE_ALARM`, `TEST`, `CANCELLED`, `RESOLVED`, and `DISMISSED` events, exclusively plotting live verified distress calls.
 - **AI Suite UI Integration**: Displays the full `RAMS-1.8B-Edge` specification card alongside Tier 1 (14-parameter IMU feature extraction) and Tier 2 (Clinical Reasoning Trace).
 
+---
+
+## 6. Gemini-to-RAMS Knowledge Distillation Pipeline
+
+RAMS implements a self-improving knowledge distillation loop between Google Gemini 2.0 Flash (cloud teacher) and the on-device RAMS-1.8B-Edge (student model):
+
+### 6.1 Architecture
+
+```
+User Query --> [Check Distilled Cache] --> HIT? --> Return cached answer (works offline)
+                                      |
+                                      MISS
+                                      |
+                                      v
+                    [Online?] --> YES --> [Gemini 2.0 Flash API] --> Response
+                              |                                      |
+                              NO                                     v
+                              |                          [Persist to JSONL cache]
+                              v                          [Add to in-memory map]
+                    [Offline Cognitive Reasoning]                     |
+                                                                     v
+                                                            Return response
+```
+
+### 6.2 Implementation Details
+
+| Component | Specification |
+| :--- | :--- |
+| **Cache File** | `rams_distilled_knowledge.jsonl` (app-internal storage, one JSON object per line) |
+| **In-Memory Index** | `HashMap<String, DistilledKnowledgeSample>` loaded on engine `init{}` |
+| **Key Normalization** | Lowercase, strip punctuation, remove 40+ filler words (articles, pronouns, wh-words), sort remaining tokens alphabetically |
+| **Sample Schema** | `query`, `normalizedKey`, `response`, `timestamp`, `speedKmh`, `userRole`, `vehicleModel`, `source` |
+| **Source Tag** | `gemini-2.0-flash-distillation` |
+| **UI Access** | Settings > RAMS Knowledge Base card: sample count, scrollable Q&A viewer dialog, JSONL clipboard export |
+| **Dependencies** | Zero (uses `java.io.File`, `org.json.JSONObject`, `SharedPreferences`) |
+
+### 6.3 Self-Improving Behavior
+
+Each online Gemini interaction automatically enriches the local knowledge base. Over time, the device accumulates a growing corpus of domain-relevant Q&A pairs that can be answered instantly offline without consuming API quota. The normalized key system enables fuzzy deduplication (e.g., "What is countersteering?" and "Tell me about countersteering" map to the same canonical key).
+
