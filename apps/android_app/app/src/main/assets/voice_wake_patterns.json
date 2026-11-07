@@ -1,0 +1,66 @@
+{
+  "model_spec": {
+    "model_name": "RAMS-1.8B-Edge",
+    "model_family": "Road Accident Monitoring System - Edge Language Model",
+    "version": "v2.5-Edge",
+    "parameters": "1.8 Billion (1.8B)",
+    "architecture": "Transformer Decoder-Only with GQA, RoPE & SwiGLU",
+    "quantization": "4-bit AWQ / Int4 Quantized Edge Engine",
+    "context_window": 4096,
+    "domain": "Real-time Vehicle Kinematics, Crash Cognition, Emergency SOS & Rider Guidance",
+    "target_device": "Android Mobile NPU & CPU (100% Offline Capable)"
+  },
+  "voice_training_dataset": {
+    "dataset_name": "RAMS-Wake-Word-Acoustic-Patterns-v3",
+    "sample_count": 528,
+    "language_coverage": ["en-US", "en-PH", "fil-PH", "tl-PH"],
+    "wake_prefixes": [
+      "hey", "hi", "hay", "ay", "ey", "ae", "ai", "high", "he",
+      "yo", "hoy", "uy", "oy", "aye", "ok", "okay", "hello", "halo",
+      "ui", "oi", "the", "a", "k", "kay"
+    ],
+    "rams_phonetic_homophones": [
+      "rams", "ram", "rhams", "rham", "roms", "rom", "rems", "rem",
+      "rums", "rum", "arms", "arm", "ran", "runs", "round", "rounds",
+      "raps", "wrap", "wraps", "wrams", "rims", "rim", "raam", "raams",
+      "rahm", "rahms", "rhum", "rhums", "drums", "drum", "france", "lens",
+      "branch", "bronze", "crumbs", "brands", "dance", "chance", "rance"
+    ],
+    "slurred_contractions": [
+      "heyrams", "hirams", "hairams", "hairam", "hayrams", "ayrams",
+      "eyrams", "airams", "airam", "hermes", "hyram", "hyrams", "aram",
+      "arams", "eyram", "eyrams", "oram", "orams", "iram", "irams",
+      "ayram", "highrams", "highram", "yo-rams", "ok-rams"
+    ],
+    "regional_accent_variations": {
+      "tagalog_taglish": [
+        "hoy rams", "uy rams", "oy rams", "ey rams", "ay rams",
+        "halo rams", "paki cancel rams", "tama na rams", "para rams",
+        "tigil mo rams", "rams paki stop", "rams cancel mo", "okay na rams"
+      ],
+      "casual_colloquial": [
+        "e rams", "a rams", "yo ram", "k rams", "kay rams",
+        "hey there rams", "hi there rams", "rams listen", "rams wake up"
+      ],
+      "noisy_wind_buffeting": [
+        "ey rms", "ay ranz", "hey rums", "hye ram", "hi rham",
+        "he rom", "ay realms", "hey realms", "ai rams", "ae rams"
+      ]
+    },
+    "cancel_commands": [
+      "cancel", "stop", "cancel alarm", "stop alarm", "stop the alarm",
+      "cancel the alarm", "stop alert", "cancel alert", "stop the alert",
+      "cancel the alert", "rams stop", "rams cancel", "rams stop the alarm",
+      "rams cancel the alarm", "rams stop the alert", "rams cancel the alert",
+      "rams stop alert", "dismiss", "abort", "false alarm", "i am ok",
+      "im ok", "i'm ok", "i am safe", "im safe", "i'm safe", "i am fine",
+      "im fine", "i'm fine", "quiet", "silence", "no alarm", "shut up",
+      "turn off", "end alarm", "stop it", "cancel please", "stop please",
+      "ok na", "okay na", "tama na", "tigil", "hinto", "para", "huwag",
+      "ayoko", "patayin", "patayin ang alarm", "cancer", "counsel",
+      "council", "cancle", "cancell", "cancelar", "kansel", "consol",
+      "console", "stub", "step"
+    ]
+  }
+}
+

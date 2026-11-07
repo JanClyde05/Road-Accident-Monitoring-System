@@ -48,11 +48,11 @@ fun MapScreen(
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .verticalScroll(rememberScrollState())
       .padding(horizontal = 16.dp, vertical = 12.dp),
     verticalArrangement = Arrangement.spacedBy(16.dp)
   ) {
     // 1. Live Interactive Map (Main User Pin + Direction Beam + Offline Fallback)
+    // Sits at top outside vertical scroll so finger dragging, pan, and zoom are 100% smooth!
     RamsMapView(
       gps = gps,
       imu = imu,
@@ -63,8 +63,16 @@ fun MapScreen(
       onOpenLoginDialog = onOpenLoginDialog
     )
 
-    // 2. High-Precision GNSS Coordinates & Speed Grid
-    Surface(
+    // 2. Scrollable Telemetry & Incidents Area below the Map
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .weight(1f)
+        .verticalScroll(rememberScrollState()),
+      verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+      // High-Precision GNSS Coordinates & Speed Grid
+      Surface(
       modifier = Modifier.fillMaxWidth(),
       shape = RoundedCornerShape(12.dp),
       color = MaterialTheme.colorScheme.surface,
@@ -182,6 +190,7 @@ fun MapScreen(
       }
     }
   }
+}
 }
 
 @Composable

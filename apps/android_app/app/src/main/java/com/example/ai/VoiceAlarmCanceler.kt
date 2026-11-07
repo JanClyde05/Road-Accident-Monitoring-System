@@ -16,6 +16,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.example.MainActivity
+import org.json.JSONObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -245,7 +246,22 @@ class VoiceAlarmCanceler(
     // TTS speaking guard: when true, recognizer is paused so mic doesn't hear TTS playback
     private var isTtsSpeaking = false
 
+    // Watchdog to prevent TTS stuck state from permanently blocking speech recognition
+    private val ttsWatchdog = Runnable {
+        if (isTtsSpeaking) {
+            Log.w(TAG, "TTS watchdog fired! Auto-clearing isTtsSpeaking and resuming microphone.")
+            isTtsSpeaking = false
+            scheduleRestart(200L)
+        }
+    }
+
+    // Dynamic voice pattern dataset loaded from voice_wake_patterns.json
+    private val dynamicWakeWords = mutableSetOf<String>()
+    private val dynamicCancelWords = mutableSetOf<String>()
+    private var consecutiveErrorCount = 0
+
     init {
+        loadVoicePatternsFromAssets()
         // Only initialize TTS engine. Do NOT auto-start SpeechRecognizer here.
         // The ViewModel or activity must explicitly call startListeningForCancel().
         try {
@@ -254,6 +270,56 @@ class VoiceAlarmCanceler(
             Log.w(TAG, "TTS Init exception: ${e.message}")
         }
         Log.i(TAG, "VoiceAlarmCanceler initialized. Awaiting explicit start call.")
+    }
+
+    private fun loadVoicePatternsFromAssets() {
+        try {
+            val jsonStr = context.assets.open("voice_wake_patterns.json").bufferedReader().use { it.readText() }
+            val root = JSONObject(jsonStr)
+            val ds = root.optJSONObject("voice_training_dataset")
+            if (ds != null) {
+                val prefixes = ds.optJSONArray("wake_prefixes")
+                val homophones = ds.optJSONArray("rams_phonetic_homophones")
+                val slurs = ds.optJSONArray("slurred_contractions")
+                val cancels = ds.optJSONArray("cancel_commands")
+
+                if (slurs != null) {
+                    for (i in 0 until slurs.length()) {
+                        dynamicWakeWords.add(slurs.getString(i).lowercase(Locale.US))
+                    }
+                }
+                if (prefixes != null && homophones != null) {
+                    for (i in 0 until prefixes.length()) {
+                        val p = prefixes.getString(i).lowercase(Locale.US)
+                        for (j in 0 until homophones.length()) {
+                            val h = homophones.getString(j).lowercase(Locale.US)
+                            dynamicWakeWords.add("$p $h")
+                            dynamicWakeWords.add("$p$h")
+                        }
+                    }
+                }
+                val regional = ds.optJSONObject("regional_accent_variations")
+                if (regional != null) {
+                    val keys = regional.keys()
+                    while (keys.hasNext()) {
+                        val arr = regional.optJSONArray(keys.next())
+                        if (arr != null) {
+                            for (i in 0 until arr.length()) {
+                                dynamicWakeWords.add(arr.getString(i).lowercase(Locale.US))
+                            }
+                        }
+                    }
+                }
+                if (cancels != null) {
+                    for (i in 0 until cancels.length()) {
+                        dynamicCancelWords.add(cancels.getString(i).lowercase(Locale.US))
+                    }
+                }
+                Log.i(TAG, "Loaded training dataset: ${dynamicWakeWords.size} wake combinations, ${dynamicCancelWords.size} cancel variations.")
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not load voice_wake_patterns.json: ${e.message}")
+        }
     }
 
     override fun onInit(status: Int) {
@@ -267,6 +333,7 @@ class VoiceAlarmCanceler(
                 }
                 override fun onDone(utteranceId: String?) {
                     isTtsSpeaking = false
+                    mainHandler.removeCallbacks(ttsWatchdog)
                     // Resume listening after TTS finishes
                     mainHandler.postDelayed({
                         if (_engineState.value != VoiceEngineState.DORMANT &&
@@ -278,6 +345,7 @@ class VoiceAlarmCanceler(
                 @Deprecated("Deprecated in Java")
                 override fun onError(utteranceId: String?) {
                     isTtsSpeaking = false
+                    mainHandler.removeCallbacks(ttsWatchdog)
                     mainHandler.postDelayed({
                         if (_engineState.value != VoiceEngineState.DORMANT &&
                             _engineState.value != VoiceEngineState.COMMAND_SPOTTED) {
@@ -303,15 +371,18 @@ class VoiceAlarmCanceler(
         try {
             // Pause recognizer so mic doesn't pick up TTS audio
             isTtsSpeaking = true
+            mainHandler.removeCallbacks(ttsWatchdog)
+            mainHandler.postDelayed(ttsWatchdog, 3500L)
             mainHandler.post {
                 try {
                     speechRecognizer?.stopListening()
-                } catch (_: Exception) {}
+                } catch (_: Throwable) {}
             }
             textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "rams_tts_${System.currentTimeMillis()}")
         } catch (e: Exception) {
             Log.w(TAG, "TTS speak failed: ${e.message}")
             isTtsSpeaking = false
+            mainHandler.removeCallbacks(ttsWatchdog)
         }
     }
 
@@ -461,16 +532,16 @@ class VoiceAlarmCanceler(
             val existing = speechRecognizer
             if (existing != null) {
                 try {
-                    existing.cancel()
+                    existing.stopListening()
                     existing.startListening(intent)
                     Log.d(TAG, "SpeechRecognizer: startListening resumed cleanly (state=${_engineState.value})")
                     return@post
-                } catch (e: Exception) {
-                    Log.w(TAG, "Existing recognizer restart failed, recreating fresh: ${e.message}")
+                } catch (t: Throwable) {
+                    Log.w(TAG, "Existing recognizer restart failed, recreating fresh: ${t.message}")
                     try {
                         existing.cancel()
                         existing.destroy()
-                    } catch (_: Exception) {}
+                    } catch (_: Throwable) {}
                     speechRecognizer = null
                 }
             }
@@ -480,11 +551,10 @@ class VoiceAlarmCanceler(
                 val recognizer = SpeechRecognizer.createSpeechRecognizer(context.applicationContext)
                 speechRecognizer = recognizer
                 recognizer.setRecognitionListener(createRecognitionListener())
-                recognizer.cancel()
                 recognizer.startListening(intent)
                 Log.d(TAG, "SpeechRecognizer started listening (state=${_engineState.value})")
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to start SpeechRecognizer", e)
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to start SpeechRecognizer", t)
                 mainHandler.postDelayed({
                     if (_engineState.value != VoiceEngineState.DORMANT &&
                         _engineState.value != VoiceEngineState.COMMAND_SPOTTED &&
@@ -500,6 +570,7 @@ class VoiceAlarmCanceler(
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 isRestarting = false
+                consecutiveErrorCount = 0
                 if (!isAwaitingCommandStage) {
                     _engineState.value = VoiceEngineState.LISTENING_FOR_WAKE_WORD
                 } else {
@@ -517,7 +588,7 @@ class VoiceAlarmCanceler(
             override fun onRmsChanged(rmsdB: Float) {
                 val normalized = ((rmsdB + 2f) / 12f).coerceIn(0.05f, 1.0f)
                 _audioLevelFlow.value = normalized
-                if (isAlarmActiveContext && normalized > 0.45f) {
+                if ((isAlarmActiveContext || getSystemContext().isAlarmActive) && normalized > 0.45f) {
                     onSpeechDetectedListener?.invoke(true)
                 }
             }
@@ -533,6 +604,7 @@ class VoiceAlarmCanceler(
 
             override fun onError(error: Int) {
                 onSpeechDetectedListener?.invoke(false)
+                consecutiveErrorCount++
                 val errMsg = when (error) {
                     SpeechRecognizer.ERROR_AUDIO -> "ERROR_AUDIO(3)"
                     SpeechRecognizer.ERROR_CLIENT -> "ERROR_CLIENT(5)"
@@ -549,18 +621,19 @@ class VoiceAlarmCanceler(
                     14 -> "ERROR_CANNOT_CHECK_SUPPORT(14)"
                     else -> "ERROR_CODE($error)"
                 }
-                Log.d(TAG, "SpeechRecognizer onError: $errMsg (state=${_engineState.value})")
+                Log.d(TAG, "SpeechRecognizer onError: $errMsg (state=${_engineState.value}, consecutive=$consecutiveErrorCount)")
 
-                if (error == SpeechRecognizer.ERROR_CLIENT || error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || error == 11) {
+                if (consecutiveErrorCount >= 3 || error == SpeechRecognizer.ERROR_CLIENT || error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || error == 11) {
                     try {
                         speechRecognizer?.cancel()
                         speechRecognizer?.destroy()
-                    } catch (_: Exception) {}
+                    } catch (_: Throwable) {}
                     speechRecognizer = null
+                    consecutiveErrorCount = 0
                 } else {
                     try {
-                        speechRecognizer?.cancel()
-                    } catch (_: Exception) {}
+                        speechRecognizer?.stopListening()
+                    } catch (_: Throwable) {}
                 }
 
                 val shouldRestart = _engineState.value == VoiceEngineState.LISTENING_FOR_WAKE_WORD ||
@@ -581,6 +654,7 @@ class VoiceAlarmCanceler(
 
             override fun onResults(results: Bundle?) {
                 onSpeechDetectedListener?.invoke(false)
+                consecutiveErrorCount = 0
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 checkMatchesForTrigger(matches, isPartial = false)
 
@@ -595,6 +669,7 @@ class VoiceAlarmCanceler(
             override fun onPartialResults(partialResults: Bundle?) {
                 pendingQueryJob?.cancel()
                 pendingQueryJob = null
+                consecutiveErrorCount = 0
 
                 val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 if (!matches.isNullOrEmpty()) {
@@ -625,16 +700,27 @@ class VoiceAlarmCanceler(
     }
 
     private fun checkFuzzyWakeWord(text: String): Boolean {
-        val tokens = text.split(" ")
+        val tokens = text.split(" ").filter { it.isNotBlank() }
         for (i in tokens.indices) {
             val t1 = tokens[i]
-            if (levenshteinDistance(t1, "rams") <= 1 || t1 == "ram" || t1 == "rhams") return true
+            if (t1 == "rams" || t1 == "ram" || t1 == "rhams" || t1 == "rham" ||
+                t1 == "roms" || t1 == "rems" || t1 == "rums" || t1 == "arms" ||
+                t1 == "ran" || t1 == "rims" || t1 == "wrams" || t1 == "hermes" ||
+                t1 == "hyram" || t1 == "hyrams" || t1 == "airam" || t1 == "airams" ||
+                t1 == "heyrams" || t1 == "hirams") {
+                return true
+            }
+            if (levenshteinDistance(t1, "rams") <= 1) return true
+
             if (i + 1 < tokens.size) {
                 val pair = "$t1 ${tokens[i + 1]}"
                 if (levenshteinDistance(pair, "hey rams") <= 2 ||
-                    levenshteinDistance(pair, "hi rams") <= 1 ||
+                    levenshteinDistance(pair, "hi rams") <= 2 ||
                     levenshteinDistance(pair, "ok rams") <= 1 ||
-                    levenshteinDistance(pair, "yo rams") <= 1) {
+                    levenshteinDistance(pair, "yo rams") <= 1 ||
+                    levenshteinDistance(pair, "hoy rams") <= 1 ||
+                    levenshteinDistance(pair, "ay rams") <= 1 ||
+                    levenshteinDistance(pair, "ey rams") <= 1) {
                     return true
                 }
             }
@@ -651,12 +737,15 @@ class VoiceAlarmCanceler(
     private fun checkMatchesForTrigger(matches: List<String>?, isPartial: Boolean) {
         if (matches.isNullOrEmpty()) return
 
+        val isAlarmActiveNow = isAlarmActiveContext || getSystemContext().isAlarmActive
+
         for (phrase in matches) {
             val normalized = normalizeText(phrase)
             if (normalized.isBlank()) continue
 
             // 1. CANCEL COMMANDS -- always checked first, even on partial results! Instant safety abort!
             val isCancelWord = CANCEL_COMMANDS.any { cmd -> normalized.contains(cmd) } ||
+                dynamicCancelWords.any { cmd -> normalized.contains(cmd) } ||
                 CANCEL_REGEX.containsMatchIn(normalized)
 
             if (isCancelWord) {
@@ -664,7 +753,7 @@ class VoiceAlarmCanceler(
                 pendingQueryJob = null
 
                 // If bubble is open (awaiting command) or alarm is actively counting down, cancel immediately!
-                if (isAwaitingCommandStage || isAlarmActiveContext) {
+                if (isAwaitingCommandStage || isAlarmActiveNow) {
                     Log.i(TAG, "Immediate cancel command in active/awaiting stage: '$phrase'")
                     handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
                     return
@@ -682,7 +771,8 @@ class VoiceAlarmCanceler(
 
             // 2. WAKE WORDS -- only check if not already awaiting command
             if (!isAwaitingCommandStage) {
-                val matchesWakeList = WAKE_WORDS.any { wake -> normalized.contains(wake) }
+                val matchesWakeList = WAKE_WORDS.any { wake -> normalized.contains(wake) } ||
+                    dynamicWakeWords.any { wake -> normalized.contains(wake) }
                 val matchesWakeRegex = WAKE_WORD_REGEX.containsMatchIn(normalized)
                 val matchesDirectWake = DIRECT_WAKE_REGEX.containsMatchIn(normalized)
                 val matchesFuzzy = checkFuzzyWakeWord(normalized)

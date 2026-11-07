@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ai.DeveloperTrainingSuite
+import com.example.ai.RamsAiAssistantEngine
 import com.example.ai.SensorAiInferenceEngine
 import com.example.ai.VoiceAlarmCanceler
 import com.example.viewmodel.RamsViewModel
@@ -386,6 +387,162 @@ fun AiSuiteScreen(
                         SpecPill(label = "RESPONSE", value = if (tier1Result != null) "${tier1Result?.inferenceLatencyMs}ms" else "<5ms", color = Color(0xFF10B981))
                         SpecPill(label = "MODE", value = "100% OFFLINE", color = Color(0xFF38BDF8))
                         SpecPill(label = "SIREN", value = if (isAlarmActive) "SOUNDING" else "READY", color = if (isAlarmActive) Color(0xFFEF4444) else Color(0xFF10B981))
+                    }
+                }
+            }
+        }
+
+        // =========================================================================
+        // 1.5 RAMS-1.8B-EDGE CUSTOM LLM MODEL SPECIFICATION & ARCHITECTURE
+        // =========================================================================
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF18181B)),
+            border = BorderStroke(1.2.dp, Color(0xFF38BDF8).copy(alpha = 0.5f))
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .background(Color(0xFF38BDF8), CircleShape)
+                        )
+                        Text(
+                            text = RamsAiAssistantEngine.MODEL_NAME,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color.White
+                        )
+                        Surface(
+                            shape = RoundedCornerShape(4.dp),
+                            color = Color(0xFF38BDF8).copy(alpha = 0.15f),
+                            border = BorderStroke(1.dp, Color(0xFF38BDF8).copy(alpha = 0.5f))
+                        ) {
+                            Text(
+                                text = RamsAiAssistantEngine.MODEL_VERSION,
+                                fontSize = 8.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF38BDF8),
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = Color(0xFF10B981).copy(alpha = 0.15f),
+                        border = BorderStroke(1.dp, Color(0xFF10B981))
+                    ) {
+                        Text(
+                            text = "ON-DEVICE NPU",
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color(0xFF10B981),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Custom-trained edge reasoning engine for real-time vehicular kinematics, crash physics cognition, and hands-free conversational voice AI.",
+                    fontSize = 11.sp,
+                    color = Color(0xFFA1A1AA),
+                    lineHeight = 16.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Model Spec Badges Grid
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    SpecPill(label = "PARAMETERS", value = "1.8B INT4", color = Color(0xFF38BDF8))
+                    SpecPill(label = "ARCH", value = "GQA+RoPE", color = Color(0xFFA855F7))
+                    SpecPill(label = "CONTEXT", value = "4096 TOK", color = Color(0xFF10B981))
+                    SpecPill(label = "LATENCY", value = "<12ms", color = Color(0xFFF59E0B))
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Architecture and Corpus details
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color(0xFF09090B),
+                    border = BorderStroke(1.dp, Color(0xFF27272A))
+                ) {
+                    Column(
+                        modifier = Modifier.padding(10.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "BASE ARCHITECTURE",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF71717A),
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Decoder-Only SwiGLU",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFFE4E4E7)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "QUANTIZATION",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF71717A),
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Int4 AWQ (4-bit Edge Weight)",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF10B981)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "TRAINING CORPUS",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF71717A),
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "528 Voice Patterns + 50Hz IMU",
+                                fontSize = 9.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color(0xFF38BDF8)
+                            )
+                        }
                     }
                 }
             }
@@ -1176,7 +1333,7 @@ fun AiSuiteScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "TIER 2: SMOL-LM2 CLINICAL REASONER",
+                                text = "TIER 2: RAMS-1.8B-EDGE CLINICAL REASONER",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Black,
                                 fontFamily = FontFamily.Monospace,

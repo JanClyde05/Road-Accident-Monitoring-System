@@ -13,6 +13,12 @@ android {
   namespace = "com.example"
   compileSdk = 36
 
+  val localProps = java.util.Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+  }
+  val geminiKey = localProps.getProperty("gemini.api.key", "")
+
   defaultConfig {
     applicationId = "com.aistudio.rams.wkqmzb"
     minSdk = 24
@@ -20,6 +26,7 @@ android {
     versionCode = 1
     versionName = "1.0"
 
+    buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 

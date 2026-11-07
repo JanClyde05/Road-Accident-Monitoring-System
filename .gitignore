@@ -26,6 +26,9 @@ Desktop.ini
 .env
 .env.local
 .env.production
+local.properties
+**/local.properties
+*.secret
 
 # Logs
 *.log

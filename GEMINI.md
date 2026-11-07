@@ -28,3 +28,10 @@ Replace framework orchestration and monolithic prompt stuffing with filesystem-a
 
 ## 4. Multi-Account & Persistent Workspace Enforcement
 These instructions are bound directly to this workspace repository. They persist across all user accounts, agent sessions, subagents, and IDE instances.
+
+## 5. Mandatory Technical Logging Directive
+All significant architectural additions, model specifications, training datasets, and engineering decisions must ALWAYS be logged to persistent system records:
+1. **Model & Algorithm Specifications**: Log model name, version, parameter count (e.g., 1.8B), architecture (e.g., Decoder-Only SwiGLU GQA/RoPE), quantization (e.g., Int4 AWQ), and inference constraints directly in `MEMORY_MAP.md` and `docs/`.
+2. **Acoustic & Sensor Datasets**: Log training corpus details, phonetic homophone matrices, sample counts, and threshold calibrations.
+3. **Hardware, Bug Fixes & Timings**: Log critical bug fixes (e.g., binder crashes, watchdog timers, touch interception, PCB footprints) in `MEMORY_MAP.md` and relevant subsystem markdown contracts before completing tasks.
+
