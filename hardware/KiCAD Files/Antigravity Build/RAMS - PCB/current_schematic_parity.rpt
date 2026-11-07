@@ -1,0 +1,323 @@
+** Drc report for RAMS - PCB.kicad_pcb **
+** Created on 2026-10-30T00:19:34 **
+** Report includes: Errors, Warnings **
+
+** Found 0 DRC violations **
+
+** Found 5 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on B.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+    @(100.3000 mm, 100.3000 mm): Zone [/GND] on F.Cu, priority 0
+
+** Found 95 Footprint errors **
+[footprint_symbol_mismatch]: rams:Buzzer_SMD_9650_3327 doesn't match footprint given by symbol (Buzzer_Beeper:Buzzer_12x9.5RM7.6)
+    Local override; warning
+    @(132.0000 mm, 106.5000 mm): Footprint BZ1
+[footprint_symbol_field_mismatch]: Field 'LCSC' differs (PCB: 'C42420997', Schematic: 'C96238')
+    Local override; warning
+    @(132.0000 mm, 106.5000 mm): Footprint BZ1
+[footprint_symbol_mismatch]: Value (C1) doesn't match symbol value (10uF)
+    Local override; warning
+    @(126.5000 mm, 124.0000 mm): Footprint C1
+[footprint_symbol_mismatch]: Value (C2) doesn't match symbol value (0.1uF)
+    Local override; warning
+    @(126.5000 mm, 126.5000 mm): Footprint C2
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'DW01 VCC Decouple', Schematic: 'VCC Decouple')
+    Local override; warning
+    @(134.5000 mm, 124.0000 mm): Footprint C5
+[net_conflict]: Pad net (/B_MINUS) doesn't match net given by schematic (/GND)
+    Local override; warning
+    @(134.9800 mm, 124.0000 mm): Pad 2 [/B_MINUS] of C5 on F.Cu
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'DW01 Delay Filter', Schematic: 'Pack Bulk Cap')
+    Local override; warning
+    @(131.0000 mm, 124.5000 mm): Footprint C6
+[net_conflict]: Pad net (/DW_TD) doesn't match net given by schematic (/B_PLUS)
+    Local override; warning
+    @(130.5200 mm, 124.5000 mm): Pad 1 [/DW_TD] of C6 on F.Cu
+[net_conflict]: Pad net (/B_MINUS) doesn't match net given by schematic (/GND)
+    Local override; warning
+    @(131.4800 mm, 124.5000 mm): Pad 2 [/B_MINUS] of C6 on F.Cu
+[footprint_symbol_mismatch]: Value (C8) doesn't match symbol value (47uF)
+    Local override; warning
+    @(103.0000 mm, 129.5000 mm): Footprint C8
+[footprint_symbol_mismatch]: Value (C10) doesn't match symbol value (47uF)
+    Local override; warning
+    @(107.0000 mm, 129.5000 mm): Footprint C10
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'ADC Input Low-pass Filter', Schematic: 'ADC Filter Cap')
+    Local override; warning
+    @(106.5000 mm, 121.0000 mm): Footprint C29
+[footprint_symbol_mismatch]: Value (D2) doesn't match symbol value (SS14W)
+    Local override; warning
+    @(125.5000 mm, 117.0000 mm): Footprint D2
+[footprint_symbol_mismatch]: Diode_SMD:D_SOD-123 doesn't match footprint given by symbol (Diode_SMD:D_SMA)
+    Local override; warning
+    @(125.5000 mm, 117.0000 mm): Footprint D2
+[footprint_symbol_field_mismatch]: Field 'LCSC' differs (PCB: 'C2909920', Schematic: 'C22452')
+    Local override; warning
+    @(125.5000 mm, 117.0000 mm): Footprint D2
+[net_conflict]: Pad net (/LDO_IN) doesn't match net given by schematic (/VBUS)
+    Local override; warning
+    @(123.8500 mm, 117.0000 mm): Pad 1 [/LDO_IN] of D2 on F.Cu
+[net_conflict]: Pad net (/VBUS) doesn't match net given by schematic (/LDO_IN)
+    Local override; warning
+    @(127.1500 mm, 117.0000 mm): Pad 2 [/VBUS] of D2 on F.Cu
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Buzzer Flyback Protection', Schematic: 'Flyback Diode')
+    Local override; warning
+    @(124.0000 mm, 103.0000 mm): Footprint D3
+[net_conflict]: Pad net (/+3V3) doesn't match net given by schematic (/BUZZER_NEG)
+    Local override; warning
+    @(122.3500 mm, 103.0000 mm): Pad 1 [/+3V3] of D3 on F.Cu
+[net_conflict]: Pad net (/BUZZER_NEG) doesn't match net given by schematic (/+3V3)
+    Local override; warning
+    @(125.6500 mm, 103.0000 mm): Pad 2 [/BUZZER_NEG] of D3 on F.Cu
+[footprint_symbol_mismatch]: USB_C_TYPE_C_31_M_12 doesn't match footprint given by symbol (rams:USB_C_TYPE_C_31_M_12)
+    Local override; warning
+    @(119.0000 mm, 128.5000 mm): Footprint J1
+[footprint_symbol_field_mismatch]: Missing symbol field 'Mounting' in footprint
+    Local override; warning
+    @(119.0000 mm, 128.5000 mm): Footprint J1
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(120.2500 mm, 124.4550 mm): Pad A8 [unconnected-(J1-SBU1-PadA8)] of J1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(117.2500 mm, 124.4550 mm): Pad B8 [unconnected-(J1-SBU2-PadB8)] of J1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(101.9500 mm, 119.9500 mm): Pad 4 [unconnected-(LED1-DOUT-Pad3)] of LED1 on F.Cu
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Batt P-MOSFET Switch', Schematic: 'Power Path P-MOSFET')
+    Local override; warning
+    @(125.5000 mm, 113.5000 mm): Footprint Q1
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Buzzer NPN Driver', Schematic: 'NPN Buzzer Driver')
+    Local override; warning
+    @(124.0000 mm, 106.0000 mm): Footprint Q2
+[net_conflict]: Pad net (/BUZZER_BASE) doesn't match net given by schematic (/BUZZ_DRV)
+    Local override; warning
+    @(123.0625 mm, 105.0500 mm): Pad 1 [/BUZZER_BASE] of Q2 on F.Cu
+[footprint_symbol_mismatch]: Package_SO:TSSOP-8_4.4x3mm_P0.65mm doesn't match footprint given by symbol (Package_TO_SOT_SMD:SOT-23-6)
+    Local override; warning
+    @(138.5000 mm, 126.5000 mm): Footprint Q3
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Dual N-MOSFET Protection', Schematic: 'Dual N-MOSFET Protection Switch')
+    Local override; warning
+    @(138.5000 mm, 126.5000 mm): Footprint Q3
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(138.1750 mm, 129.3625 mm): Pad 2 [/GND] of Q3 on F.Cu
+[net_conflict]: Pad net (/DW_OD) doesn't match net given by schematic (/B_MINUS)
+    Local override; warning
+    @(138.8250 mm, 129.3625 mm): Pad 3 [/DW_OD] of Q3 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(139.4750 mm, 123.6375 mm): Pad 5 [/B_MINUS] of Q3 on F.Cu
+[net_conflict]: Pad net (/B_MINUS) doesn't match net given by schematic (/DW_OD)
+    Local override; warning
+    @(138.8250 mm, 123.6375 mm): Pad 6 [/B_MINUS] of Q3 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(138.1750 mm, 123.6375 mm): Pad 7 [unconnected-(Q3-D-Pad7)] of Q3 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(137.5250 mm, 123.6375 mm): Pad 8 [unconnected-(Q3-D-Pad8)] of Q3 on F.Cu
+[footprint_symbol_mismatch]: Value (R3) doesn't match symbol value (4.02k)
+    Local override; warning
+    @(134.0000 mm, 114.0000 mm): Footprint R3
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'DW01 VCC Filter', Schematic: 'VCC Filter Resistor')
+    Local override; warning
+    @(134.5000 mm, 120.0000 mm): Footprint R4
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'DW01 CS Resistor', Schematic: 'Current Sense Resistor')
+    Local override; warning
+    @(134.5000 mm, 122.0000 mm): Footprint R5
+[net_conflict]: Pad net (/GND) doesn't match net given by schematic (/B_MINUS)
+    Local override; warning
+    @(135.0100 mm, 122.0000 mm): Pad 2 [/GND] of R5 on F.Cu
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'P-FET Gate Pull-down', Schematic: 'Gate Pull-down')
+    Local override; warning
+    @(125.5000 mm, 120.0000 mm): Footprint R6
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'LDO EN Pull-down', Schematic: 'EN Default Pull-down')
+    Local override; warning
+    @(103.0000 mm, 123.0000 mm): Footprint R7
+[net_conflict]: Pad net (/BUZZER_BASE) doesn't match net given by schematic (/BUZZ_DRV)
+    Local override; warning
+    @(124.5100 mm, 108.5000 mm): Pad 2 [/BUZZER_BASE] of R12 on F.Cu
+[net_conflict]: Pad net (/BUZZER_BASE) doesn't match net given by schematic (/BUZZ_DRV)
+    Local override; warning
+    @(123.4900 mm, 110.5000 mm): Pad 1 [/BUZZER_BASE] of R13 on F.Cu
+[footprint_symbol_mismatch]: Value (R14) doesn't match symbol value (330k)
+    Local override; warning
+    @(106.5000 mm, 117.0000 mm): Footprint R14
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Battery Divider Upper', Schematic: 'ADC Top Divider')
+    Local override; warning
+    @(106.5000 mm, 117.0000 mm): Footprint R14
+[footprint_symbol_mismatch]: Value (R15) doesn't match symbol value (180k)
+    Local override; warning
+    @(106.5000 mm, 119.0000 mm): Footprint R15
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'Battery Divider Lower', Schematic: 'ADC Bottom Divider')
+    Local override; warning
+    @(106.5000 mm, 119.0000 mm): Footprint R15
+[footprint_symbol_field_mismatch]: Field 'Func' differs (PCB: 'System Power Switch', Schematic: 'Main Power Slide Switch')
+    Local override; warning
+    @(138.5000 mm, 116.5000 mm): Footprint SW1
+[footprint_symbol_mismatch]: Value (SW2) doesn't match symbol value (KMR2)
+    Local override; warning
+    @(102.5000 mm, 108.0000 mm): Footprint SW2
+[footprint_symbol_mismatch]: Value (SW3) doesn't match symbol value (KMR2)
+    Local override; warning
+    @(102.5000 mm, 115.0000 mm): Footprint SW3
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(112.5500 mm, 114.2000 mm): Pad 8 [unconnected-(U1-GPIO3-Pad8)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(112.5500 mm, 114.6000 mm): Pad 9 [unconnected-(U1-GPIO4-Pad9)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(112.5500 mm, 115.0000 mm): Pad 10 [unconnected-(U1-GPIO5-Pad10)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(112.5500 mm, 115.4000 mm): Pad 11 [unconnected-(U1-GPIO6-Pad11)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(112.5500 mm, 115.8000 mm): Pad 12 [unconnected-(U1-GPIO7-Pad12)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(115.0000 mm, 117.4500 mm): Pad 19 [unconnected-(U1-GPIO14-Pad19)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(115.8000 mm, 117.4500 mm): Pad 21 [unconnected-(U1-XTAL_32K_P-Pad21)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(116.2000 mm, 117.4500 mm): Pad 22 [unconnected-(U1-XTAL_32K_N-Pad22)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(116.6000 mm, 117.4500 mm): Pad 23 [unconnected-(U1-GPIO17-Pad23)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(117.0000 mm, 117.4500 mm): Pad 24 [unconnected-(U1-GPIO18-Pad24)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(118.2000 mm, 117.4500 mm): Pad 27 [unconnected-(U1-GPIO21-Pad27)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(118.6000 mm, 117.4500 mm): Pad 28 [unconnected-(U1-SPICS1-Pad28)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 116.2000 mm): Pad 30 [unconnected-(U1-SPIHD-Pad30)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 115.8000 mm): Pad 31 [unconnected-(U1-SPIWP-Pad31)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 115.4000 mm): Pad 32 [unconnected-(U1-SPICS0-Pad32)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 115.0000 mm): Pad 33 [unconnected-(U1-SPICLK-Pad33)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 114.6000 mm): Pad 34 [unconnected-(U1-SPIQ-Pad34)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 114.2000 mm): Pad 35 [unconnected-(U1-SPID-Pad35)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 113.8000 mm): Pad 36 [unconnected-(U1-SPICLK_N-Pad36)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 113.4000 mm): Pad 37 [unconnected-(U1-SPICLK_P-Pad37)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 113.0000 mm): Pad 38 [unconnected-(U1-GPIO33-Pad38)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 112.6000 mm): Pad 39 [unconnected-(U1-GPIO34-Pad39)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 112.2000 mm): Pad 40 [unconnected-(U1-GPIO35-Pad40)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 111.8000 mm): Pad 41 [unconnected-(U1-GPIO36-Pad41)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(119.4500 mm, 111.4000 mm): Pad 42 [unconnected-(U1-GPIO37-Pad42)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(118.6000 mm, 110.5500 mm): Pad 43 [unconnected-(U1-GPIO38-Pad43)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(118.2000 mm, 110.5500 mm): Pad 44 [unconnected-(U1-MTCK-Pad44)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(117.8000 mm, 110.5500 mm): Pad 45 [unconnected-(U1-MTDO-Pad45)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(117.0000 mm, 110.5500 mm): Pad 47 [unconnected-(U1-MTDI-Pad47)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(116.6000 mm, 110.5500 mm): Pad 48 [unconnected-(U1-MTMS-Pad48)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(116.2000 mm, 110.5500 mm): Pad 49 [unconnected-(U1-U0TXD-Pad49)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(115.8000 mm, 110.5500 mm): Pad 50 [unconnected-(U1-U0RXD-Pad50)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(115.4000 mm, 110.5500 mm): Pad 51 [unconnected-(U1-GPIO45-Pad51)] of U1 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(110.0000 mm, 110.0000 mm): Pad 6 [unconnected-(U2-DIO1-Pad6)] of U2 on B.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(110.0000 mm, 108.0000 mm): Pad 7 [unconnected-(U2-DIO2-Pad7)] of U2 on B.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(110.0000 mm, 106.0000 mm): Pad 8 [unconnected-(U2-DIO3-Pad8)] of U2 on B.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(126.0000 mm, 108.0000 mm): Pad 10 [unconnected-(U2-DIO4-Pad10)] of U2 on B.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(126.0000 mm, 110.0000 mm): Pad 11 [unconnected-(U2-DIO5-Pad11)] of U2 on B.Cu
+[footprint_symbol_field_mismatch]: Field 'LCSC' differs (PCB: 'C668215', Schematic: 'C841234')
+    Local override; warning
+    @(130.0000 mm, 114.0000 mm): Footprint U3
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(128.8625 mm, 113.0500 mm): Pad 1 [/CHRG_STAT] of U3 on F.Cu
+[footprint_symbol_field_mismatch]: Field 'LCSC' differs (PCB: 'C42380662', Schematic: 'C39048')
+    Local override; warning
+    @(131.0000 mm, 121.5000 mm): Footprint U4
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(132.1375 mm, 122.4500 mm): Pad 4 [/DW_TD] of U4 on F.Cu
+[net_conflict]: Pad net (/B_MINUS) doesn't match net given by schematic (/GND)
+    Local override; warning
+    @(132.1375 mm, 120.5500 mm): Pad 6 [/B_MINUS] of U4 on F.Cu
+[net_conflict]: No corresponding pin found in schematic
+    Local override; warning
+    @(108.1375 mm, 124.9500 mm): Pad 4 [unconnected-(U5-NC-Pad4)] of U5 on F.Cu
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

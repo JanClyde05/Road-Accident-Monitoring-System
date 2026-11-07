@@ -1,0 +1,11 @@
+# Offline Keyword Spotting Table for RAMS Voice Alarm Canceler
+# Format: <Keyword Phrase> / <Phoneme Representation> / <Trigger Action>
+
+RAMS CANCEL ALARM / r ae m z k ae n s ah l ah l aa r m / CANCEL_EMERGENCY_ALARM
+RAMS STOP THE ALARM / r ae m z s t aa p dh ah ah l aa r m / CANCEL_EMERGENCY_ALARM
+RAMS STOP / r ae m z s t aa p / CANCEL_EMERGENCY_ALARM
+RAMS CANCEL / r ae m z k ae n s ah l / CANCEL_EMERGENCY_ALARM
+HEY RAMS CANCEL / hh ey r ae m z k ae n s ah l / CANCEL_EMERGENCY_ALARM
+STOP ALARM / s t aa p ah l aa r m / CANCEL_EMERGENCY_ALARM
+I AM OKAY RAMS / ay ae m ow k ey r ae m z / CANCEL_EMERGENCY_ALARM
+

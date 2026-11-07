@@ -1,0 +1,13 @@
+{
+  "service": "Local Ollama Daemon",
+  "endpoint": "http://127.0.0.1:11434/api/generate",
+  "recommended_model": "llama3.2:3b",
+  "alternative_models": ["qwen2.5:3b", "phi3.5:mini"],
+  "quantization": "Q4_K_M",
+  "ram_allocation_gb": 2.05,
+  "context_window_tokens": 2048,
+  "temperature": 0.2,
+  "offline_fallback_enabled": true,
+  "target_brief_format": "EOC Incident Intelligence Brief (CDRRMO / PNP Highway Patrol)"
+}
+

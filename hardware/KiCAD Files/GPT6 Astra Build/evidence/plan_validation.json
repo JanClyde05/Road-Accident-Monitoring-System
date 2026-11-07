@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-30T18:46:27.917990+08:00",
+  "result": "passed",
+  "chapters": 8,
+  "local_markdown_links": 7,
+  "source_files_matching_snapshot": 84,
+  "original_board_and_order_zip": "match previously recorded SHA-256",
+  "scope": "Document QA only. No fresh complete ERC/DRC, supplier acceptance or physical tests.",
+  "chapter_sha256": {
+    "00_START_HERE.md": "56d29ed1c50b5c26f40de9fd76416d638bd93e8ba507aede4b53c0d2cf364c66",
+    "01_REVISION_PLAN.md": "877cd11ea55b73b0eec8b246d5a17809a67c07399bbe9d28b6a11bec17804466",
+    "02_PARTS_REUSE_AND_MISSING_ITEMS.md": "e8d38e8e38aa2c63123299fba51314d1b4ad3df3625b350020e986da5c5ca654",
+    "03_DOST_FABRICATION_CONSTRAINTS.md": "37ba8837d45d644ccbed67916f08517b561eb773008a15bbdfd434c7ea7a8657",
+    "04_ELECTRICAL_AND_FIRMWARE_REQUIREMENTS.md": "ad059de44aa1c5d12718cbf57c4db7edecedb145d501feb1b4f444982d0a89c7",
+    "05_FAILURE_MODES_AND_AI_RULES.md": "78e155fb8f2fd0e561af908ba95fb2a4496eac55bc1fbbaab85ea5de73a9976e",
+    "06_VERIFICATION_AND_HANDOFF.md": "2c77c0f1a156bbdb73ea7503c8aaffdf7efeeb4c2c6f61cdb699dff3ef5ec678",
+    "07_DECISIONS_AND_OPEN_ITEMS.md": "41d8b54560f26ddfadecfc68ba6cb9c406738ad0466e5a1d9cb85b376e5142fc"
+  }
+}

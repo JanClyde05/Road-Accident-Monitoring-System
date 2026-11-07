@@ -1,0 +1,23 @@
+{
+  "engine": "Sherpa-ONNX",
+  "version": "1.10.22",
+  "offline": true,
+  "sample_rate_hz": 16000,
+  "channels": 1,
+  "audio_format": "PCM_16BIT",
+  "feature_dim": 80,
+  "acoustic_model": "sherpa-onnx-zipformer-kws-en-2024-01-01.onnx",
+  "keywords_file": "keywords.txt",
+  "confidence_threshold": 0.75,
+  "activation_gate": {
+    "dormant_during_ride": true,
+    "active_only_during_alarm_countdown": true,
+    "countdown_duration_sec": 10
+  },
+  "dsp_filters": {
+    "hardware_acoustic_echo_canceler": true,
+    "hardware_noise_suppressor": true,
+    "high_pass_cutoff_hz": 350
+  }
+}
+

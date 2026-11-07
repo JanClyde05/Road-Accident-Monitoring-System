@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "filename": "RAMS_RevC.kicad_pro",
+    "version": 1
+  },
+  "board": {
+    "design_settings": {
+      "rules": {
+        "min_clearance": 0.254,
+        "min_track_width": 0.3,
+        "min_via_diameter": 0.95,
+        "min_through_hole_diameter": 0.4,
+        "min_copper_edge_clearance": 0.3,
+        "min_hole_clearance": 0.254,
+        "min_hole_to_hole": 0.4,
+        "solder_mask_min_width": 0.1,
+        "silk_min_line_width": 0.15
+      }
+    }
+  },
+  "sheets": [
+    [
+      "",
+      ""
+    ]
+  ]
+}

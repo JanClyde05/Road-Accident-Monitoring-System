@@ -1,0 +1,20 @@
+{
+  "model_name": "RAMS_IMU_Classifier_Tier1",
+  "framework": "Google LiteRT (TensorFlow Lite)",
+  "architecture": "1D-CNN + Dense MLP",
+  "input_parameters": 14,
+  "sliding_window_samples": 50,
+  "sampling_rate_hz": 50.0,
+  "window_duration_sec": 1.0,
+  "memory_footprint_ram_mb": 4.8,
+  "model_size_disk_kb": 34.2,
+  "quantization": "INT8 Post-Training Quantization",
+  "target_latency_ms": 1.8,
+  "classes": [
+    { "id": 0, "name": "NORMAL_RIDING", "is_emergency": false },
+    { "id": 1, "name": "ADL_FALSE_ALARM", "is_emergency": false, "notes": "Pothole bounce, speed bump, phone dropped while stopped" },
+    { "id": 2, "name": "SKIDDING", "is_emergency": true, "notes": "Loss of traction, high yaw rate oscillation" },
+    { "id": 3, "name": "SEVERE_IMPACT", "is_emergency": true, "notes": "Direct collision, ground impact with persistent body tilt" }
+  ]
+}
+

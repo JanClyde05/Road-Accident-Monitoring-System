@@ -6,34 +6,47 @@ Welcome to the **Road Accident Monitoring System (RAMS)** codebase. This documen
 
 ## 🗺️ High-Level Directory Map
 
+> [!NOTE]
+> See the complete, detailed file and subsystem index in **[`DIRECTORY_MAP.md`](DIRECTORY_MAP.md)**.
+
 ```
 Danger Monitoring System V2/
 │
-├── 00_SYSTEM_ARCHITECTURE.md       ◄── Master Navigation & Architecture Guide (You are here)
+├── DIRECTORY_MAP.md                ◄── Master Navigation & Complete Directory Index
+├── 00_SYSTEM_ARCHITECTURE.md       ◄── Master Architecture Guide (You are here)
 ├── DESIGN_RULES.md                 ◄── System-wide UI/UX Design System & Zero-Emoji Rules
 ├── MEMORY_MAP.md                   ◄── Technical Memory Map & Module Relationship Graph
 │
-├── ═══ SECTION 1: ORIGINAL HARDWARE BASELINE (OG Concept) ═══
-│   ├── wearable/                   ◄── ESP32 Wearable Firmware (Original Hardware Sensors)
-│   ├── receiver/                   ◄── ESP32 LoRa Base Station Firmware
-│   ├── Mobile App/                 ◄── Original Mobile Captive Portal Web Prototype (100% Intact)
-│   ├── backend/                    ◄── Original Netlify Cloud Rescuer Web Dashboard (100% Intact)
-│   ├── shared/                     ◄── Shared C/C++ Protocol & Logo Header Assets
-│   ├── data_logger/                ◄── Serial IMU & Sensor Calibration Suite
-│   └── validation/                 ◄── Hardware Verification & Test Data
+├── ═══ 1. EMBEDDED FIRMWARE (firmware/) ═══
+│   ├── wearable_withApp/           ◄── ESP32-S3 Wearable Firmware (BLE, LoRa TX, GPS, NeoPixel)
+│   ├── receiver_withDesktop/       ◄── ESP32 LoRa Base Station Firmware (LoRa RX, USB Serial, HTTP)
+│   ├── data_logger_standalone/     ◄── Serial IMU & Sensor Calibration Suite
+│   └── shared/                     ◄── Shared C/C++ Protocol & Packet Structs (protocol.h)
 │
-├── ═══ SECTION 2: MODERN APPS ECOSYSTEM (V2 Software Node System) ═══
+├── ═══ 2. PRODUCTION APPLICATIONS (apps/) ═══
 │   ├── android_app/                ◄── Native Android App (Phone 100Hz IMU + Dual-Band GNSS)
 │   ├── desktop_app/                ◄── Standalone Windows Rescuer Station (.exe)
-│   ├── RAMS IMU Studio Application/◄── Real-Time 100Hz IMU Calibration Suite
-│   └── apps/                       ◄── Unified Apps Hub & Quick-Launch Shortcuts
+│   ├── backend/                    ◄── Netlify Serverless Backend & Live Map Dashboard
+│   ├── imu_studio_app/             ◄── Real-Time 100Hz IMU Calibration Suite
+│   └── *.bat                       ◄── Quick-Launch & Build Scripts
 │
-└── ═══ SECTION 3: HARDWARE ENGINEERING & CUSTOM PCB ═══
-    └── KiCAD Files/Antigravity Build/RAMS - PCB/
-        ├── RAMS - PCB.kicad_sch    ◄── Schematic Source (0 Errors Verified)
-        ├── RAMS - PCB.kicad_pcb    ◄── 42x32mm 2-Layer Layout (0 DRC Violations)
-        ├── scripts/                ◄── Headless Freerouting Autoroute Pipeline
-        └── JLCPCB_ORDER_PACKAGE/   ◄── Turnkey Gerbers, BOM, CPL & DIY SMT Matrix
+├── ═══ 3. HARDWARE ENGINEERING (hardware/) ═══
+│   └── KiCAD Files/
+│       ├── Antigravity Build/RAMS - PCB - Rev C/  ◄── Active EPDC-Compliant Redesign
+│       └── Antigravity Build/RAMS - PCB/          ◄── Rev A JLCPCB Baseline
+│
+├── ═══ 4. DOCUMENTATION & KNOWLEDGE (docs/) ═══
+│   ├── MD Files/                   ◄── Master Architecture Specs, Flowcharts, Memory Maps
+│   ├── RAMS/                       ◄── Obsidian Knowledge Vault (.obsidian, MDF)
+│   └── Pictures/                   ◄── Hardware Photos & Visual Architecture Diagrams
+│
+├── ═══ 5. PROTOTYPES & SIMULATORS (prototypes/) ═══
+│   ├── AI Studio/                  ◄── Web Simulator & WearablePortalSimulator
+│   └── UI Redesign/                ◄── Vite/React Modern UI Redesign Workspace
+│
+└── ═══ 6. ARCHIVE & VALIDATION ═══
+    ├── validation/                 ◄── Fall/Crash FSM Algorithm Validator (validate_fsm.py)
+    └── archive/                    ◄── Preserved Legacy Clones, Stubs & Initial Backups
 ```
 
 ---

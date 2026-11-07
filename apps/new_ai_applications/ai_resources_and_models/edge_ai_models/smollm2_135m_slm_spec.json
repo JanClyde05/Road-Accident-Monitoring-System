@@ -1,0 +1,15 @@
+{
+  "model_name": "SmolLM2-135M-Instruct",
+  "organization": "Hugging Face",
+  "parameters": 135000000,
+  "quantization": "INT4 / Q4_K_M GGUF & MediaPipe GenAI",
+  "disk_size_mb": 78.4,
+  "active_ram_allocation_mb": 118.0,
+  "runtime_engine": "MediaPipe GenAI LLM Inference API / LiteRT-LLM",
+  "offline": true,
+  "role": "Tier 2 Contextual Emergency Reasoner & Clinical Diagnostic Explainer",
+  "context_length_tokens": 512,
+  "trigger_condition": "Activated strictly upon Tier 1 high-G shock or skid confirmation",
+  "generation_latency_ms": 160
+}
+

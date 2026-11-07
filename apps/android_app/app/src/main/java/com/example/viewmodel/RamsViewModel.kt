@@ -1,0 +1,1001 @@
+package com.example.viewmodel
+
+import android.annotation.SuppressLint
+import android.app.Application
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.ai.DeveloperTrainingSuite
+import com.example.ai.SensorAiInferenceEngine
+import com.example.ai.VoiceAlarmCanceler
+import com.example.audio.AlarmSoundEngine
+import com.example.connectivity.Esp32ConnectionManager
+import com.example.export.CsvExportManager
+import com.example.model.AccidentClassification
+import com.example.model.ConnectionType
+import com.example.model.DeviceLinkStatus
+import com.example.model.GpsData
+import com.example.model.ImuData
+import com.example.model.IncidentEvent
+import com.example.model.IncidentType
+import com.example.model.RiderProfile
+import com.example.sensor.PhoneSensorEngine
+import com.example.sync.Esp32SyncEngine
+import com.example.sync.Esp32SyncStatus
+import com.example.sync.SyncTransport
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.UUID
+
+class RamsViewModel(application: Application) : AndroidViewModel(application) {
+
+  // Phone Physical Hardware Sensors
+  val phoneSensorEngine = PhoneSensorEngine(application.applicationContext, viewModelScope)
+
+  // Wearable Sync & Emergency Uplink Engine (WebSocket / TCP / Bluetooth Classic & BLE)
+  val esp32SyncEngine = Esp32SyncEngine(viewModelScope, application.applicationContext)
+
+  // Internal Fallback manager
+  private val simulatedConnectionManager = Esp32ConnectionManager(viewModelScope)
+
+  // CSV Logger & Exporter
+  val csvExportManager = CsvExportManager(application.applicationContext)
+
+  // Intelligent Edge AI Engine (Dual-Tier LiteRT + SLM Reasoning for IECEP Nationals)
+  val sensorAiEngine = SensorAiInferenceEngine(application.applicationContext, viewModelScope)
+
+  // Live telemetry and status snapshot provider for RAMS Voice AI Assistant
+  val systemContext: com.example.ai.RamsSystemContext
+    get() {
+      val gps = gpsState.value
+      val imu = imuState.value
+      val link = linkStatus.value
+      val profile = _riderProfile.value
+      val aiResult = sensorAiEngine.tier1ResultFlow.value
+      return com.example.ai.RamsSystemContext(
+        speedKmh = gps.speedKmh,
+        liveG = imu.aMag,
+        peakG = _peakAMag.value,
+        latitude = gps.latitude,
+        longitude = gps.longitude,
+        locationAddress = gps.locationAddress,
+        hasGpsFix = gps.hasFix,
+        isWearableConnected = link.isConnected,
+        wearableName = link.bluetoothName ?: "RAMS Wearable",
+        wearableBatteryPct = link.batteryPct,
+        riderName = profile.riderName,
+        userType = profile.userType,
+        plateNumber = profile.plateNumber,
+        vehicleModel = profile.vehicleModel,
+        bloodType = profile.bloodType,
+        allergies = profile.allergies,
+        emergencyContactName = profile.emergencyContactName,
+        emergencyContactPhone = profile.emergencyContactPhone,
+        token = profile.token,
+        aiMotionProfile = aiResult?.motionProfile?.displayName ?: "Resting Upright",
+        aiConfidence = aiResult?.confidence ?: 0.99f,
+        isAlarmActive = _isAlarmActive.value,
+        alarmCountdownSec = _alarmCountdownSeconds.value
+      )
+    }
+
+  // Offline Custom Wake-Word & Online Conversational AI Assistant
+  val voiceAlarmCanceler = VoiceAlarmCanceler(
+    context = application.applicationContext,
+    scope = viewModelScope,
+    getSystemContext = { systemContext },
+    onAlarmCancelledByVoice = { _, _ -> cancelFalseAlarm() }
+  )
+
+  // Emergency Siren & Vibration Audio Engine (Continuous loop until canceled)
+  val alarmSoundEngine = AlarmSoundEngine(application.applicationContext)
+
+  // Active Emergency Alarm State
+  private val _isAlarmActive = MutableStateFlow(false)
+  val isAlarmActive: StateFlow<Boolean> = _isAlarmActive.asStateFlow()
+
+  private val _alarmCountdownSeconds = MutableStateFlow(0)
+  val alarmCountdownSeconds: StateFlow<Int> = _alarmCountdownSeconds.asStateFlow()
+
+  private var alarmCountdownJob: Job? = null
+
+  // In-App Developer Training Suite (Ground Truth Data Collector & Simulation Mode)
+  val devTrainingSuite = DeveloperTrainingSuite(application.applicationContext, viewModelScope)
+
+  // Master AI classification toggle
+  private val _aiClassificationEnabled = MutableStateFlow(true)
+  val aiClassificationEnabled: StateFlow<Boolean> = _aiClassificationEnabled.asStateFlow()
+
+  fun setAiClassificationEnabled(enabled: Boolean) {
+    _aiClassificationEnabled.value = enabled
+  }
+
+  // Rider Profile & Registration State (Persisted in SharedPreferences)
+  private val _riderProfile = MutableStateFlow(RiderProfile.loadFromPreferences(application.applicationContext))
+  val riderProfile: StateFlow<RiderProfile> = _riderProfile.asStateFlow()
+
+  // Nearby Incidents on Map toggle (Default: OFF / false)
+  val showNearbyIncidents: StateFlow<Boolean> = _riderProfile.map { it.showNearbyIncidents }
+    .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+  // Use real phone sensors by default
+  private val _usePhoneSensors = MutableStateFlow(true)
+  val usePhoneSensors: StateFlow<Boolean> = _usePhoneSensors.asStateFlow()
+
+  // Dynamic active sensor states (Phone Hardware)
+  val gpsState: StateFlow<GpsData> = combine(
+    _usePhoneSensors,
+    phoneSensorEngine.phoneGpsState,
+    simulatedConnectionManager.gpsState
+  ) { usePhone, phoneGps, simGps ->
+    if (usePhone) phoneGps else simGps
+  }.stateIn(viewModelScope, SharingStarted.Eagerly, phoneSensorEngine.phoneGpsState.value)
+
+  val imuState: StateFlow<ImuData> = combine(
+    _usePhoneSensors,
+    phoneSensorEngine.phoneImuState,
+    simulatedConnectionManager.imuState
+  ) { usePhone, phoneImu, simImu ->
+    if (usePhone) phoneImu else simImu
+  }.stateIn(viewModelScope, SharingStarted.Eagerly, phoneSensorEngine.phoneImuState.value)
+
+  val linkStatus: StateFlow<DeviceLinkStatus> = combine(
+    _usePhoneSensors,
+    esp32SyncEngine.syncStatus,
+    simulatedConnectionManager.linkStatus,
+    _riderProfile
+  ) { usePhone, sync, simLink, profile ->
+    if (usePhone) {
+      val connType = when (sync.transport) {
+        SyncTransport.WEBSOCKET -> ConnectionType.WEBSOCKET
+        SyncTransport.WIFI_TCP -> ConnectionType.WIFI_SOCKET
+        SyncTransport.BLUETOOTH_SPP -> ConnectionType.BLUETOOTH_SPP
+        SyncTransport.STANDALONE_LOGGER -> ConnectionType.SIMULATION
+      }
+      DeviceLinkStatus(
+        isConnected = sync.isSyncActive,
+        connectionType = connType,
+        pingLatencyMs = 8L,
+        packetRateHz = sync.syncRateHz,
+        batteryPct = 94,
+        batteryVoltage = 4.10f,
+        deviceToken = profile.token,
+        firmwareVersion = "RAMS-SAFETY-CLIENT v3.2",
+        ipAddress = sync.esp32Ip,
+        port = sync.esp32Port,
+        wsUrl = sync.esp32WsUrl,
+        bluetoothName = sync.btDeviceName,
+        bluetoothMac = sync.btMacAddress
+      )
+    } else {
+      simLink.copy(deviceToken = profile.token)
+    }
+  }.stateIn(viewModelScope, SharingStarted.Eagerly, DeviceLinkStatus())
+
+  val syncStatus: StateFlow<Esp32SyncStatus> = esp32SyncEngine.syncStatus
+
+  // Waveform buffer for IMU sparklines (last 50 data points)
+  private val _imuHistory = MutableStateFlow<List<ImuData>>(emptyList())
+  val imuHistory: StateFlow<List<ImuData>> = _imuHistory.asStateFlow()
+
+  // Peak G-force recorder
+  private val _peakAMag = MutableStateFlow(1.02f)
+  val peakAMag: StateFlow<Float> = _peakAMag.asStateFlow()
+
+  // Incident Events Stream
+  private val _events = MutableStateFlow<List<IncidentEvent>>(createInitialEvents())
+  val events: StateFlow<List<IncidentEvent>> = _events.asStateFlow()
+
+  // Selected event for Profile Overlay Showcase
+  private val _selectedEvent = MutableStateFlow<IncidentEvent?>(null)
+  val selectedEvent: StateFlow<IncidentEvent?> = _selectedEvent.asStateFlow()
+
+  // Dialog & Overlay visibility
+  private val _showProfileOverlay = MutableStateFlow(false)
+  val showProfileOverlay: StateFlow<Boolean> = _showProfileOverlay.asStateFlow()
+
+  private val _showConnectionDialog = MutableStateFlow(false)
+  val showConnectionDialog: StateFlow<Boolean> = _showConnectionDialog.asStateFlow()
+
+  private val _showRiderLoginDialog = MutableStateFlow(false)
+  val showRiderLoginDialog: StateFlow<Boolean> = _showRiderLoginDialog.asStateFlow()
+
+  private val _showCsvDialog = MutableStateFlow(false)
+  val showCsvDialog: StateFlow<Boolean> = _showCsvDialog.asStateFlow()
+
+  private val _csvDialogInitialTab = MutableStateFlow("EXPORT")
+  val csvDialogInitialTab: StateFlow<String> = _csvDialogInitialTab.asStateFlow()
+
+  private val _showCsvImportDialog = MutableStateFlow(false)
+  val showCsvImportDialog: StateFlow<Boolean> = _showCsvImportDialog.asStateFlow()
+
+  // IMU Studio Calibration State (Dynamic thresholds & false-alarm cancellation)
+  val imuCalibration: StateFlow<com.example.model.ImuCalibration> = csvExportManager.calibrationState
+
+  private val _showDesignRulesDialog = MutableStateFlow(false)
+  val showDesignRulesDialog: StateFlow<Boolean> = _showDesignRulesDialog.asStateFlow()
+
+  // Theme mode (Dark / Light)
+  private val _isDarkTheme = MutableStateFlow(true)
+  val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
+
+  // Filter & Search
+  private val _activeFilter = MutableStateFlow("ALL")
+  val activeFilter: StateFlow<String> = _activeFilter.asStateFlow()
+
+  private val _searchQuery = MutableStateFlow("")
+  val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+  // Bluetooth Wearable Scanner State
+  private val bluetoothManager = application.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+  private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager?.adapter
+
+  private val _isBluetoothEnabled = MutableStateFlow(bluetoothAdapter?.isEnabled == true)
+  val isBluetoothEnabled: StateFlow<Boolean> = _isBluetoothEnabled.asStateFlow()
+
+  private val _isScanningBluetooth = MutableStateFlow(false)
+  val isScanningBluetooth: StateFlow<Boolean> = _isScanningBluetooth.asStateFlow()
+
+  private val _bondedDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+  val bondedDevices: StateFlow<List<BluetoothDevice>> = _bondedDevices.asStateFlow()
+
+  private val _discoveredWearables = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+  val discoveredWearables: StateFlow<List<BluetoothDevice>> = _discoveredWearables.asStateFlow()
+
+  private var isReceiverRegistered = false
+  private var leScanCallback: android.bluetooth.le.ScanCallback? = null
+  private var scanCycleCount = 0
+
+  private fun sortWearables(devices: List<BluetoothDevice>): List<BluetoothDevice> {
+    return devices.sortedWith(compareByDescending { device ->
+      try {
+        val name = device.name ?: ""
+        name.contains("RAMS", ignoreCase = true) || name.contains("Wearable", ignoreCase = true)
+      } catch (_: SecurityException) { false }
+    })
+  }
+
+  fun refreshBluetoothState() {
+    val enabled = bluetoothAdapter?.isEnabled == true
+    _isBluetoothEnabled.value = enabled
+    if (enabled) {
+      queryBondedWearableDevices()
+      startBluetoothDiscovery()
+    }
+  }
+
+  private val bluetoothScanReceiver = object : BroadcastReceiver() {
+    @SuppressLint("MissingPermission")
+    override fun onReceive(context: Context?, intent: Intent?) {
+      when (intent?.action) {
+        BluetoothAdapter.ACTION_STATE_CHANGED -> {
+          val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+          if (state == BluetoothAdapter.STATE_ON) {
+            _isBluetoothEnabled.value = true
+            queryBondedWearableDevices()
+            startBluetoothDiscovery()
+          } else if (state == BluetoothAdapter.STATE_OFF) {
+            _isBluetoothEnabled.value = false
+            _isScanningBluetooth.value = false
+            _discoveredWearables.value = emptyList()
+            _bondedDevices.value = emptyList()
+          }
+        }
+        BluetoothDevice.ACTION_FOUND -> {
+          val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+          if (device != null) {
+            val currentList = _discoveredWearables.value.toMutableList()
+            if (!currentList.any { it.address == device.address }) {
+              currentList.add(device)
+              _discoveredWearables.value = sortWearables(currentList)
+            }
+          }
+        }
+        BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
+          if (_isScanningBluetooth.value && scanCycleCount < 2) {
+            scanCycleCount++
+            try {
+              bluetoothAdapter?.startDiscovery()
+            } catch (_: Exception) {
+              _isScanningBluetooth.value = false
+            }
+          } else {
+            _isScanningBluetooth.value = false
+          }
+        }
+      }
+    }
+  }
+
+  val filteredEvents: StateFlow<List<IncidentEvent>> = combine(
+    _events,
+    _activeFilter,
+    _searchQuery
+  ) { eventList, filter, query ->
+    eventList.filter { event ->
+      val matchesFilter = when (filter) {
+        "ALERT" -> event.type == IncidentType.ALERT
+        "TEST" -> event.type == IncidentType.TEST
+        "TELEMETRY" -> event.type == IncidentType.TELEMETRY
+        else -> true
+      }
+      val matchesQuery = query.isEmpty() ||
+          event.riderName.contains(query, ignoreCase = true) ||
+          event.deviceToken.contains(query, ignoreCase = true) ||
+          event.title.contains(query, ignoreCase = true) ||
+          event.plateNumber.contains(query, ignoreCase = true)
+      matchesFilter && matchesQuery
+    }
+  }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _events.value)
+
+  init {
+    // Start phone physical sensors
+    phoneSensorEngine.startSensors()
+
+    // Connect AI crash trigger listener to launch continuous alarm & voice abort
+    sensorAiEngine.onCrashAlarmTriggerListener = { scenario, reason ->
+      triggerEmergencyCrashAlarm(scenario, reason)
+    }
+
+    // Connect Wearable physical button press cancel event
+    esp32SyncEngine.onWearableCancelRequested = {
+      cancelFalseAlarm()
+    }
+
+    // Register Bluetooth broadcast receiver
+    try {
+      val filter = IntentFilter().apply {
+        addAction(BluetoothDevice.ACTION_FOUND)
+        addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+      }
+      application.registerReceiver(bluetoothScanReceiver, filter)
+      isReceiverRegistered = true
+    } catch (_: Exception) {}
+
+    // Collect IMU to update history buffer, peak G, and CSV logging
+    viewModelScope.launch {
+      imuState.collect { imu ->
+        val currentList = _imuHistory.value.toMutableList()
+        if (currentList.size >= 50) currentList.removeAt(0)
+        currentList.add(imu)
+        _imuHistory.value = currentList
+
+        if (imu.aMag > _peakAMag.value) {
+          _peakAMag.value = imu.aMag
+        }
+
+        // Record to CSV logger if recording is turned on
+        csvExportManager.recordSample(
+          gps = gpsState.value,
+          imu = imu,
+          battPct = 94
+        )
+      }
+    }
+
+    // Collect Real Phone Crash Alert Events
+    viewModelScope.launch {
+      phoneSensorEngine.crashTriggerFlow.collect { (gps, imu) ->
+        handleCrashShockDetected(gps, imu, "PHONE SENSOR IMPACT DETECTED")
+      }
+    }
+
+    // Stream real-time sensor samples into Edge AI Engine and Developer Training Suite
+    viewModelScope.launch {
+      combine(phoneSensorEngine.phoneImuState, phoneSensorEngine.phoneGpsState) { imu, gps ->
+        Pair(imu, gps.speedKmh)
+      }.collect { (imu, speed) ->
+        sensorAiEngine.ingestSample(imu, speed)
+        if (devTrainingSuite.recordingState.value == DeveloperTrainingSuite.RecordingState.RECORDING) {
+          devTrainingSuite.recordSample(imu)
+        }
+      }
+    }
+
+    // Observe dynamic IMU Studio calibration profile for motion threshold & false alarm rejection
+    viewModelScope.launch {
+      csvExportManager.calibrationState.collect { cal ->
+        if (cal.isCalibrated && cal.crashThresholdG > 0f) {
+          phoneSensorEngine.setCrashThreshold(cal.crashThresholdG)
+        } else {
+          phoneSensorEngine.setCrashThreshold(0f)
+        }
+      }
+    }
+
+    // Populate paired Wearable devices on startup if bluetooth is active
+    if (bluetoothAdapter?.isEnabled == true) {
+      queryBondedWearableDevices()
+      startBluetoothDiscovery()
+      checkAndAutoConnectWearable()
+    }
+
+    // Connect speech detection listener to siren ducking
+    voiceAlarmCanceler.onSpeechDetectedListener = { isSpeaking ->
+      if (_isAlarmActive.value) {
+        alarmSoundEngine.duckVolume(isSpeaking)
+      }
+    }
+
+    // Explicitly start background wake-word listener (VoiceAlarmCanceler no longer auto-starts in init{})
+    voiceAlarmCanceler.startListeningForCancel(promptDirectly = false)
+  }
+
+  @SuppressLint("MissingPermission")
+  fun checkAndAutoConnectWearable() {
+    if (syncStatus.value.isSyncActive || syncStatus.value.isConnecting) return
+    val prefs = getApplication<Application>().getSharedPreferences("rams_ble_sync_prefs", Context.MODE_PRIVATE)
+    val lastMac = prefs.getString("last_ble_mac", null)
+    val lastName = prefs.getString("last_ble_name", "RAMS Wearable")
+
+    if (!lastMac.isNullOrBlank()) {
+      android.util.Log.i("RAMS_AutoConnect", "Found saved wearable MAC: $lastMac ($lastName). Initiating auto-connect.")
+      connectBluetoothSync(lastMac, lastName ?: "RAMS Wearable")
+      return
+    }
+
+    // Check bonded devices for any device named RAMS
+    val bonded = _bondedDevices.value
+    val ramsBonded = bonded.firstOrNull { d ->
+      val name = try { d.name ?: "" } catch (_: SecurityException) { "" }
+      name.contains("RAMS", ignoreCase = true) || name.contains("Wearable", ignoreCase = true)
+    }
+    if (ramsBonded != null) {
+      android.util.Log.i("RAMS_AutoConnect", "Found bonded RAMS device: ${ramsBonded.address}. Auto-connecting.")
+      connectWearableDevice(ramsBonded)
+    }
+  }
+
+  @SuppressLint("MissingPermission")
+  fun queryBondedWearableDevices() {
+    try {
+      val bonded = bluetoothAdapter?.bondedDevices ?: emptySet()
+      _bondedDevices.value = sortWearables(bonded.toList())
+      checkAndAutoConnectWearable()
+    } catch (_: Exception) {}
+  }
+
+  @SuppressLint("MissingPermission")
+  fun startBluetoothDiscovery() {
+    val app = getApplication<Application>()
+    val enabled = bluetoothAdapter?.isEnabled == true
+    _isBluetoothEnabled.value = enabled
+    if (!enabled) return
+
+    try {
+      if (!isReceiverRegistered) {
+        val filter = IntentFilter().apply {
+          addAction(BluetoothDevice.ACTION_FOUND)
+          addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+          addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        }
+        app.registerReceiver(bluetoothScanReceiver, filter)
+        isReceiverRegistered = true
+      }
+
+      // Check bonded devices first
+      queryBondedWearableDevices()
+
+      // Reset discovered list and cycle counter for fresh scan
+      _discoveredWearables.value = emptyList()
+      scanCycleCount = 0
+
+      if (bluetoothAdapter?.isDiscovering == true) {
+        bluetoothAdapter.cancelDiscovery()
+      }
+      val startedDiscovery = bluetoothAdapter?.startDiscovery() ?: false
+
+      // Also start BLE scanner for ESP32-S3 and other BLE peripherals
+      val leScanner = bluetoothAdapter?.bluetoothLeScanner
+      var startedBle = false
+      if (leScanner != null) {
+        if (leScanCallback == null) {
+          leScanCallback = object : android.bluetooth.le.ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: android.bluetooth.le.ScanResult?) {
+              result?.device?.let { device ->
+                val currentList = _discoveredWearables.value.toMutableList()
+                if (!currentList.any { it.address == device.address }) {
+                  currentList.add(device)
+                  _discoveredWearables.value = sortWearables(currentList)
+                }
+
+                // Seamless auto-connect to priority wearable
+                if (!syncStatus.value.isSyncActive && !syncStatus.value.isConnecting) {
+                  val name = try { device.name ?: "" } catch (_: SecurityException) { "" }
+                  val prefs = getApplication<Application>().getSharedPreferences("rams_ble_sync_prefs", Context.MODE_PRIVATE)
+                  val lastMac = prefs.getString("last_ble_mac", null)
+                  if ((lastMac != null && device.address.equals(lastMac, ignoreCase = true)) ||
+                      name.contains("RAMS", ignoreCase = true)) {
+                    android.util.Log.i("RAMS_AutoConnect", "Spotted RAMS BLE peripheral: ${device.address}. Auto-connecting.")
+                    connectWearableDevice(device)
+                  }
+                }
+              }
+            }
+
+            override fun onBatchScanResults(results: MutableList<android.bluetooth.le.ScanResult>?) {
+              results?.forEach { result ->
+                result.device?.let { device ->
+                  val currentList = _discoveredWearables.value.toMutableList()
+                  if (!currentList.any { it.address == device.address }) {
+                    currentList.add(device)
+                    _discoveredWearables.value = sortWearables(currentList)
+                  }
+                }
+              }
+            }
+
+            override fun onScanFailed(errorCode: Int) {}
+          }
+        }
+        try {
+          val settings = android.bluetooth.le.ScanSettings.Builder()
+            .setScanMode(android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .build()
+          leScanner.startScan(null, settings, leScanCallback)
+          startedBle = true
+        } catch (_: Exception) {}
+      }
+
+      _isScanningBluetooth.value = startedDiscovery || startedBle
+    } catch (e: Exception) {
+      _isScanningBluetooth.value = false
+    }
+  }
+
+  @SuppressLint("MissingPermission")
+  fun stopBluetoothDiscovery() {
+    try {
+      scanCycleCount = 99
+      if (bluetoothAdapter?.isDiscovering == true) {
+        bluetoothAdapter.cancelDiscovery()
+      }
+      leScanCallback?.let { cb ->
+        try {
+          bluetoothAdapter?.bluetoothLeScanner?.stopScan(cb)
+        } catch (_: Exception) {}
+      }
+      _isScanningBluetooth.value = false
+    } catch (_: Exception) {}
+  }
+
+  fun triggerEmergencyCrashAlarm(scenario: String = "CRASH", reason: String = "Severe Impact Shock") {
+    _isAlarmActive.value = true
+    _alarmCountdownSeconds.value = 10
+    voiceAlarmCanceler.setAlarmActiveState(true)
+
+    // 1. Start continuous audio siren & vibration loop
+    alarmSoundEngine.startEmergencyAlarm(viewModelScope)
+
+    // 2. Countdown loop
+    alarmCountdownJob?.cancel()
+    alarmCountdownJob = viewModelScope.launch {
+      for (sec in 10 downTo 1) {
+        _alarmCountdownSeconds.value = sec
+        delay(1000)
+      }
+      _alarmCountdownSeconds.value = 0
+    }
+
+    // 3. Send emergency BLE packet to Wearable
+    val currentRider = _riderProfile.value
+    esp32SyncEngine.sendEmergencyCrashPacket(
+      gps = gpsState.value,
+      imu = imuState.value,
+      riderProfile = currentRider,
+      eventType = 2,
+      eventTypeName = "Severe Crash Collision"
+    )
+
+    // 4. Log alert event
+    val alertEvent = IncidentEvent(
+      id = "ALERT-${System.currentTimeMillis() % 100000}",
+      title = "CRASH ALERT: $scenario",
+      type = IncidentType.ALERT,
+      timestamp = System.currentTimeMillis(),
+      lat = gpsState.value.latitude,
+      lon = gpsState.value.longitude,
+      aMag = imuState.value.aMag,
+      speedKmh = gpsState.value.speedKmh,
+      batteryPct = 94,
+      riderName = currentRider.riderName,
+      plateNumber = currentRider.plateNumber,
+      deviceToken = currentRider.token,
+      vehicleModel = currentRider.vehicleModel,
+      locationAddress = gpsState.value.locationAddress.ifBlank { "Location Active" },
+      notes = "$reason. Emergency siren playing continuously until canceled by voice, physical button, or app."
+    )
+    _events.value = listOf(alertEvent) + _events.value
+
+    // 5. Open Voice Assistant bubble asking what to do next
+    voiceAlarmCanceler.startListeningForCancel(promptDirectly = true)
+  }
+
+  fun cancelFalseAlarm() {
+    alarmSoundEngine.duckVolume(false)
+    alarmSoundEngine.stopEmergencyAlarm()
+    alarmCountdownJob?.cancel()
+    alarmCountdownJob = null
+    _isAlarmActive.value = false
+    _alarmCountdownSeconds.value = 0
+    voiceAlarmCanceler.setAlarmActiveState(false)
+
+    // Only reset voice state if it wasn't already transitioned by voice command
+    if (voiceAlarmCanceler.engineState.value != VoiceAlarmCanceler.VoiceEngineState.COMMAND_SPOTTED) {
+      voiceAlarmCanceler.resetVoiceState()
+      voiceAlarmCanceler.scheduleRestart(600L)
+    }
+
+    csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed("False alarm dismissed by rider via mobile app / voice command / wearable physical button")
+    val currentRider = _riderProfile.value
+    esp32SyncEngine.sendCancelAlertPacket(currentRider)
+    sensorAiEngine.simulateScenario("NORMAL")
+
+    // Update prior active ALERT events for this rider so they are cleared from the active map pins
+    _events.value = _events.value.map { evt ->
+      if (evt.type == IncidentType.ALERT && (evt.deviceToken == currentRider.token || evt.title.startsWith("CRASH ALERT"))) {
+        evt.copy(
+          type = IncidentType.FALSE_ALARM,
+          title = "${evt.title} [CANCELLED]",
+          notes = "${evt.notes} [Cancelled by rider]"
+        )
+      } else {
+        evt
+      }
+    }
+
+    val cancelEvent = IncidentEvent(
+      id = "CLR-${System.currentTimeMillis() % 100000}",
+      title = "FALSE ALARM DISMISSED",
+      type = IncidentType.FALSE_ALARM,
+      timestamp = System.currentTimeMillis(),
+      lat = gpsState.value.latitude,
+      lon = gpsState.value.longitude,
+      aMag = imuState.value.aMag,
+      speedKmh = gpsState.value.speedKmh,
+      batteryPct = 94,
+      riderName = currentRider.riderName,
+      plateNumber = currentRider.plateNumber,
+      deviceToken = currentRider.token,
+      vehicleModel = currentRider.vehicleModel,
+      locationAddress = gpsState.value.locationAddress.ifBlank {
+        if (gpsState.value.hasFix) "GPS: %.5f, %.5f".format(gpsState.value.latitude, gpsState.value.longitude)
+        else "Location Pending (GPS Searching)"
+      },
+      notes = "False alarm signal cancelled by rider. Siren & buzzer silenced. Normal monitoring resumed."
+    )
+    _events.value = listOf(cancelEvent) + _events.value
+  }
+
+  fun connectWearableDevice(device: BluetoothDevice) {
+    stopBluetoothDiscovery()
+    @SuppressLint("MissingPermission")
+    val deviceName = try { device.name ?: TARGET_WEARABLE_NAME } catch (_: SecurityException) { TARGET_WEARABLE_NAME }
+    connectBluetoothSync(device.address, deviceName)
+  }
+
+  private fun handleCrashShockDetected(gps: GpsData, imu: ImuData, note: String) {
+    // Intelligent Edge AI Evaluation (Dual-Tier Deterministic Kinematic & LiteRT Filter)
+    val aiResult = if (_aiClassificationEnabled.value) {
+      sensorAiEngine.evaluateCurrentWindowSynchronous(gps.speedKmh)
+        ?: sensorAiEngine.tier1ResultFlow.value
+    } else {
+      null
+    }
+
+    if (aiResult != null && !aiResult.motionProfile.isAccident) {
+      csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed(
+        "Edge AI: Suppressed %s (%s, %.1f%% conf)".format(
+          aiResult.motionProfile.displayName, aiResult.kinematicReason, aiResult.confidence * 100f
+        )
+      )
+      return
+    }
+
+    val cal = csvExportManager.calibrationState.value
+    // If uncalibrated, no threshold is set: check if confirmed by Edge AI
+    if (!cal.isCalibrated || cal.crashThresholdG <= 0f) {
+      if (aiResult == null || !aiResult.motionProfile.isAccident || aiResult.confidence < 0.80f) {
+        return
+      }
+    }
+
+    // Classify against dynamic baseline derived from IMU Studio correlation data
+    val classification = cal.classifyMotion(
+      aMag = imu.aMag,
+      tiltDeltaDeg = imu.tiltAngleDeg,
+      gyroMagRads = imu.gyroMagRads
+    )
+
+    when (classification) {
+      AccidentClassification.NONE -> return
+      AccidentClassification.NEGATIVE_PHONE_DROP -> {
+        csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed(
+          "Phone drop shock (%.2fg) suppressed below calibrated accident envelope (max phone fall baseline: %.2fg)".format(
+            imu.aMag, cal.phoneFallMaxG
+          )
+        )
+        return
+      }
+      AccidentClassification.NEGATIVE_DATA -> {
+        csvExportManager.imuCalibrationManager.recordFalseAlarmSuppressed(
+          "ADL motion (%.2fg) suppressed below calibrated %.2fg crash threshold".format(
+            imu.aMag, cal.crashThresholdG
+          )
+        )
+        return
+      }
+      AccidentClassification.FALL, AccidentClassification.SKID, AccidentClassification.DIRECT_IMPACT -> {
+        // Confirmed accident exceeding negative baseline
+      }
+    }
+
+    val currentRider = _riderProfile.value
+    val eventTypeName = classification.displayName
+    val newAlert = IncidentEvent(
+      id = "ALERT-${UUID.randomUUID().toString().substring(0, 6).uppercase()}",
+      title = "CRASH ALERT: $eventTypeName (%.2fg)".format(imu.aMag),
+      type = IncidentType.ALERT,
+      timestamp = System.currentTimeMillis(),
+      lat = gps.latitude,
+      lon = gps.longitude,
+      aMag = imu.aMag,
+      speedKmh = gps.speedKmh,
+      batteryPct = 94,
+      riderName = currentRider.riderName,
+      plateNumber = currentRider.plateNumber,
+      deviceToken = currentRider.token,
+      vehicleModel = currentRider.vehicleModel,
+      locationAddress = gps.locationAddress.ifBlank {
+        if (gps.hasFix) "GPS: %.5f, %.5f".format(gps.latitude, gps.longitude)
+        else "Location Pending (GPS Searching)"
+      },
+      notes = "$note: Classified as $eventTypeName (Peak ${imu.aMag}g shock). Baseline threshold: ${cal.crashThresholdG}g. Dispatched to Rescue Network via Safety Wearable."
+    )
+    _events.value = listOf(newAlert) + _events.value
+
+    // Activate Hands-Free Voice Alarm Canceler during the countdown window ("Hey RAMS, Cancel Alarm")
+    voiceAlarmCanceler.startListeningForCancel()
+
+    // Transmit emergency broadcast packet to Wearable with classified accident type
+    esp32SyncEngine.sendEmergencyCrashPacket(
+      gps = gps,
+      imu = imu,
+      riderProfile = currentRider,
+      eventType = classification.eventType,
+      eventTypeName = classification.displayName
+    )
+  }
+
+  fun toggleSensorSource() {
+    _usePhoneSensors.value = !_usePhoneSensors.value
+    if (_usePhoneSensors.value) {
+      phoneSensorEngine.startSensors()
+    }
+  }
+
+  fun toggleNearbyIncidents(show: Boolean) {
+    _riderProfile.value = _riderProfile.value.copy(showNearbyIncidents = show)
+  }
+
+  fun connectWebSocketSync(wsUrl: String) {
+    _riderProfile.value = _riderProfile.value.copy(wearableWsUrl = wsUrl)
+    esp32SyncEngine.startWebSocketSync(
+      wsUrl = wsUrl,
+      getGps = { gpsState.value },
+      getImu = { imuState.value },
+      getRiderProfile = { _riderProfile.value }
+    )
+    _showConnectionDialog.value = false
+  }
+
+  fun connectWifiSync(ip: String, port: Int) {
+    esp32SyncEngine.startWifiSync(
+      ip = ip,
+      port = port,
+      getGps = { gpsState.value },
+      getImu = { imuState.value },
+      getRiderProfile = { _riderProfile.value }
+    )
+    _showConnectionDialog.value = false
+  }
+
+  fun connectBluetoothSync(mac: String, name: String) {
+    stopBluetoothDiscovery()
+    esp32SyncEngine.startBluetoothSync(
+      mac = mac,
+      name = name,
+      getGps = { gpsState.value },
+      getImu = { imuState.value },
+      getRiderProfile = { _riderProfile.value }
+    )
+    _showConnectionDialog.value = false
+  }
+
+  fun saveRiderProfile(profile: RiderProfile) {
+    _riderProfile.value = profile
+    // Persist to SharedPreferences so data survives app restarts
+    profile.saveToPreferences(getApplication<Application>().applicationContext)
+  }
+
+  fun generateNewToken() {
+    val newToken = RiderProfile.generateNewToken()
+    _riderProfile.value = _riderProfile.value.copy(token = newToken)
+  }
+
+  fun startSimulation() {
+    _usePhoneSensors.value = false
+    simulatedConnectionManager.startSimulation()
+  }
+
+  fun resetPeakG() {
+    _peakAMag.value = imuState.value.aMag
+  }
+
+  fun selectEvent(event: IncidentEvent) {
+    _selectedEvent.value = event
+    _showProfileOverlay.value = true
+  }
+
+  fun closeProfileOverlay() {
+    _showProfileOverlay.value = false
+  }
+
+  fun setConnectionDialogVisible(visible: Boolean) {
+    _showConnectionDialog.value = visible
+  }
+
+  fun setRiderLoginDialogVisible(visible: Boolean) {
+    _showRiderLoginDialog.value = visible
+  }
+
+  fun setCsvDialogVisible(visible: Boolean, initialTab: String = "EXPORT") {
+    _csvDialogInitialTab.value = initialTab
+    _showCsvDialog.value = visible
+  }
+
+  fun setDesignRulesDialogVisible(visible: Boolean) {
+    _showDesignRulesDialog.value = visible
+  }
+
+  fun toggleTheme() {
+    _isDarkTheme.value = !_isDarkTheme.value
+  }
+
+  fun setFilter(filter: String) {
+    _activeFilter.value = filter
+  }
+
+  fun setSearch(query: String) {
+    _searchQuery.value = query
+  }
+
+  fun toggleRecording() {
+    if (csvExportManager.isRecording.value) {
+      csvExportManager.stopRecording()
+    } else {
+      csvExportManager.startRecording()
+    }
+  }
+
+  fun exportCsv() {
+    csvExportManager.shareCsv()
+  }
+
+  fun importCsv(uri: android.net.Uri, fileName: String) {
+    csvExportManager.importCsvFromUri(uri, fileName)
+  }
+
+  fun mergeImportedData() {
+    csvExportManager.mergeImportedToRecording()
+  }
+
+  fun clearImportedData() {
+    csvExportManager.clearImportedData()
+  }
+
+  fun setCsvImportDialogVisible(visible: Boolean) {
+    _showCsvImportDialog.value = visible
+    setCsvDialogVisible(visible, "IMPORT")
+  }
+
+  fun clearLogs() {
+    csvExportManager.clearLogs()
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    phoneSensorEngine.stopSensors()
+    esp32SyncEngine.stopSync()
+    if (isReceiverRegistered) {
+      try {
+        getApplication<Application>().unregisterReceiver(bluetoothScanReceiver)
+      } catch (_: Exception) {}
+      isReceiverRegistered = false
+    }
+  }
+
+  companion object {
+    const val TARGET_WEARABLE_NAME = "RAMS Bluetooth Connection"
+  }
+
+  private fun createInitialEvents(): List<IncidentEvent> {
+    val now = System.currentTimeMillis()
+    return listOf(
+      IncidentEvent(
+        id = "EVT-8821-CRASH",
+        title = "RESOLVED ROAD INCIDENT",
+        type = IncidentType.FALSE_ALARM,
+        timestamp = now - 180000L,
+        lat = 17.613210,
+        lon = 121.727040,
+        aMag = 3.82f,
+        speedKmh = 52.4f,
+        batteryPct = 94,
+        riderName = "Nearby Road Unit",
+        plateNumber = "NCR-8821",
+        vehicleModel = "Road Vehicle",
+        deviceToken = "RAMS-41A0",
+        locationAddress = "Maharlika Highway cor. Caritan Norte, Tuguegarao City",
+        notes = "Historical incident resolved and cleared by responders. Road sector all clear."
+      ),
+      IncidentEvent(
+        id = "EVT-8821-TEST",
+        title = "PRE-TRIP SENSOR CALIBRATION",
+        type = IncidentType.TEST,
+        timestamp = now - 950000L,
+        lat = 17.615200,
+        lon = 121.729500,
+        aMag = 1.01f,
+        speedKmh = 12.0f,
+        batteryPct = 96,
+        riderName = "Unit Diagnostic",
+        deviceToken = "RAMS-41A0",
+        notes = "Hardware sensor diagnostic passed: Accelerometer and Gyro OK"
+      ),
+      IncidentEvent(
+        id = "EVT-8821-FALSE",
+        title = "POTHOLE SHOCK RESOLVED",
+        type = IncidentType.FALSE_ALARM,
+        timestamp = now - 1800000L,
+        lat = 17.617500,
+        lon = 121.729200,
+        aMag = 2.15f,
+        speedKmh = 38.0f,
+        batteryPct = 98,
+        riderName = "Nearby Road Unit",
+        deviceToken = "RAMS-41A0",
+        notes = "Vertical bump without vehicle capsize; cleared by operator confirmation"
+      ),
+      IncidentEvent(
+        id = "EVT-8821-TELEM",
+        title = "LIVE TELEMETRY SNAPSHOT",
+        type = IncidentType.TELEMETRY,
+        timestamp = now - 60000L,
+        lat = 17.614100,
+        lon = 121.728200,
+        aMag = 1.00f,
+        speedKmh = 44.5f,
+        batteryPct = 94,
+        riderName = "Safety Wearable Stream",
+        deviceToken = "RAMS-41A0",
+        notes = "Normal IMU and GPS sync to Autonomous Safety Gateway"
+      )
+    )
+  }
+}

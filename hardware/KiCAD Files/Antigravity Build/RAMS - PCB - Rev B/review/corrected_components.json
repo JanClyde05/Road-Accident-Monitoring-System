@@ -1,0 +1,1479 @@
+{
+  "C8": {
+    "value": "47uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C20": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD_SPI"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C26": {
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LORA_VDD"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C13": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C22": {
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C2": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "U4": {
+    "value": "DW01A",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/DW_OD"
+      },
+      {
+        "pin": "2",
+        "net": "/DW_CS"
+      },
+      {
+        "pin": "3",
+        "net": "/DW_OC"
+      },
+      {
+        "pin": "4",
+        "net": "unconnected-(U4-NC-Pad4)"
+      },
+      {
+        "pin": "5",
+        "net": "/DW_VCC"
+      },
+      {
+        "pin": "6",
+        "net": "/B_MINUS"
+      }
+    ]
+  },
+  "C29": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBAT_SENSE"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C23": {
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/MCU_EN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C11": {
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "U3": {
+    "value": "LTH7R",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "unconnected-(U3-CHRG-Pad1)"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "4",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "5",
+        "net": "/CHG_PROG"
+      }
+    ]
+  },
+  "R11": {
+    "value": "33R",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LORA_SCK"
+      },
+      {
+        "pin": "2",
+        "net": "/LORA_SCK_DEV"
+      }
+    ]
+  },
+  "L1": {
+    "value": "2nH",
+    "footprint": "Inductor_SMD:L_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/VDD3P3_A"
+      }
+    ]
+  },
+  "L2": {
+    "value": "2.4nH",
+    "footprint": "Inductor_SMD:L_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/RF_LNA"
+      },
+      {
+        "pin": "2",
+        "net": "/RF_MID"
+      }
+    ]
+  },
+  "C1": {
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C15": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C9": {
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C3": {
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "D1": {
+    "value": "USBLC6-2SC6",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/USB_DP_CONN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/USB_DN_CONN"
+      },
+      {
+        "pin": "4",
+        "net": "/USB_DN"
+      },
+      {
+        "pin": "5",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "6",
+        "net": "/USB_DP"
+      }
+    ]
+  },
+  "D3": {
+    "value": "1N4148W",
+    "footprint": "Diode_SMD:D_SOD-123",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/BUZZER_NEG"
+      }
+    ]
+  },
+  "FB1": {
+    "value": "FerriteBead",
+    "footprint": "Inductor_SMD:L_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/LORA_VDD"
+      }
+    ]
+  },
+  "R12": {
+    "value": "1k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/BUZZER_CTRL"
+      },
+      {
+        "pin": "2",
+        "net": "/BUZZER_BASE"
+      }
+    ]
+  },
+  "R5": {
+    "value": "1k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/DW_CS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "Q1": {
+    "value": "AO3401A",
+    "footprint": "Package_TO_SOT_SMD:SOT-23",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "2",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "3",
+        "net": "/B_PLUS"
+      }
+    ]
+  },
+  "D2": {
+    "value": "SS14W",
+    "footprint": "Diode_SMD:D_SOD-123",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "2",
+        "net": "/VBUS"
+      }
+    ]
+  },
+  "Q2": {
+    "value": "BC817-25",
+    "footprint": "Package_TO_SOT_SMD:SOT-23",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/BUZZER_BASE"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/BUZZER_NEG"
+      }
+    ]
+  },
+  "C10": {
+    "value": "47uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "SW1": {
+    "value": "MSK12C02",
+    "footprint": "Button_Switch_SMD:SW_SPDT_PCM12",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "2",
+        "net": "/LDO_EN"
+      },
+      {
+        "pin": "3",
+        "net": "/GND"
+      }
+    ]
+  },
+  "U5": {
+    "value": "AP2112K-3.3",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/LDO_EN"
+      },
+      {
+        "pin": "4",
+        "net": "unconnected-(U5-NC-Pad4)"
+      },
+      {
+        "pin": "5",
+        "net": "/+3V3"
+      }
+    ]
+  },
+  "SW2": {
+    "value": "KMR2",
+    "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/MCU_EN"
+      },
+      {
+        "pin": "1",
+        "net": "/MCU_EN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C12": {
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C17": {
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD_SPI"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R3": {
+    "value": "4.02k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/CHG_PROG"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C25": {
+    "value": "12pF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/XTAL_N"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R2": {
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/USB_CC2"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C28": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C24": {
+    "value": "12pF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/XTAL_P"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "BZ1": {
+    "value": "SMD-9650-3327",
+    "footprint": "rams:Buzzer_SMD_9650_3327",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/BUZZER_NEG"
+      }
+    ]
+  },
+  "C27": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LORA_VDD"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "Y1": {
+    "value": "40MHz",
+    "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/XTAL_P"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/XTAL_N"
+      },
+      {
+        "pin": "4",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R14": {
+    "value": "330k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "2",
+        "net": "/VBAT_SENSE"
+      }
+    ]
+  },
+  "J2": {
+    "value": "SM02B-SRSS-TB",
+    "footprint": "Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "2",
+        "net": "/B_MINUS"
+      },
+      {
+        "pin": "MP",
+        "net": ""
+      },
+      {
+        "pin": "MP",
+        "net": ""
+      }
+    ]
+  },
+  "R9": {
+    "value": "22R",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/XTAL_P_DRV"
+      },
+      {
+        "pin": "2",
+        "net": "/XTAL_P"
+      }
+    ]
+  },
+  "U1": {
+    "value": "ESP32-S3FH4R2",
+    "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/RF_LNA"
+      },
+      {
+        "pin": "2",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "3",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "4",
+        "net": "/MCU_EN"
+      },
+      {
+        "pin": "5",
+        "net": "/BOOT_BTN"
+      },
+      {
+        "pin": "6",
+        "net": "/BUZZER_CTRL"
+      },
+      {
+        "pin": "7",
+        "net": "/VBAT_SENSE"
+      },
+      {
+        "pin": "8",
+        "net": "unconnected-(U1-GPIO3-Pad8)"
+      },
+      {
+        "pin": "9",
+        "net": "unconnected-(U1-GPIO4-Pad9)"
+      },
+      {
+        "pin": "10",
+        "net": "unconnected-(U1-GPIO5-Pad10)"
+      },
+      {
+        "pin": "11",
+        "net": "unconnected-(U1-GPIO6-Pad11)"
+      },
+      {
+        "pin": "12",
+        "net": "unconnected-(U1-GPIO7-Pad12)"
+      },
+      {
+        "pin": "13",
+        "net": "/LORA_DIO0"
+      },
+      {
+        "pin": "14",
+        "net": "/LORA_RST"
+      },
+      {
+        "pin": "15",
+        "net": "/LORA_NSS"
+      },
+      {
+        "pin": "16",
+        "net": "/LORA_MOSI"
+      },
+      {
+        "pin": "17",
+        "net": "/LORA_SCK"
+      },
+      {
+        "pin": "18",
+        "net": "/LORA_MISO"
+      },
+      {
+        "pin": "19",
+        "net": "unconnected-(U1-GPIO14-Pad19)"
+      },
+      {
+        "pin": "20",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "21",
+        "net": "unconnected-(U1-XTAL_32K_P-Pad21)"
+      },
+      {
+        "pin": "22",
+        "net": "unconnected-(U1-XTAL_32K_N-Pad22)"
+      },
+      {
+        "pin": "23",
+        "net": "unconnected-(U1-GPIO17-Pad23)"
+      },
+      {
+        "pin": "24",
+        "net": "unconnected-(U1-GPIO18-Pad24)"
+      },
+      {
+        "pin": "25",
+        "net": "/USB_DN"
+      },
+      {
+        "pin": "26",
+        "net": "/USB_DP"
+      },
+      {
+        "pin": "27",
+        "net": "unconnected-(U1-GPIO21-Pad27)"
+      },
+      {
+        "pin": "28",
+        "net": "unconnected-(U1-SPICS1-Pad28)"
+      },
+      {
+        "pin": "29",
+        "net": "/VDD_SPI"
+      },
+      {
+        "pin": "30",
+        "net": "unconnected-(U1-SPIHD-Pad30)"
+      },
+      {
+        "pin": "31",
+        "net": "unconnected-(U1-SPIWP-Pad31)"
+      },
+      {
+        "pin": "32",
+        "net": "unconnected-(U1-SPICS0-Pad32)"
+      },
+      {
+        "pin": "33",
+        "net": "unconnected-(U1-SPICLK-Pad33)"
+      },
+      {
+        "pin": "34",
+        "net": "unconnected-(U1-SPIQ-Pad34)"
+      },
+      {
+        "pin": "35",
+        "net": "unconnected-(U1-SPID-Pad35)"
+      },
+      {
+        "pin": "36",
+        "net": "/NEO_DATA"
+      },
+      {
+        "pin": "37",
+        "net": "unconnected-(U1-SPICLK_P-Pad37)"
+      },
+      {
+        "pin": "38",
+        "net": "unconnected-(U1-GPIO33-Pad38)"
+      },
+      {
+        "pin": "39",
+        "net": "unconnected-(U1-GPIO34-Pad39)"
+      },
+      {
+        "pin": "40",
+        "net": "unconnected-(U1-GPIO35-Pad40)"
+      },
+      {
+        "pin": "41",
+        "net": "unconnected-(U1-GPIO36-Pad41)"
+      },
+      {
+        "pin": "42",
+        "net": "unconnected-(U1-GPIO37-Pad42)"
+      },
+      {
+        "pin": "43",
+        "net": "unconnected-(U1-GPIO38-Pad43)"
+      },
+      {
+        "pin": "44",
+        "net": "unconnected-(U1-MTCK-Pad44)"
+      },
+      {
+        "pin": "45",
+        "net": "unconnected-(U1-MTDO-Pad45)"
+      },
+      {
+        "pin": "46",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "47",
+        "net": "unconnected-(U1-MTDI-Pad47)"
+      },
+      {
+        "pin": "48",
+        "net": "unconnected-(U1-MTMS-Pad48)"
+      },
+      {
+        "pin": "49",
+        "net": "unconnected-(U1-U0TXD-Pad49)"
+      },
+      {
+        "pin": "50",
+        "net": "unconnected-(U1-U0RXD-Pad50)"
+      },
+      {
+        "pin": "51",
+        "net": "unconnected-(U1-GPIO45-Pad51)"
+      },
+      {
+        "pin": "52",
+        "net": "unconnected-(U1-GPIO46-Pad52)"
+      },
+      {
+        "pin": "53",
+        "net": "/XTAL_N"
+      },
+      {
+        "pin": "54",
+        "net": "/XTAL_P_DRV"
+      },
+      {
+        "pin": "55",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "56",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "57",
+        "net": "/GND"
+      }
+    ]
+  },
+  "Q3": {
+    "value": "FS8205A",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_MINUS"
+      },
+      {
+        "pin": "2",
+        "net": "/FET_DRAIN"
+      },
+      {
+        "pin": "3",
+        "net": "/GND"
+      },
+      {
+        "pin": "4",
+        "net": "/DW_OC"
+      },
+      {
+        "pin": "5",
+        "net": "/FET_DRAIN"
+      },
+      {
+        "pin": "6",
+        "net": "/DW_OD"
+      }
+    ]
+  },
+  "R10": {
+    "value": "0R",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/RF_MID"
+      },
+      {
+        "pin": "2",
+        "net": "/ANT_FEED"
+      }
+    ]
+  },
+  "ANT1": {
+    "value": "2450AT18B100E",
+    "footprint": "RF_Antenna:Johanson_2450AT18x100",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/ANT_FEED"
+      },
+      {
+        "pin": "2",
+        "net": "unconnected-(ANT1-NC-Pad2)"
+      }
+    ]
+  },
+  "R4": {
+    "value": "330R",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "2",
+        "net": "/DW_VCC"
+      }
+    ]
+  },
+  "C16": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R1": {
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/USB_CC1"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R13": {
+    "value": "100k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/BUZZER_BASE"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R7": {
+    "value": "100k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_EN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C19": {
+    "value": "2.4pF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/RF_MID"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R8": {
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/MCU_EN"
+      }
+    ]
+  },
+  "C14": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VDD3P3_A"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "SW3": {
+    "value": "KMR2",
+    "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/BOOT_BTN"
+      },
+      {
+        "pin": "1",
+        "net": "/BOOT_BTN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C6": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "2",
+        "net": "/B_MINUS"
+      }
+    ]
+  },
+  "C21": {
+    "value": "10nF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C18": {
+    "value": "2.7pF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/RF_LNA"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C4": {
+    "value": "4.7uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/B_PLUS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "J1": {
+    "value": "TYPE-C-31-M-12",
+    "footprint": "rams:USB_C_TYPE_C_31_M_12",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "A1",
+        "net": "/GND"
+      },
+      {
+        "pin": "A4",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "A5",
+        "net": "/USB_CC1"
+      },
+      {
+        "pin": "A6",
+        "net": "/USB_DP_CONN"
+      },
+      {
+        "pin": "A7",
+        "net": "/USB_DN_CONN"
+      },
+      {
+        "pin": "A8",
+        "net": "unconnected-(J1-SBU1-PadA8)"
+      },
+      {
+        "pin": "A9",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "A12",
+        "net": "/GND"
+      },
+      {
+        "pin": "B1",
+        "net": "/GND"
+      },
+      {
+        "pin": "B4",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "B5",
+        "net": "/USB_CC2"
+      },
+      {
+        "pin": "B6",
+        "net": "/USB_DP_CONN"
+      },
+      {
+        "pin": "B7",
+        "net": "/USB_DN_CONN"
+      },
+      {
+        "pin": "B8",
+        "net": "unconnected-(J1-SBU2-PadB8)"
+      },
+      {
+        "pin": "B9",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "B12",
+        "net": "/GND"
+      },
+      {
+        "pin": "SH",
+        "net": "/GND"
+      },
+      {
+        "pin": "SH",
+        "net": "/GND"
+      },
+      {
+        "pin": "SH",
+        "net": "/GND"
+      },
+      {
+        "pin": "SH",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R15": {
+    "value": "180k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBAT_SENSE"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "R6": {
+    "value": "100k",
+    "footprint": "Resistor_SMD:R_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/VBUS"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "LED1": {
+    "value": "SK6805-EC20",
+    "footprint": "rams:LED_SK6805_EC20_2.0x2.0mm",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/GND"
+      },
+      {
+        "pin": "2",
+        "net": "/NEO_DATA"
+      },
+      {
+        "pin": "3",
+        "net": "/+3V3"
+      },
+      {
+        "pin": "4",
+        "net": "unconnected-(LED1-DOUT-Pad3)"
+      }
+    ]
+  },
+  "C7": {
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/LDO_IN"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      }
+    ]
+  },
+  "C5": {
+    "value": "0.1uF",
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/DW_VCC"
+      },
+      {
+        "pin": "2",
+        "net": "/B_MINUS"
+      }
+    ]
+  },
+  "U2": {
+    "value": "Ai-Thinker-Ra-02",
+    "footprint": "RF_Module:Ai-Thinker-Ra-01-LoRa",
+    "fields": {},
+    "pads": [
+      {
+        "pin": "1",
+        "net": "/GND"
+      },
+      {
+        "pin": "2",
+        "net": "/GND"
+      },
+      {
+        "pin": "3",
+        "net": "/LORA_VDD"
+      },
+      {
+        "pin": "4",
+        "net": "/LORA_RST"
+      },
+      {
+        "pin": "5",
+        "net": "/LORA_DIO0"
+      },
+      {
+        "pin": "6",
+        "net": "unconnected-(U2-DIO1-Pad6)"
+      },
+      {
+        "pin": "7",
+        "net": "unconnected-(U2-DIO2-Pad7)"
+      },
+      {
+        "pin": "8",
+        "net": "unconnected-(U2-DIO3-Pad8)"
+      },
+      {
+        "pin": "9",
+        "net": "/GND"
+      },
+      {
+        "pin": "10",
+        "net": "unconnected-(U2-DIO4-Pad10)"
+      },
+      {
+        "pin": "11",
+        "net": "unconnected-(U2-DIO5-Pad11)"
+      },
+      {
+        "pin": "12",
+        "net": "/LORA_SCK_DEV"
+      },
+      {
+        "pin": "13",
+        "net": "/LORA_MISO"
+      },
+      {
+        "pin": "14",
+        "net": "/LORA_MOSI"
+      },
+      {
+        "pin": "15",
+        "net": "/LORA_NSS"
+      },
+      {
+        "pin": "16",
+        "net": "/GND"
+      }
+    ]
+  }
+}

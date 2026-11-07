@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RAMS_Hotspot_Incident_Report",
+  "description": "Standardized schema for spatial cluster analysis and LLM-generated municipal incident reports on the desktop app.",
+  "type": "object",
+  "required": [
+    "report_id",
+    "generated_at_utc",
+    "analyzed_incidents_count",
+    "hotspots_detected",
+    "hotspots",
+    "llm_executive_summary"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "Unique identifier formatted as EOC-HS-YYYY-XXXX"
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "analyzed_incidents_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hotspots_detected": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hotspots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cluster_id",
+          "center_lat",
+          "center_lon",
+          "radius_meters",
+          "incident_count",
+          "hotspot_danger_index",
+          "risk_tier"
+        ],
+        "properties": {
+          "cluster_id": { "type": "string" },
+          "center_lat": { "type": "number" },
+          "center_lon": { "type": "number" },
+          "radius_meters": { "type": "number" },
+          "incident_count": { "type": "integer" },
+          "hotspot_danger_index": { "type": "number" },
+          "risk_tier": {
+            "type": "string",
+            "enum": ["LOW", "MODERATE", "HIGH", "CRITICAL"]
+          },
+          "primary_accident_type": { "type": "string" },
+          "mean_impact_g": { "type": "number" },
+          "mean_pre_crash_speed_kmh": { "type": "number" },
+          "peak_risk_hours": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "street_reference": { "type": "string" }
+        }
+      }
+    },
+    "llm_executive_summary": {
+      "type": "object",
+      "required": ["model_name", "narrative_brief", "recommended_interventions"],
+      "properties": {
+        "model_name": { "type": "string" },
+        "narrative_brief": { "type": "string" },
+        "recommended_interventions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

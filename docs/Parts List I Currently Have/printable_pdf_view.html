@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List & Expense Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1f2937;
+            margin: 0;
+            padding: 24px;
+            background-color: #f9fafb;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #111827;
+        }
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .print-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .print-btn:hover {
+            background-color: #1d4ed8;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .card {
+            background-color: #f3f4f6;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .card-val {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111827;
+        }
+        .card-lbl {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f9fafb;
+        }
+        .order-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            background-color: #eff6ff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .total-row td {
+            font-weight: bold;
+            border-top: 2px solid #374151;
+            border-bottom: none;
+            font-size: 14px;
+        }
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Electronics Component Product List</h1>
+                <div class="subtitle">Complete Breakdown of Purchases & Expenses</div>
+            </div>
+            <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-val">47</div>
+                <div class="card-lbl">Unique Item Variations</div>
+            </div>
+            <div class="card">
+                <div class="card-val">25</div>
+                <div class="card-lbl">Total Orders</div>
+            </div>
+            <div class="card">
+                <div class="card-val" style="color: #059669;">₱6,891.00</div>
+                <div class="card-lbl">Grand Total Spent</div>
+            </div>
+        </div>
+
+        <h2>Order Breakdown</h2>
+
+        <div class="order-title">Order 1: Microcontroller ICs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>ESP32-S3 WIFI+Bluetooth Original</td><td>ESP32-S3FH4R2</td><td class="text-right">5</td><td class="text-right">₱859.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 2: Diodes</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1N4148W T4 SOD-123 SMD Transistor Fast Rectifier Switch Diode</td><td>50pcs</td><td class="text-right">1</td><td class="text-right">₱46.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 3: Ferrite Beads</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>MGGB1005M800HT-LF 0402 FERRITE BEAD</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱51.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 4: SMD Resistors Lot 1</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>[100pcs] 0402 SMD Resistor 1% 1/16W</td><td>330K</td><td class="text-right">1</td><td class="text-right">₱50.00</td></tr>
+                <tr><td>[100pcs] 0402 SMD Resistor 1% 1/16W</td><td>4.3K</td><td class="text-right">1</td><td class="text-right">₱50.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱93.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 5: Inductors & ESD ICs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>100pcs SMD Inductor 0402</td><td>2.4nH, 0402(1005)</td><td class="text-right">1</td><td class="text-right">₱72.00</td></tr>
+                <tr><td>100pcs SMD Inductor 0402</td><td>2.0nH, 0402(1005)</td><td class="text-right">1</td><td class="text-right">₱72.00</td></tr>
+                <tr><td>USBLC USBLC6-2SC6 SOT-23-6 ESD Chip IC</td><td>20pcs</td><td class="text-right">1</td><td class="text-right">₱120.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱235.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 6: Battery Charger ICs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10PCS LTC4054 LTH7 SOT-23 Chipset</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱39.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 7: USB Connectors (Horizontal)</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>20Pcs Type-C Female socket Connector USB3.1</td><td>TYPE-C 16P Spring-Type, 20pcs</td><td class="text-right">1</td><td class="text-right">₱74.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 8: Tactile Switches Lot 1</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10 pcs Power Switch Button Micro Switch</td><td>3*4*2mm Fore (10pcs)</td><td class="text-right">1</td><td class="text-right">₱50.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 9: Ceramic Antennas</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>2450AT18B100E 2.4G Built-in Bluetooth Ceramic Antenna</td><td>Default</td><td class="text-right">5</td><td class="text-right">₱1,595.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 10: 0402 Multilayer Capacitors</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>100pcs 0402 SMD Ceramic Capacitor</td><td>2.4pF</td><td class="text-right">1</td><td class="text-right">₱150.00</td></tr>
+                <tr><td>100pcs 0402 SMD Ceramic Capacitor</td><td>12pF</td><td class="text-right">1</td><td class="text-right">₱150.00</td></tr>
+                <tr><td>100pcs 0402 SMD Ceramic Capacitor</td><td>10nF</td><td class="text-right">1</td><td class="text-right">₱150.00</td></tr>
+                <tr><td>100pcs 0402 SMD Ceramic Capacitor</td><td>100nF</td><td class="text-right">1</td><td class="text-right">₱150.00</td></tr>
+                <tr><td>100pcs 0402 SMD Ceramic Capacitor</td><td>1uF</td><td class="text-right">1</td><td class="text-right">₱150.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱664.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 11: Battery Protection ICs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>20~50pcs DW01A Lithium Battery IC</td><td>20PCS</td><td class="text-right">1</td><td class="text-right">₱78.00</td></tr>
+                <tr><td>20-100pcs FS8205A Lithium Protection IC</td><td>20PCS</td><td class="text-right">1</td><td class="text-right">₱83.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱161.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 12: MOSFETs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>50pcs AO3401 P-Channel MOSFET SOT-23</td><td>AO3401</td><td class="text-right">1</td><td class="text-right">₱57.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 13: Quartz Crystal Oscillators</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10PCS SMD 3225 passive quartz crystal oscillator 8-48 MHz</td><td>40Mhz</td><td class="text-right">1</td><td class="text-right">₱69.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 14: Slide Switches</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10PCS Slide Switch Micro-power Toggle Switch</td><td>MSK-12C02</td><td class="text-right">1</td><td class="text-right">₱62.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 15: Mixed Electronic Assortment</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>200pcs 0402 Resistor 5%</td><td>180K Ohm</td><td class="text-right">1</td><td class="text-right">₱41.00</td></tr>
+                <tr><td>100pcs 0402 SMD Resistor 1%</td><td>33R</td><td class="text-right">1</td><td class="text-right">₱52.00</td></tr>
+                <tr><td>100pcs 0402 SMD Resistor 1%</td><td>0R</td><td class="text-right">1</td><td class="text-right">₱52.00</td></tr>
+                <tr><td>20pcs SS14 Schottky Diode</td><td>SS14</td><td class="text-right">1</td><td class="text-right">₱53.00</td></tr>
+                <tr><td>0603 SMD X5R Capacitor</td><td>4.7uF_16V_X5R_10pcs</td><td class="text-right">1</td><td class="text-right">₱64.00</td></tr>
+                <tr><td>BC817 PNP Transistor SMD</td><td>BC817-25_215_6BW</td><td class="text-right">1</td><td class="text-right">₱66.00</td></tr>
+                <tr><td>0603 SMD X5R Capacitor</td><td>10uF_16V_X5R_10pcs</td><td class="text-right">1</td><td class="text-right">₱68.00</td></tr>
+                <tr><td>5pcs MLT Buzzers Loudspeaker</td><td>9650 Active 3V</td><td class="text-right">1</td><td class="text-right">₱106.00</td></tr>
+                <tr><td>0805 SMD X5R Capacitor</td><td>47uF_10V_X5R_10pcs</td><td class="text-right">1</td><td class="text-right">₱128.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱568.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 16: RGB LEDs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>100PCS WS2812B RGB LED Chip 5050SMD White PCB</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱188.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 17: AP2112 Voltage Regulators</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10pcs/lot AP2112K-3.3TRG1 3.3V 0.6A LDO Regulator</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱86.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 18: JST SH1.0 Connectors</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>50pcs JST SH1.0 Connector SMT</td><td>Housing, 2P</td><td class="text-right">1</td><td class="text-right">₱97.00</td></tr>
+                <tr><td>50pcs JST SH1.0 Connector SMT</td><td>Horizontal, 2P</td><td class="text-right">1</td><td class="text-right">₱100.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱179.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 19: Accelerometer & Gyroscope ICs</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>MPU-6050 QFN24 Gyroscope 9 Axis Accelerator Chip</td><td>Default</td><td class="text-right">5</td><td class="text-right">₱275.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 20: RT9013 Voltage Regulators</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>20PCS RT9013-33GB 3.3V 500mA SOT23-5 SMD CMOS LDO IC</td><td>RT9013-33GB SOT23-5</td><td class="text-right">1</td><td class="text-right">₱113.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 21: SX1278 LoRa Wireless Modules</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>SX1278 LoRa Module 433M 10KM Ra-02 Wireless Module</td><td>RA-02</td><td class="text-right">1</td><td class="text-right">₱169.00</td></tr>
+                <tr><td>SX1278 LoRa Module 433M 10KM Ra-02 Wireless Module</td><td>RA-02 Module</td><td class="text-right">1</td><td class="text-right">₱218.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱387.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 22: USB Type-C Connectors (Vertical)</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>USB Charging Connector Type C Female Jack 16 Pin</td><td>16p Vertically Green, 5pcs</td><td class="text-right">1</td><td class="text-right">₱92.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 23: Tactile Switches Lot 2</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>SMD 2 Pin 3X4MM Tactile Tact Push Button Micro Switch Momentary</td><td>3*4*2 MM</td><td class="text-right">2</td><td class="text-right">₱130.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 24: RF Antenna Connectors</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10Pcs a lot High Quality UFL seat IPEX / IPX connector U.FL-R-SMT RF coaxial</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱64.00</td></tr>
+            </tbody>
+        </table>
+
+        <div class="order-title">Order 25: ELETEK & SAMIROB Component Multi-Kits</div>
+        <table>
+            <thead>
+                <tr><th>Item Description</th><th>Variation</th><th class="text-right">Qty</th><th class="text-right">Total</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>320Pcs 1206 SMD Capacitor Assorted Kit 10PF-22UF (16 Values x 20pcs)</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱166.00</td></tr>
+                <tr><td>10Pcs AMS1117 Series LDO Regulator</td><td>AMS1117-3V3, 10pcs</td><td class="text-right">1</td><td class="text-right">₱60.00</td></tr>
+                <tr><td>10Pcs AMS1117 Series LDO Regulator</td><td>AMS1117-5V, 10pcs</td><td class="text-right">1</td><td class="text-right">₱60.00</td></tr>
+                <tr><td>100Pcs 0805 1206 SMD LED Electronic Kit Light Emitting Diode Set</td><td>1206 set</td><td class="text-right">1</td><td class="text-right">₱68.00</td></tr>
+                <tr><td>10Pcs SMD Power Inductors 0520</td><td>0520 4.7UH, 10pcs</td><td class="text-right">1</td><td class="text-right">₱82.00</td></tr>
+                <tr><td>10Pcs SMD Power Inductors 0520</td><td>0520 1UH, 10pcs</td><td class="text-right">1</td><td class="text-right">₱82.00</td></tr>
+                <tr><td>10Pcs SMD Power Inductors 0520</td><td>0520 10UH, 10pcs</td><td class="text-right">1</td><td class="text-right">₱82.00</td></tr>
+                <tr><td>150Pcs SOD-123 1206 0.5W Zener Diode SMD Package 15 Values</td><td>Default</td><td class="text-right">1</td><td class="text-right">₱166.00</td></tr>
+                <tr><td>0805 0603 SMD Resistor Kit Assorted Kit 1ohm-1M ohm 1% 33valuesX 20pcs=660pcs</td><td>0805 33values</td><td class="text-right">1</td><td class="text-right">₱88.00</td></tr>
+                <tr class="total-row"><td colspan="3">Order Total (after discounts)</td><td class="text-right">₱500.00</td></tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

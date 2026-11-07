@@ -1,0 +1,69 @@
+{
+  "RAMS_RevC.kicad_pcb": {
+    "footprints": 68,
+    "track_segments": 0,
+    "vias": 43,
+    "track_width_counts_mm": {},
+    "zones": [
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "/GND",
+        "rule_area": false
+      },
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "/GND",
+        "rule_area": false
+      },
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "",
+        "rule_area": true
+      }
+    ]
+  },
+  "build/RAMS_RevC_route_test.kicad_pcb": {
+    "footprints": 68,
+    "track_segments": 510,
+    "vias": 59,
+    "track_width_counts_mm": {
+      "0.2": 444,
+      "0.15": 66
+    },
+    "zones": [
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "/GND",
+        "rule_area": false
+      },
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "/GND",
+        "rule_area": false
+      },
+      {
+        "net": "",
+        "rule_area": true
+      },
+      {
+        "net": "",
+        "rule_area": true
+      }
+    ]
+  }
+}

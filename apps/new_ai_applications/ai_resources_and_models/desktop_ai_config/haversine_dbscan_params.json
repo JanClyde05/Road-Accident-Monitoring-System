@@ -1,0 +1,15 @@
+{
+  "algorithm": "Haversine DBSCAN (Density-Based Spatial Clustering of Applications with Noise)",
+  "earth_radius_meters": 6371000.0,
+  "epsilon_meters": 150.0,
+  "min_points": 3,
+  "target_region": "Tuguegarao City Road Network",
+  "danger_index_formula": "HDI = 1.0 + (0.25 * PeakG) + (0.15 * (SpeedKmh / 10.0)) + UnresponsivePenalty(2.5)",
+  "risk_tiers": {
+    "CRITICAL": "HDI >= 25.0 OR MeanImpactG > 5.5G",
+    "HIGH": "HDI >= 15.0 OR MeanImpactG > 4.0G",
+    "MODERATE": "HDI >= 8.0",
+    "LOW": "HDI < 8.0"
+  }
+}
+

@@ -7,7 +7,7 @@ echo   Road Accident Monitoring System (RAMS) - Live Web Application Preview
 echo ===============================================================================
 echo.
 
-set "PREVIEW_DIR=%~dp0AI Studio\UI Fix"
+set "PREVIEW_DIR=%~dp0prototypes\AI Studio\UI Fix"
 set "TARGET_PORT=3000"
 set "PREVIEW_URL=http://localhost:%TARGET_PORT%/#wearable_ui"
 

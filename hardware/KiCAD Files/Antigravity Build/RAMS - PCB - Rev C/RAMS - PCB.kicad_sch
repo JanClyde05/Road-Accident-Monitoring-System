@@ -1,0 +1,2016 @@
+(kicad_sch
+  (version 20231120)
+  (generator "RAMS_Rev_C_build_schematic")
+  (generator_version "1.0")
+  (uuid "3e8f9216-89b6-4310-bc5d-8e84282f58f9")
+  (paper "A3")
+
+  (lib_symbols
+  )
+
+  (title_block
+    (title "RAMS Wearable PCB Rev C")
+    (date "2026-10-30")
+    (rev "C")
+    (company "Antigravity / RAMS")
+    (comment 1 "Road Accident Monitoring System")
+    (comment 2 "DOST-ASTI EPDC 2-Layer")
+    (comment 3 "Black mask / White silk")
+    (comment 4 "Generated from circuit_spec.json")
+  )
+
+  (symbol
+    (lib_id "Connector:USB_C_Receptacle_USB2.0")
+    (at 30 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "33983f28-7a39-403c-8cae-88b8075a976d")
+    (property "Reference" "J1"
+      (at 30 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "TYPE-C-31-M-12"
+      (at 30 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RAMS_Local:USB_C_16P_USB4105_EPDC"
+      (at 30 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:D_TVS_x2_AAC")
+    (at 55 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "03bef6d5-3da7-453d-a2d2-73aa5e7f54a7")
+    (property "Reference" "D1"
+      (at 55 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "USBLC6-2SC6"
+      (at 55 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+      (at 55 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 80 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e6f261fb-cab8-4922-842f-e43e92375b87")
+    (property "Reference" "R1"
+      (at 80 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "5.1k"
+      (at 80 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 80 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 105 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "c2fe44d1-56c9-44c0-9b17-0f26fba4cc55")
+    (property "Reference" "R2"
+      (at 105 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "5.1k"
+      (at 105 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 105 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 30 50 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "1d791390-f72b-4e25-a3de-15da7a86ac5c")
+    (property "Reference" "C1"
+      (at 30 47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10uF 16V"
+      (at 30 53 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 30 56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 55 50 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "033570d3-c5d9-44c6-b93f-991bb38cb588")
+    (property "Reference" "C2"
+      (at 55 47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 55 53 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 55 56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Regulator_Linear:MCP73831-2-OT")
+    (at 30 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "ea244195-6234-405c-81c1-74e220d96dd3")
+    (property "Reference" "U3"
+      (at 30 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LTH7R"
+      (at 30 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+      (at 30 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 55 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "ded34f79-39de-468f-b4a6-4e0a39f27f29")
+    (property "Reference" "R3"
+      (at 55 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "4.3k 1%"
+      (at 55 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 55 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 80 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "b787ab65-51ad-4f3f-a674-60acaa299649")
+    (property "Reference" "C3"
+      (at 80 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1uF"
+      (at 80 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 80 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 105 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "7b0eb9dc-3600-497b-9241-ba48aeae84da")
+    (property "Reference" "C4"
+      (at 105 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "4.7uF"
+      (at 105 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 105 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Connector:Conn_01x02_Pin")
+    (at 30 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "0990d227-f1f9-4e2b-a7b4-b51fcbb6006a")
+    (property "Reference" "J2"
+      (at 30 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "SM02B-SRSS-TB"
+      (at 30 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal"
+      (at 30 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Power_Protection:DW01A")
+    (at 55 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "0ebee905-c44e-498f-bc67-97d6e3fd747e")
+    (property "Reference" "U4"
+      (at 55 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "DW01A"
+      (at 55 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+      (at 55 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Q_NMOS_GSD")
+    (at 80 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "bb85d1b1-1786-4358-8d07-e86394a6fcf8")
+    (property "Reference" "Q3"
+      (at 80 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "FS8205A"
+      (at 80 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+      (at 80 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 105 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "779b096f-6100-4a31-896c-a54047fc252b")
+    (property "Reference" "R4"
+      (at 105 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "330R"
+      (at 105 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 105 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 30 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "30e77d02-217d-421a-91e4-90b2bb534b8a")
+    (property "Reference" "R5"
+      (at 30 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1k"
+      (at 30 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 30 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 55 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "b0e0b5ff-e016-4070-aa67-59b3725fc7a1")
+    (property "Reference" "C5"
+      (at 55 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 55 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 55 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 80 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "f1aa7302-0200-47da-8666-62b01888efd4")
+    (property "Reference" "C6"
+      (at 80 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 80 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 80 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Q_PMOS_GSD")
+    (at 30 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "7da3b307-a60d-4b74-bfa8-f63360c4726d")
+    (property "Reference" "Q1"
+      (at 30 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "AO3401A"
+      (at 30 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+      (at 30 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:D_Schottky")
+    (at 55 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8b309c95-b705-423a-815f-f6869d7c65ba")
+    (property "Reference" "D2"
+      (at 55 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "SS14"
+      (at 55 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Diode_SMD:D_SMA"
+      (at 55 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Switch:SW_SPDT")
+    (at 80 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "dbb15326-e4ee-4132-bc47-f009590fe70b")
+    (property "Reference" "SW1"
+      (at 80 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "MSK12C02"
+      (at 80 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Button_Switch_SMD:SW_SPDT_PCM12"
+      (at 80 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Regulator_Linear:AP2112K-3.3")
+    (at 105 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "36d8c7ba-22c8-45e8-9b0c-b670febe4016")
+    (property "Reference" "U5"
+      (at 105 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "AP2112K-3.3"
+      (at 105 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+      (at 105 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 30 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "32fde6a3-91b1-474d-b6a0-d6d8b6466d22")
+    (property "Reference" "R6"
+      (at 30 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100k"
+      (at 30 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 30 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 55 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "26b84711-d08d-4382-be61-9591a66b2d8d")
+    (property "Reference" "R7"
+      (at 55 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100k"
+      (at 55 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 55 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 80 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "7726cad1-53cd-4793-9b5c-4745299ce69f")
+    (property "Reference" "C7"
+      (at 80 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10uF"
+      (at 80 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 80 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 105 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "289f8513-c24a-406b-ae46-638d3710f3a6")
+    (property "Reference" "C8"
+      (at 105 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "47uF"
+      (at 105 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+      (at 105 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 30 190 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "df379f33-c033-445e-bc29-3998db6e8c71")
+    (property "Reference" "C9"
+      (at 30 187 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10uF"
+      (at 30 193 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 30 196 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 55 190 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6edf554e-9d18-4870-92a2-765a43c81c5e")
+    (property "Reference" "C10"
+      (at 55 187 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 55 193 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 55 196 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "RF_Module:ESP32-S3-WROOM-1")
+    (at 120 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "226c1d02-3314-488f-80c9-5bf927c3c924")
+    (property "Reference" "U1"
+      (at 120 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "ESP32-S3-WROOM-1-N4"
+      (at 120 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RF_Module:ESP32-S3-WROOM-1"
+      (at 120 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 145 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa0453d7-c48f-44a7-87d0-7f766d71e047")
+    (property "Reference" "R8"
+      (at 145 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10k"
+      (at 145 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 145 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Switch:SW_Push")
+    (at 170 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "832da8e5-6ca5-456e-92f8-4e7a58d9dd1e")
+    (property "Reference" "SW2"
+      (at 170 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "RESET"
+      (at 170 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RAMS_Local:SW_Tactile_SPST_3x4mm"
+      (at 170 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Switch:SW_Push")
+    (at 195 70 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "c1974cf5-ddc0-47a2-982f-571912bfc1e9")
+    (property "Reference" "SW3"
+      (at 195 67 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "BOOT"
+      (at 195 73 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RAMS_Local:SW_Tactile_SPST_3x4mm"
+      (at 195 76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 120 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "9e38eb2d-1858-4999-aef7-4fdf597269ec")
+    (property "Reference" "C11"
+      (at 120 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10uF"
+      (at 120 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 120 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 145 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6cdca1cd-d1ae-4165-8bf2-4904ceccf330")
+    (property "Reference" "C12"
+      (at 145 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1uF"
+      (at 145 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 145 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 170 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "a6c607d6-24fd-4d70-959b-f53f2540fc35")
+    (property "Reference" "C13"
+      (at 170 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 170 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 170 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 195 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "80c17179-acec-4feb-8c64-b9e829649fe1")
+    (property "Reference" "C14"
+      (at 195 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 195 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 195 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 120 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8bff499a-8110-42a7-94be-e8821b1cd92e")
+    (property "Reference" "C15"
+      (at 120 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 120 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 120 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 145 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "2ccec843-02f9-4ddf-a78f-c5f1c5389133")
+    (property "Reference" "C16"
+      (at 145 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 145 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 145 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 170 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "38d11ca2-3915-47de-b5e0-da0d6b65cda1")
+    (property "Reference" "C17"
+      (at 170 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1uF"
+      (at 170 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 170 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 195 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "342cd7ac-f6b9-45f1-aec5-b66d587f2050")
+    (property "Reference" "C20"
+      (at 195 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 195 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 195 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 120 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8ab66247-4de8-4b3f-983e-835065ab7f93")
+    (property "Reference" "C21"
+      (at 120 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10nF"
+      (at 120 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 120 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 145 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8892fd9d-e9db-4577-a5ad-8f7a3433890d")
+    (property "Reference" "C22"
+      (at 145 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1uF"
+      (at 145 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 145 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 170 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6bd01f9e-896b-4445-ab88-bb24e67f83b1")
+    (property "Reference" "C23"
+      (at 170 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1uF"
+      (at 170 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 170 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 195 130 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "22b23eca-762d-404d-9bf8-9943f3e3807e")
+    (property "Reference" "C28"
+      (at 195 127 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 195 133 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 195 136 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Crystal_GND24")
+    (at 120 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "5433f1e1-3404-43ae-b1e3-17bda895a82e")
+    (property "Reference" "Y1"
+      (at 120 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "40MHz"
+      (at 120 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
+      (at 120 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 145 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "47394055-f8d0-47d5-ac1b-3db81ce5b3d9")
+    (property "Reference" "R9"
+      (at 145 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "33R"
+      (at 145 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 145 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 170 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e4e4b764-6e42-45f6-a703-41d31bf35e35")
+    (property "Reference" "C24"
+      (at 170 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "12pF"
+      (at 170 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 170 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 195 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "ea255336-6424-4c9f-9cd4-89511d5d2112")
+    (property "Reference" "C25"
+      (at 195 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "12pF"
+      (at 195 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 195 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Antenna")
+    (at 200 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8c4c8d1f-3234-4ad6-bb3c-7a8b7d238bc3")
+    (property "Reference" "ANT1"
+      (at 200 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2450AT18B100E"
+      (at 200 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RAMS_Local:Johanson_2450AT18B100_3216"
+      (at 200 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 225 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6491bf1d-9058-47e1-8d9d-1b51418b5955")
+    (property "Reference" "R10"
+      (at 225 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0R"
+      (at 225 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 225 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:L")
+    (at 250 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "18c547ef-3f1f-41df-a417-6e53dcb1954d")
+    (property "Reference" "L2"
+      (at 250 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2.4nH"
+      (at 250 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Inductor_SMD:L_0402_1005Metric"
+      (at 250 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 275 30 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6e60d089-13ad-48fd-806e-c82be9779c22")
+    (property "Reference" "C18"
+      (at 275 27 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2.4pF"
+      (at 275 33 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 275 36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 200 50 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "7016f9bd-ead2-4ec6-8973-a1a1077fc119")
+    (property "Reference" "C19"
+      (at 200 47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2.4pF"
+      (at 200 53 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 200 56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "RF_Module:Ai-Thinker-Ra-02")
+    (at 200 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "ba05af1b-b0cf-425c-b63f-a4b0f943aeec")
+    (property "Reference" "U2"
+      (at 200 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "Ai-Thinker-Ra-02"
+      (at 200 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RF_Module:Ai-Thinker-Ra-01-LoRa"
+      (at 200 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 225 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "2c58161b-eb37-45a0-a469-c77574f07552")
+    (property "Reference" "R11"
+      (at 225 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "33R"
+      (at 225 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 225 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:FerriteBead")
+    (at 250 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "19ff3593-4501-4f0d-b830-3aa5b2cbf828")
+    (property "Reference" "FB1"
+      (at 250 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "FerriteBead"
+      (at 250 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Inductor_SMD:L_0402_1005Metric"
+      (at 250 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 275 90 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "04e130ca-8487-43f0-af7d-f692450c2e82")
+    (property "Reference" "C26"
+      (at 275 87 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10uF"
+      (at 275 93 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+      (at 275 96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 200 110 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "35efdb81-c006-4ab6-8b44-0bf1b223fb59")
+    (property "Reference" "C27"
+      (at 200 107 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 200 113 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 200 116 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:L")
+    (at 200 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "a83086f3-8dc8-466c-87a1-8d3057970ac5")
+    (property "Reference" "LED1"
+      (at 200 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "WS2812B"
+      (at 200 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
+      (at 200 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Buzzer")
+    (at 225 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "ef4d5d4e-ce0e-4e91-a21d-29a8f2fa4284")
+    (property "Reference" "BZ1"
+      (at 225 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "SMD-9650-3327"
+      (at 225 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "RAMS_Local:Buzzer_SMD_9650"
+      (at 225 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:Q_NPN_BEC")
+    (at 250 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "8d0d3142-f904-491a-b505-170ec49ed0c0")
+    (property "Reference" "Q2"
+      (at 250 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "BC817-25"
+      (at 250 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+      (at 250 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:D")
+    (at 275 150 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "898a421c-629e-4db7-90bc-cce5c1d7e544")
+    (property "Reference" "D3"
+      (at 275 147 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1N4148W"
+      (at 275 153 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Diode_SMD:D_SOD-123"
+      (at 275 156 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 200 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "18a6a721-b079-4feb-92b6-28a34e8c73e7")
+    (property "Reference" "R12"
+      (at 200 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1k"
+      (at 200 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 200 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 225 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "2c09979c-2322-49a3-ba2a-8d9e76759fc9")
+    (property "Reference" "R13"
+      (at 225 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100k"
+      (at 225 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 225 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 250 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "2efa16c5-4f6f-4234-aa9d-307c0179b3b5")
+    (property "Reference" "R14"
+      (at 250 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "330k 1%"
+      (at 250 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 250 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:R")
+    (at 275 170 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "c5e0fdb6-e0a4-4293-a85e-ea43dbd9c351")
+    (property "Reference" "R15"
+      (at 275 167 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "180k 1%"
+      (at 275 173 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+      (at 275 176 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 200 190 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6f966d04-3651-4159-9ffa-e686f2241d92")
+    (property "Reference" "C29"
+      (at 200 187 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 200 193 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 200 196 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:C")
+    (at 225 190 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "90355c53-e5bb-438c-84cd-63ebc109727b")
+    (property "Reference" "C30"
+      (at 225 187 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0.1uF"
+      (at 225 193 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+      (at 225 196 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (symbol
+    (lib_id "Device:L")
+    (at 120 190 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "773a464a-f904-4fa6-8a8f-b21a95fb45f0")
+    (property "Reference" "L1"
+      (at 120 187 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "0R (DNP for WROOM-1)"
+      (at 120 193 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Inductor_SMD:L_0402_1005Metric"
+      (at 120 196 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (power_port
+    (at 10 10 0)
+    (effects (font (size 1.27 1.27)) hide)
+    (uuid "9be19792-00f8-4b01-aa13-b4162991029c")
+    (property "Reference" "#PWR_3V3_0"
+      (at 10 10 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+3V3"
+      (at 10 12 0)
+      (effects (font (size 1.27 1.27)))
+    )
+  )
+
+  (global_label "ANT_FEED"
+    (shape passive)
+    (at 40 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "fec4c6df-e186-4eb0-a471-7f5d25d2ad3d")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "BOOT"
+    (shape passive)
+    (at 70 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "666d158f-13f5-4fcc-b2cd-17983f9cc978")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "BUZZER_BASE"
+    (shape passive)
+    (at 100 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "0d65264d-8233-403d-933a-8c13e1e87e1f")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "BUZZER_DRV"
+    (shape passive)
+    (at 130 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "bbb783bb-6296-4558-a8a2-8b6c9e03de57")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "BUZZER_NEG"
+    (shape passive)
+    (at 160 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "575c8232-96e2-433c-b19c-587600944223")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "B_MINUS"
+    (shape passive)
+    (at 190 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "98bc334c-3c92-4d93-b26c-b7675a355da6")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "B_PLUS"
+    (shape passive)
+    (at 220 10 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "cd8e8faf-9f93-47da-8431-418a38e5e273")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "CC1"
+    (shape passive)
+    (at 10 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "811f4310-c884-4528-b791-643d1f32c6a3")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "CC2"
+    (shape passive)
+    (at 40 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "5068257b-4478-4b8b-a5fc-ce1b3e5b3088")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "DW_CS"
+    (shape passive)
+    (at 70 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "72482770-ecc0-436b-934e-4eb1ceb97ae9")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "DW_OC"
+    (shape passive)
+    (at 100 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "64e600b3-d983-485a-8d2e-c7ea13ad88df")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "DW_OD"
+    (shape passive)
+    (at 130 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "c8049aee-d814-4bfd-8328-679c49794a3d")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "DW_VCC"
+    (shape passive)
+    (at 160 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "ef2a390f-5fea-4af8-8dec-efd6616dd076")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "EN"
+    (shape passive)
+    (at 190 15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b6d3a879-0850-47b0-ab07-ef6443b1652b")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (power_port
+    (at 220 15 0)
+    (effects (font (size 1.27 1.27)) hide)
+    (uuid "f06fbb70-4ceb-4123-91f3-e6a74c937579")
+    (property "Reference" "#PWR_GND_15"
+      (at 220 15 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND"
+      (at 220 17 0)
+      (effects (font (size 1.27 1.27)))
+    )
+  )
+
+  (global_label "LDO_EN"
+    (shape passive)
+    (at 10 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "02a44cbc-66b5-43d5-82c1-33b154bf383b")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LDO_IN"
+    (shape passive)
+    (at 40 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "af171903-8366-4aef-aeab-7e5afdbe7cfa")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LED_DIN"
+    (shape passive)
+    (at 70 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "711eb121-3f50-45e5-9a75-25f4c1a1229d")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_DIO0"
+    (shape passive)
+    (at 100 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "99feddc2-724d-45dd-a178-53febb037a71")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_MISO"
+    (shape passive)
+    (at 130 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "4e87d8d7-8e54-4047-8f46-4a3f9911943c")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_MOSI"
+    (shape passive)
+    (at 160 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "43083594-b0d5-43e9-b1e4-9a512d21063d")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_NSS"
+    (shape passive)
+    (at 190 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "9a9a998a-84a9-45c8-a12a-fa54ba15f628")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_RST"
+    (shape passive)
+    (at 220 20 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "5071112c-ff2b-4d81-94bd-35a1a3ca5554")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_SCK"
+    (shape passive)
+    (at 10 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "49220a0b-ac34-4436-9b2c-c20cec2f916f")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_SCK_DEV"
+    (shape passive)
+    (at 40 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "80bf851e-4fbb-4b1a-b879-65d333477832")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "LORA_VDD"
+    (shape passive)
+    (at 70 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "661117fb-8853-4031-88cc-8ba30553e720")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "PROG"
+    (shape passive)
+    (at 100 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "20c9740e-80cb-43c6-8910-68faf721f544")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "Q3_DRAIN"
+    (shape passive)
+    (at 130 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "33a999fc-0d92-4413-8ce1-27e764b7ba2f")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "RF_LNA"
+    (shape passive)
+    (at 160 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "cadf7298-06f1-4cd1-a156-337cb1f9d4ee")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "RF_MID"
+    (shape passive)
+    (at 190 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "1a321e98-dd85-4703-b293-a3aaf3aa6f78")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "USB_DN"
+    (shape passive)
+    (at 220 25 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "baff182d-277e-4555-a90f-3aa62476993d")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "USB_DP"
+    (shape passive)
+    (at 10 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "d9804e53-6660-4d15-9895-78cabd0b9c3b")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "VBAT_SENSE"
+    (shape passive)
+    (at 40 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "4d8cdb35-70b6-4cd1-b3cc-aed3e07beb10")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "VBUS"
+    (shape passive)
+    (at 70 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "e9a33fd6-0a00-467a-8068-4e48c230da3b")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "XTAL_N"
+    (shape passive)
+    (at 100 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "61f82809-5e17-49bd-b622-b169ce689670")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "XTAL_P"
+    (shape passive)
+    (at 130 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "7ed2c46b-a77e-4254-a25d-3945f54999c6")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (global_label "XTAL_P_MCU"
+    (shape passive)
+    (at 160 30 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "73538af2-6aec-458f-b16b-821d8c867626")
+    (property "Intersheets" ""
+      (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
+
+  (sheet_instances
+    (path "/75dea24c-8daa-4257-ba9f-87189394941e"
+      (page "1")
+    )
+  )
+
+)

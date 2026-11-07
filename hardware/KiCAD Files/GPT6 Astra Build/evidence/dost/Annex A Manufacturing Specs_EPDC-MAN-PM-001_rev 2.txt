@@ -1,0 +1,66 @@
+
+--- PDF PAGE 1 ---
+ 
+UNIT MANUFACTURING 
+SUBJECT PROCESS FLOW 
+ 
+ Page 3 of 3   
+EPDC-MAN-PM-001 
+REV 02 / 28 September 2026 
+ANNEX A 
+ 
+Specifications and Limitations for PCB Fabrication and PCB Assembly 
+ITEM DESCRIPTION LIMITATIONS 
+PCB Fabrication 
+1 PCB Allowable Design Dimension (x,y) 190 mm x 250 mm Maximum 
+2 PCB Material FR4 only, client can provide own PCB 
+3 Board Thickness 1.6mm only 
+4 Copper Thickness 35µm (1oz) 
+5 Solder Mask Color Green, Black, Blue, Red, Orange, White, Yellow, Pink, Purple  
+(subject to color availability) 
+6 Silkscreen Color Black and White 
+(subject to color availability) 
+7 Silkscreen Line Width 0.15 mm Minimum 
+8 Through-Hole Plating Process Chemical-Free, organic Conductive Polymer Paste (not 
+recommended for high current application) 
+9 Hole Diameter Ø0.4 mm (15mil) Minimum 
+10 Slotted Hole 1 mm Minimum 
+11 Annular Ring 0.254 mm (10mil) Minimum 
+12 Isolation type a. Basic Isolation 
+b. Rubout (incur additional cost) 
+13 Pattern Width  0.3 mm (12mils) Minimum 
+14 Pattern Space 0.254 mm Min. for 35µm copper 
+15 Pad Surface Finishing Bare Copper, Immersion Tin 
+16 PCB design format In Gerber File (RS 274-x) 
+17 Number of Layers 1, 2 
+18 Lead-time (Days) To be determined based on the client’s design 
+19 Outside route to copper track 0.3mm (12mils) board outline, edge 
+20 Drill Sizes 
+Spiral Drill 0.4mm (Green) 
+Spiral Drill 0.5mm (Green) 
+Spiral Drill 0.6mm (Green) 
+Spiral Drill 0.7mm (Green) 
+Spiral Drill 0.8mm (Green) 
+Spiral Drill 0.9mm (Green) 
+Spiral Drill 1.0mm (Green) 
+Spiral Drill 1.2mm (Green) 
+Spiral Drill 1.4mm (Green) 
+Spiral Drill 1.5mm (Green) 
+Spiral Drill 1.6mm (Green) 
+Spiral Drill 1.8mm (Green) 
+Spiral Drill 2.0mm (Green) 
+We convert the drill size given in the drill files or tool lists into millimeter and round to the nearest 0.1mm. 
+       Example: Drill size of 31 mil – converted to 0.7874 mm is then rounded to 0.80 mm 
+       Example: Drill size of 32 mil – converted to 0.8128 mm is then rounded to 0.80 mm 
+       Example: Drill size of 33.5 mil – converted to 0.8509 mm. Will be rounded to 0.9mm if within minimum annular ring 
+size. 
+ 
+PCB Assembly 
+1 Parts Acquisition Service available in Consignment 
+2 Stencil (for SMD Components) Material: Polyimide 
+Max. Component Area: 210mm x 250mm 
+3 Surface Mount Components 0201 Min. Chip Package 
+All kinds except Grid array types 
+4 Through-Hole Components Radial and Axial 
+5 Standard (Reference) IPC-A-610, Acceptability of Electronics Assemblies 
+6 Solder and flux Lead-Free 

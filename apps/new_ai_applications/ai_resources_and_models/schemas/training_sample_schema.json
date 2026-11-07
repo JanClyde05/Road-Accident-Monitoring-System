@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RAMS_IMU_Training_Sample",
+  "description": "Canonical dataset schema for logging and training the RAMS Edge AI Fall/Crash and False-Alarm Classifier, matching imu_studio_app.",
+  "type": "object",
+  "required": [
+    "session_id",
+    "timestamp_epoch_ms",
+    "category",
+    "class_type",
+    "is_accident",
+    "features",
+    "raw_samples"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Unique UUID or formatted timestamp identifier for the recorded simulation session"
+    },
+    "timestamp_epoch_ms": {
+      "type": "integer",
+      "description": "Unix millisecond timestamp when the simulation recording started"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["POSITIVE", "NEGATIVE"],
+      "description": "POSITIVE for genuine accident/fall, NEGATIVE for ADL or false alarm"
+    },
+    "class_type": {
+      "type": "string",
+      "enum": [
+        "FALL",
+        "IMPACT",
+        "SKIDDING",
+        "WALKING",
+        "RUNNING",
+        "JUMPING",
+        "PHONE_FALLING",
+        "PHONE_SHAKING",
+        "NORMAL_VEHICLE_RIDE",
+        "POTHOLE_BOUNCE",
+        "SPEED_BUMP"
+      ],
+      "description": "Specific granular physical scenario label"
+    },
+    "is_accident": {
+      "type": "integer",
+      "enum": [0, 1],
+      "description": "Binary ground-truth truth label: 1 for accident, 0 for false alarm"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "device_model": { "type": "string" },
+        "sensor_source": { "type": "string", "enum": ["PHONE_HARDWARE", "WEARABLE_BLE"] },
+        "sampling_rate_hz": { "type": "number", "default": 50.0 },
+        "pre_event_speed_kmh": { "type": "number" },
+        "rider_notes": { "type": "string" }
+      }
+    },
+    "features": {
+      "type": "object",
+      "description": "14-parameter canonical feature vector calculated over the impact window",
+      "required": [
+        "mean_svm_g",
+        "max_svm_g",
+        "min_svm_g",
+        "std_svm_g",
+        "rms_svm_g",
+        "max_gyro_mag",
+        "mean_gyro_mag",
+        "max_jerk",
+        "mean_jerk",
+        "tilt_delta_deg",
+        "signal_magnitude_area",
+        "energy_svm",
+        "zero_crossing_rate"
+      ],
+      "properties": {
+        "mean_svm_g": { "type": "number" },
+        "max_svm_g": { "type": "number" },
+        "min_svm_g": { "type": "number" },
+        "std_svm_g": { "type": "number" },
+        "rms_svm_g": { "type": "number" },
+        "max_gyro_mag": { "type": "number" },
+        "mean_gyro_mag": { "type": "number" },
+        "max_jerk": { "type": "number" },
+        "mean_jerk": { "type": "number" },
+        "tilt_delta_deg": { "type": "number" },
+        "signal_magnitude_area": { "type": "number" },
+        "energy_svm": { "type": "number" },
+        "zero_crossing_rate": { "type": "number" }
+      }
+    },
+    "raw_samples": {
+      "type": "array",
+      "description": "List of 50Hz raw IMU telemetry samples captured during the maneuver",
+      "items": {
+        "type": "object",
+        "required": ["rel_time_ms", "ax", "ay", "az", "gx", "gy", "gz", "svm_g"],
+        "properties": {
+          "rel_time_ms": { "type": "integer" },
+          "ax": { "type": "number" },
+          "ay": { "type": "number" },
+          "az": { "type": "number" },
+          "gx": { "type": "number" },
+          "gy": { "type": "number" },
+          "gz": { "type": "number" },
+          "svm_g": { "type": "number" },
+          "pitch_deg": { "type": "number" },
+          "roll_deg": { "type": "number" }
+        }
+      }
+    }
+  }
+}

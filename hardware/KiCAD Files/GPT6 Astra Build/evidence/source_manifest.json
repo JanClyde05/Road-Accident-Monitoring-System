@@ -1,0 +1,427 @@
+{
+  "captured_at": "2026-10-30T18:45:53.032380+08:00",
+  "scope": "Planning-input snapshot; listed files are evidence, not all accepted design sources.",
+  "repository_root": "D:\\Antigravity\\Projects\\Danger Monitoring System V2",
+  "files": [
+    {
+      "path": "00_SYSTEM_ARCHITECTURE.md",
+      "bytes": 8434,
+      "sha256": "b3a5014d687b9fb6a59ad53a08c4d1fb5f8ca69d8d570f430780ce3138751b1e"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 3473,
+      "sha256": "ea9e96b0c5c89115a80282b9f474e772340a0cf8f3b63da1dd894e5e50f2eb2e"
+    },
+    {
+      "path": "DIRECTORY_MAP.md",
+      "bytes": 14024,
+      "sha256": "005da42902e0c113bc3bb424175d41083e46bc30e9b55c87a98e245125c6f9b7"
+    },
+    {
+      "path": "docs/For PCB Ordering - DOST/Annex A Manufacturing Specs_EPDC-MAN-PM-001_rev 2.pdf",
+      "bytes": 439717,
+      "sha256": "828cd4c70df16a1f69586ff0ddfffc977cefb5bb4eda86f3cbd4906106a3c2cc"
+    },
+    {
+      "path": "docs/For PCB Ordering - DOST/DOST-ASTI-Citizens-Charter 2026.pdf",
+      "bytes": 1605448,
+      "sha256": "586e6ac7133fc6511fe35a3901dfc22911673c8494fb3b8b6b21d4defc2ec26f"
+    },
+    {
+      "path": "docs/For PCB Ordering - DOST/EPDC BROCHURE 2026.pdf",
+      "bytes": 13926338,
+      "sha256": "92346fc2cef505b95ceb8fab9a9ea3317a9cc8a210ff81b7bfc2e7eedd95c5d4"
+    },
+    {
+      "path": "docs/For PCB Ordering - DOST/PCB-Manufacturing-and-Assembly-Inquiry-Form.pdf",
+      "bytes": 805326,
+      "sha256": "80b85e11acbad77c1638163941951276571120f4e59ddb2ed46920f9ae876cd9"
+    },
+    {
+      "path": "docs/Parts List I Currently Have/printable_pdf_view.html",
+      "bytes": 21564,
+      "sha256": "4f4f4d9b69506bcd8e6780d8d1de4ccfdeb8c23a92348dcb4bd11658bf996fd5"
+    },
+    {
+      "path": "docs/Parts List I Currently Have/product_list_expense_breakdown.md",
+      "bytes": 12060,
+      "sha256": "af51a775be9ac2e24ea7a55daf9ca818fa834fd529b6816cb4fcb6ac6821851d"
+    },
+    {
+      "path": "firmware/shared/protocol.h",
+      "bytes": 7960,
+      "sha256": "7546b1efe5c3a2c0556ddd14ce4aed20212ac54937ae958b9bcc827c88b8e5cc"
+    },
+    {
+      "path": "firmware/wearable_withApp/battery.cpp",
+      "bytes": 3608,
+      "sha256": "c9d1119ceac069851653a9b988cc3663d722bd7554cc4207661b5e766239ac45"
+    },
+    {
+      "path": "firmware/wearable_withApp/battery.h",
+      "bytes": 2305,
+      "sha256": "593c1f0ea06be9033378d8414af888e7b22d8cc264e1773375b7366f0ca7287b"
+    },
+    {
+      "path": "firmware/wearable_withApp/bt_service.cpp",
+      "bytes": 14643,
+      "sha256": "b6dc2d90adddd286923d1d311855ab0267d81dfd6fe49b0e329fef0ba8a51621"
+    },
+    {
+      "path": "firmware/wearable_withApp/config.h",
+      "bytes": 2075,
+      "sha256": "bda046bf29b8215c50c57c50bbd978f051ce070169a66496bbbe0d14e78fc384"
+    },
+    {
+      "path": "firmware/wearable_withApp/gps.cpp",
+      "bytes": 1297,
+      "sha256": "cf03ff6c01c78cc5d0990d5f4f9ab4445785f1ce0232030747049ae605711d20"
+    },
+    {
+      "path": "firmware/wearable_withApp/lora_tx.cpp",
+      "bytes": 5344,
+      "sha256": "fb9cadd8a3be7c1f031d20183a46bbffb1eacbd4fad784be8fa7935676736dc7"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/COMPONENT_PLACEMENT_INSTRUCTIONS.md",
+      "bytes": 16010,
+      "sha256": "1380ceea0a19c922de9459b64da45e37907d1239203f865c9c4ec11d66e0833e"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/current_drc.json",
+      "bytes": 5163,
+      "sha256": "0c5af04ee9de8985d3be391ee5cd58bb09769720f1e8b740f1492c684e7f3020"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/fp-lib-table",
+      "bytes": 193,
+      "sha256": "b6aeea87f2ea42aad96a90feea5d3ed1c22e1425b85709039525d42e72ec31d3"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ENGINEER_REVIEW_REQUEST.md",
+      "bytes": 5205,
+      "sha256": "722cd5041c44fbf51c6a43b01b434e9ce5a73b76bfe75af37b0844cde745b780"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/1_GERBERS_RAMS_PCB.zip",
+      "bytes": 141009,
+      "sha256": "0c74cf696dfba11d9b9548588514f9f0b6437286112295032579ac4183284c24"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/PARTS_LIST_FOR_ORDERING.md",
+      "bytes": 7289,
+      "sha256": "de5672f65ea429b581e68f1d2383f54969a6dbc259fd9990b7b1a69bc94f2600"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/lib/rams.kicad_sym",
+      "bytes": 10143,
+      "sha256": "7eb0cf758d887ecc0b9484ac2d21954f72eb7a1714499dfcecdf2bf57c98344a"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/lib/rams.pretty/Buzzer_SMD_9650_3327.kicad_mod",
+      "bytes": 1510,
+      "sha256": "646e60aaf57e53cbd38eec3cee978521a99222b856fcd4e724db891cb1083549"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/lib/rams.pretty/LED_SK6805_EC20_2.0x2.0mm.kicad_mod",
+      "bytes": 3756,
+      "sha256": "7dad4a2a06c5122b5eb8f3297a7d8f25a029fcff4187ae606bffb07e3636b568"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/lib/rams.pretty/USB_C_TYPE_C_31_M_12.kicad_mod",
+      "bytes": 8040,
+      "sha256": "a7c814075e6da755b50709f0b4acda75c682f79772caf11563665014159df15c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/PCB_REVIEW_2026-10-30.md",
+      "bytes": 9441,
+      "sha256": "b10527a90f0a3bf97d1af782e92432d9668f0bb396df93c595484b42fd29e890"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_dru",
+      "bytes": 497,
+      "sha256": "8dd85f3d28c7573379dd8ecbf0dcab9085aaac82617f08eddaa747df7ab77362"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pcb",
+      "bytes": 798930,
+      "sha256": "cccc6209cfafdab1f8c6d15217eb72f07c533188559bad071022571ead0909b4"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pro",
+      "bytes": 20664,
+      "sha256": "497d2eff9d59d59fe7d304e4fcfd328866af416b37c4a48691183aa14fc69480"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_sch",
+      "bytes": 347310,
+      "sha256": "3ddf52db5ac92523645c3d15b23b8716f3e7580660e0a7f1cd5ffea082acef26"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS_ERC_report.json",
+      "bytes": 3617,
+      "sha256": "0d963785acbad01eb4101580a1d73f2104887ac0595402063fb99ac887a8a7c2"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/sym-lib-table",
+      "bytes": 202,
+      "sha256": "365bb267d5d3862be0c6c332d66d984673b5a4d575998c2c627720a6279fa943"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/test_bisect.kicad_sch",
+      "bytes": 163844,
+      "sha256": "f5d4c8d26eb0b0ced6f70061356de2fd46c7031b39cca84b913dd146899de085"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/test_single.kicad_sch",
+      "bytes": 133899,
+      "sha256": "1dca955650a09914eac4e4b84036c68a9901745b55cad1d7debf3898b0084631"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/fp-lib-table",
+      "bytes": 193,
+      "sha256": "b6aeea87f2ea42aad96a90feea5d3ed1c22e1425b85709039525d42e72ec31d3"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/lib/rams.kicad_sym",
+      "bytes": 28366,
+      "sha256": "30e444c0f2520082ce56ca84d6905dec799b0a1d36624162a81bf3db1dafdc65"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/lib/rams.pretty/Buzzer_SMD_9650_3327.kicad_mod",
+      "bytes": 1510,
+      "sha256": "646e60aaf57e53cbd38eec3cee978521a99222b856fcd4e724db891cb1083549"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/lib/rams.pretty/LED_SK6805_EC20_2.0x2.0mm.kicad_mod",
+      "bytes": 3756,
+      "sha256": "7dad4a2a06c5122b5eb8f3297a7d8f25a029fcff4187ae606bffb07e3636b568"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/lib/rams.pretty/USB_C_TYPE_C_31_M_12.kicad_mod",
+      "bytes": 8040,
+      "sha256": "a7c814075e6da755b50709f0b4acda75c682f79772caf11563665014159df15c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/RAMS - PCB.kicad_dru",
+      "bytes": 519,
+      "sha256": "d3d0bf05ac6d96a81b7fd845a6931692a371377f7b2910d7562f4c321378f48e"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/RAMS - PCB.kicad_pcb",
+      "bytes": 739610,
+      "sha256": "180679fb3c61c6a4e9963a02b9bc3d78be136cbdb8895619033660554d2ffa22"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/RAMS - PCB.kicad_pro",
+      "bytes": 20664,
+      "sha256": "497d2eff9d59d59fe7d304e4fcfd328866af416b37c4a48691183aa14fc69480"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/RAMS - PCB.kicad_sch",
+      "bytes": 318601,
+      "sha256": "a08f9fa784699254a6ba7573cf903f58ee6d6f63a60ed479615e6aed7a4114c2"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/README.md",
+      "bytes": 2356,
+      "sha256": "57df8c89d8afe05c3db69246316b492904bdfcedd6643ec234c4d820dba532c7"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/sym-lib-table",
+      "bytes": 202,
+      "sha256": "365bb267d5d3862be0c6c332d66d984673b5a4d575998c2c627720a6279fa943"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/00_REVISION_PLAN.md",
+      "bytes": 23190,
+      "sha256": "5414e18446fa83dcd9038a727a87f46d093fa299430ed181c33c66d9b0423a71"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/BOM_CROSS_REFERENCE.md",
+      "bytes": 7285,
+      "sha256": "d07faa869060f92aca94893a5f15995cf1092273a732da6ce7d302a7db2bcdfd"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/build_board.py",
+      "bytes": 14468,
+      "sha256": "88881e1b91f0ec7813379bf6ccac507bd69ddcf370f29f440f9909d272399001"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/build_schematic.py",
+      "bytes": 12484,
+      "sha256": "03b27dbfb7b8ce6204a13705cf224b6a96cea6298a8dd23355d9e77d000950eb"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/circuit_spec.json",
+      "bytes": 43337,
+      "sha256": "e5d8c2a1262863abed04a2207c50b778fe2f050634b78145a82930462101cf76"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/DECISIONS.md",
+      "bytes": 1264,
+      "sha256": "455fee4d3dc161c54fccd2a836673ccc678729f750bc7afc0974093ad3e9b27c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/EPDC_DESIGN_RULES.md",
+      "bytes": 3807,
+      "sha256": "ae5e8e2977be6e0e82e1afd05601c3092f1396cd90857d35e00ee75b5ad93f8c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/ERROR_LOG.md",
+      "bytes": 4830,
+      "sha256": "5ebd8a805712b0f7f7a4faae7fbcf7ac4b7272dcd9d5e3ac33981f79a1b2e2b3"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/fp-lib-table",
+      "bytes": 160,
+      "sha256": "71f2a562eaecf41f2d37f5c16978c9e10f481074f8de1ee1ad0a0b922a4b8aa6"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS - PCB.kicad_pcb",
+      "bytes": 24237,
+      "sha256": "26882656947a882bf1fddf4eeb52fac0898f897606fca45d27746f0d4a4218aa"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS - PCB.kicad_pro",
+      "bytes": 11872,
+      "sha256": "0638196280816d8f3e72066bb48c1ae93e7d86a55b777232936aa0e18201fdd1"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS - PCB.kicad_sch",
+      "bytes": 48158,
+      "sha256": "b9e6ed407440a2cf5dc1e1e49b24b2b4caa6761c6a2ad6451fee3daac230b82e"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS_Local.pretty/Buzzer_SMD_9650.kicad_mod",
+      "bytes": 2706,
+      "sha256": "7e2ab65d9cc98db06a616ffd0c8429466c1f9b551b323d1d26a89ea438b49ce7"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS_Local.pretty/Johanson_2450AT18B100_3216.kicad_mod",
+      "bytes": 2323,
+      "sha256": "45906e5f310bb0a02fd1998770f40b9b7dd59828d08651d5f8f19ab7380df509"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS_Local.pretty/SW_Tactile_SPST_3x4mm.kicad_mod",
+      "bytes": 2340,
+      "sha256": "352a00f57746de31b056e85f62096b05cf7677cecb2cf8dccfb0daf85ea6dece"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RAMS_Local.pretty/USB_C_16P_USB4105_EPDC.kicad_mod",
+      "bytes": 7114,
+      "sha256": "29e2a14012da4a0e0c04f0f9b9838b116fdc055cab31418acbd6311e7545de26"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/README.md",
+      "bytes": 3653,
+      "sha256": "9211dea32950182e4c332e74e7909c012d46981c3fc9b20dc1dbf1ec0cd9b53f"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/RESEARCH_LEDGER.md",
+      "bytes": 2983,
+      "sha256": "60b29b5f75de227e54c2772e75974404b21ac5b91b52a8bae8d3fecc422bda37"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/verify_circuit_spec.py",
+      "bytes": 5104,
+      "sha256": "96d95ba573506fff2b416127403a3e50a096863ecd03d6e70fd4240d48197697"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/00_REVISION_PLAN.md",
+      "bytes": 23190,
+      "sha256": "5414e18446fa83dcd9038a727a87f46d093fa299430ed181c33c66d9b0423a71"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/BOM_CROSS_REFERENCE.md",
+      "bytes": 7285,
+      "sha256": "d07faa869060f92aca94893a5f15995cf1092273a732da6ce7d302a7db2bcdfd"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/circuit_spec.json",
+      "bytes": 43343,
+      "sha256": "82adb2fc32d674adf405293a42076e942dde60a7e1ad22c70a45d0f7aedd0662"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/DECISIONS.md",
+      "bytes": 1264,
+      "sha256": "455fee4d3dc161c54fccd2a836673ccc678729f750bc7afc0974093ad3e9b27c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/EPDC_DESIGN_RULES.md",
+      "bytes": 3807,
+      "sha256": "ae5e8e2977be6e0e82e1afd05601c3092f1396cd90857d35e00ee75b5ad93f8c"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/ERROR_LOG.md",
+      "bytes": 4830,
+      "sha256": "5ebd8a805712b0f7f7a4faae7fbcf7ac4b7272dcd9d5e3ac33981f79a1b2e2b3"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/fp-lib-table",
+      "bytes": 160,
+      "sha256": "71f2a562eaecf41f2d37f5c16978c9e10f481074f8de1ee1ad0a0b922a4b8aa6"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_Local.pretty/Buzzer_SMD_9650.kicad_mod",
+      "bytes": 2706,
+      "sha256": "7e2ab65d9cc98db06a616ffd0c8429466c1f9b551b323d1d26a89ea438b49ce7"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_Local.pretty/ESP32-S3-WROOM-1_EPDC.kicad_mod",
+      "bytes": 14030,
+      "sha256": "1708b620b96b482404584fb42860958c1aa5bdd17bf37711cd318c5ae1abd70f"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_Local.pretty/Johanson_2450AT18B100_3216.kicad_mod",
+      "bytes": 2323,
+      "sha256": "45906e5f310bb0a02fd1998770f40b9b7dd59828d08651d5f8f19ab7380df509"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_Local.pretty/SW_Tactile_SPST_3x4mm.kicad_mod",
+      "bytes": 2340,
+      "sha256": "352a00f57746de31b056e85f62096b05cf7677cecb2cf8dccfb0daf85ea6dece"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_Local.pretty/USB_C_16P_USB4105_EPDC.kicad_mod",
+      "bytes": 7114,
+      "sha256": "29e2a14012da4a0e0c04f0f9b9838b116fdc055cab31418acbd6311e7545de26"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_RevC.kicad_dru",
+      "bytes": 317,
+      "sha256": "bce9f3d47342a83ed7fae9f9cea29df21ddd859552903632dda7e3acf8958f61"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_RevC.kicad_pcb",
+      "bytes": 524050,
+      "sha256": "3b3cd5dfd37bc1eb89fa52a72fef844f725ba48c2dcbab6d405219559165fa06"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_RevC.kicad_pro",
+      "bytes": 9607,
+      "sha256": "4307fead9c6f146b71e719264cf8ab5cc8159c6b1117f64b4ce6b06144974ddd"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RAMS_RevC.kicad_sch",
+      "bytes": 204661,
+      "sha256": "58c4fdb6c484db5807529c963e8d65cb3811584ca77c63302f7b82afbe9adb7b"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/README.md",
+      "bytes": 5554,
+      "sha256": "17204a29b1c7793c02b486a91f0249b662402b715cb638cadf88742eb356833d"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/RESEARCH_LEDGER.md",
+      "bytes": 2983,
+      "sha256": "60b29b5f75de227e54c2772e75974404b21ac5b91b52a8bae8d3fecc422bda37"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS Wearable - PCB/GEMINI Build/sym-lib-table",
+      "bytes": 153,
+      "sha256": "cd27e0d68387117ea8d46ff7878e0a123dea8ebf73ea3c7dc114627046b39024"
+    }
+  ]
+}

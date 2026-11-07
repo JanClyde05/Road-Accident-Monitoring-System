@@ -1,0 +1,1813 @@
+{
+  "meta": {
+    "project": "RAMS Wearable PCB Rev C",
+    "revision": "C",
+    "created": "2026-10-30",
+    "target_manufacturer": "DOST-ASTI EPDC",
+    "layers": 2,
+    "board_thickness_mm": 1.6,
+    "copper_weight_oz": 1,
+    "min_track_mm": 0.3,
+    "min_space_mm": 0.254,
+    "min_drill_mm": 0.4,
+    "min_annular_ring_mm": 0.254
+  },
+  "components": {
+    "U1": {
+      "value": "ESP32-S3-WROOM-1-N4",
+      "description": "WiFi + BLE 5.0 MCU module with 4MB Flash, 2MB PSRAM",
+      "footprint": "RAMS_Local:ESP32-S3-WROOM-1_EPDC",
+      "package": "Castellated module 18x25.5mm",
+      "manufacturer": "Espressif Systems",
+      "source": "Shopee (SuperMini dev board prototype)",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "2",
+          "function": "3V3",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "3",
+          "function": "EN",
+          "net": "/EN"
+        },
+        {
+          "pin": "4",
+          "function": "GPIO4",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "5",
+          "function": "GPIO5",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "6",
+          "function": "GPIO6",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "7",
+          "function": "GPIO7",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "8",
+          "function": "GPIO15",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "9",
+          "function": "GPIO16",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "10",
+          "function": "GPIO17",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "11",
+          "function": "GPIO18",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "12",
+          "function": "GPIO8",
+          "net": "/LORA_DIO0"
+        },
+        {
+          "pin": "13",
+          "function": "GPIO19 (USB_D-)",
+          "net": "/USB_DN"
+        },
+        {
+          "pin": "14",
+          "function": "GPIO20 (USB_D+)",
+          "net": "/USB_DP"
+        },
+        {
+          "pin": "15",
+          "function": "GPIO3",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "16",
+          "function": "GPIO46",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "17",
+          "function": "GPIO9",
+          "net": "/LORA_RST"
+        },
+        {
+          "pin": "18",
+          "function": "GPIO10",
+          "net": "/LORA_NSS"
+        },
+        {
+          "pin": "19",
+          "function": "GPIO11",
+          "net": "/LORA_MOSI"
+        },
+        {
+          "pin": "20",
+          "function": "GPIO12",
+          "net": "/LORA_SCK"
+        },
+        {
+          "pin": "21",
+          "function": "GPIO13",
+          "net": "/LORA_MISO"
+        },
+        {
+          "pin": "22",
+          "function": "GPIO14",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "23",
+          "function": "GPIO21",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "24",
+          "function": "GPIO47",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "25",
+          "function": "GPIO48",
+          "net": "/LED_DIN"
+        },
+        {
+          "pin": "26",
+          "function": "GPIO45",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "27",
+          "function": "GPIO0",
+          "net": "/BOOT"
+        },
+        {
+          "pin": "28",
+          "function": "GPIO35 (PSRAM)",
+          "net": "RESERVED_PSRAM"
+        },
+        {
+          "pin": "29",
+          "function": "GPIO36 (PSRAM)",
+          "net": "RESERVED_PSRAM"
+        },
+        {
+          "pin": "30",
+          "function": "GPIO37 (PSRAM)",
+          "net": "RESERVED_PSRAM"
+        },
+        {
+          "pin": "31",
+          "function": "GPIO38",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "32",
+          "function": "GPIO39",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "33",
+          "function": "GPIO40",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "34",
+          "function": "GPIO41",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "35",
+          "function": "GPIO42",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "36",
+          "function": "RXD0 (GPIO44)",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "37",
+          "function": "TXD0 (GPIO43)",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "38",
+          "function": "GPIO2",
+          "net": "/VBAT_SENSE"
+        },
+        {
+          "pin": "39",
+          "function": "GPIO1",
+          "net": "/BUZZER_DRV"
+        },
+        {
+          "pin": "40",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "41",
+          "function": "GND (EPAD)",
+          "net": "/GND"
+        }
+      ],
+      "notes": "Pin numbers follow WROOM-1 module datasheet. PSRAM pins 35/36/37 must not be externally connected. GPIO0 is strapping pin (boot mode). VDDA is connected internally within the module to VDD3P3. No external VDDA pin or connection needed. Place decoupling caps on +3V3 near module pin 2."
+    },
+    "U2": {
+      "value": "Ai-Thinker-Ra-02",
+      "description": "SX1278 433MHz LoRa transceiver module",
+      "footprint": "RF_Module:Ai-Thinker-Ra-01-LoRa",
+      "package": "Castellated module 17x16mm",
+      "manufacturer": "Ai-Thinker",
+      "source": "Shopee",
+      "layer": "B.Cu",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "2",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "VCC (3.3V)",
+          "net": "/LORA_VDD"
+        },
+        {
+          "pin": "4",
+          "function": "RESET",
+          "net": "/LORA_RST"
+        },
+        {
+          "pin": "5",
+          "function": "DIO0",
+          "net": "/LORA_DIO0"
+        },
+        {
+          "pin": "6",
+          "function": "DIO1",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "7",
+          "function": "DIO2",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "8",
+          "function": "DIO3",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "9",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "10",
+          "function": "DIO4",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "11",
+          "function": "DIO5",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "12",
+          "function": "SCK",
+          "net": "/LORA_SCK_DEV"
+        },
+        {
+          "pin": "13",
+          "function": "MISO",
+          "net": "/LORA_MISO"
+        },
+        {
+          "pin": "14",
+          "function": "MOSI",
+          "net": "/LORA_MOSI"
+        },
+        {
+          "pin": "15",
+          "function": "NSS",
+          "net": "/LORA_NSS"
+        },
+        {
+          "pin": "16",
+          "function": "GND",
+          "net": "/GND"
+        }
+      ],
+      "notes": "Module on B.Cu. VCC max 3.7V, fed from +3V3 through ferrite bead FB1. Has onboard U.FL for 433MHz antenna."
+    },
+    "ANT1": {
+      "value": "2450AT18B100E",
+      "description": "2.4GHz ceramic chip antenna, 2-terminal",
+      "footprint": "RAMS_Local:Johanson_2450AT18B100_3216",
+      "package": "3216 (3.2 x 1.6 mm) SMD",
+      "manufacturer": "Johanson Technology",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Feed",
+          "net": "/ANT_FEED"
+        },
+        {
+          "pin": "2",
+          "function": "NC (mechanical anchor)",
+          "net": "UNCONNECTED"
+        }
+      ],
+      "notes": "B100 variant: 2-terminal (feed + NC). Pin 2 is NOT ground -- solder for mechanical stability only. Place at board corner with copper keepout under radiating body."
+    },
+    "J1": {
+      "value": "TYPE-C-31-M-12",
+      "description": "16-pin USB-C receptacle",
+      "footprint": "RAMS_Local:USB_C_16P_USB4105_EPDC",
+      "package": "USB-C SMD",
+      "manufacturer": "HRO",
+      "source": "Shopee (C165948)",
+      "pads": [
+        {
+          "pin": "A1",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "A4",
+          "function": "VBUS",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "A5",
+          "function": "CC1",
+          "net": "/CC1"
+        },
+        {
+          "pin": "A6",
+          "function": "D+",
+          "net": "/USB_DP"
+        },
+        {
+          "pin": "A7",
+          "function": "D-",
+          "net": "/USB_DN"
+        },
+        {
+          "pin": "A8",
+          "function": "SBU1",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "A9",
+          "function": "VBUS",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "A12",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "B1",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "B4",
+          "function": "VBUS",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "B5",
+          "function": "CC2",
+          "net": "/CC2"
+        },
+        {
+          "pin": "B6",
+          "function": "D+",
+          "net": "/USB_DP"
+        },
+        {
+          "pin": "B7",
+          "function": "D-",
+          "net": "/USB_DN"
+        },
+        {
+          "pin": "B8",
+          "function": "SBU2",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "B9",
+          "function": "VBUS",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "B12",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "S1",
+          "function": "Shield",
+          "net": "/GND"
+        },
+        {
+          "pin": "S2",
+          "function": "Shield",
+          "net": "/GND"
+        },
+        {
+          "pin": "S3",
+          "function": "Shield",
+          "net": "/GND"
+        },
+        {
+          "pin": "S4",
+          "function": "Shield",
+          "net": "/GND"
+        }
+      ],
+      "notes": "D+/D- from A6/B6 and A7/B7 are tied together at the connector. CC1/CC2 each get separate 5.1k to GND."
+    },
+    "D1": {
+      "value": "USBLC6-2SC6",
+      "description": "Low-capacitance USB ESD protection",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "package": "SOT-23-6",
+      "manufacturer": "STMicroelectronics",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "I/O1",
+          "net": "/USB_DN"
+        },
+        {
+          "pin": "2",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "I/O2",
+          "net": "/USB_DP"
+        },
+        {
+          "pin": "4",
+          "function": "I/O2",
+          "net": "/USB_DP"
+        },
+        {
+          "pin": "5",
+          "function": "VBUS",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "6",
+          "function": "I/O1",
+          "net": "/USB_DN"
+        }
+      ],
+      "notes": "Place within 5mm of J1. Pins 1/6 are one protected pair, pins 3/4 are the other."
+    },
+    "U3": {
+      "value": "LTH7R",
+      "description": "500mA standalone LiPo charger IC",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "package": "SOT-23-5",
+      "manufacturer": "LCSC C841234",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "CHRG",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "2",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "BAT",
+          "net": "/B_PLUS"
+        },
+        {
+          "pin": "4",
+          "function": "VCC",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "5",
+          "function": "PROG",
+          "net": "/PROG"
+        }
+      ],
+      "notes": "R_PROG = 4.02k 1% from PROG to GND gives ~249mA charge current. VCC input range 4.5-5.5V."
+    },
+    "U4": {
+      "value": "DW01A",
+      "description": "Single-cell Li-ion battery protection IC",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "package": "SOT-23-6",
+      "manufacturer": "Various",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "OD (over-discharge gate)",
+          "net": "/DW_OD"
+        },
+        {
+          "pin": "2",
+          "function": "CS (current sense)",
+          "net": "/DW_CS"
+        },
+        {
+          "pin": "3",
+          "function": "OC (over-charge gate)",
+          "net": "/DW_OC"
+        },
+        {
+          "pin": "4",
+          "function": "TD/NC",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "5",
+          "function": "VCC",
+          "net": "/DW_VCC"
+        },
+        {
+          "pin": "6",
+          "function": "VSS",
+          "net": "/B_MINUS"
+        }
+      ],
+      "notes": "Pin 4 (TD) must be NC. VCC connected to B_PLUS through 330 ohm resistor. VSS to B_MINUS. 0.1uF from VCC to VSS."
+    },
+    "Q3": {
+      "value": "FS8205A",
+      "description": "Dual N-channel MOSFET for battery protection",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "package": "SOT-23-6",
+      "manufacturer": "FuxinSemi",
+      "source": "Shopee (C908265)",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "S1 (source FET1, discharge)",
+          "net": "/B_MINUS"
+        },
+        {
+          "pin": "2",
+          "function": "D1 (drain, common)",
+          "net": "/Q3_DRAIN"
+        },
+        {
+          "pin": "3",
+          "function": "S2 (source FET2, charge)",
+          "net": "/GND"
+        },
+        {
+          "pin": "4",
+          "function": "G2 (gate FET2, charge control)",
+          "net": "/DW_OC"
+        },
+        {
+          "pin": "5",
+          "function": "D2 (drain, common)",
+          "net": "/Q3_DRAIN"
+        },
+        {
+          "pin": "6",
+          "function": "G1 (gate FET1, discharge control)",
+          "net": "/DW_OD"
+        }
+      ],
+      "notes": "Pins 2 and 5 are internally connected (common drain). FET1 (S1/G1) controls discharge. FET2 (S2/G2) controls charge. VERIFIED against FuxinSemi C908265 datasheet 2026-10-30."
+    },
+    "Q1": {
+      "value": "AO3401A",
+      "description": "P-channel MOSFET for power path (battery to LDO)",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "package": "SOT-23",
+      "manufacturer": "Alpha & Omega",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Gate",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "2",
+          "function": "Source",
+          "net": "/LDO_IN"
+        },
+        {
+          "pin": "3",
+          "function": "Drain",
+          "net": "/B_PLUS"
+        }
+      ],
+      "notes": "When USB present: gate high, FET off. When USB absent: gate pulled low by R6, FET on (battery powers LDO). Body diode from source to drain blocks battery backfeed to USB."
+    },
+    "Q2": {
+      "value": "BC817-25",
+      "description": "NPN transistor, buzzer low-side driver",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "package": "SOT-23",
+      "manufacturer": "Various",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Base",
+          "net": "/BUZZER_BASE"
+        },
+        {
+          "pin": "2",
+          "function": "Emitter",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "Collector",
+          "net": "/BUZZER_NEG"
+        }
+      ],
+      "notes": "Pin 1 Base (via 1k from GPIO1), Pin 2 Emitter (GND), Pin 3 Collector (BUZZER_NEG). Verified against standard SOT-23 BC817 pinning."
+    },
+    "U5": {
+      "value": "AP2112K-3.3",
+      "description": "600mA low-dropout 3.3V regulator",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "package": "SOT-23-5",
+      "manufacturer": "Diodes Incorporated",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "VIN",
+          "net": "/LDO_IN"
+        },
+        {
+          "pin": "2",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "EN",
+          "net": "/LDO_EN"
+        },
+        {
+          "pin": "4",
+          "function": "NC/BYP",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "5",
+          "function": "VOUT",
+          "net": "/+3V3"
+        }
+      ],
+      "notes": "EN controlled by power switch SW1. VIN from power path (VBUS via D2 or battery via Q1). 600mA max output."
+    },
+    "D2": {
+      "value": "SS14",
+      "description": "1A 40V Schottky diode, USB to LDO power path",
+      "footprint": "Diode_SMD:D_SMA",
+      "package": "SMA (DO-214AC)",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Cathode",
+          "net": "/LDO_IN"
+        },
+        {
+          "pin": "2",
+          "function": "Anode",
+          "net": "/VBUS"
+        }
+      ],
+      "notes": "Purchased SS14 is in SMA (DO-214AC) package, not SOD-123. Larger but purchased in stock."
+    },
+    "D3": {
+      "value": "1N4148W",
+      "description": "Buzzer flyback clamp diode",
+      "footprint": "Diode_SMD:D_SOD-123",
+      "package": "SOD-123",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Cathode",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "function": "Anode",
+          "net": "/BUZZER_NEG"
+        }
+      ]
+    },
+    "LED1": {
+      "value": "WS2812B",
+      "description": "Addressable RGB LED",
+      "footprint": "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+      "package": "PLCC4 5050",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "VDD",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "function": "DOUT",
+          "net": "UNCONNECTED"
+        },
+        {
+          "pin": "3",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "4",
+          "function": "DIN",
+          "net": "/LED_DIN"
+        }
+      ],
+      "notes": "DIN on GPIO48 per firmware. Verify purchased WS2812B is V6 revision for 3.3V operation. Add 0.1uF bypass cap on VDD."
+    },
+    "BZ1": {
+      "value": "SMD-9650-3327",
+      "description": "3.3V active piezo buzzer transducer",
+      "footprint": "RAMS_Local:Buzzer_SMD_9650",
+      "package": "9.6 x 6.5 mm SMD",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Positive",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "function": "Negative",
+          "net": "/BUZZER_NEG"
+        }
+      ]
+    },
+    "Y1": {
+      "value": "40MHz",
+      "description": "Crystal oscillator for ESP32-S3",
+      "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+      "package": "3225 SMD",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "XTAL_IN",
+          "net": "/XTAL_P"
+        },
+        {
+          "pin": "2",
+          "function": "GND",
+          "net": "/GND"
+        },
+        {
+          "pin": "3",
+          "function": "XTAL_OUT",
+          "net": "/XTAL_N"
+        },
+        {
+          "pin": "4",
+          "function": "GND",
+          "net": "/GND"
+        }
+      ],
+      "notes": "12pF NP0 load caps to GND on each pin. 22 ohm series on XTAL_P."
+    },
+    "J2": {
+      "value": "SM02B-SRSS-TB",
+      "description": "1.0mm pitch 2-pin JST-SH battery connector",
+      "footprint": "Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+      "package": "JST-SH SMD",
+      "source": "Shopee (C160402)",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Battery +",
+          "net": "/B_PLUS"
+        },
+        {
+          "pin": "2",
+          "function": "Battery -",
+          "net": "/B_MINUS"
+        }
+      ],
+      "notes": "Pin 1 = cell positive, pin 2 = cell negative. Verify polarity with meter before connecting battery."
+    },
+    "SW1": {
+      "value": "MSK12C02",
+      "description": "SPDT slide switch (power on/off)",
+      "footprint": "Button_Switch_SMD:SW_SPDT_PCM12",
+      "package": "SPDT SMD slide",
+      "source": "Shopee (C431540)",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Common",
+          "net": "/LDO_EN"
+        },
+        {
+          "pin": "2",
+          "function": "NO (ON)",
+          "net": "/LDO_IN"
+        },
+        {
+          "pin": "3",
+          "function": "NC (OFF)",
+          "net": "/GND"
+        }
+      ],
+      "notes": "Common to U5 EN pin. ON position connects EN to LDO_IN (high). OFF position connects EN to GND (low)."
+    },
+    "SW2": {
+      "value": "RESET",
+      "description": "Tactile push button (reset)",
+      "footprint": "RAMS_Local:SW_Tactile_SPST_3x4mm",
+      "package": "SMD 3x4mm (TS-1185 / 3*4*2mm)",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Terminal A",
+          "net": "/EN"
+        },
+        {
+          "pin": "2",
+          "function": "Terminal B",
+          "net": "/GND"
+        }
+      ]
+    },
+    "SW3": {
+      "value": "BOOT",
+      "description": "Tactile push button (boot/GPIO0)",
+      "footprint": "RAMS_Local:SW_Tactile_SPST_3x4mm",
+      "package": "SMD 3x4mm (TS-1185 / 3*4*2mm)",
+      "source": "Shopee",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Terminal A",
+          "net": "/BOOT"
+        },
+        {
+          "pin": "2",
+          "function": "Terminal B",
+          "net": "/GND"
+        }
+      ]
+    },
+    "FB1": {
+      "value": "FerriteBead",
+      "description": "LoRa supply noise suppression",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Input",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "function": "Output",
+          "net": "/LORA_VDD"
+        }
+      ]
+    },
+    "L1": {
+      "value": "0R (DNP for WROOM-1)",
+      "description": "Not needed for WROOM-1 module (internal VDD3P3_A). DNP or place as 0R jumper.",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "Input",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "function": "Output",
+          "net": "/+3V3"
+        }
+      ]
+    },
+    "R1": {
+      "value": "5.1k",
+      "description": "USB-C CC1 sink termination",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/CC1"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ]
+    },
+    "R2": {
+      "value": "5.1k",
+      "description": "USB-C CC2 sink termination",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/CC2"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ]
+    },
+    "R3": {
+      "value": "4.3k 1%",
+      "description": "LTH7R charge current programming (233mA, from purchased 4.3k stock)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/PROG"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ],
+      "notes": "Purchased 4.3k instead of 4.02k. Charge current = 1000/4.3 = ~233mA (was 249mA). Acceptable."
+    },
+    "R4": {
+      "value": "330R",
+      "description": "DW01A VCC current-limit resistor",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/B_PLUS"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/DW_VCC"
+        }
+      ]
+    },
+    "R5": {
+      "value": "1k",
+      "description": "DW01A current sense filter resistor",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/DW_CS"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/B_MINUS"
+        }
+      ]
+    },
+    "R6": {
+      "value": "100k",
+      "description": "Q1 P-FET gate pull-down (battery mode enable)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ],
+      "notes": "Pulls Q1 gate low when USB disconnected, enabling battery power path."
+    },
+    "R7": {
+      "value": "100k",
+      "description": "LDO enable pull-up",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/LDO_EN"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/LDO_IN"
+        }
+      ]
+    },
+    "R8": {
+      "value": "10k",
+      "description": "MCU CHIP_PU (EN/RESET) pull-up",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/EN"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/+3V3"
+        }
+      ]
+    },
+    "R9": {
+      "value": "33R",
+      "description": "Crystal series damping resistor (33R from purchased stock, acceptable substitute for 22R)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/XTAL_P"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/XTAL_P_MCU"
+        }
+      ]
+    },
+    "R10": {
+      "value": "0R",
+      "description": "RF feed tuning jumper (antenna matching)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/RF_MID"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/ANT_FEED"
+        }
+      ]
+    },
+    "R11": {
+      "value": "33R",
+      "description": "LoRa SPI clock series termination",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/LORA_SCK"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/LORA_SCK_DEV"
+        }
+      ]
+    },
+    "R12": {
+      "value": "1k",
+      "description": "Buzzer NPN base current limiter",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/BUZZER_DRV"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/BUZZER_BASE"
+        }
+      ]
+    },
+    "R13": {
+      "value": "100k",
+      "description": "Buzzer NPN base bleeder pull-down",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/BUZZER_BASE"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ]
+    },
+    "R14": {
+      "value": "330k 1%",
+      "description": "Battery ADC voltage divider (high side)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/B_PLUS"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/VBAT_SENSE"
+        }
+      ]
+    },
+    "R15": {
+      "value": "180k 1%",
+      "description": "Battery ADC voltage divider (low side)",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "function": "",
+          "net": "/VBAT_SENSE"
+        },
+        {
+          "pin": "2",
+          "function": "",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C1": {
+      "value": "10uF 16V",
+      "description": "USB VBUS bulk input filter",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C2": {
+      "value": "0.1uF",
+      "description": "USB VBUS high-freq decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C3": {
+      "value": "1uF",
+      "description": "Charger VCC input bypass",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/VBUS"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C4": {
+      "value": "4.7uF",
+      "description": "Charger BAT output filter",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/B_PLUS"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C5": {
+      "value": "0.1uF",
+      "description": "DW01A VCC decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/DW_VCC"
+        },
+        {
+          "pin": "2",
+          "net": "/B_MINUS"
+        }
+      ]
+    },
+    "C6": {
+      "value": "0.1uF",
+      "description": "Battery protection current sense filter",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/DW_CS"
+        },
+        {
+          "pin": "2",
+          "net": "/B_MINUS"
+        }
+      ]
+    },
+    "C7": {
+      "value": "10uF",
+      "description": "LDO input bulk filter",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/LDO_IN"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C8": {
+      "value": "47uF",
+      "description": "LDO output high-capacity reservoir",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "package": "0805",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C9": {
+      "value": "10uF",
+      "description": "LDO output stability ceramic",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C10": {
+      "value": "0.1uF",
+      "description": "+3V3 high-freq bypass",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C11": {
+      "value": "10uF",
+      "description": "MCU VDD33 bulk filter",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C12": {
+      "value": "1uF",
+      "description": "MCU VDD33 decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C13": {
+      "value": "0.1uF",
+      "description": "MCU VDD33 high-freq bypass A",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C14": {
+      "value": "0.1uF",
+      "description": "MCU VDD_SPI decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C15": {
+      "value": "0.1uF",
+      "description": "MCU MCU +3V3 additional bypass A",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C16": {
+      "value": "0.1uF",
+      "description": "MCU MCU +3V3 additional bypass B",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C17": {
+      "value": "1uF",
+      "description": "MCU VDD_SPI low-freq bypass",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C18": {
+      "value": "2.4pF",
+      "description": "2.4GHz RF matching shunt (LNA side) -- 2.4pF from purchased stock, tune on hardware",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/RF_LNA"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C19": {
+      "value": "2.4pF",
+      "description": "2.4GHz RF matching shunt (antenna side)",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/RF_MID"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C20": {
+      "value": "0.1uF",
+      "description": "MCU VDD33 high-freq bypass B",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C21": {
+      "value": "10nF",
+      "description": "MCU MCU +3V3 additional RF high-freq decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C22": {
+      "value": "1uF",
+      "description": "MCU MCU +3V3 additional mid-freq decoupling",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C23": {
+      "value": "1uF",
+      "description": "MCU EN reset delay",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/EN"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C24": {
+      "value": "12pF",
+      "description": "40MHz crystal XTAL_P load cap",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/XTAL_P"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C25": {
+      "value": "12pF",
+      "description": "40MHz crystal XTAL_N load cap",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/XTAL_N"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C26": {
+      "value": "10uF",
+      "description": "LoRa VDD bulk filter",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "package": "0603",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/LORA_VDD"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C27": {
+      "value": "0.1uF",
+      "description": "LoRa VDD high-freq bypass",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/LORA_VDD"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C28": {
+      "value": "0.1uF",
+      "description": "MCU analog subsystem filter",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C29": {
+      "value": "0.1uF",
+      "description": "Battery ADC divider filter",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/VBAT_SENSE"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "C30": {
+      "value": "0.1uF",
+      "description": "LED1 VDD bypass",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/+3V3"
+        },
+        {
+          "pin": "2",
+          "net": "/GND"
+        }
+      ]
+    },
+    "L2": {
+      "value": "2.4nH",
+      "description": "2.4GHz RF matching series inductor",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "package": "0402",
+      "pads": [
+        {
+          "pin": "1",
+          "net": "/RF_LNA"
+        },
+        {
+          "pin": "2",
+          "net": "/RF_MID"
+        }
+      ]
+    }
+  },
+  "net_summary": {
+    "power_nets": [
+      "/VBUS",
+      "/+3V3",
+      "/LDO_IN",
+      "/B_PLUS",
+      "/B_MINUS",
+      "/LORA_VDD"
+    ],
+    "ground_net": "/GND",
+    "signal_nets": [
+      "/USB_DP",
+      "/USB_DN",
+      "/LORA_NSS",
+      "/LORA_MOSI",
+      "/LORA_MISO",
+      "/LORA_SCK",
+      "/LORA_SCK_DEV",
+      "/LORA_RST",
+      "/LORA_DIO0",
+      "/LED_DIN",
+      "/BUZZER_DRV",
+      "/BUZZER_BASE",
+      "/BUZZER_NEG",
+      "/VBAT_SENSE",
+      "/EN",
+      "/BOOT"
+    ],
+    "rf_nets": [
+      "/RF_LNA",
+      "/RF_MID",
+      "/ANT_FEED"
+    ],
+    "protection_nets": [
+      "/DW_OD",
+      "/DW_OC",
+      "/DW_CS",
+      "/DW_VCC",
+      "/Q3_DRAIN",
+      "/PROG"
+    ],
+    "usb_config_nets": [
+      "/CC1",
+      "/CC2"
+    ],
+    "crystal_nets": [
+      "/XTAL_P",
+      "/XTAL_P_MCU",
+      "/XTAL_N"
+    ],
+    "switch_nets": [
+      "/LDO_EN"
+    ]
+  },
+  "firmware_gpio_map": {
+    "GPIO0": {
+      "net": "/BOOT",
+      "function": "Boot button / alarm cancel"
+    },
+    "GPIO1": {
+      "net": "/BUZZER_DRV",
+      "function": "Buzzer driver"
+    },
+    "GPIO2": {
+      "net": "/VBAT_SENSE",
+      "function": "Battery ADC sense"
+    },
+    "GPIO8": {
+      "net": "/LORA_DIO0",
+      "function": "LoRa interrupt"
+    },
+    "GPIO9": {
+      "net": "/LORA_RST",
+      "function": "LoRa reset"
+    },
+    "GPIO10": {
+      "net": "/LORA_NSS",
+      "function": "LoRa SPI chip select"
+    },
+    "GPIO11": {
+      "net": "/LORA_MOSI",
+      "function": "LoRa SPI data out"
+    },
+    "GPIO12": {
+      "net": "/LORA_SCK",
+      "function": "LoRa SPI clock"
+    },
+    "GPIO13": {
+      "net": "/LORA_MISO",
+      "function": "LoRa SPI data in"
+    },
+    "GPIO19": {
+      "net": "/USB_DN",
+      "function": "USB D-"
+    },
+    "GPIO20": {
+      "net": "/USB_DP",
+      "function": "USB D+"
+    },
+    "GPIO48": {
+      "net": "/LED_DIN",
+      "function": "NeoPixel data"
+    }
+  }
+}

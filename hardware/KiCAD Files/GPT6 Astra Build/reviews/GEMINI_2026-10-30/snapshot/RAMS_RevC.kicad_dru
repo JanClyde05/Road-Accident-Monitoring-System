@@ -1,0 +1,9 @@
+(version 1)
+
+(rule "USB-C fine pitch internal clearance"
+   (constraint clearance (min 0.15mm))
+   (condition "A.insideFootprint('J1') && B.insideFootprint('J1')"))
+
+(rule "USB-C mounting hole clearance"
+   (constraint hole_clearance (min 0.15mm))
+   (condition "A.insideFootprint('J1') || B.insideFootprint('J1')"))

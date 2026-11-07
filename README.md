@@ -1,315 +1,181 @@
 # Road Accident Monitoring System (RAMS)
 
-**A real-time highway emergency detection and dispatch system using wearable IoT sensors, long-range LoRa radio, and a standalone Windows command center.**
+**Real-Time Highway Incident Detection, LoRa Long-Range Telemetry, Dual-Tier Edge AI, and Rescuer Command Center**
 
-RAMS detects road accidents in real time using smartphone-grade 100Hz inertial measurement, broadcasts emergency alerts over 433MHz LoRa radio links that bypass cellular network outages, and delivers live incident telemetry to a standalone Windows rescuer desktop application for immediate dispatch response.
-
----
-
-## System Architecture
-
-```
-  Android Phone                ESP32-S3 Wearable           ESP32-S3 Receiver          Windows Desktop
-  (Sensor Engine)              (BLE-to-LoRa Relay)         (Base Station)             (Command Center)
- +-----------------+         +-------------------+       +-------------------+      +--------------------+
- | 100Hz Fused IMU |--BLE--->| BLE GATT Server   |       | SX1278 LoRa RX    |      | Embedded HTTP      |
- | Dual-Band GNSS  |  GATT   | (0xFFE0/0xFFE1)   |       | (433MHz, SF9)     |      | Server (C#)        |
- | Crash Detection |         |                   |       |                   |      |                    |
- | Rider Profile   |         | SX1278 LoRa TX    |=====>>| JSON Serial Out   |--USB->| Serial COM Listener|
- | Google Drive CDN|         | (433MHz, SF9)     | LoRa  | Wi-Fi HTTP POST   |--LAN->| LAN TCP Bridge     |
- +-----------------+         +-------------------+       +-------------------+      |                    |
-                              NeoPixel + Buzzer            NeoPixel Status           | React Dashboard    |
-                              False-Alarm Button                                     | Leaflet Radar Map  |
-                                                                                     | Edge App Mode      |
-                                                                                     +--------------------+
-```
-
-### Data Flow
-
-1. **Phone** captures 100Hz IMU kinematics + dual-band GNSS position + rider credentials
-2. **BLE GATT** streams chunked JSON packets (20-240B MTU) to the wearable
-3. **Wearable** relays via 433MHz LoRa to the receiver (up to several kilometers range)
-4. **Receiver** outputs JSON over USB Serial and/or Wi-Fi HTTP POST to the desktop
-5. **Desktop** ingests, enriches with cached rider profiles and photos, persists to JSON, and renders on a tactical Leaflet map
+RAMS is an end-to-end, multi-tier emergency response platform engineered for real-time traffic accident detection and immediate rescue dispatch. Designed specifically for highway environments and rural road segments vulnerable to cellular coverage dropouts, RAMS pairs a custom wearable sensor relay node with high-rate inertial shock sensing, off-grid 433MHz LoRa long-range radio broadcast, dual-tier on-device neural edge classification, rider mobile telemetry synchronization, conversational voice AI, and a standalone command-center desktop application.
 
 ---
 
-## Hardware Bill of Materials
+## 1. System Architecture & Information Pipeline
 
-### Wearable Node
-
-| Component | Model | Purpose |
-|:---|:---|:---|
-| Microcontroller | ESP32-S3 SuperMini | BLE GATT server + SPI LoRa host |
-| LoRa Radio | SX1278 Ra-02 (433MHz) | Long-range packet transmission |
-| LED | WS2812B NeoPixel (1x) | Status indicator (Blue/Green/Red/Amber) |
-| Buzzer | Active Piezo Buzzer | Audible SOS alert |
-| Button | Tactile Push Button | False-alarm cancellation (GPIO0) |
-| Power | 3.7V LiPo Battery | Portable operation |
-
-### Receiver Base Station
-
-| Component | Model | Purpose |
-|:---|:---|:---|
-| Microcontroller | ESP32-S3 SuperMini | SPI LoRa host + Wi-Fi + USB Serial |
-| LoRa Radio | SX1278 Ra-02 (433MHz) | Long-range packet reception |
-| LED | WS2812B NeoPixel (1x) | Connection status indicator |
-| Power | USB-C (from Desktop PC) | Powered by host computer |
-
-### Wiring Table (Both Nodes)
-
-| Signal | ESP32-S3 Pin | SX1278 Pin |
-|:---|:---|:---|
-| NSS (CS) | GPIO 10 | NSS |
-| SCK | GPIO 12 | SCK |
-| MISO | GPIO 13 | MISO |
-| MOSI | GPIO 11 | MOSI |
-| RST | GPIO 9 | RST |
-| DIO0 (IRQ) | GPIO 8 | DIO0 |
-
-**Wearable additional pins:** NeoPixel = GPIO 48, Buzzer = GPIO 1, Button = GPIO 0
+```
+  +-------------------------------------------------------------------------------+
+  |                             RIDER TIER (MOBILE)                               |
+  |  Android Companion App (Kotlin / Jetpack Compose / Edge AI Engine)            |
+  |  - 50Hz Continuous Inertial Sensing (Fused Accel/Gyro + Euler Horizon)        |
+  |  - Dual-Tier Edge AI: 1D-CNN Kinematic Feature Extractor + SLM Reasoner       |
+  |  - 100% Offline On-Device Voice AI Assistant & Wake-Word Canceler ("Hey RAMS")|
+  |  - Background System Overlay: Pop-up AI assistant over Facebook / other apps  |
+  |  - Dual-Band GNSS Coordinate Acquisition & Offline Hotspot Hazard Density     |
+  |  - Medical & Identity Profile Management (Base62 Token, Photo CDN)            |
+  |  - Cellular Fallback: Automated SMS Emergency Dispatch & Cloud REST Relay     |
+  +---------------------------------------+---------------------------------------+
+                                          |
+                              BLE GATT (0xFFE0 / 0xFFE1)
+                                          |
+                                          v
+  +-------------------------------------------------------------------------------+
+  |                            WEARABLE RELAY TIER                                |
+  |  RAMS Custom Wearable PCB (ESP32-S3FH4R2, Rev C EPDC Edition)                 |
+  |  - 2-Stage Finite State Machine (Freefall -> Impact Spike -> Rest -> Latch)   |
+  |  - On-Board MPU-6050 Motion Engine & Crash Logic (100Hz I2C)                  |
+  |  - 30-Second Auditory / Visual Warning & False-Alarm Cancellation Button      |
+  |  - WS2812B RGB Status Indication (Armed, SOS Alert, Low Battery)              |
+  |  - On-Board Battery Management (TP4054 Charger + DW01A/FS8205A Protection)   |
+  +---------------------------------------+---------------------------------------+
+                                          |
+                        433MHz LoRa Link (SX1278, SF9, CR 4/5)
+                                          |
+                                          v
+  +-------------------------------------------------------------------------------+
+  |                         BASE STATION RECEIVER TIER                            |
+  |  LoRa Ground Station (ESP32-S3 Base Unit)                                     |
+  |  - Continuous 433MHz Carrier Monitoring (SX1278 SPI Interface)               |
+  |  - Dual-Stream Output: High-Speed USB Serial & Local Wi-Fi TCP/HTTP Bridge    |
+  |  - LittleFS Offline Flash Store-and-Forward Emergency Queue                   |
+  +-------------------+---------------------------------------+-------------------+
+                      |                                       |
+              USB Serial (115200)                      Wi-Fi / LAN TCP (8888)
+                      |                                       |
+                      +-------------------+-------------------+
+                                          v
+  +-------------------------------------------------------------------------------+
+  |                        COMMAND CENTER & DISPATCH TIER                         |
+  |  Windows Rescuer Desktop Application (C# .NET + React 19 / Leaflet Radar)     |
+  |  - Zero-Configuration COM Port Auto-Detection & USB Ingestion Engine          |
+  |  - Real-Time Incident Triage, Audible Klaxon Alerts, & Priority Queuing       |
+  |  - Interactive Tactical Radar Map with Live Marker Tracking & ETA Calculation |
+  |  - Spatial Machine Learning Hotspot Predictor & Incident Heatmap              |
+  |  - Local JSON Data Persistence (incidents.json, registrations.json)           |
+  |  - Netlify Cloud Backend Integration & Public Web Map Mirror                  |
+  +-------------------------------------------------------------------------------+
+```
 
 ---
 
-## Software Subsystems
+## 2. Master Navigation Index: Focus Folders & Core Entry Points
 
-### 1. Android Companion App (`android_app/`)
+This directory routing table allows human engineers and AI agents to locate and navigate every functional subsystem directly:
 
-Native Kotlin application built with Android Jetpack Compose Material 3.
-
-- **Monochrome High-Contrast Visual Architecture**: Sleek matte-black UI mirroring RAMS IMU Studio with colored functional icons, signal waveforms, and emergency status indicators.
-- **100Hz fused IMU** with dynamic crash threshold calibration and 2-second sticky shock latch
-- **Dual-Band multi-GNSS** position provider (sub-meter accuracy)
-- **BLE GATT client** with MTU-aware chunked transmission (12ms pacing)
-- **Rider Profile** with Base62 token generator and Google Drive 2x2 photo CDN formatter
-- **Dual EXPORT / IMPORT CSV Telemetry Studio**: Full session logging with real-time import of IMU Studio processed CSV datasets.
-- **Dynamic IMU Calibration & False Alarm Cancellation**: Automatically adapts crash shock thresholds and suppresses benign ADL vibrations using imported IMU Studio profiles.
-- **4-tab UI**: Telemetry, Map, Wearable, Settings
-
-**Build and install:**
-```bash
-cd android_app
-.\build_and_install.bat
-```
-
-### 2. ESP32-S3 Wearable Firmware (`wearable_withApp/`)
-
-Ultra-compact body-worn BLE-to-LoRa relay node.
-
-- **BLE GATT Server** (`0xFFE0 / 0xFFE1`) receives phone telemetry JSON
-- **SX1278 LoRa TX** broadcasts packets at 433MHz, SF9, BW125kHz, CR4/5
-- **NeoPixel state machine**: Blue (Connecting), Green (Armed), Red (SOS Alert)
-- **False-alarm** button on GPIO0 with hardware debounce
-
-**Flash:** Open `wearable_withApp/wearable_withApp.ino` in Arduino IDE and upload to ESP32-S3.
-
-### 3. ESP32-S3 Receiver Firmware (`receiver_withDesktop/`)
-
-Stationary base station that captures LoRa packets.
-
-- **SX1278 LoRa RX** with backward-compatible 101-byte and 233-byte packet decoding
-- **USB Serial JSON stream** at 115200 baud for desktop ingestion
-- **Wi-Fi HTTP POST** to cloud backup and LAN desktop bridge
-- **LittleFS queue** for offline store-and-retry resilience
-
-**Flash:** Open `receiver_withDesktop/receiver_withDesktop.ino` in Arduino IDE and upload to ESP32-S3.  
-**Important:** Close the Arduino IDE Serial Monitor after flashing so the desktop app can access the COM port.
-
-### 4. Windows Desktop Command Center (`desktop_app/`)
-
-Standalone native Windows `.exe` with zero external dependencies.
-
-- **Embedded C# HTTP server** with multi-threaded request handling
-- **Auto-detecting USB Serial bridge** for direct LoRa base station hardware ingestion
-- **LAN TCP bridge** (port 8888) for optional Wi-Fi receiver ingestion
-- **Persistent JSON storage** (`registrations.json`, `incidents.json`)
-- **Google Drive CDN photo rendering** with `referrerPolicy="no-referrer"` bypass
-- **Incident auto-enrichment engine**: retroactively updates all events when rider profile arrives
-- **React 19 + Vite dashboard** with Leaflet tactical radar map, animated pins, and emergency triage modals
-- **Microsoft Edge App Mode** for borderless fullscreen operation
-
-**Launch:**
-```bash
-cd desktop_app
-.\launch_desktop.bat
-```
-
-**Recompile (under 2 seconds):**
-```bash
-cd desktop_app
-.\build_exe.bat
-```
-
-### 5. RAMS IMU Studio Application (`RAMS IMU Studio Application/`)
-
-Companion Android inertial analysis & calibration suite:
-
-- **100Hz Real-Time IMU Waveform Monitor**: Multi-channel live visualization for acceleration, angular rate, and orientation angles.
-- **Accident vs. ADL Correlation Studio**: Statistical feature extraction and classification rule derivation.
-- **Processed CSV & Calibration Rules Engine**: Exports filtered CSV and JSON thresholds for seamless consumption by `android_app/`.
-- **Automated USB Installer**: Complete build & deploy pipeline via `build_and_install.bat`.
-
-**Build and install:**
-```bash
-cd "RAMS IMU Studio Application"
-.\build_and_install.bat
-```
-
-### 6. Hardware Engineering & Custom Wearable PCB (`KiCAD Files/Antigravity Build/RAMS - PCB/`)
-
-Turnkey custom hardware design for an ultra-compact body-worn sensor relay:
-
-- **Board Specifications**: 42.0 mm x 32.0 mm, 2-layer FR-4, 1.6mm thickness, 0.15mm standard track width, 0.3mm mechanical drill vias.
-- **Core Processing & Radio**: ESP32-S3FH4R2 (QFN-56, 4MB Flash + 2MB PSRAM), Johanson 2450AT18 2.4GHz ceramic chip antenna with <10mm direct 45-degree microstrip feed and dual-layer ground keepout, and bottom-mounted Ai-Thinker Ra-02 (SX1278) 433MHz LoRa module with LC power filtering.
-- **Power Management & Safety**:
-  - `U3` (LTH7R / TP4054): 500mA Li-Ion linear charger ($249\text{ mA}$ charge rate).
-  - Auto Power Multiplexer: `Q1` (AO3401A P-FET) + `D2` (SS14W SOD-123FL Schottky) for seamless, zero-loss battery-to-USB switching.
-  - Soft Power Switch: `SW1` (MSK12C02) driving the high-impedance enable pin of `U5` (AP2112K-3.3 600mA LDO with dual 47uF MLCC sag capacitors).
-  - Battery Protection: `U4` (DW01A) + `Q3` (FS8205A TSSOP-8 dual N-FET) for low-side over-charge, over-discharge, and short-circuit cutoff.
-  - Battery Voltage Monitor: Resistor divider `R14` ($330\text{ k}\Omega$) + `R15` ($180\text{ k}\Omega$) with $0.1\ \mu\text{F}$ noise filter.
-- **Automated Autorouting Pipeline**: Headless Specctra DSN/SES Freerouting v2.4.1 execution script (`scripts/auto_route_pipeline.py`) with perimeter ground shield stitching and zone refills.
-- **Fabrication & DIY Reflow**:
-  - Turnkey Gerber, BOM, and CPL files in `JLCPCB_ORDER_PACKAGE/`.
-  - DIY SMT Reflow Option: Bare PCB + Stainless Stencil from JLCPCB (~$15 / ~₱850) paired with Shopee PH components and 2-stage reflow on a Mechanic IX5 Ultra hotplate ($150^\circ\text{C}$ soak / $205^\circ\text{C}$ reflow) using Relife RL-403 ($183^\circ\text{C}$ Sn63Pb37) paste.
+| Subsystem Domain | Primary Focus Folder | Key Entry Points & Core Files | Role & Capabilities |
+|---|---|---|---|
+| **Android Mobile App** | [`apps/android_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/) | [`MainActivity.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/MainActivity.kt)<br>[`RamsViewModel.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt)<br>[`AndroidManifest.xml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/AndroidManifest.xml) | Production Android Kotlin / Jetpack Compose application. Houses BLE GATT, GPS, real-time telemetry, and foreground service. |
+| **Edge AI & Assistant** | [`apps/android_app/.../ai/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/) | [`SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt)<br>[`VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)<br>[`RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt) | Dual-tier edge neural model, 100% offline "Hey RAMS" wake-word recognizer, and personalized conversational companion. |
+| **Standalone AI Suite** | [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/) | [`mobile_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/mobile_ai_app/)<br>[`ai_resources_and_models/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/ai_resources_and_models/)<br>[`FREE_MOTION_DATASETS_DIRECTORY.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/ai_resources_and_models/FREE_MOTION_DATASETS_DIRECTORY.md) | Synchronized standalone twin applications, motion benchmark datasets, and 1-click build pipelines. |
+| **Wearable Firmware** | [`firmware/wearable_withApp/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/wearable_withApp/) | [`wearable_withApp.ino`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/wearable_withApp/wearable_withApp.ino) | ESP32-S3 firmware with MPU-6050 100Hz FSM, ATGM336H GPS parsing, SX1278 LoRa uplink, BLE GATT server, and WS2812B NeoPixel. |
+| **Base Station Firmware** | [`firmware/receiver_withDesktop/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/receiver_withDesktop/) | [`receiver_withDesktop.ino`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/receiver_withDesktop/receiver_withDesktop.ino) | ESP32-S3 base station listening on 433MHz LoRa. Forwards alerts over USB Serial (`RAMS_PKT:...`) and Wi-Fi TCP/HTTP. |
+| **Shared RF Protocol** | [`firmware/shared/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/shared/) | [`protocol.h`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/shared/protocol.h) | Canonical C header defining packed binary RF structs (`LoRaAlertPacket`, `TelemetryPacket`), bitmasks, and RF channels. |
+| **Command Center Desktop** | [`apps/desktop_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/) | [`RescuerForm.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/RescuerForm.cs)<br>[`HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/HotspotPredictor.cs)<br>[`www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html) | Windows Rescuer Operations app (C# .NET / WebView2 + React 19). Handles serial auto-detect, klaxon alerts, and incident triage. |
+| **Cloud Web Mirror** | [`apps/backend/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/) | [`src/App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/App.tsx)<br>[`netlify.toml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/netlify.toml) | React 19 / Leaflet live dispatch map hosted on Netlify Serverless for supervisor and field hospital visibility. |
+| **Hardware & PCB CAD** | [`hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/) | [`RAMS - PCB.kicad_sch`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_sch)<br>[`RAMS - PCB.kicad_pcb`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_pcb)<br>[`circuit_spec.json`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/circuit_spec.json) | Production Rev C EPDC-compliant PCB CAD (DOST-ASTI EPDC manufacturing rules: 0.3mm trace, 0.4mm drill, 0.95mm via). |
+| **Data & Research Docs** | [`docs/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/docs/) | [`FREE_MOTION_DATASETS_DIRECTORY.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/docs/FREE_MOTION_DATASETS_DIRECTORY.md)<br>[`00_SYSTEM_ARCHITECTURE.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/00_SYSTEM_ARCHITECTURE.md)<br>[`MEMORY_MAP.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/MEMORY_MAP.md) | Architectural documentation, dataset directories, validation matrices, and DOST procurement specifications. |
 
 ---
 
-## LoRa Protocol Specification
+## 3. Scientific References, Standards & Open Datasets Used
 
-All packets are defined in `shared/protocol.h` using `__attribute__((packed))` structs.
+The design, mathematical formulations, sensor calibration, and physical validation of RAMS are built upon peer-reviewed research, international engineering standards, and public benchmark datasets:
 
-### Packet Header (13 bytes) -- present in all packets
+### 3.1 Open-Source Motion Datasets & Kinematic Benchmarks
+* **SisFall Dataset** (*Universidad de Antioquia, Colombia*):
+  - 4,510 recorded trials across 38 subjects using dual 3-axis accelerometers (ADXL345, MMA8451Q) and ITG3200 gyroscope at 200 Hz.
+  - Used to calibrate human fall kinematics, pre-impact freefall boundaries, and post-fall rest posture.
+  - Source: [Zenodo 57233](https://zenodo.org/record/57233).
+* **MobiFall & MobiAct Dataset** (*Biomedical Informatics & eHealth Laboratory, HMU Greece*):
+  - 3,200 trials across 67 participants recording pocket smartphone IMU vectors at 87 Hz.
+  - Used to benchmark trouser-pocket smartphone movement during walking, running, stumbling, and vehicle transit.
+  - Source: [MobiAct HMU](https://www.bmi.hmu.gr/the-mobiact-dataset/).
+* **UP-Fall Detection Dataset** (*Universidad Panamericana, Mexico*):
+  - Multi-IMU dataset (waist, wrist, neck, thigh, ankle) at 100 Hz.
+  - Used to correlate wrist wearable kinematics against waist/pocket smartphone telemetry.
+  - Source: [Zenodo 3739768](https://zenodo.org/record/3739768).
+* **IEEE DataPort Road Pothole & Speed Bump Dataset** (*IEEE DataPort*):
+  - 50 Hz tri-axial accelerometer & gyroscope recordings from motorcycles and passenger vehicles over road anomalies.
+  - Used for **False-Positive Suppression**: establishing the vertical shockwave recovery signature ($>4.0G$ vertical impulse returning to $0^\circ$ upright within 300 ms).
+  - Source: [IEEE DataPort Pothole Dataset](https://ieee-dataport.org/open-access/road-pothole-and-bump-dataset).
+* **UCI Human Activity Recognition (HAR) Smartphone Dataset** (*UCI ML Repository*):
+  - 10,299 instances of 50 Hz waist-mounted smartphone data across walking, stair climbing, sitting, and standing.
+  - Used as the nominal Activities of Daily Living (ADL) control group to ensure zero false triggers during pedestrian transit.
+  - Source: [UCI HAR Repository](https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones).
 
-| Field | Type | Size | Description |
-|:---|:---|:---|:---|
-| `packetType` | `uint8_t` | 1B | Packet type enum |
-| `deviceToken` | `char[8]` | 8B | Alphanumeric device identifier |
-| `timestamp` | `uint32_t` | 4B | `millis()` at send time |
-
-### Packet Types
-
-| Type | ID | Total Size | Key Fields |
-|:---|:---|:---|:---|
-| `PKT_TELEMETRY` | 0 | 21B | lat, lon, batteryPct |
-| `PKT_ALERT` | 1 | 26B | lat, lon, eventType, aMag |
-| `PKT_FALSE_ALARM` | 2 | 21B | lat, lon |
-| `PKT_TEST` | 3 | -- | Simulation trigger |
-| `PKT_REGISTER` | 4 | 133B | name, driveLinkConverted |
-| `PKT_USER_TYPE` | 5 | 29B | userType |
-| `PKT_RIDER_PROFILE` | 6 | 233B | Full rider identity, vehicle, medical, photo |
-
-### RiderProfilePacket (233 bytes) -- Single Source of Truth
-
-| Field | Size | Description |
-|:---|:---|:---|
-| `header` | 13B | Packet header |
-| `name` | 24B | Rider's full name |
-| `plate` | 12B | License plate number |
-| `contact` | 16B | Primary phone number |
-| `blood` | 4B | Blood type (e.g. "O+") |
-| `category` | 16B | Road user category |
-| `emergencyPhone` | 16B | Emergency contact phone |
-| `emergencyName` | 20B | Emergency contact name |
-| `vehicleModel` | 20B | Vehicle make/model |
-| `allergies` | 20B | Medical allergies |
-| `photoUrl` | 72B | Google Drive CDN direct URL |
-
-### Radio Settings
-
-| Parameter | Value |
-|:---|:---|
-| Frequency | 433 MHz ISM |
-| Spreading Factor | SF9 |
-| Bandwidth | 125 kHz |
-| Coding Rate | CR 4/5 |
-| TX Power | 17 dBm |
-| Sync Word | 0x34 |
+### 3.2 Hardware Standards & Semiconductor Specifications
+* **InvenSense MPU-6050 Motion Processing Unit**:
+  - $I^2C$ fast-mode protocol, internal digital low-pass filtering (DLPF 44Hz), $\pm 16g$ accelerometer full-scale, $\pm 2000^\circ/s$ gyroscope range.
+* **Semtech SX1278 LoRa Transceiver**:
+  - 433MHz ISM physical layer, Spreading Factor 9, 125 kHz Bandwidth, Coding Rate 4/5, $+17\text{ dBm}$ output power, link budget $>148\text{ dB}$.
+* **Espressif ESP32-S3FH4R2 Microcontroller**:
+  - Dual-core Xtensa LX7 @ 240MHz with vector instructions, 4MB embedded Flash, 2MB embedded PSRAM, Bluetooth 5.0 LE GATT peripheral.
+* **DOST-ASTI EPDC PCB Design Rules**:
+  - Electronics Product Development Center, Department of Science and Technology, Bicutan, Taguig.
+  - Minimum track width: $0.30\text{ mm}$, track clearance: $0.254\text{ mm}$, mechanical drill: $0.40\text{ mm}$, via diameter: $0.95\text{ mm}$.
 
 ---
 
-## BLE GATT Service
+## 4. Production Methodologies & Technical Engineering
 
-| UUID | Direction | Purpose |
-|:---|:---|:---|
-| Service `0xFFE0` | -- | RAMS Telemetry Service |
-| Characteristic `0xFFE1` | Phone to Wearable | JSON telemetry, profile sync, crash alerts |
+### 4.1 Kinematic Feature Extraction Pipeline (14 Canonical Parameters)
+RAMS samples the phone's 6-axis IMU (fused accelerometer and calibrated gyroscope) at 50 Hz through a 50-sample sliding window ($1000\text{ ms}$ duration with $200\text{ ms}$ overlap). For each window, the kinematic pipeline computes a 14-parameter feature vector:
 
-Packets are MTU-aware chunked (20-240 bytes) with 12ms inter-chunk pacing to prevent BLE stack overflow.
+$$\text{SVM}_i = \sqrt{a_{x,i}^2 + a_{y,i}^2 + a_{z,i}^2}$$
+
+1. **Mean SVM ($G$)**: Baseline gravitational loading and continuous propulsion.
+2. **Peak Shock SVM ($G$)**: Maximum impact impulse ($>4.5G$ for severe collisions; $2.5G\text{--}4.0G$ for road bumps).
+3. **Minimum Freefall SVM ($G$)**: Airborne / drop detection ($<0.35G$ signals weightlessness).
+4. **SVM Standard Deviation ($G$)**: Roughness and kinematic variance dispersion.
+5. **Root Mean Square SVM ($G$)**: Continuous kinetic energy density.
+6. **Peak Gyroscope Magnitude ($^\circ/s$)**: Maximum angular tumbling velocity.
+7. **Mean Gyroscope Magnitude ($^\circ/s$)**: Sustained angular rotation.
+8. **Gyroscope Standard Deviation ($^\circ/s$)**: Rotational stability index.
+9. **Maximum Jerk ($G/s$)**: $\max(\|\text{SVM}_i - \text{SVM}_{i-1}\| \times 50)$, measuring shockwave sharpness.
+10. **Mean Jerk ($G/s$)**: Continuous rate of acceleration change.
+11. **Tilt Delta ($^\circ$)**: $\|\Delta\text{Pitch}\| + \|\Delta\text{Roll}\|$. **The critical discriminator**: genuine crashes rest at $>45^\circ$, while potholes and speed bumps immediately recover to upright ($<5^\circ$).
+12. **Signal Magnitude Area (SMA)**: Activity energy normalized over the window.
+13. **Spectral Energy (SVM)**: Energy dissipation across the shock window.
+14. **Zero-Crossing Rate**: Cyclic cadence used to detect walking ($1.5\text{--}2.0\text{ Hz}$) and running ($2.5\text{--}3.5\text{ Hz}$) while suppressing false alarms.
+
+### 4.2 False Alarm Rejection & Hysteresis Logic
+Naive impact detectors trigger 911 alarms whenever a phone is dropped or hits a bump. RAMS enforces strict **zero false-alarm suppression rules**:
+* **Potholes & Speed Bumps**: Vertical spike up to $4.5G$ with $\text{Tilt Delta} < 10^\circ$ and immediate recovery $\rightarrow$ `SUPPRESSED: ROAD POTHOLE` (0% Risk).
+* **Stationary Phone Drops**: Drop shock up to $3.5G$ at $0\text{ km/h}$ pre-event speed $\rightarrow$ `SUPPRESSED: STATIONARY DROP` (0% Risk).
+* **Pocket Tremors & Hand Shakes**: High-frequency gyro tremor without vehicular speed $\rightarrow$ `SUPPRESSED: POCKET VIBRATION` (0% Risk).
+* **Pedestrian Gait**: Cyclic zero-crossing rate ($1.2\text{--}3.0\text{ Hz}$) with $1.0G$ baseline $\rightarrow$ `SUPPRESSED: PEDESTRIAN ADL` (0% Risk).
+* **Temporal Hysteresis**: Transitions require 3 consecutive matching windows, preventing AI decision flutter, while true accidents trigger immediately ($0\text{ ms}$ latency).
+
+### 4.3 100% Offline Conversational Voice AI & Background Overlay
+* **Continuous Microphone Listener**: Android On-Device Speech Recognition (`createOnDeviceSpeechRecognizer`) backed by Android System Intelligence (`com.google.android.as`), operating 100% offline without network connections.
+* **Phonetic Normalization**: Strips punctuation and matches phonetic variants (`"Hey RAMS"`, `"Hi RAMS"`, `"Hey Ram"`, `"OK RAMS"`, `"RAMS"`).
+* **Background System Overlay (`SYSTEM_ALERT_WINDOW`)**: When the rider says "Hey RAMS" while using Facebook, Google Maps, or browsing the home screen, the app immediately summons the translucent Assistant Bubble over the current screen.
+* **Adaptive Conversational Persona**: Personalizes every response to the registered user type (Motorcycle Rider vs Pedestrian vs Car Driver vs Cyclist) using live telemetry, weather, medical tokens, and comprehensive app technical guidance.
 
 ---
 
-## Quick Start
+## 5. Build, Setup & Quick Start Guide
 
 ### Prerequisites
+* **Android Studio Ladybug (or newer)** with Android SDK 34+.
+* **Arduino IDE 2.x** with the ESP32 Board Support Package (by Espressif Systems).
+* **Windows 10 / 11** with .NET Framework 4.8+.
+* **Node.js 20+** and `npm` (for backend/desktop web builds).
+* **KiCad 10** (for schematic review and PCB generation).
 
-- **Arduino IDE** with ESP32-S3 board support
-- **Android Studio** with Kotlin and Jetpack Compose
-- **Windows 10/11** with Microsoft Edge installed
-- **.NET Framework 4.x** (pre-installed on Windows)
-
-### Deployment Steps
-
-1. **Hardware Assembly (Custom PCB or Prototyping Breadboard)**:
-   - For custom PCB: Follow `KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/PARTS_LIST_FOR_ORDERING.md` to order bare boards + stencil from JLCPCB and reflow using the Mechanic IX5 Ultra.
-   - For breadboard testing: Wire an ESP32-S3 SuperMini to an SX1278 Ra-02 module using the wiring table above.
-
-2. **Flash the Wearable**: Open `wearable_withApp/wearable_withApp.ino` in Arduino IDE, select ESP32-S3, and upload.
-
-3. **Flash the Receiver**: Open `receiver_withDesktop/receiver_withDesktop.ino` in Arduino IDE, select ESP32-S3, and upload. **Close the Serial Monitor after flashing.**
-
-4. **Build the Android App**: Run `android_app/build_and_install.bat` with your phone connected via USB.
-
-5. **Launch the Desktop App**: Run `desktop_app/launch_desktop.bat`. The status popup will show USB Serial and Wi-Fi LAN bridge status.
-
-6. **Connect**: Open the Android app, connect to the wearable via BLE. The wearable LED turns solid green when armed.
-
-7. **Monitor**: The desktop tactical map displays live rider positions and incident alerts in real time.
+### 1-Click Batch Scripts (in `apps/`)
+* [`apps/Build_Android_APK.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/Build_Android_APK.bat) — Compiles and packages the native Android APK (`app-debug.apk`).
+* [`apps/Launch_Desktop_Rescuer.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/Launch_Desktop_Rescuer.bat) — Launches the Rescuer Command Center Desktop executable.
+* [`preview_mobile_app.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/preview_mobile_app.bat) — Runs the browser web preview at port 3000.
 
 ---
 
-## Repository Structure
-
-```
-Danger Monitoring System V2/
-|-- shared/                     Shared LoRa protocol definitions (protocol.h)
-|-- wearable_withApp/           ESP32-S3 wearable firmware (BLE + LoRa TX)
-|-- receiver_withDesktop/       ESP32-S3 receiver firmware (LoRa RX + Serial/WiFi)
-|-- android_app/                Android Jetpack Compose companion app (100Hz IMU + GNSS)
-|-- desktop_app/                Windows desktop command center (C# + React)
-|   |-- Program.cs              Embedded HTTP server + serial bridge
-|   |-- www/                    Compiled React dashboard assets
-|   |-- build_exe.bat           Native C# compiler script
-|   |-- launch_desktop.bat      One-click launcher
-|-- RAMS IMU Studio Application/ Standalone Android 100Hz IMU calibration & correlation studio
-|-- KiCAD Files/                KiCad 10 hardware engineering & manufacturing
-|   |-- Antigravity Build/RAMS - PCB/ 42x32mm 2-layer wearable PCB layout & schematics
-|       |-- JLCPCB_ORDER_PACKAGE/ Turnkey Gerbers, BOM, CPL & Shopee PH parts matrix
-|       |-- scripts/            Automated routing & silkscreen optimization pipelines
-|       |-- ERC reports/        Electrical rule check audit logs (0 errors verified)
-|-- UI Redesign/                React 19 + Vite dashboard source
-|-- Working Code - Do Not Touch/ Golden baseline reference snapshot archive
-|-- MD Files/                   Obsidian vault specifications, flowcharts, & memory maps
-|-- apps/                       Quick-launch shortcuts & setup runners
-|-- .agents/                    Ponytail token optimization rules & skills
-|-- AGENTS.md                   Agent operating guidelines & Decision Ladder
-|-- DESIGN_RULES.md             UI/UX design system (Zero-Emoji Rule)
-|-- MEMORY_MAP.md               Technical knowledge graph & Graphify index
-|-- 00_SYSTEM_ARCHITECTURE.md   Architecture navigation guide
-```
-
----
-
-## Design System
-
-The dashboard follows a strict design system defined in `DESIGN_RULES.md`:
-
-- **Zero-Emoji Rule**: No system Unicode emojis. All icons are custom SVG vector glyphs.
-- **Typography**: Plus Jakarta Sans 900 (display), JetBrains Mono 700 (telemetry data).
-- **Color Palette**: Dark Slate canvas (`#09090b`), Surface (`#121214`), Elevated (`#18181b`).
-- **Map Pins**: Custom teardrop SVG (36x46px) with animated radar rings and context-colored radial shadows.
-
----
-
-## License
-
-This project was developed as a capstone research initiative for highway safety monitoring in the Philippines.
+## 6. Engineering Standards & Design Rules
+1. **Zero-Emoji Design Rule ([`DESIGN_RULES.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/DESIGN_RULES.md))**: System UI interfaces, alerts, logs, and commit records strictly prohibit Unicode emojis. All iconography uses precision vector glyphs.
+2. **DFM Manufacturing Strictness**: All Rev C PCB designs pass automated Python KiCad rule validation against DOST-ASTI EPDC physical limits without waivers or DRC suppressions.
+3. **Safety Timing Invariants**: LoRa airtime constraints, SPI clock speeds (up to 10MHz for SX1278), and BLE notification pacing (12ms) are preserved across all revisions to eliminate packet collision and watchdog resets.
