@@ -120,14 +120,14 @@ fun TelemetryBar(
 
           // Tabular Coordinates
           Text(
-            text = String.format(Locale.US, "LAT %9.6f°", gps.latitude),
+            text = String.format(Locale.US, "LAT %9.6f", gps.latitude),
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurface
           )
           Text(
-            text = String.format(Locale.US, "LON %9.6f°", gps.longitude),
+            text = String.format(Locale.US, "LON %9.6f", gps.longitude),
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
@@ -211,7 +211,7 @@ fun TelemetryBar(
           Spacer(modifier = Modifier.height(4.dp))
 
           Text(
-            text = String.format(Locale.US, "HDG %03.0f°", gps.headingDegrees),
+            text = String.format(Locale.US, "HDG %03.0f deg", gps.headingDegrees),
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
@@ -335,7 +335,7 @@ fun TelemetryBar(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-              text = String.format(Locale.US, "GX %+4.0f  GY %+4.0f  GZ %+4.0f °/s", imu.gyroX, imu.gyroY, imu.gyroZ),
+              text = String.format(Locale.US, "GX %+4.0f  GY %+4.0f  GZ %+4.0f dps", imu.gyroX, imu.gyroY, imu.gyroZ),
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,
               fontSize = 9.sp,

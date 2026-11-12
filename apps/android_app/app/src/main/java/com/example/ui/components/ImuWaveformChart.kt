@@ -120,7 +120,7 @@ fun ImuWaveformChart(
               .padding(horizontal = 8.dp, vertical = 4.dp)
           ) {
             Text(
-              text = "GYRO (°/s)",
+              text = "GYRO (dps)",
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,
               fontSize = 9.sp,
@@ -260,9 +260,9 @@ fun ImuWaveformChart(
           WaveformLegendItem("AZ", WaveAz, String.format(Locale.US, "%+.2f", latestImu.accelZ))
           WaveformLegendItem("SVM", WaveSvm, String.format(Locale.US, "%.2fG", latestImu.aMag))
         } else {
-          WaveformLegendItem("WX", WaveGx, String.format(Locale.US, "%+.0f°/s", latestImu.gyroX))
-          WaveformLegendItem("WY", WaveGy, String.format(Locale.US, "%+.0f°/s", latestImu.gyroY))
-          WaveformLegendItem("WZ", WaveGz, String.format(Locale.US, "%+.0f°/s", latestImu.gyroZ))
+          WaveformLegendItem("WX", WaveGx, String.format(Locale.US, "%+.0f dps", latestImu.gyroX))
+          WaveformLegendItem("WY", WaveGy, String.format(Locale.US, "%+.0f dps", latestImu.gyroY))
+          WaveformLegendItem("WZ", WaveGz, String.format(Locale.US, "%+.0f dps", latestImu.gyroZ))
         }
       }
     }

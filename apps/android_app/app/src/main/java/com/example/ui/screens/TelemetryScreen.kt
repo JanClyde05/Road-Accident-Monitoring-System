@@ -91,7 +91,7 @@ fun TelemetryScreen(
     val statusSubtitle = when {
         imu.aMag >= 3.0f -> "Emergency SOS beacon active"
         imu.aMag >= 1.6f -> "Filtering non-vehicular false alarms"
-        else -> "Watching for crashes and falls • 100% Offline AI"
+        else -> "Watching for crashes and falls | 100% Offline AI"
     }
 
     Column(
@@ -327,9 +327,9 @@ fun TelemetryScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            MetricCell(label = "GX", value = String.format(Locale.US, "%+.1f°/s", imu.gyroX), modifier = Modifier.weight(1f))
-                            MetricCell(label = "GY", value = String.format(Locale.US, "%+.1f°/s", imu.gyroY), modifier = Modifier.weight(1f))
-                            MetricCell(label = "GZ", value = String.format(Locale.US, "%+.1f°/s", imu.gyroZ), modifier = Modifier.weight(1f))
+                            MetricCell(label = "GX", value = String.format(Locale.US, "%+.1f dps", imu.gyroX), modifier = Modifier.weight(1f))
+                            MetricCell(label = "GY", value = String.format(Locale.US, "%+.1f dps", imu.gyroY), modifier = Modifier.weight(1f))
+                            MetricCell(label = "GZ", value = String.format(Locale.US, "%+.1f dps", imu.gyroZ), modifier = Modifier.weight(1f))
                         }
 
                         Spacer(modifier = Modifier.height(4.dp))

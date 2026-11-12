@@ -144,7 +144,7 @@ fun RamsMapView(
   val showNearby = riderProfile?.showNearbyIncidents ?: false
   var isOfflineMode by remember { mutableStateOf(!isDeviceOnline(context)) }
   var webViewRef by remember { mutableStateOf<WebView?>(null) }
-  var isBeamFacingTop by remember { mutableStateOf(true) }
+  var isBeamFacingTop by remember { mutableStateOf(false) }
 
   // Prioritize real-time IMU compass orientation, fallback to GPS heading
   val heading = if (imu.yawDegrees != 0f) imu.yawDegrees else gps.headingDegrees
@@ -404,13 +404,13 @@ fun RamsMapView(
           // Controls on Right: Beam Mode & Recenter Buttons
           Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
 
-            // Beam Alignment Toggle Button (Forward/Top of Phone vs Compass)
+            // Beam Alignment Toggle Button (Compass Tracking vs Locked)
             Box(
               modifier = Modifier
                 .size(28.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .background(Color(0xE618181B))
-                .border(1.dp, if (isBeamFacingTop) RamsSyncBlue else Color(0xFF27272A), RoundedCornerShape(4.dp))
+                .border(1.dp, if (!isBeamFacingTop) RamsSyncBlue else Color(0xFF27272A), RoundedCornerShape(4.dp))
                 .clickable {
                   isBeamFacingTop = !isBeamFacingTop
                 },
@@ -419,7 +419,7 @@ fun RamsMapView(
               Icon(
                 imageVector = Icons.Default.Explore,
                 contentDescription = "Beam Mode",
-                tint = if (isBeamFacingTop) RamsSyncBlue else Color(0xFFA1A1AA),
+                tint = if (!isBeamFacingTop) RamsSyncBlue else Color(0xFFA1A1AA),
                 modifier = Modifier.size(15.dp)
               )
             }
@@ -464,12 +464,12 @@ fun RamsMapView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
-            val beamLabel = if (isBeamFacingTop) "BEAM: FORWARD (TOP)" else String.format(Locale.US, "HDG %03.0f°", heading)
+            val beamLabel = if (isBeamFacingTop) "BEAM: LOCKED (0 deg)" else String.format(Locale.US, "HDG %03.0f deg", heading)
             Text(
               text = if (gps.hasFix) {
-                String.format(Locale.US, "%.5f, %.5f • %s", gps.latitude, gps.longitude, beamLabel)
+                String.format(Locale.US, "%.5f, %.5f | %s", gps.latitude, gps.longitude, beamLabel)
               } else {
-                String.format(Locale.US, "ACQUIRING FIX • %s", beamLabel)
+                String.format(Locale.US, "ACQUIRING FIX | %s", beamLabel)
               },
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,

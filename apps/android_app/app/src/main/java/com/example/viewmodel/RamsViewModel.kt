@@ -357,8 +357,10 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun pinAndRouteToLocation(locationQuery: String) {
+    _activeNavTabFlow.value = RamsNavTab.MAP
     viewModelScope.launch(Dispatchers.IO) {
       val (destLat, destLon, resolvedName) = resolveLocationCoordinates(locationQuery)
+      android.util.Log.i("RAMS_Route", "pinAndRouteToLocation: '$locationQuery' -> target: $resolvedName ($destLat, $destLon)")
       val userLat = if (gpsState.value.hasFix) gpsState.value.latitude else 17.6132
       val userLon = if (gpsState.value.hasFix) gpsState.value.longitude else 121.7270
 
@@ -877,6 +879,9 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       startBluetoothDiscovery()
       checkAndAutoConnectWearable()
     }
+
+    // Wire app action handler to Voice AI engine for voice navigation & command execution
+    voiceAlarmCanceler.appActionHandler = appActionHandler
 
     // Connect speech detection listener to siren ducking
     voiceAlarmCanceler.onSpeechDetectedListener = { isSpeaking ->

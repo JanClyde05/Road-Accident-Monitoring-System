@@ -208,8 +208,8 @@
     var isUserPanning = false;
     var lastUserPanTime = 0;
 
-    // Direction beam alignment mode: 'forward' (default: locked to North/top of phone) or 'compass'
-    var beamMode = 'forward';
+    // Direction beam alignment mode: 'compass' (default: dynamic real-time compass heading) or 'forward'
+    var beamMode = 'compass';
 
     // Continuous 360-degree angle unwrap tracker to eliminate jitter and 359/1 spin
     var cumulativeHdg = 0;
@@ -251,22 +251,14 @@
     function createUserIcon(hdg) {
       var initRot = (beamMode === 'forward') ? 0 : hdg;
       var beamSvg = '<svg class="direction-beam-container" id="directionBeam" viewBox="0 0 160 160" style="transform: rotate(' + initRot + 'deg);">' +
-        '<defs>' +
-        '<radialGradient id="beamGrad" cx="80" cy="80" r="75" fx="80" fy="80" gradientUnits="userSpaceOnUse">' +
-        '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.85"/>' +
-        '<stop offset="35%" stop-color="#3b82f6" stop-opacity="0.45"/>' +
-        '<stop offset="70%" stop-color="#3b82f6" stop-opacity="0.15"/>' +
-        '<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>' +
-        '</radialGradient>' +
-        '</defs>' +
-        '<path d="M 80 80 L 42.5 15.05 A 75 75 0 0 1 117.5 15.05 Z" fill="url(#beamGrad)" />' +
+        '<path d="M 80 80 L 42.5 15.05 A 75 75 0 0 1 117.5 15.05 Z" fill="#3b82f6" fill-opacity="0.35" />' +
         '</svg>';
 
       var puckHtml = '<div class="user-puck-view">' +
         beamSvg +
         '<div class="user-pulse-ring"></div>' +
         '<div class="user-puck"><div class="puck-center-dot"></div></div>' +
-        '<div class="user-label-pill">LIVE • YOU</div>' +
+        '<div class="user-label-pill">LIVE | YOU</div>' +
         '</div>';
 
       var pinSvg = '<svg class="user-pin-svg" viewBox="0 0 36 46" fill="none">' +
@@ -278,7 +270,7 @@
       var pinHtml = '<div class="user-pin-view">' +
         '<div class="user-pin-pulse"></div>' +
         pinSvg +
-        '<div class="user-pin-label">LIVE • YOU</div>' +
+        '<div class="user-pin-label">LIVE | YOU</div>' +
         '</div>';
 
       var currentZoom = (map && typeof map.getZoom === 'function') ? map.getZoom() : 15;

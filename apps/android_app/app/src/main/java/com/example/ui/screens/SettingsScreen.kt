@@ -1828,7 +1828,7 @@ fun SettingsScreen(
     if (showPrivacyDialog) {
       LegalDocumentDialog(
         title = "Privacy Policy",
-        subtitle = "Google Play & Statutory Compliance • v1.0.0",
+        subtitle = "Google Play & Statutory Compliance | v1.0.0",
         content = RamsLegalDocuments.PRIVACY_POLICY,
         onDismiss = { showPrivacyDialog = false }
       )
@@ -1837,7 +1837,7 @@ fun SettingsScreen(
     if (showTermsDialog) {
       LegalDocumentDialog(
         title = "Terms of Service",
-        subtitle = "End-User License Agreement • v1.0.0",
+        subtitle = "End-User License Agreement | v1.0.0",
         content = RamsLegalDocuments.TERMS_OF_SERVICE,
         onDismiss = { showTermsDialog = false }
       )
@@ -1916,7 +1916,7 @@ private fun CreditsOverlay(onDismiss: () -> Unit) {
       Spacer(modifier = Modifier.height(6.dp))
       TeamMemberCard(
         name = "Engr. May Anne Valencia, Ph.D.",
-        role = "Project Adviser — ECE, Ph.D.",
+        role = "Project Adviser - ECE, Ph.D.",
         description = "Academic supervision, ECE research guidance, and doctoral engineering mentorship",
         accentColor = RamsWarningAmber,
         icon = Icons.Default.School
@@ -1937,7 +1937,7 @@ private fun CreditsOverlay(onDismiss: () -> Unit) {
       Spacer(modifier = Modifier.height(6.dp))
       TeamMemberCard(
         name = "Jan Clyde T. Talosig",
-        role = "Main Developer — Software & Hardware (ECE)",
+        role = "Main Developer - Software & Hardware (ECE)",
         description = "Full-stack system architecture, embedded firmware (ESP32/Arduino), Android & Desktop app development, PCB design, and IoT integration",
         accentColor = RamsAlertRed,
         icon = Icons.Default.Person,
@@ -1973,7 +1973,7 @@ private fun CreditsOverlay(onDismiss: () -> Unit) {
       Spacer(modifier = Modifier.height(4.dp))
 
       // TIER 3: Support Members
-      Text("SUPPORT TEAM — ECE", fontSize = 9.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = RamsSyncBlue, letterSpacing = 1.sp)
+      Text("SUPPORT TEAM - ECE", fontSize = 9.sp, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold, color = RamsSyncBlue, letterSpacing = 1.sp)
       Spacer(modifier = Modifier.height(6.dp))
 
       Row(
@@ -2018,10 +2018,10 @@ private fun CreditsOverlay(onDismiss: () -> Unit) {
         ) {
           Text("A capstone project under the", fontSize = 10.sp, color = Color(0xFF71717A))
           Text("College of Engineering and Architecture", fontSize = 12.sp, fontWeight = FontWeight.Black, color = Color.White, textAlign = TextAlign.Center)
-          Text("Cagayan State University — Carig Campus", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFFA1A1AA), textAlign = TextAlign.Center)
+          Text("Cagayan State University - Carig Campus", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFFA1A1AA), textAlign = TextAlign.Center)
           Text("Department of Electronics Engineering (ECE)", fontSize = 9.5.sp, fontFamily = FontFamily.Monospace, color = RamsSyncBlue, textAlign = TextAlign.Center)
           Spacer(modifier = Modifier.height(2.dp))
-          Text("© 2026–2027 RAMS Project Team", fontSize = 9.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF52525B))
+          Text("(c) 2026-2027 RAMS Project Team", fontSize = 9.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF52525B))
         }
       }
 
@@ -2264,7 +2264,7 @@ private fun GooglePlayPublishingDialog(onDismiss: () -> Unit) {
           verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
           PublishingSpecItem(label = "Application ID", value = "com.aistudio.rams.wkqmzb", status = "Configured")
-          PublishingSpecItem(label = "Target SDK Level", value = "API 35 (Android 15 — Play Store Requirement)", status = "Ready")
+          PublishingSpecItem(label = "Target SDK Level", value = "API 35 (Android 15 - Play Store Requirement)", status = "Ready")
           PublishingSpecItem(label = "Minimum SDK Level", value = "API 24 (Android 7.0 Nougat)", status = "Ready")
           PublishingSpecItem(label = "Version Code / Name", value = "1 (v1.0.0)", status = "Configured")
           PublishingSpecItem(label = "Permissions Disclosure", value = "ACCESS_FINE_LOCATION, BLUETOOTH_SCAN, BLUETOOTH_CONNECT, POST_NOTIFICATIONS", status = "Compliant")
@@ -2316,64 +2316,64 @@ private fun PublishingSpecItem(label: String, value: String, status: String) {
 private object RamsLegalDocuments {
   const val PRIVACY_POLICY = """ROAD ACCIDENT MONITORING SYSTEM (RAMS)
 PRIVACY POLICY
-Last Updated: September 2026 • Version 1.0.0
+Last Updated: September 2026 | Version 1.0.0
 
 1. INTRODUCTION & SCOPE
 The Road Accident Monitoring System ("RAMS", "we", "our") is designed to safeguard commuters and riders through real-time accident detection, telemetry monitoring, and emergency response dispatch. This Privacy Policy explains how your information is collected, processed, and protected when using the RAMS mobile application.
 
 2. INFORMATION WE COLLECT
-• Location Data (GPS): High-precision latitude, longitude, speed, and altitude are captured during active monitoring sessions to pinpoint incident locations and provide emergency routing for first responders.
-• Telemetry & Sensor Data: 3-axis accelerometer and gyroscope readings (IMU) from your connected wearable device are continuously analyzed on-device to identify crash signatures (fall, high-G impact, collision).
-• Road User Profile: Name, road user category (Pedestrian, Bicycle, Motorcycle, Tricycle, Car, Truck), emergency contact details (name and phone number), blood type, known allergies, and vehicle model.
-• Device & Network Telemetry: Bluetooth MAC addresses, Wi-Fi SoftAP credentials, and LoRa packet transmission status.
+- Location Data (GPS): High-precision latitude, longitude, speed, and altitude are captured during active monitoring sessions to pinpoint incident locations and provide emergency routing for first responders.
+- Telemetry & Sensor Data: 3-axis accelerometer and gyroscope readings (IMU) from your connected wearable device are continuously analyzed on-device to identify crash signatures (fall, high-G impact, collision).
+- Road User Profile: Name, road user category (Pedestrian, Bicycle, Motorcycle, Tricycle, Car, Truck), emergency contact details (name and phone number), blood type, known allergies, and vehicle model.
+- Device & Network Telemetry: Bluetooth MAC addresses, Wi-Fi SoftAP credentials, and LoRa packet transmission status.
 
 3. HOW WE USE YOUR INFORMATION
-• Real-Time Crash Detection: Analyzing sensor spikes to trigger automatic rescue alerts.
-• Emergency Dispatch: Sending automated SOS packets containing your coordinates and medical info to nearby emergency services and desktop monitoring command stations.
-• False Alarm Prevention: Enabling riders to cancel benign triggers before alerting rescue personnel.
-• Offline Resilience: Caching telemetry locally on your device when cellular networks are unavailable.
+- Real-Time Crash Detection: Analyzing sensor spikes to trigger automatic rescue alerts.
+- Emergency Dispatch: Sending automated SOS packets containing your coordinates and medical info to nearby emergency services and desktop monitoring command stations.
+- False Alarm Prevention: Enabling riders to cancel benign triggers before alerting rescue personnel.
+- Offline Resilience: Caching telemetry locally on your device when cellular networks are unavailable.
 
 4. DATA STORAGE & RETENTION
 All telemetry data is processed locally on-device and transmitted directly to authorized RAMS base stations via LoRa radio or secure local networks. We do not sell, rent, or monetize your personal data with third-party advertisers.
 
 5. PERMISSIONS REQUIRED
-• Location (ACCESS_FINE_LOCATION): Required for accident GPS localization.
-• Bluetooth (BLUETOOTH_SCAN, BLUETOOTH_CONNECT): Required for ESP32 wearable sensor pairing and real-time telemetry streaming.
-• Notifications (POST_NOTIFICATIONS): Required for emergency status alerts and danger warnings.
+- Location (ACCESS_FINE_LOCATION): Required for accident GPS localization.
+- Bluetooth (BLUETOOTH_SCAN, BLUETOOTH_CONNECT): Required for ESP32 wearable sensor pairing and real-time telemetry streaming.
+- Notifications (POST_NOTIFICATIONS): Required for emergency status alerts and danger warnings.
 
 6. CONTACT & COMPLIANCE
 For legal inquiries, data protection questions, or cyber security disclosures:
-• Cybersecurity & Legality Lead: Jake Harvey Lopez (ECE)
-• Lead Developer: Jan Clyde T. Talosig (ECE)
-• Project Adviser: Engr. May Anne Valencia, Ph.D. (ECE)
-• College of Engineering and Architecture, Cagayan State University — Carig Campus
-• Department of Electronics Engineering"""
+- Cybersecurity & Legality Lead: Jake Harvey Lopez (ECE)
+- Lead Developer: Jan Clyde T. Talosig (ECE)
+- Project Adviser: Engr. May Anne Valencia, Ph.D. (ECE)
+- College of Engineering and Architecture, Cagayan State University - Carig Campus
+- Department of Electronics Engineering"""
 
   const val TERMS_OF_SERVICE = """ROAD ACCIDENT MONITORING SYSTEM (RAMS)
 TERMS OF SERVICE & END-USER LICENSE AGREEMENT
-Last Updated: September 2026 • Version 1.0.0
+Last Updated: September 2026 | Version 1.0.0
 
 1. ACCEPTANCE OF TERMS
 By installing, registering with, or utilizing the RAMS mobile application ("Application"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not install or use the Application.
 
 2. NATURE OF THE SERVICE
-RAMS is an assistive road safety and accident detection research platform developed as a capstone project at the College of Engineering and Architecture, Cagayan State University — Carig Campus by Electronics Engineering (ECE) students under the academic supervision of Engr. May Anne Valencia, Ph.D. It pairs with wearable hardware (ESP32) and LoRa base station receivers to assist in rapid accident identification.
+RAMS is an assistive road safety and accident detection research platform developed as a capstone project at the College of Engineering and Architecture, Cagayan State University - Carig Campus by Electronics Engineering (ECE) students under the academic supervision of Engr. May Anne Valencia, Ph.D. It pairs with wearable hardware (ESP32) and LoRa base station receivers to assist in rapid accident identification.
 
 3. IMPORTANT SAFETY & EMERGENCY DISCLAIMER
-• ASSISTIVE TOOL ONLY: RAMS is designed to assist riders and emergency responders, but it DOES NOT replace standard emergency services (such as 911, local emergency rescue hotlines, or official traffic police).
-• NO GUARANTEE OF TRANSMISSION: Wireless transmission (LoRa, Bluetooth, Wi-Fi, Cellular) is subject to environmental interference, terrain blockage, battery levels, and network coverage. RAMS does not warrant uninterrupted communication under all crash scenarios.
-• RIDER RESPONSIBILITY: Users must obey all local traffic laws, wear protective equipment (helmets, protective gear), and operate vehicles prudently regardless of monitoring status.
+- ASSISTIVE TOOL ONLY: RAMS is designed to assist riders and emergency responders, but it DOES NOT replace standard emergency services (such as 911, local emergency rescue hotlines, or official traffic police).
+- NO GUARANTEE OF TRANSMISSION: Wireless transmission (LoRa, Bluetooth, Wi-Fi, Cellular) is subject to environmental interference, terrain blockage, battery levels, and network coverage. RAMS does not warrant uninterrupted communication under all crash scenarios.
+- RIDER RESPONSIBILITY: Users must obey all local traffic laws, wear protective equipment (helmets, protective gear), and operate vehicles prudently regardless of monitoring status.
 
 4. HARDWARE MOUNTING & ACCURACY
 Accident detection accuracy relies on proper wearable sensor positioning, stable Bluetooth connectivity, and valid GPS fix. False alarms can occur during sudden drops or aggressive maneuvers; users should utilize the "Cancel False Alarm" control within the configured cancellation countdown window.
 
 5. INTELLECTUAL PROPERTY & ATTRIBUTION
 The RAMS software, firmware, and user interfaces are the intellectual property of the RAMS Project Team:
-• Project Adviser: Engr. May Anne Valencia, Ph.D. (ECE)
-• Lead Developer: Jan Clyde T. Talosig (ECE)
-• Cybersecurity & Legality: Jake Harvey Lopez (ECE)
-• Research & Documentation: James Laurence Guzman (ECE)
-• © 2026–2027 RAMS Project Team • College of Engineering and Architecture, CSU-Carig
+- Project Adviser: Engr. May Anne Valencia, Ph.D. (ECE)
+- Lead Developer: Jan Clyde T. Talosig (ECE)
+- Cybersecurity & Legality: Jake Harvey Lopez (ECE)
+- Research & Documentation: James Laurence Guzman (ECE)
+- (c) 2026-2027 RAMS Project Team - College of Engineering and Architecture, CSU-Carig
 
 6. LIMITATION OF LIABILITY
 To the maximum extent permitted by applicable law, the development team and academic institution shall not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use the system during a vehicular incident."""

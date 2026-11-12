@@ -542,6 +542,69 @@ Every entry documents:
   3. Passed `cognition.movement.name` to match parameter type.
 - **Prevention Directive**: In Kotlin, anonymous object declarations whose members must be accessible within the class must be marked `private` (otherwise their public type collapses to `Any`). Declare internal helper properties before the `init {}` block.
 
+
+---
+
+### Bug 33: Missing appActionHandler Dependency Injection in RamsViewModel Init
+- **Subsystem**: Voice AI Engine & Application Navigation Dispatch (`RamsViewModel.kt`, `VoiceAlarmCanceler.kt`, `RamsAiAssistantEngine.kt`)
+- **Severity**: HIGH (Silent Failure of All Voice Navigation & Action Commands)
+- **Symptoms**: Voice commands for map pin placement ("pin MCNP", "route to SM City", "where is Robinsons") and system actions returned spoken confirmations from RAMS, but no pin appeared on the map, no route polyline was plotted, and no tab navigation occurred.
+- **Root Cause**: `voiceAlarmCanceler.appActionHandler = appActionHandler` was omitted during `RamsViewModel` initialization. When `assistantEngine.generateAssistantResponse()` executed, `appActionHandler` remained null, resulting in safe-call invocations (`appActionHandler?.pinAndRouteToLocation()`) silently no-oping without triggering errors.
+- **Files Modified**: `apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt`, `apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt`
+- **Resolution**:
+  1. Explicitly wired `voiceAlarmCanceler.appActionHandler = appActionHandler` inside `RamsViewModel.kt:init{}`.
+  2. Enhanced `pinAndRouteToLocation()` to immediately switch the active navigation tab to `RamsNavTab.MAP` upon invocation, ensuring immediate visual feedback.
+  3. Expanded `routeRegex` in `RamsAiAssistantEngine.kt` to recognise "where is", "nasaan ang", "locate", "find", "take us to", and "dalhin kami sa".
+- **Prevention Directive**: Never instantiate a decoupled command handler interface without verifying its injection into the consumer engine in the viewmodel initialization block.
+
+---
+
+### Bug 34: Flashlight Direction Beam Orientation Inversion & Compass Tracking Failure
+- **Subsystem**: Dynamic Mapping UI & Sensor Orientation (`map.html`, `RamsMapView.kt`, `PhoneSensorEngine.kt`)
+- **Severity**: HIGH (Navigation Beam Inversion & Lack of Dynamic Pointing)
+- **Symptoms**: On the Infinix Note 40 Pro+ 5G, pointing the physical top of the phone (front camera / IR blaster) like a remote control did not dynamically rotate the map's blue flashlight beam; the beam remained locked pointing straight up or failed to reflect the true compass azimuth.
+- **Root Cause**:
+  1. In `map.html` and `RamsMapView.kt`, `beamMode` was hardcoded to default to `'forward'` (`rotate(0deg)`), locking the flashlight cone to screen-up and bypassing live compass azimuth inputs.
+  2. `isBeamFacingTop` in `RamsMapView.kt` defaulted to `true`, forcing the WebView to continually re-lock the beam forward.
+- **Files Modified**: `apps/android_app/app/src/main/assets/leaflet/map.html`, `apps/android_app/app/src/main/java/com/example/ui/components/RamsMapView.kt`
+- **Resolution**:
+  1. Defaulted `beamMode = 'compass'` in `map.html` and `isBeamFacingTop = false` in `RamsMapView.kt`.
+  2. Linked unwrapped continuous 360-degree heading tracking directly to the device's horizontal forward-axis projection (`atan2(R[1], R[4])` in `PhoneSensorEngine.kt`), allowing the user to use the phone as a remote/compass pointer.
+  3. Added interactive toggle support so riders can switch between compass-tracking and top-locked modes as needed.
+- **Prevention Directive**: Always default handheld map orientation beams to dynamic compass azimuth tracking with continuous angle unwrapping to prevent 359/0 spinning.
+
+---
+
+### Bug 35: Monospace Font Tofu Box Glyphs on Android 14 (Transsion XOS)
+- **Subsystem**: Visual Design & Cross-Platform Typography (`SensorAiInferenceEngine.kt`, `MapScreen.kt`, `TelemetryScreen.kt`, `AiSuiteScreen.kt`, `RamsMapView.kt`)
+- **Severity**: MEDIUM (Visual UI Distortion / Broken Glyphs)
+- **Symptoms**: Ugly rectangular missing-glyph boxes displayed in place of bullet points and degree symbols across the AI Cognition Monitor, Telemetry Dashboard, and Map HUD (e.g., `0% RISK [?] FALSE ALARM SUPPRESSED`, `METRICS: 1.00G Peak [?] 0.0[?] Tilt`).
+- **Root Cause**: UTF-8 bullet characters (`•`) and degree symbols (`°`) lack glyph representations in the default monospace font bundled with Android 14 on Transsion XOS (Infinix / Tecno), causing the OS font renderer to display tofu placeholder boxes.
+- **Files Modified**:
+  - `apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/screens/MapScreen.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/screens/TelemetryScreen.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/screens/AiSuiteScreen.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/components/RamsMapView.kt`
+  - `apps/android_app/app/src/main/java/com/example/SplashActivity.kt`
+- **Resolution**: Replaced all Unicode bullets with standard ASCII pipes (`|`) or dashes (`-`), and replaced degree symbols with explicit textual units (`deg`, `dps`, `N`, `E`).
+- **Prevention Directive**: In monospace telemetry fields on mobile OSs, avoid Unicode symbols that lack guaranteed font glyph support; use standard ASCII separators and unit designations.
+
+---
+
+### Bug 36: Elimination of Non-Compliant Gradient UI Elements
+- **Subsystem**: UI Theme & Design System (`SplashActivity.kt`, `VoiceBubbleOverlay.kt`, `AiSuiteScreen.kt`, `map.html`)
+- **Severity**: LOW (Aesthetic Specification Compliance)
+- **Symptoms**: Inconsistent visual gradients in the splash screen loading bar, voice bubble background, AI radar canvas, and Leaflet SVG direction beam violated the strict monochromatic flat UI guidelines.
+- **Root Cause**: Residue from previous multi-color gradient experiments (`Brush.horizontalGradient`, `Brush.radialGradient`, `<radialGradient>`).
+- **Files Modified**:
+  - `apps/android_app/app/src/main/java/com/example/SplashActivity.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/components/VoiceBubbleOverlay.kt`
+  - `apps/android_app/app/src/main/java/com/example/ui/screens/AiSuiteScreen.kt`
+  - `apps/android_app/app/src/main/assets/leaflet/map.html`
+- **Resolution**: Replaced all gradient brushes with clean, solid, flat fills adhering to DESIGN_RULES.md (e.g., solid `#3b82f6` with 0.35 opacity for the flashlight beam, solid `Color(0xFF3B82F6)` for splash bar).
+- **Prevention Directive**: Adhere strictly to flat, monochromatic color tokens; eliminate fake gradients and decorative visual noise.
+
 ## 3. Master Prevention Guidelines
 
 | Category | Golden Rule |

@@ -50,17 +50,17 @@ class SensorAiInferenceEngine(
         val isAccident: Boolean,
         val ruling: String
     ) {
-        NORMAL_RIDING("Nominal Cruising", false, "Normal riding posture with regular road texture (<2.0G, <15° tilt)"),
-        ROAD_POTHOLE("Road Pothole", false, "Sharp vertical shock (4.2G) with upright posture (<10° tilt). FALSE ALARM SUPPRESSED."),
-        SPEED_BUMP("Speed Bump", false, "Sinusoidal suspension deflection with upright posture (<10° tilt). FALSE ALARM SUPPRESSED."),
+        NORMAL_RIDING("Nominal Cruising", false, "Normal riding posture with regular road texture (<2.0G, <15 deg tilt)"),
+        ROAD_POTHOLE("Road Pothole", false, "Sharp vertical shock (4.2G) with upright posture (<10 deg tilt). FALSE ALARM SUPPRESSED."),
+        SPEED_BUMP("Speed Bump", false, "Sinusoidal suspension deflection with upright posture (<10 deg tilt). FALSE ALARM SUPPRESSED."),
         DROPPED_SMARTPHONE("Stationary Phone Drop", false, "Freefall (<0.3G) followed by tile slap at 0 km/h. FALSE ALARM SUPPRESSED."),
         POCKET_SHAKING("Pocket Shaking / Tremor", false, "High-frequency tremor (3.5Hz) with zero net vehicular velocity. FALSE ALARM SUPPRESSED."),
         PEDESTRIAN_ADL("Walking / Running ADL", false, "Cyclic human gait cadence (1.8-3.0 Hz) without vehicular deceleration. FALSE ALARM SUPPRESSED."),
         MOTORCYCLE_WIND_FLUTTER("Motorcycle High-Speed Wind Flutter", false, "High-frequency aerodynamic pocket flutter (40-60 km/h) with sustained vehicular momentum and upright posture. FALSE ALARM SUPPRESSED."),
         LEARNED_FALSE_ALARM("Learned False Alarm Profile", false, "Motion dynamics match previously dismissed false alarm signature. False alarm safely suppressed by adaptive learning."),
-        SEVERE_COLLISION("Severe Crash Collision", true, "Violent collision shockwave (>5.0G) with extreme tilt (>45°) and rapid deceleration. ALARM CONFIRMED."),
-        FALL_AND_SLIDE("Motorcycle Fall & Spill", true, "Airborne/fall phase followed by ground impact (>3.5G) and persistent resting tilt (>60°). ALARM CONFIRMED."),
-        LOSS_OF_TRACTION("Loss of Traction / Fishtail", true, "Lateral fishtail yaw oscillation (>120°/s) leading to lowside motorcycle spill. ALARM CONFIRMED.")
+        SEVERE_COLLISION("Severe Crash Collision", true, "Violent collision shockwave (>5.0G) with extreme tilt (>45 deg) and rapid deceleration. ALARM CONFIRMED."),
+        FALL_AND_SLIDE("Motorcycle Fall & Spill", true, "Airborne/fall phase followed by ground impact (>3.5G) and persistent resting tilt (>60 deg). ALARM CONFIRMED."),
+        LOSS_OF_TRACTION("Loss of Traction / Fishtail", true, "Lateral fishtail yaw oscillation (>120 dps) leading to lowside motorcycle spill. ALARM CONFIRMED.")
     }
 
     enum class MovementCategory(val label: String, val isEmergency: Boolean, val colorHex: Long) {
@@ -83,8 +83,8 @@ class SensorAiInferenceEngine(
         val movement: MovementCategory = MovementCategory.RESTING,
         val confidencePercent: Int = 99,
         val thoughtStream: String = "Analyzing 50Hz sensor stream. Posture is 0.99G upright. All kinematics nominal.",
-        val riskSummary: String = "0% RISK • NOMINAL SAFETY",
-        val sensorMetrics: String = "0.99G • 1.2° tilt • 0 km/h • 0.0 G/s jerk",
+        val riskSummary: String = "0% RISK | NOMINAL SAFETY",
+        val sensorMetrics: String = "0.99G | 1.2 deg tilt | 0 km/h | 0.0 G/s jerk",
         val decisionTag: String = "SUPPRESSED: No crash signature detected"
     )
 
@@ -180,7 +180,7 @@ class SensorAiInferenceEngine(
     // Temporal hysteresis filter to keep AI decision-making stable and decisive (thread-safe for concurrent inference)
     private val categoryHistory = java.util.concurrent.CopyOnWriteArrayList<MovementCategory>()
     private var committedCategory = MovementCategory.RESTING
-    private var committedThought = "Stable 1.0G gravity vector, 0° tilt delta, 0 km/h. Rider/phone is resting stationary. No movement anomaly."
+    private var committedThought = "Stable 1.0G gravity vector, 0 deg tilt delta, 0 km/h. Rider/phone is resting stationary. No movement anomaly."
     private var smoothedConfidence = 0.99f
 
     /**
@@ -361,9 +361,9 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.SEVERE_IMPACT
                 conf = 0.99f
                 category = MovementCategory.SEVERE_CRASH
-                reason = "Severe collision shockwave (%.2fG, %.1f G/s jerk) with persistent %.1f° rollover capsize tilt at %.0f km/h. Crash confirmed."
+                reason = "Severe collision shockwave (%.2fG, %.1f G/s jerk) with persistent %.1f deg rollover capsize tilt at %.0f km/h. Crash confirmed."
                     .format(Locale.US, f.maxSvmG, f.maxJerk, f.tiltDeltaDeg, preSpeedKmh)
-                thought = "CRITICAL SHOCK DETECTED! Measured %.2fG impact and %.1f° rollover tilt. Kinetic energy confirms motorcycle crash collision. Initiating emergency dispatch."
+                thought = "CRITICAL SHOCK DETECTED! Measured %.2fG impact and %.1f deg rollover tilt. Kinetic energy confirms motorcycle crash collision. Initiating emergency dispatch."
                     .format(Locale.US, f.maxSvmG, f.tiltDeltaDeg)
             }
             // 2. Fall & Slide (Freefall or roll followed by shock and severe resting tilt)
@@ -372,9 +372,9 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.SEVERE_IMPACT
                 conf = 0.98f
                 category = MovementCategory.FALL_AND_SLIDE
-                reason = "Freefall descent (%.2fG) followed by %.2fG ground impact and persistent %.1f° spill tilt while in transit. Lowside spill confirmed."
+                reason = "Freefall descent (%.2fG) followed by %.2fG ground impact and persistent %.1f deg spill tilt while in transit. Lowside spill confirmed."
                     .format(Locale.US, f.minSvmG, f.maxSvmG, f.tiltDeltaDeg)
-                thought = "Airborne freefall phase (%.2fG) followed by ground contact (%.2fG) and sustained %.1f° spill posture. Motorcycle lowside crash confirmed."
+                thought = "Airborne freefall phase (%.2fG) followed by ground contact (%.2fG) and sustained %.1f deg spill posture. Motorcycle lowside crash confirmed."
                     .format(Locale.US, f.minSvmG, f.maxSvmG, f.tiltDeltaDeg)
             }
             // 3. Loss of Traction / Skidding (Violent yaw fishtail leading to vehicle rollover on side)
@@ -383,9 +383,9 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.SKIDDING
                 conf = 0.96f
                 category = MovementCategory.LOSS_OF_TRACTION
-                reason = "Severe lateral yaw oscillation (%.1f deg/s) followed by %.1f° capsize tilt. Skid lowside spill confirmed."
+                reason = "Severe lateral yaw oscillation (%.1f deg/s) followed by %.1f deg capsize tilt. Skid lowside spill confirmed."
                     .format(Locale.US, f.maxGyroMag, f.tiltDeltaDeg)
-                thought = "Violent fishtail yaw oscillation (%.1f°/s) resulted in loss of vehicular balance and capsize. Skid spill confirmed."
+                thought = "Violent fishtail yaw oscillation (%.1f dps) resulted in loss of vehicular balance and capsize. Skid spill confirmed."
                     .format(Locale.US, f.maxGyroMag)
             }
             // 4. Motorcycle High-Speed Wind Flutter (40-60 km/h in jacket pocket with upright rider posture)
@@ -394,9 +394,9 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.NORMAL_RIDING
                 conf = 0.99f
                 category = MovementCategory.MOTORCYCLE_WIND_FLUTTER
-                reason = "High-frequency jacket pocket wind flutter (%.2fG max, %.1f° tilt) at %.0f km/h. Rider posture upright and momentum sustained. False alarm safely suppressed."
+                reason = "High-frequency jacket pocket wind flutter (%.2fG max, %.1f deg tilt) at %.0f km/h. Rider posture upright and momentum sustained. False alarm safely suppressed."
                     .format(Locale.US, f.maxSvmG, f.tiltDeltaDeg, preSpeedKmh)
-                thought = "Aerodynamic wind buffeting detected in jacket pocket at %.0f km/h (%.2fG flutter). Vehicle momentum continuous and posture upright (<50° tilt). No ground contact or capsize. False alarm suppressed."
+                thought = "Aerodynamic wind buffeting detected in jacket pocket at %.0f km/h (%.2fG flutter). Vehicle momentum continuous and posture upright (<50 deg tilt). No ground contact or capsize. False alarm suppressed."
                     .format(Locale.US, preSpeedKmh, f.maxSvmG)
             }
             // 4. Road Pothole (High shock, NO tilt, vehicle in motion)
@@ -405,9 +405,9 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.ADL_FALSE_ALARM
                 conf = 0.99f
                 category = MovementCategory.ROAD_POTHOLE
-                reason = "Vertical shock (%.2fG) with 0° tilt delta (%.1f°). Vehicle remained upright. Road anomaly false alarm suppressed."
+                reason = "Vertical shock (%.2fG) with 0 deg tilt delta (%.1f deg). Vehicle remained upright. Road anomaly false alarm suppressed."
                     .format(Locale.US, f.maxSvmG, f.tiltDeltaDeg)
-                thought = "Vertical suspension shock spike (%.2fG) detected, but tilt angle remained 0° upright (%.1f°). Motorcycle did not spill. Pothole false alarm suppressed."
+                thought = "Vertical suspension shock spike (%.2fG) detected, but tilt angle remained 0 deg upright (%.1f deg). Motorcycle did not spill. Pothole false alarm suppressed."
                     .format(Locale.US, f.maxSvmG, f.tiltDeltaDeg)
             }
             // 5. Speed Bump (Moderate sinusoidal deflection, NO tilt)
@@ -416,7 +416,7 @@ class SensorAiInferenceEngine(
                 hazard = HazardClass.ADL_FALSE_ALARM
                 conf = 0.98f
                 category = MovementCategory.SPEED_BUMP
-                reason = "Sinusoidal suspension impulse (%.2fG) with 0° persistent tilt. Speed bump traversal safely suppressed."
+                reason = "Sinusoidal suspension impulse (%.2fG) with 0 deg persistent tilt. Speed bump traversal safely suppressed."
                     .format(Locale.US, f.maxSvmG)
                 thought = "Symmetrical sinusoidal suspension oscillation (%.2fG). Frame maintained upright attitude. Concluded: Speed bump traversal. Safely suppressed."
                     .format(Locale.US, f.maxSvmG)
@@ -439,7 +439,7 @@ class SensorAiInferenceEngine(
                 conf = 0.98f
                 category = MovementCategory.PHONE_SHAKING
                 reason = "Pocket tremor detected with zero vehicular displacement. Hand turbulence suppressed."
-                thought = "High-frequency erratic tremor (%.1f°/s gyro) at 0 km/h. Concluded: Phone shaking in pocket or hand. Impact ruled out."
+                thought = "High-frequency erratic tremor (%.1f dps gyro) at 0 km/h. Concluded: Phone shaking in pocket or hand. Impact ruled out."
                     .format(Locale.US, f.maxGyroMag)
             }
             // 8. Pedestrian Walking or Running (Only when cyclic variance is sustained)
@@ -466,16 +466,16 @@ class SensorAiInferenceEngine(
                     hazard = HazardClass.NORMAL_RIDING
                     conf = 0.99f
                     category = MovementCategory.NORMAL_CRUISING
-                    thought = "Nominal cruising dynamics (%.2fG, %.1f° tilt) at %.0f km/h. All vehicle kinematics nominal."
+                    thought = "Nominal cruising dynamics (%.2fG, %.1f deg tilt) at %.0f km/h. All vehicle kinematics nominal."
                         .format(Locale.US, f.meanSvmG, f.tiltDeltaDeg, preSpeedKmh)
-                    reason = "Nominal vehicle riding kinematics (%.2fG upright, %.1f° tilt)."
+                    reason = "Nominal vehicle riding kinematics (%.2fG upright, %.1f deg tilt)."
                         .format(Locale.US, f.meanSvmG, f.tiltDeltaDeg)
                 } else {
                     profile = MotionProfile.NORMAL_RIDING
                     hazard = HazardClass.NORMAL_RIDING
                     conf = 0.99f
                     category = MovementCategory.RESTING
-                    thought = "Stable 1.0G gravity vector, 0° tilt delta, 0 km/h. Rider/phone is resting stationary. No movement anomaly."
+                    thought = "Stable 1.0G gravity vector, 0 deg tilt delta, 0 km/h. Rider/phone is resting stationary. No movement anomaly."
                     reason = "Stationary resting posture (%.2fG upright, 0 km/h)."
                         .format(Locale.US, f.meanSvmG)
                 }
@@ -522,8 +522,8 @@ class SensorAiInferenceEngine(
             movement = finalCategory,
             confidencePercent = (finalConf * 100f).toInt(),
             thoughtStream = finalThought,
-            riskSummary = if (profile.isAccident) "CRITICAL RISK (99%) • ALARM CONFIRMED" else "0% RISK • FALSE ALARM SUPPRESSED",
-            sensorMetrics = "%.2fG Peak • %.1f° Tilt • %.0f km/h • %.1f G/s Jerk".format(Locale.US, f.maxSvmG, f.tiltDeltaDeg, preSpeedKmh, f.maxJerk),
+            riskSummary = if (profile.isAccident) "CRITICAL RISK (99%) | ALARM CONFIRMED" else "0% RISK | FALSE ALARM SUPPRESSED",
+            sensorMetrics = "%.2fG Peak | %.1f deg Tilt | %.0f km/h | %.1f G/s Jerk".format(Locale.US, f.maxSvmG, f.tiltDeltaDeg, preSpeedKmh, f.maxJerk),
             decisionTag = if (profile.isAccident) "TRIGGER: Genuine Crash Event Confirmed" else "SUPPRESSED: ${finalCategory.label}"
         )
 
@@ -549,7 +549,7 @@ class SensorAiInferenceEngine(
                     isConfirmedCrash = true,
                     confidenceScore = 0.98f,
                     medicalUrgency = if (f.maxSvmG > 5.0f || preSpeedKmh > 40.0f) "CRITICAL" else "HIGH",
-                    clinicalReasoning = "KINEMATIC VERIFICATION [CONFIRMED CRASH]: Motion profile [%s]. Detected %.2fG impact shock and %.1f G/s jerk followed by sustained %.1f° resting tilt. Pre-crash speed was %.1f km/h. Kinematic trajectory conclusively rules out potholes and ADL drops."
+                    clinicalReasoning = "KINEMATIC VERIFICATION [CONFIRMED CRASH]: Motion profile [%s]. Detected %.2fG impact shock and %.1f G/s jerk followed by sustained %.1f deg resting tilt. Pre-crash speed was %.1f km/h. Kinematic trajectory conclusively rules out potholes and ADL drops."
                         .format(Locale.US, tier1.motionProfile.displayName, f.maxSvmG, f.maxJerk, f.tiltDeltaDeg, preSpeedKmh),
                     automatedDispatchSms = "RAMS EMERGENCY: Confirmed %s. Speed: %.0f km/h, Shock: %.1fG, Tilt: %.0f deg. Urgent medical response requested."
                         .format(Locale.US, tier1.motionProfile.displayName, preSpeedKmh, f.maxSvmG, f.tiltDeltaDeg),

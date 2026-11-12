@@ -260,7 +260,7 @@ private fun IncidentRowItem(
         }
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-          text = "${event.riderName} • ${event.plateNumber} • ${String.format(Locale.US, "%.1f km/h", event.speedKmh)}",
+          text = "${event.riderName} | ${event.plateNumber} | ${String.format(Locale.US, "%.1f km/h", event.speedKmh)}",
           fontFamily = FontFamily.Monospace,
           fontSize = 9.sp,
           color = MaterialTheme.colorScheme.onSurfaceVariant

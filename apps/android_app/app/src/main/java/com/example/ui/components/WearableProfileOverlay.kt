@@ -147,7 +147,7 @@ fun WearableProfileOverlay(
               color = if (event.type == IncidentType.ALERT) RamsAlertRed else MaterialTheme.colorScheme.onSurface
             )
             Text(
-              text = String.format(Locale.US, "Recorded at %s • aMag: %.2fG • Spd: %.1f km/h", event.formattedTime(), event.aMag, event.speedKmh),
+              text = String.format(Locale.US, "Recorded at %s | aMag: %.2fG | Spd: %.1f km/h", event.formattedTime(), event.aMag, event.speedKmh),
               fontFamily = FontFamily.Monospace,
               fontSize = 9.sp,
               color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -245,7 +245,7 @@ fun WearableProfileOverlay(
         ) {
           InfoRow(label = "INCIDENT ID", value = event.id)
           InfoRow(label = "LOCATION", value = event.locationAddress)
-          InfoRow(label = "COORDINATES", value = String.format(Locale.US, "%.6f° N, %.6f° E", event.lat, event.lon))
+          InfoRow(label = "COORDINATES", value = String.format(Locale.US, "%.6f N, %.6f E", event.lat, event.lon))
           InfoRow(label = "PEAK G-FORCE", value = String.format(Locale.US, "%.2f G", event.aMag), valueColor = RamsAlertRed)
           InfoRow(label = "EST. SPEED", value = String.format(Locale.US, "%.1f km/h", event.speedKmh))
           if (event.notes.isNotEmpty()) {

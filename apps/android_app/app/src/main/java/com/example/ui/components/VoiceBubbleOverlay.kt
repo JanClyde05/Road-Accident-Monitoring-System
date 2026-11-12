@@ -287,9 +287,7 @@ fun VoiceBubbleOverlay(
                             modifier = Modifier
                                 .size(48.dp)
                                 .background(
-                                    Brush.radialGradient(
-                                        listOf(accentColor.copy(alpha = 0.25f), Color(0xFF09090B))
-                                    ),
+                                    accentColor.copy(alpha = 0.15f),
                                     CircleShape
                                 )
                                 .clip(CircleShape),

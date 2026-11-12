@@ -656,7 +656,7 @@ class RamsAiAssistantEngine(
         }
 
         // 8. Location Pinning and Routing Execution ("pin X", "route to X", "and route X on my map", "navigate to X", etc.)
-        val routeRegex = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|show route to|how to go to|paano pumunta sa|papunta sa|punta sa|dalhin mo ako sa|pin)\\s+(.+)")
+        val routeRegex = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|take us to|show route to|how to go to|paano pumunta sa|papunta sa|punta sa|punta tayo sa|dalhin mo ako sa|dalhin kami sa|where is|nasaan ang|locate|find|pin)\\s+(.+)")
         val matchResult = routeRegex.find(lower)
         val isPinOrRouteQuery = matchResult != null || lower.contains("ルート") || lower.contains("案内して")
 
@@ -816,7 +816,7 @@ class RamsAiAssistantEngine(
                 try {
                     val weatherData = fetchLiveWeatherRaw(sys.latitude, sys.longitude)
                     if (weatherData != null) {
-                        weatherPrefix = "Currently %.0f°C and %s with winds at %.0f km/h.".format(Locale.US, weatherData.first, weatherData.second)
+                        weatherPrefix = "Currently %.0f C and %s with winds at %.0f km/h.".format(Locale.US, weatherData.first, weatherData.second)
                         weatherCode = weatherData.third
                     }
                 } catch (e: Exception) {
@@ -1121,7 +1121,7 @@ class RamsAiAssistantEngine(
      */
     private fun fetchLiveWeather(lat: Double, lon: Double): String {
         val raw = fetchLiveWeatherRaw(lat, lon) ?: return ""
-        return "Currently %.0f°C and %s.".format(Locale.US, raw.first, raw.second)
+        return "Currently %.0f C and %s.".format(Locale.US, raw.first, raw.second)
     }
 
     /**

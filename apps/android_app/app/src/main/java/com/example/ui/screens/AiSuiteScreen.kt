@@ -347,9 +347,9 @@ fun AiSuiteScreen(
                 }
 
                 val subtitleText = when {
-                    isAlarmActive || isAccident -> "Continuous siren sounding • Say 'Hey RAMS, Stop' to abort"
+                    isAlarmActive || isAccident -> "Continuous siren sounding | Say 'Hey RAMS, Stop' to abort"
                     !isAiEnabled -> "Enable switch above to activate 24/7 crash detection"
-                    isRoadAnomaly -> "${motionProfile.displayName} recognized • No false alarm sent"
+                    isRoadAnomaly -> "${motionProfile.displayName} recognized | No false alarm sent"
                     else -> "Continuously watching for severe impacts & motorcycle falls"
                 }
 
@@ -801,20 +801,20 @@ fun AiSuiteScreen(
                 ) {
                     SimulationActionTile(
                         title = "Severe Crash",
-                        subtitle = "6.8G impact + 78° fall (Siren plays until cancelled)",
+                        subtitle = "6.8G impact + 78 deg fall (Siren plays until cancelled)",
                         accentColor = Color(0xFFEF4444),
                         iconType = SimIconType.CRASH_IMPACT,
                         modifier = Modifier.weight(1f),
                         onClick = {
                             aiEngine.simulateScenario("CRASH")
-                            viewModel.triggerEmergencyCrashAlarm("CRASH", "Simulated Severe Crash (6.8G impact + 78° tilt)")
+                            viewModel.triggerEmergencyCrashAlarm("CRASH", "Simulated Severe Crash (6.8G impact + 78 deg tilt)")
                             statusMessage = "Severe Crash Triggered! Siren & buzzer active until canceled by voice, wearable button, or app."
                         }
                     )
 
                     SimulationActionTile(
                         title = "Road Pothole",
-                        subtitle = "4.2G spike (0° tilt delta)",
+                        subtitle = "4.2G spike (0 deg tilt delta)",
                         accentColor = Color(0xFF06B6D4),
                         iconType = SimIconType.POTHOLE_DIP,
                         modifier = Modifier.weight(1f),
@@ -1232,7 +1232,7 @@ fun AiSuiteScreen(
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             FeatureChip(label = "PEAK SVM", value = String.format(Locale.US, "%.2f G", f?.maxSvmG ?: 0.99f), modifier = Modifier.weight(1f))
                             FeatureChip(label = "PEAK JERK", value = String.format(Locale.US, "%.1f G/s", f?.maxJerk ?: 0f), modifier = Modifier.weight(1f))
-                            FeatureChip(label = "TILT DELTA", value = String.format(Locale.US, "%.1f°", f?.tiltDeltaDeg ?: 1.2f), modifier = Modifier.weight(1f))
+                            FeatureChip(label = "TILT DELTA", value = String.format(Locale.US, "%.1f deg", f?.tiltDeltaDeg ?: 1.2f), modifier = Modifier.weight(1f))
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1522,11 +1522,9 @@ private fun RiderProtectionShieldGraphic(
         val h = size.height
 
         drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(primaryColor.copy(alpha = 0.22f), Color.Transparent),
-                center = Offset(w / 2f, h / 2f),
-                radius = w * 0.48f
-            )
+            color = primaryColor.copy(alpha = 0.08f),
+            center = Offset(w / 2f, h / 2f),
+            radius = w * 0.48f
         )
 
         drawCircle(

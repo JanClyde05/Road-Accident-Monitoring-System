@@ -91,7 +91,7 @@ fun AttitudeIndicator(
           color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-          text = String.format(Locale.US, "P:%+.0f° R:%+.0f° Y:%.0f°", pitch, roll, yaw),
+          text = String.format(Locale.US, "P:%+.0f R:%+.0f Y:%03.0f deg", pitch, roll, yaw),
           fontFamily = FontFamily.Monospace,
           fontWeight = FontWeight.Bold,
           fontSize = 10.sp,
@@ -207,7 +207,7 @@ fun AttitudeIndicator(
               color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-              text = String.format(Locale.US, "%+5.1f°", pitch),
+              text = String.format(Locale.US, "%+5.1f deg", pitch),
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,
               fontSize = 11.sp,
@@ -227,7 +227,7 @@ fun AttitudeIndicator(
               color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-              text = String.format(Locale.US, "%+5.1f°", roll),
+              text = String.format(Locale.US, "%+5.1f deg", roll),
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,
               fontSize = 11.sp,
@@ -247,7 +247,7 @@ fun AttitudeIndicator(
               color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-              text = String.format(Locale.US, "%03.0f°", yaw),
+              text = String.format(Locale.US, "%03.0f deg", yaw),
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,
               fontSize = 11.sp,

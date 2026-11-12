@@ -113,14 +113,14 @@ fun MapScreen(
             }
             if (destinationRoute.distanceKm > 0f) {
               Text(
-                text = String.format(java.util.Locale.US, "%.1f km away  •  ~%.0f min", destinationRoute.distanceKm, destinationRoute.durationMin),
+                text = String.format(java.util.Locale.US, "%.1f km away  | ~%.0f min", destinationRoute.distanceKm, destinationRoute.durationMin),
                 fontSize = 10.sp,
                 fontFamily = FontFamily.Monospace,
                 color = Color(0xFF38BDF8)
               )
             } else {
               Text(
-                text = "Live Route Active • Following Road Corridor",
+                text = "Live Route Active | Following Road Corridor",
                 fontSize = 10.sp,
                 fontFamily = FontFamily.Monospace,
                 color = Color(0xFF38BDF8)
@@ -205,12 +205,12 @@ fun MapScreen(
         ) {
           MetricTile(
             label = "LATITUDE",
-            value = if (gps.hasFix) String.format(java.util.Locale.US, "%.6f° N", gps.latitude) else "NO FIX",
+            value = if (gps.hasFix) String.format(java.util.Locale.US, "%.6f N", gps.latitude) else "NO FIX",
             modifier = Modifier.weight(1f)
           )
           MetricTile(
             label = "LONGITUDE",
-            value = if (gps.hasFix) String.format(java.util.Locale.US, "%.6f° E", gps.longitude) else "NO FIX",
+            value = if (gps.hasFix) String.format(java.util.Locale.US, "%.6f E", gps.longitude) else "NO FIX",
             modifier = Modifier.weight(1f)
           )
         }
@@ -226,7 +226,7 @@ fun MapScreen(
           )
           MetricTile(
             label = "HEADING",
-            value = String.format(java.util.Locale.US, "%03.0f°", activeHeading),
+            value = String.format(java.util.Locale.US, "%03.0f deg", activeHeading),
             modifier = Modifier.weight(1f)
           )
           MetricTile(

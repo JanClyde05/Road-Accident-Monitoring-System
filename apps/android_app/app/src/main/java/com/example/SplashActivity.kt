@@ -250,7 +250,7 @@ fun RamsSplashScreen(
         border = BorderStroke(1.dp, Color(0xFF27272A))
       ) {
         Text(
-          text = "OPERATIONS STATION • v2.0",
+          text = "OPERATIONS STATION | v2.0",
           fontFamily = FontFamily.Monospace,
           fontSize = 10.sp,
           fontWeight = FontWeight.Bold,
@@ -299,16 +299,7 @@ fun RamsSplashScreen(
           modifier = Modifier
             .fillMaxWidth(progressValue)
             .height(3.dp)
-            .background(
-              Brush.horizontalGradient(
-                colors = listOf(
-                  Color(0xFF3B82F6),
-                  Color(0xFF10B981),
-                  Color(0xFFF59E0B),
-                  Color(0xFFEF4444)
-                )
-              )
-            )
+            .background(Color(0xFF3B82F6))
         )
       }
 
