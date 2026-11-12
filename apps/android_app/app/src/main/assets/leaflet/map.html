@@ -210,10 +210,31 @@
 
     // Direction beam alignment mode: 'compass' (default: dynamic real-time compass heading) or 'forward'
     var beamMode = 'compass';
+    var currentBeamAperture = 28.0; // Google Maps narrow high-accuracy default aperture
 
     // Continuous 360-degree angle unwrap tracker to eliminate jitter and 359/1 spin
     var cumulativeHdg = 0;
     var lastRawHdg = null;
+
+    function computeBeamSvgPath(apertureDeg) {
+      var ap = Math.max(16, Math.min(120, (typeof apertureDeg === 'number' && !isNaN(apertureDeg)) ? apertureDeg : 28));
+      var halfRad = (ap / 2) * (Math.PI / 180);
+      var R = 75;
+      var x1 = (80 - R * Math.sin(halfRad)).toFixed(1);
+      var y1 = (80 - R * Math.cos(halfRad)).toFixed(1);
+      var x2 = (80 + R * Math.sin(halfRad)).toFixed(1);
+      var y2 = (80 - R * Math.cos(halfRad)).toFixed(1);
+      return 'M 80 80 L ' + x1 + ' ' + y1 + ' A ' + R + ' ' + R + ' 0 0 1 ' + x2 + ' ' + y2 + ' Z';
+    }
+
+    window.setBeamAperture = function(apertureDeg) {
+      if (typeof apertureDeg !== 'number' || isNaN(apertureDeg)) return;
+      currentBeamAperture = apertureDeg;
+      var pathEl = document.getElementById('directionBeamPath');
+      if (pathEl) {
+        pathEl.setAttribute('d', computeBeamSvgPath(currentBeamAperture));
+      }
+    };
 
     window.setBeamMode = function(mode) {
       beamMode = mode;
@@ -250,8 +271,9 @@
 
     function createUserIcon(hdg) {
       var initRot = (beamMode === 'forward') ? 0 : hdg;
+      var initialPath = computeBeamSvgPath(currentBeamAperture);
       var beamSvg = '<svg class="direction-beam-container" id="directionBeam" viewBox="0 0 160 160" style="transform: rotate(' + initRot + 'deg);">' +
-        '<path d="M 80 80 L 42.5 15.05 A 75 75 0 0 1 117.5 15.05 Z" fill="#3b82f6" fill-opacity="0.35" />' +
+        '<path id="directionBeamPath" d="' + initialPath + '" fill="#3b82f6" fill-opacity="0.35" />' +
         '</svg>';
 
       var puckHtml = '<div class="user-puck-view">' +
@@ -457,9 +479,12 @@
       });
     };
 
-    window.updateUserHeading = function(hdg) {
+    window.updateUserHeading = function(hdg, apertureDeg) {
       currentHdg = hdg;
       applySmoothHeading(hdg);
+      if (typeof apertureDeg === 'number' && !isNaN(apertureDeg)) {
+        window.setBeamAperture(apertureDeg);
+      }
     };
 
     window.recenterMap = function(lat, lon) {
@@ -545,41 +570,16 @@
         lineCap: 'round',
         lineJoin: 'round'
       }).addTo(map);
-
-      // Dynamic road-geometry enhancement: query OSRM directly in WebView for pixel-perfect road curvature
-      if (points.length < 35 && typeof fetch === 'function') {
-        var osrmClientUrl = "https://router.project-osrm.org/route/v1/driving/" + currentLon.toFixed(6) + "," + currentLat.toFixed(6) + ";" + destLon.toFixed(6) + "," + destLat.toFixed(6) + "?overview=full&geometries=geojson";
-        var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-        var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 8000) : null;
-        var fetchOpts = { headers: { 'Accept': 'application/json' } };
-        if (controller) fetchOpts.signal = controller.signal;
-
-        fetch(osrmClientUrl, fetchOpts)
-          .then(function(res) { 
-            if (timeoutId) clearTimeout(timeoutId);
-            return res.json(); 
-          })
-          .then(function(data) {
-            if (data && data.routes && data.routes.length > 0) {
-              var coords = data.routes[0].geometry.coordinates;
-              var highResRoadPoints = coords.map(function(c) { return [c[1], c[0]]; });
-              if (highResRoadPoints.length > 0 && routePolyline && routeGlowLine) {
-                routeGlowLine.setLatLngs(highResRoadPoints);
-                routePolyline.setLatLngs(highResRoadPoints);
-                var g = new L.featureGroup([userMarker, destinationMarker, routePolyline]);
-                map.fitBounds(g.getBounds().pad(0.22), { animate: true, duration: 0.8 });
-                console.log("RAMS: Leaflet upgraded route to " + highResRoadPoints.length + " high-res road coordinates.");
-              }
-            }
-          })
-          .catch(function(err) {
-            console.warn("Client OSRM upgrade skipped: " + err);
-          });
-      }
-
       try {
         var group = new L.featureGroup([userMarker, destinationMarker, routePolyline]);
-        map.fitBounds(group.getBounds().pad(0.22), { animate: true, duration: 0.8 });
+        // Google Maps asymmetrical insets: clear top HUD (80px) and bottom destination card (240px)
+        map.fitBounds(group.getBounds(), {
+          paddingTopLeft: [40, 80],
+          paddingBottomRight: [40, 240],
+          maxZoom: 17,
+          animate: true,
+          duration: 0.8
+        });
       } catch (e) {
         console.warn("fitBounds failed: " + e);
       }

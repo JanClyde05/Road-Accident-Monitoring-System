@@ -111,6 +111,16 @@ fun MapScreen(
                 maxLines = 1
               )
             }
+            if (destinationRoute.nextManeuver.isNotBlank()) {
+              Text(
+                text = "NEXT: " + destinationRoute.nextManeuver.uppercase(java.util.Locale.US),
+                fontSize = 9.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFFBBF24),
+                maxLines = 1
+              )
+            }
             if (destinationRoute.distanceKm > 0f) {
               Text(
                 text = String.format(java.util.Locale.US, "%.1f km away  | ~%.0f min", destinationRoute.distanceKm, destinationRoute.durationMin),

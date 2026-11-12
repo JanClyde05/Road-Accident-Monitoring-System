@@ -605,6 +605,31 @@ Every entry documents:
 - **Resolution**: Replaced all gradient brushes with clean, solid, flat fills adhering to DESIGN_RULES.md (e.g., solid `#3b82f6` with 0.35 opacity for the flashlight beam, solid `Color(0xFF3B82F6)` for splash bar).
 - **Prevention Directive**: Adhere strictly to flat, monochromatic color tokens; eliminate fake gradients and decorative visual noise.
 
+---
+
+### Bug 37: Compass Heading Offset, Missing Road Snapping, and Viewport Pin Obscuration in Live Navigation
+- **Subsystem**: Android Sensor Engine, Live Leaflet Mapping & OSRM Routing (`PhoneSensorEngine.kt`, `map.html`, `RamsMapView.kt`, `RamsViewModel.kt`, `MapScreen.kt`, `DestinationRoute.kt`, `TelemetryModels.kt`)
+- **Severity**: HIGH (Navigation Precision & Spatial Coordination Failure)
+- **Symptoms**:
+  1. Direction beam pointed slightly off true north due to missing geomagnetic declination.
+  2. Flashlight beam had a hardcoded static aperture, failing to provide sensor accuracy confidence feedback.
+  3. Routing from indoors/alleys produced erratic U-turn loops because raw GPS coordinates were not snapped to the road centerline.
+  4. Plotted destination pins and route polylines rendered partially underneath the Compose destination card because Leaflet's `fitBounds` lacked asymmetric vertical padding.
+  5. The navigation card lacked immediate turn-by-turn next maneuver guidance.
+- **Root Cause**:
+  1. `PhoneSensorEngine.kt` did not compute `GeomagneticField.declination` (-1.25 deg in Tuguegarao), causing permanent magnetic north bias on Web Mercator map tiles.
+  2. In `map.html`, the SVG beam was static (fixed 60 deg arc), ignoring `onAccuracyChanged` from Android sensor manager.
+  3. Raw GPS coordinates were passed directly into OSRM route URL without first snapping to the nearest road network via `/nearest/v1/driving/`.
+  4. Symmetrical padding `pad(0.22)` in `fitBounds` ignored bottom Compose UI elements (navigation bar + destination card taking up ~220px).
+  5. Maneuvers were not requested (`steps=true` omitted in OSRM URL).
+- **Resolution**:
+  1. Added `GeomagneticField` true north declination correction and Doppler velocity heading fusion (`curSpeed >= 6.0f`) to `PhoneSensorEngine.kt`.
+  2. Added dynamic beam aperture computation (22 deg for transit, 28 deg for high accuracy, up to 110 deg for low/uncalibrated) streamed into `map.html` SVG path.
+  3. Integrated OSRM `/nearest/v1/driving/` road centerline snapping in `RamsViewModel.kt` prior to route generation.
+  4. Updated `fitBounds` with asymmetrical insets (`paddingTopLeft: [40, 80]`, `paddingBottomRight: [40, 240]`), ensuring markers sit completely in the visible map canvas.
+  5. Added `steps=true` to OSRM query and extracted `nextManeuver` into `DestinationRoute`, rendered as live amber maneuver guidance in `MapScreen.kt`.
+- **Prevention Directive**: Always snap origin coordinates to routable road centerlines before routing; apply `GeomagneticField` declination to align digital compasses with true north map tiles; and configure asymmetric viewport padding for mobile map overlays.
+
 ## 3. Master Prevention Guidelines
 
 | Category | Golden Rule |

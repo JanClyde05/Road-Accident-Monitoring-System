@@ -46,6 +46,8 @@ data class ImuData(
   val yawDegrees: Float = 45.0f,
   val temperatureCelsius: Float = 32.4f,
   val isShockSticky: Boolean = false,
+  val compassAccuracy: Int = 3, // 3 = SENSOR_STATUS_ACCURACY_HIGH
+  val beamAperture: Float = 28.0f, // Google Maps dynamic beam angle in degrees
   val timestamp: Long = System.currentTimeMillis()
 ) {
   val aMag: Float

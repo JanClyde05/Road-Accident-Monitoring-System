@@ -457,9 +457,37 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   private fun fetchOsrmRoute(userLat: Double, userLon: Double, destLat: Double, destLon: Double, label: String): DestinationRoute {
+    // 1. Google Maps style road snapping: snap user raw GPS to nearest road centerline
+    var originLat = userLat
+    var originLon = userLon
+    var originRoadName = ""
+    try {
+      val snapUrl = String.format(Locale.US, "https://router.project-osrm.org/nearest/v1/driving/%.6f,%.6f?number=1", userLon, userLat)
+      val snapConn = URL(snapUrl).openConnection() as HttpURLConnection
+      snapConn.connectTimeout = 3000
+      snapConn.readTimeout = 3000
+      snapConn.setRequestProperty("User-Agent", "RAMS-Road-Safety-Assistant/2.5 (Android; DOST-ASTI)")
+      snapConn.setRequestProperty("Accept", "application/json")
+      if (snapConn.responseCode == 200) {
+        val snapJson = snapConn.inputStream.bufferedReader().use { it.readText() }
+        val snapRoot = JSONObject(snapJson)
+        val waypoints = snapRoot.optJSONArray("waypoints")
+        if (waypoints != null && waypoints.length() > 0) {
+          val wp = waypoints.getJSONObject(0)
+          val loc = wp.optJSONArray("location")
+          if (loc != null && loc.length() >= 2) {
+            originLon = loc.getDouble(0)
+            originLat = loc.getDouble(1)
+            originRoadName = wp.optString("name", "")
+            android.util.Log.i("RAMS_Route", "Snapped origin to road: $originRoadName ($originLat, $originLon)")
+          }
+        }
+      }
+    } catch (_: Exception) {}
+
     val endpoints = listOf(
-      String.format(Locale.US, "https://router.project-osrm.org/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson", userLon, userLat, destLon, destLat),
-      String.format(Locale.US, "https://routing.openstreetmap.de/routed-car/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson", userLon, userLat, destLon, destLat)
+      String.format(Locale.US, "https://router.project-osrm.org/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson&steps=true", originLon, originLat, destLon, destLat),
+      String.format(Locale.US, "https://routing.openstreetmap.de/routed-car/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson&steps=true", originLon, originLat, destLon, destLat)
     )
 
     for (urlStr in endpoints) {
@@ -480,6 +508,33 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
             val durationSec = first.optDouble("duration", 0.0).toFloat()
             val geom = first.optJSONObject("geometry")
             val coords = geom?.optJSONArray("coordinates")
+
+            // Extract Google Maps style turn-by-turn next maneuver guidance
+            var nextManeuverText = ""
+            val legs = first.optJSONArray("legs")
+            if (legs != null && legs.length() > 0) {
+              val leg0 = legs.getJSONObject(0)
+              val steps = leg0.optJSONArray("steps")
+              if (steps != null && steps.length() > 0) {
+                for (sIdx in 0 until steps.length()) {
+                  val st = steps.getJSONObject(sIdx)
+                  val man = st.optJSONObject("maneuver")
+                  val manType = man?.optString("type", "") ?: ""
+                  val modifier = man?.optString("modifier", "") ?: ""
+                  val roadName = st.optString("name", "")
+                  val stepDist = st.optDouble("distance", 0.0)
+                  if (sIdx == 0 && steps.length() > 1 && stepDist < 40.0) continue // Skip micro depart
+                  val modStr = if (modifier.isNotBlank()) " $modifier" else ""
+                  val ontoStr = if (roadName.isNotBlank()) " onto $roadName" else ""
+                  nextManeuverText = "${manType.replaceFirstChar { it.uppercase() }}$modStr$ontoStr in ${stepDist.toInt()}m"
+                  break
+                }
+              }
+            }
+            if (nextManeuverText.isBlank() && originRoadName.isNotBlank()) {
+              nextManeuverText = "Proceed on $originRoadName"
+            }
+
             if (coords != null && coords.length() > 0) {
               val polylinePoints = StringBuilder("[")
               for (i in 0 until coords.length()) {
@@ -490,14 +545,16 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
                 polylinePoints.append(String.format(Locale.US, "[%.6f,%.6f]", lat, lon))
               }
               polylinePoints.append("]")
-              android.util.Log.i("RAMS_Route", "Resolved ${coords.length()} turn-by-turn road waypoints (${distMeters / 1000f} km) via $urlStr")
+              android.util.Log.i("RAMS_Route", "Resolved ${coords.length()} turn-by-turn road waypoints (${distMeters / 1000f} km) via $urlStr. Maneuver: $nextManeuverText")
               return DestinationRoute(
                 destinationName = label,
                 destLat = destLat,
                 destLon = destLon,
                 waypointsJson = polylinePoints.toString(),
                 distanceKm = distMeters / 1000f,
-                durationMin = durationSec / 60f
+                durationMin = durationSec / 60f,
+                nextManeuver = nextManeuverText,
+                snappedRoad = originRoadName
               )
             }
           }

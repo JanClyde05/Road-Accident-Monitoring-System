@@ -104,6 +104,37 @@ class PhoneSensorEngine(
   private var smoothedPitch: Float = Float.NaN
   private var smoothedRoll: Float = Float.NaN
 
+  // Google Maps True North declination & dynamic sensor accuracy aperture
+  @Volatile
+  private var magneticDeclinationDeg: Float = -1.25f // Tuguegarao baseline (~ -1.2 to -1.3 deg West)
+  @Volatile
+  private var compassAccuracyStatus: Int = SensorManager.SENSOR_STATUS_ACCURACY_HIGH
+
+  private fun updateDeclination(lat: Double, lon: Double, alt: Float) {
+    try {
+      val field = android.hardware.GeomagneticField(
+        lat.toFloat(),
+        lon.toFloat(),
+        alt,
+        System.currentTimeMillis()
+      )
+      magneticDeclinationDeg = field.declination
+    } catch (_: Exception) {}
+  }
+
+  private fun computeBeamAperture(): Float {
+    val speed = _phoneGpsState.value.speedKmh
+    if (speed >= 6.0f) {
+      return 22.0f // Tight forward travel beam during cycling / driving
+    }
+    return when (compassAccuracyStatus) {
+      SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> 28.0f // Google Maps high accuracy narrow beam
+      SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> 50.0f
+      SensorManager.SENSOR_STATUS_ACCURACY_LOW -> 85.0f
+      else -> 110.0f // Wide beam under uncalibrated / high magnetic distortion
+    }
+  }
+
   private fun filterAzimuth(rawAzimuth: Float): Float {
     if (smoothedYaw < 0f) {
       smoothedYaw = rawAzimuth
@@ -307,14 +338,29 @@ class PhoneSensorEngine(
         // Project phone's forward Y-axis [0, 1, 0] onto world horizontal plane [East, North]
         val east = rotationMatrix[1].toDouble()
         val north = rotationMatrix[4].toDouble()
-        val rawAzimuth = if (east != 0.0 || north != 0.0) {
+        var rawAzimuth = if (east != 0.0 || north != 0.0) {
           ((Math.toDegrees(atan2(east, north)) + 360.0) % 360.0).toFloat()
         } else {
           SensorManager.getOrientation(rotationMatrix, orientationAngles)
           ((orientationAngles[0] * RAD_TO_DEG) + 360f) % 360f
         }
 
-        val filteredAzimuth = filterAzimuth(rawAzimuth)
+        // Apply True Geographic North declination correction (WMM model)
+        rawAzimuth = (rawAzimuth + magneticDeclinationDeg + 360f) % 360f
+
+        // Google Maps velocity fusion: When traveling in transit (> 6 km/h), smoothly fuse with GPS Course-Over-Ground
+        val curSpeed = _phoneGpsState.value.speedKmh
+        val gpsHdg = _phoneGpsState.value.headingDegrees
+        val fusedAzimuth = if (curSpeed >= 6.0f && gpsHdg > 0f) {
+          var diff = gpsHdg - rawAzimuth
+          while (diff < -180f) diff += 360f
+          while (diff > 180f) diff -= 360f
+          (rawAzimuth + diff * 0.85f + 360f) % 360f
+        } else {
+          rawAzimuth
+        }
+
+        val filteredAzimuth = filterAzimuth(fusedAzimuth)
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles)
         val rawPitchDeg = orientationAngles[1] * RAD_TO_DEG
@@ -326,7 +372,9 @@ class PhoneSensorEngine(
         _phoneImuState.value = _phoneImuState.value.copy(
           pitchDegrees = smoothedPitch,
           rollDegrees = smoothedRoll,
-          yawDegrees = filteredAzimuth
+          yawDegrees = filteredAzimuth,
+          compassAccuracy = compassAccuracyStatus,
+          beamAperture = computeBeamAperture()
         )
       }
 
@@ -335,13 +383,15 @@ class PhoneSensorEngine(
         // Direct hardware compass fallback: event.values[0] is azimuth (0..360)
         val currentYaw = _phoneImuState.value.yawDegrees
         if (currentYaw == 0f || _phoneImuState.value.pitchDegrees == 0f) {
-          val az = filterAzimuth((event.values[0] + 360f) % 360f)
+          val az = filterAzimuth((event.values[0] + magneticDeclinationDeg + 360f) % 360f)
           smoothedPitch = filterTilt(event.values[1], smoothedPitch)
           smoothedRoll = filterTilt(event.values[2], smoothedRoll)
           _phoneImuState.value = _phoneImuState.value.copy(
             yawDegrees = az,
             pitchDegrees = smoothedPitch,
-            rollDegrees = smoothedRoll
+            rollDegrees = smoothedRoll,
+            compassAccuracy = compassAccuracyStatus,
+            beamAperture = computeBeamAperture()
           )
         }
       }
@@ -377,7 +427,7 @@ class PhoneSensorEngine(
           remappedMatrix
         )
         SensorManager.getOrientation(remappedMatrix, orientationAngles)
-        val rawAzimuth = ((orientationAngles[0] * RAD_TO_DEG) + 360f) % 360f
+        val rawAzimuth = ((orientationAngles[0] * RAD_TO_DEG) + magneticDeclinationDeg + 360f) % 360f
         val filteredYaw = filterAzimuth(rawAzimuth)
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles)
@@ -389,15 +439,24 @@ class PhoneSensorEngine(
         _phoneImuState.value = _phoneImuState.value.copy(
           pitchDegrees = smoothedPitch,
           rollDegrees = smoothedRoll,
-          yawDegrees = filteredYaw
+          yawDegrees = filteredYaw,
+          compassAccuracy = compassAccuracyStatus,
+          beamAperture = computeBeamAperture()
         )
       }
     }
   }
 
-  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    if (sensor?.type == Sensor.TYPE_ROTATION_VECTOR ||
+        sensor?.type == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR ||
+        sensor?.type == Sensor.TYPE_MAGNETIC_FIELD) {
+      compassAccuracyStatus = accuracy
+    }
+  }
 
   override fun onLocationChanged(location: Location) {
+    updateDeclination(location.latitude, location.longitude, location.altitude.toFloat())
     val speedKmh = location.speed * 3.6f // convert m/s to km/h
     val acc = if (location.hasAccuracy()) location.accuracy else 2.5f
     val fixLabel = when {

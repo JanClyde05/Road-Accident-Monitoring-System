@@ -522,3 +522,19 @@ only packages that match, drops paths to missing files).
     - **Dynamic Compass Flashlight Beam Pointer (`map.html`, `RamsMapView.kt`, `PhoneSensorEngine.kt`)**: Defaulted `beamMode = 'compass'` in `map.html` and `isBeamFacingTop = false` in `RamsMapView.kt`. The blue direction cone dynamically follows the real-time compass azimuth computed from the phone's forward Y-axis projection (`atan2(R[1], R[4])` in `PhoneSensorEngine.kt`), allowing the user to aim the top of their Infinix Note 40 Pro+ 5G (IR blaster / front camera) like a remote control while the blue beam accurately illuminates the pointed real-world direction.
     - **Monospace Tofu Box Glyph Elimination (`SensorAiInferenceEngine.kt`, `MapScreen.kt`, `TelemetryScreen.kt`, `AiSuiteScreen.kt`, `RamsMapView.kt`, `SplashActivity.kt`)**: Replaced missing Unicode glyphs (UTF-8 bullet points `\u2022` and degree symbols `\u00B0`) across all monospace UI views with standard ASCII pipes (`|`), dashes (`-`), and unambiguous unit descriptors (`deg`, `dps`, `N`, `E`), permanently eliminating broken rectangular tofu box artifacts on Android 14 (Transsion XOS).
     - **Zero-Gradient UI Cleanse (`SplashActivity.kt`, `VoiceBubbleOverlay.kt`, `AiSuiteScreen.kt`, `map.html`)**: Eliminated multi-color gradient bars, radial overlays, and SVG radial gradients (`Brush.horizontalGradient`, `Brush.radialGradient`, `<radialGradient>`), substituting high-discipline solid fills (`Color(0xFF3B82F6)` and semi-transparent flat fills) in strict compliance with the project's zero-gradient flat design directive.
+
+---
+
+## 19. Google Maps Navigation Architecture & High-Precision Road Snapping Engine
+
+### 19.1 Multi-Sensor Compass Fusion & True North Declination
+- **Magnetic Declination Compensation**: Digital compasses align to Magnetic North, but OSM/Leaflet tiles use True Geographic North (EPSG:3857). `PhoneSensorEngine.kt` computes real-time declination $\delta$ (-1.25 deg in Tuguegarao) via Android's `GeomagneticField(lat, lon, alt, epoch)` and adds it to the rotated azimuth.
+- **Doppler Velocity Bearing Fusion**: When moving at vehicular or cycling speed (`curSpeed >= 6.0 km/h`), in-vehicle magnetometer distortion is bypassed by blending 85% towards GPS Course-Over-Ground (`Location.bearing`).
+- **Dynamic Accuracy Beam Aperture**: The Leaflet flashlight beam aperture dynamically scales between 22 deg (transit forward cone), 28 deg (high sensor confidence `SENSOR_STATUS_ACCURACY_HIGH`), 50 deg (medium), and 110 deg (uncalibrated / magnetic anomaly).
+
+### 19.2 Road Centerline Snapping via OSRM Nearest
+- **Origin Snapping**: Prior to pathfinding, `RamsViewModel.kt` queries `https://router.project-osrm.org/nearest/v1/driving/{lon},{lat}?number=1`. Raw GPS pings (even from inside buildings or alleys) are projected onto the nearest asphalt roadway with street name identification (e.g., Montilla Street).
+- **Maneuver Extraction (`steps=true`)**: Turn-by-turn road steps are requested from OSRM, extracting the active maneuver (e.g., `Depart onto Montilla Street in 152m`) displayed in high-contrast amber on `MapScreen.kt`.
+
+### 19.3 Asymmetric Viewport Framing Insets
+- **Safe Clearance**: `map.fitBounds(group.getBounds(), { paddingTopLeft: [40, 80], paddingBottomRight: [40, 240], maxZoom: 17 })` reserves 240px at the bottom to guarantee route polylines and destination pins are never obscured by the Compose Destination Card or Bottom Navigation Bar.

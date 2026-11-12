@@ -192,10 +192,10 @@ fun RamsMapView(
     }
   }
 
-  // Update direction beam in real-time when phone rotates
-  LaunchedEffect(heading, isOfflineMode) {
+  // Update direction beam in real-time when phone rotates or accuracy aperture updates
+  LaunchedEffect(heading, imu.beamAperture, isOfflineMode) {
     if (!isOfflineMode && webViewRef != null) {
-      val jsHdg = "if(window.updateUserHeading){ window.updateUserHeading($heading); }"
+      val jsHdg = "if(window.updateUserHeading){ window.updateUserHeading($heading, ${imu.beamAperture}); }"
       webViewRef?.evaluateJavascript(jsHdg, null)
     }
   }
@@ -281,7 +281,7 @@ fun RamsMapView(
                     val initialHdg = heading
                     val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
                     val modeStr = if (isBeamFacingTop) "forward" else "compass"
-                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); if(window.setBeamMode){ window.setBeamMode('$modeStr'); } }", null)
+                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); if(window.setBeamMode){ window.setBeamMode('$modeStr'); } if(window.setBeamAperture){ window.setBeamAperture(${imu.beamAperture}); } }", null)
                     if (destinationRoute != null) {
                       val cleanLabel = destinationRoute.destinationName.replace("'", "\\'")
                       view?.evaluateJavascript("if(window.setDestinationPinAndRoute){ window.setDestinationPinAndRoute(${destinationRoute.destLat}, ${destinationRoute.destLon}, '$cleanLabel', ${destinationRoute.waypointsJson}); }", null)
