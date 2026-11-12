@@ -113,30 +113,58 @@ fun RamsHeader(
                             letterSpacing = 0.5.sp
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        val roleText = riderProfile?.category?.ifBlank { "RIDER" } ?: "RIDER"
+                        val rawCategory = riderProfile?.category?.lowercase(Locale.US)?.trim() ?: ""
+                        val (shortLabel, badgeColor) = when {
+                            rawCategory.contains("motor") -> Pair("MOTORCYCLE", Color(0xFFF59E0B))
+                            rawCategory.contains("pedestrian") || rawCategory.contains("walk") -> Pair("PEDESTRIAN", Color(0xFF10B981))
+                            rawCategory.contains("cyclist") || rawCategory.contains("bike") -> Pair("CYCLIST", Color(0xFF06B6D4))
+                            rawCategory.contains("car") || rawCategory.contains("drive") -> Pair("CAR DRIVER", Color(0xFF818CF8))
+                            else -> Pair(riderProfile?.category?.ifBlank { "RIDER" }?.uppercase(Locale.US) ?: "RIDER", RamsSyncBlue)
+                        }
                         Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = RamsSyncBlue.copy(alpha = 0.15f),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, RamsSyncBlue.copy(alpha = 0.4f)),
+                            shape = RoundedCornerShape(6.dp),
+                            color = badgeColor.copy(alpha = 0.15f),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, badgeColor.copy(alpha = 0.5f)),
                             modifier = Modifier.clickable { onOpenRiderLogin() }
                         ) {
-                            Text(
-                                text = roleText.uppercase(Locale.US),
-                                fontSize = 8.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.Monospace,
-                                color = RamsSyncBlue,
-                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.5.dp)
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(5.dp)
+                                        .background(badgeColor, CircleShape)
+                                )
+                                Text(
+                                    text = shortLabel,
+                                    fontSize = 8.5.sp,
+                                    fontWeight = FontWeight.Black,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = badgeColor,
+                                    maxLines = 1,
+                                    softWrap = false
+                                )
+                            }
                         }
                     }
 
+                    val isWalk = riderProfile?.category?.contains("walk", ignoreCase = true) == true ||
+                                 riderProfile?.category?.contains("pedestrian", ignoreCase = true) == true
+                    val guardText = if (isWearableConnected) {
+                        if (isWalk) "WALK GUARD ACTIVE" else "RIDER GUARD ACTIVE"
+                    } else {
+                        if (isWalk) "WALK GUARD (PHONE)" else "RIDER GUARD (PHONE)"
+                    }
                     Text(
-                        text = if (isWearableConnected) "RIDER GUARD ACTIVE" else "PHONE SENSORS ARMED",
+                        text = guardText,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Monospace,
-                        color = if (isWearableConnected) RamsSuccessEmerald else Color(0xFFA1A1AA)
+                        color = if (isWearableConnected) RamsSuccessEmerald else Color(0xFFA1A1AA),
+                        maxLines = 1,
+                        softWrap = false
                     )
                 }
             }
@@ -187,7 +215,7 @@ fun RamsHeader(
                                 )
                         )
                         Text(
-                            text = if (isWearableConnected) "WEARABLE ON" else "CONNECT WEARABLE",
+                            text = if (isWearableConnected) "WEARABLE ON" else "WEARABLE LINK",
                             fontSize = 9.sp,
                             fontWeight = FontWeight.Black,
                             fontFamily = FontFamily.Monospace,

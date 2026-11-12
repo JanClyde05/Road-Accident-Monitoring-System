@@ -1,0 +1,18 @@
+{
+  "RAMS_JLC_S3.kicad_pcb": {
+    "sha256": "946658e1e0284c15b88a7ed92a67d8ce5ff473ab85ab335465f031a1575202d5",
+    "bytes": 1034883
+  },
+  "RAMS_JLC_S3.kicad_pro": {
+    "sha256": "ea89fa15dd3e82bbb3ce3b37b9dfaab9f5c420ea07c2f2e337795c64c483d0ee",
+    "bytes": 19006
+  },
+  "RAMS_JLC_S3.kicad_dru": {
+    "sha256": "b155d2f5f3b67178106565cd3292cc8038c4136cf71d94bccadc1a99843c2210",
+    "bytes": 407
+  },
+  "circuit_spec.json": {
+    "sha256": "be6b201d27068713d75dcef38136af3334e48421145a92c44b28ef97fbf39fd1",
+    "bytes": 44446
+  }
+}

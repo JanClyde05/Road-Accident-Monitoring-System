@@ -16,7 +16,8 @@ data class RiderProfile(
   val bloodType: String = "",
   val vehicleModel: String = "",
   val allergies: String = "",
-  val showNearbyIncidents: Boolean = false
+  val showNearbyIncidents: Boolean = false,
+  val ttsVoicePreference: String = "NATURAL_FEMALE"
 ) {
   // Backward compatibility accessors
   val netlifyHost: String get() = dispatchHost
@@ -69,6 +70,7 @@ data class RiderProfile(
       .putString("vehicleModel", vehicleModel)
       .putString("allergies", allergies)
       .putBoolean("showNearbyIncidents", showNearbyIncidents)
+      .putString("ttsVoicePreference", ttsVoicePreference)
       .apply()
   }
 
@@ -99,12 +101,13 @@ data class RiderProfile(
         hash = (hash xor (byte.toLong() and 0xFF)) * prime
       }
       val sb = StringBuilder(8)
-      var v = kotlin.math.abs(hash xor (System.currentTimeMillis() shl 16))
+      var v = (hash xor (System.currentTimeMillis() shl 16)) and Long.MAX_VALUE
       repeat(8) {
-        sb.append(BASE62_ALPHABET[(v % BASE62_ALPHABET.length).toInt()])
+        val idx = (v % BASE62_ALPHABET.length).toInt().coerceIn(0, BASE62_ALPHABET.length - 1)
+        sb.append(BASE62_ALPHABET[idx])
         v /= BASE62_ALPHABET.length
         if (v == 0L) {
-          v = kotlin.math.abs(System.nanoTime() xor (it * 7919L))
+          v = (System.nanoTime() xor (it * 7919L)) and Long.MAX_VALUE
         }
       }
       return "RAMS-$sb"
@@ -138,7 +141,8 @@ data class RiderProfile(
         bloodType = prefs.getString("bloodType", "") ?: "",
         vehicleModel = prefs.getString("vehicleModel", "") ?: "",
         allergies = prefs.getString("allergies", "") ?: "",
-        showNearbyIncidents = prefs.getBoolean("showNearbyIncidents", false)
+        showNearbyIncidents = prefs.getBoolean("showNearbyIncidents", false),
+        ttsVoicePreference = prefs.getString("ttsVoicePreference", "NATURAL_FEMALE") ?: "NATURAL_FEMALE"
       )
     }
 

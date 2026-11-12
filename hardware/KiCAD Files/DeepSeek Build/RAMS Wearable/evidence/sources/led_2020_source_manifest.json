@@ -1,0 +1,55 @@
+{
+  "reviewed": "2026-11-09",
+  "scope": "Worldsemi V1.3 reference pattern, not generic stock identification",
+  "source_url": "https://cdn-shop.adafruit.com/product-files/4684/4684_WS2812B-2020_V1.3_EN.pdf",
+  "revision": "V1.3 2019-01-25",
+  "pdf_sha256": "4af8693e601ffee4a361e4a6f5f6815efba0b580541a1321bbf83ed7fb090e3f",
+  "symbol_library_path": "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\symbols\\LED.kicad_sym",
+  "symbol_block_sha256": "1875e395f72013979c660d4ceedcc833d2cb71a4f87f21ec70706272dd83b5e8",
+  "footprint_path": "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\LED_SMD.pretty\\LED_WS2812B-2020_PLCC4_2.0x2.0mm.kicad_mod",
+  "footprint_sha256": "e569c5c306aaef0e8ebdfdf0dfa525ad91edaa7494d67b25f3c2862e4d1cdacb",
+  "pin_map": {
+    "1": "DO",
+    "2": "GND",
+    "3": "DI",
+    "4": "VDD"
+  },
+  "pad_size_mm": [
+    0.7,
+    0.7
+  ],
+  "pad_centres_mm": {
+    "1": [
+      -0.915,
+      -0.55
+    ],
+    "2": [
+      -0.915,
+      0.55
+    ],
+    "3": [
+      0.915,
+      0.55
+    ],
+    "4": [
+      0.915,
+      -0.55
+    ]
+  },
+  "actual_stock_revision": "unknown",
+  "default_assembly": "LED1 DNP; +3V3 qualification required",
+  "st_usblc6_source": "https://www.st.com/resource/en/datasheet/usblc6-2.pdf",
+  "st_source_status": "DS4260 Rev7 read through web; direct PDF download timed out",
+  "st_channel_map": {
+    "I/O1": [
+      "1",
+      "6"
+    ],
+    "I/O2": [
+      "3",
+      "4"
+    ],
+    "GND": "2",
+    "VBUS": "5"
+  }
+}

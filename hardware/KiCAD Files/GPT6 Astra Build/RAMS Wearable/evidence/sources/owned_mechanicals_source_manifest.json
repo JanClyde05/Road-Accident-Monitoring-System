@@ -1,0 +1,44 @@
+[
+  {
+    "url": "https://p25.qiyeku.cn/pic/2025/1/22/jialigao/product/product_info/image/2025_03_04/20250304094903754.png",
+    "file": "Jialigao_SMT-9650-3327_dimensions.png",
+    "accessed": "2026-11-09",
+    "scope": "3.3V SMD buzzer manufacturer geometry, stock identity unverified",
+    "sha256": "4a8654df8c94b3c807cfe372ea456987e49fd6bb2f1bd11f8f064a7d3565d98b"
+  },
+  {
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/8a67125568be7bd18b7193976db880d1.pdf",
+    "file": "SS_SMD-9650-3327_manufacturer.pdf",
+    "accessed": "2026-11-09",
+    "scope": "Jianghai Wuyin manufacturer PDF; drawing differs from seller nominal9.6mm",
+    "sha256": "3ce559610dde705b7e8cc8f31f51ee6065bb6526cdd01a60dd19ed6c8bcaad17"
+  },
+  {
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/5162155576bfd231c35aa9a893d25c8c.pdf",
+    "file": "Shouhan_MSK12C02_KiCad_reference.pdf",
+    "accessed": "2026-11-09",
+    "scope": "Manufacturer drawingpage1; KiCad referenceURLredirect",
+    "sha256": "a596d32b2510ac6a6a7460bde16a5a9d76866e5e10f33f2d6220de37880602b5"
+  },
+  {
+    "url": "https://files.keeb.supply/products/MSK12C02/datasheet.pdf",
+    "file": "Shouhan_MSK12C02_manufacturer_revA0.pdf",
+    "accessed": "2026-11-09",
+    "scope": "Older Shouhan document comparison",
+    "sha256": "d2aeae48c5607c858a56a3eac19fc5ca5b02c90488555945798feb27b9de2817"
+  },
+  {
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/0475ac02febf455ca9ddcfb380b0df0d.pdf",
+    "file": "XUNPU_TS-1088-AR02016_KiCad_reference.pdf",
+    "accessed": "2026-11-09",
+    "scope": "Manufacturer drawing revisionA",
+    "sha256": "368d4cc2c26b08cb63e1b67193f671d0860b6d3fb2e6b9f2696ffade401afc30"
+  },
+  {
+    "url": "https://atta.szlcsc.com/upload/public/pdf/source/20191217/C409830_8EC3C70066086F723D62F9967ED58A07.pdf",
+    "file": "Fengming_YS-SBZ9650DYB05_geometry_only.pdf",
+    "accessed": "2026-11-09",
+    "scope": "Geometry-only alternative;5V version not selected",
+    "sha256": "668b11ca216b71bb4f15452d5652204c695c979f88689fdcf44188910a0afea2"
+  }
+]

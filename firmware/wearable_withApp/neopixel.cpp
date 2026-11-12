@@ -15,6 +15,31 @@ static uint32_t _lastUpdate = 0;
 static uint8_t  _animStep = 0;
 static uint8_t  _brightness = 40;
 
+#ifdef RAMS_JLC_S3_J2
+// Worldsemi 2020 V1.3/V6 timing; the installed sender's T0H/T1L are out of range.
+static_assert(NEOPIXEL_COUNT == 1, "J2 RMT sender is for one GRB pixel");
+static bool _rmtReady = false;
+static void _showPixel() {
+  if (!_rmtReady) return;
+  rmt_data_t symbols[25] = {};
+  const uint8_t* bytes = _pixel.getPixels(); // Already brightness-scaled, GRB order
+  for (int bit = 0; bit < 24; ++bit) {
+    const bool one = bytes[bit / 8] & (0x80 >> (bit % 8));
+    symbols[bit].level0 = 1;
+    symbols[bit].duration0 = one ? 7 : 3;  // 700/300ns at 10MHz
+    symbols[bit].level1 = 0;
+    symbols[bit].duration1 = one ? 6 : 10; // 600/1000ns; both bits total 1.3us
+  }
+  symbols[24].duration0 = 1500;
+  symbols[24].duration1 = 1500;            // Low reset: 300us
+  if (!rmtWrite(NEOPIXEL_PIN, symbols, 25, 50)) {
+    Serial.println("[NEOPIXEL] RMT write failed");
+  }
+}
+#else
+static void _showPixel() { _pixel.show(); }
+#endif
+
 static const uint16_t _sosDurations[] = {
   150, 150,
   150, 150,
@@ -31,9 +56,16 @@ static const uint16_t _sosDurations[] = {
 
 void neopixelInit() {
   _pixel.begin();
+#ifdef RAMS_JLC_S3_J2
+  digitalWrite(NEOPIXEL_PIN, LOW);
+  _rmtReady = rmtInit(NEOPIXEL_PIN, RMT_TX_MODE, RMT_MEM_NUM_BLOCKS_1, 10000000)
+           && rmtSetEOT(NEOPIXEL_PIN, LOW);
+  if (!_rmtReady) Serial.println("[NEOPIXEL] RMT initialization failed");
+  delayMicroseconds(300); // Initial reset before the first frame
+#endif
   _pixel.setBrightness(_brightness);
   _pixel.clear();
-  _pixel.show();
+  _showPixel();
   Serial.printf("[NEOPIXEL] Initialized on GPIO%d\n", NEOPIXEL_PIN);
 }
 
@@ -100,11 +132,11 @@ void neopixelUpdate() {
       break;
   }
 
-  _pixel.show();
+  _showPixel();
 }
 
 void neopixelOff() {
   _state = NEO_OFF;
   _pixel.clear();
-  _pixel.show();
+  _showPixel();
 }

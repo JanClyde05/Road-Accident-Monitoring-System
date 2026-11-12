@@ -1,0 +1,1235 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-12T02:55:03",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 105.8,
+                        "y": 127.3
+                    },
+                    "uuid": "816eeaf5-8b04-4962-8307-e5b6cc23040e"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.05,
+                        "y": 127.55
+                    },
+                    "uuid": "fd325b6d-9bfd-4e4e-a154-1982998564bd"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0500 mm",
+                    "pos": {
+                        "x": 106.75,
+                        "y": 127.1
+                    },
+                    "uuid": "eeb25862-5fd0-4093-b1c2-36c69ad8838d"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 1.4849 mm",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "ea3838c8-47eb-42e4-860d-dadfbe7f4d3d"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.5,
+                        "y": 127.525
+                    },
+                    "uuid": "d6e8ed4d-f900-4e1d-a9f4-86c64abd4e86"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.9250 mm",
+                    "pos": {
+                        "x": 108.625,
+                        "y": 124.3
+                    },
+                    "uuid": "bb8bd795-74a8-4f5e-9302-f3578dc0e95b"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 105.825,
+                        "y": 127.35
+                    },
+                    "uuid": "b7b662a9-cdae-4e53-9cef-cbd0f03fd2c6"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 105.825,
+                        "y": 127.375
+                    },
+                    "uuid": "b60054bd-8f93-42e6-b735-c88d477ec698"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 106.425,
+                        "y": 127.575
+                    },
+                    "uuid": "b29ad0bc-4a53-451f-9869-dea693a57ee8"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 2.6517 mm",
+                    "pos": {
+                        "x": 108.625,
+                        "y": 125.225
+                    },
+                    "uuid": "f4d32a49-328f-486d-91de-41bf9bbe569d"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.2250 mm",
+                    "pos": {
+                        "x": 105.75,
+                        "y": 127.15
+                    },
+                    "uuid": "a9419a8a-8c5f-4424-b886-65aea745c784"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.475,
+                        "y": 127.55
+                    },
+                    "uuid": "984325c9-3833-427a-8983-2ce23deaa9af"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.45,
+                        "y": 127.55
+                    },
+                    "uuid": "980ce544-04c9-4cce-b9d9-3b6975156fc4"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.2,
+                        "y": 127.6
+                    },
+                    "uuid": "c80e189e-4456-4efa-8674-6c53ecee86a6"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 106.3,
+                        "y": 127.6
+                    },
+                    "uuid": "8df2cb72-e56f-4cab-b44c-53b295a70ed9"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 105.8,
+                        "y": 127.325
+                    },
+                    "uuid": "8082ea37-19ad-4527-bf4f-5d1fa9db66b4"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.075,
+                        "y": 127.575
+                    },
+                    "uuid": "641531a5-7912-424b-a4c7-16feeb336924"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 106.725,
+                        "y": 127.175
+                    },
+                    "uuid": "7b51fa42-cac7-4ac6-809e-ccf2dc8dd319"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.0,
+                        "y": 127.525
+                    },
+                    "uuid": "64c38548-c047-44eb-bc13-c68a2b45ec06"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.2121 mm",
+                    "pos": {
+                        "x": 106.675,
+                        "y": 127.375
+                    },
+                    "uuid": "52ef8ac3-50a2-40ad-bc59-ddeb63ac0c23"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.7,
+                        "y": 127.3
+                    },
+                    "uuid": "63e61a22-6be0-40ee-be9b-bf873da32382"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.325,
+                        "y": 127.575
+                    },
+                    "uuid": "456da43f-096b-4402-9f09-e2bbb1acfddf"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.025,
+                        "y": 127.55
+                    },
+                    "uuid": "3f3b841a-5c49-4534-bab0-41f914968698"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.525,
+                        "y": 127.525
+                    },
+                    "uuid": "255df7c3-cdcc-4420-9c45-01194fa283b9"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.2121 mm",
+                    "pos": {
+                        "x": 105.975,
+                        "y": 127.525
+                    },
+                    "uuid": "3dd99688-2685-451c-a5ad-74061a20293b"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.725,
+                        "y": 127.275
+                    },
+                    "uuid": "250d71dc-8e8a-416a-9cb3-ed19112f1691"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 106.175,
+                        "y": 127.575
+                    },
+                    "uuid": "22dc7b08-47d0-4f6d-a53c-6eec38492743"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 105.775,
+                        "y": 127.275
+                    },
+                    "uuid": "0f856082-c5ec-4962-8c85-d74cbe901707"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 106.675,
+                        "y": 127.35
+                    },
+                    "uuid": "1ec78545-e0a2-4038-807f-d77369d22a4e"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.75,
+                        "y": 127.15
+                    },
+                    "uuid": "11fd75f6-ad71-42e5-b2db-68d5a6367dc9"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 105.775,
+                        "y": 127.175
+                    },
+                    "uuid": "00b33f54-40d3-459f-894f-ca771191bb57"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.1061 mm",
+                    "pos": {
+                        "x": 105.75,
+                        "y": 126.925
+                    },
+                    "uuid": "08b00ff8-3856-4b10-9999-d3f542130f2b"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 105.475,
+                        "y": 126.575
+                    },
+                    "uuid": "daec0bb7-40df-448e-88f4-92430e3f414e"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.0750 mm",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "750583c8-b705-471b-8125-8c102c5b10b4"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "e23088ab-3d6d-46fb-9105-36b0687d095f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "e23088ab-3d6d-46fb-9105-36b0687d095f"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "e23088ab-3d6d-46fb-9105-36b0687d095f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 105.475,
+                        "y": 126.55
+                    },
+                    "uuid": "58e5d67d-0f90-47d6-b9df-3785de2fef51"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.2828 mm",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.775
+                    },
+                    "uuid": "48645454-1c85-4831-91d6-45679bcf2ee9"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "e23088ab-3d6d-46fb-9105-36b0687d095f"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on In2.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "c7ed43f7-01cf-4a79-91ea-0a95d708a1bd"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on In2.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "c7ed43f7-01cf-4a79-91ea-0a95d708a1bd"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.675,
+                        "y": 123.25
+                    },
+                    "uuid": "6737f3f4-1b57-4a04-bbb2-78c7b16c8a52"
+                },
+                {
+                    "description": "Zone [GND] on In2.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "c7ed43f7-01cf-4a79-91ea-0a95d708a1bd"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.675,
+                        "y": 126.85
+                    },
+                    "uuid": "8b4235f1-387b-4549-88ba-de628103dbf5"
+                },
+                {
+                    "description": "Zone [GND] on In2.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "c7ed43f7-01cf-4a79-91ea-0a95d708a1bd"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on B.Cu, length 0.0354 mm",
+                    "pos": {
+                        "x": 106.7,
+                        "y": 127.325
+                    },
+                    "uuid": "a73f85d5-6dfe-4204-8fcc-e360f7877e9f"
+                },
+                {
+                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "0b80c26d-e580-4a99-8902-0b168f5b0d4b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0470 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.2828 mm",
+                    "pos": {
+                        "x": 105.45,
+                        "y": 126.5
+                    },
+                    "uuid": "dc1fc94b-173e-4665-8660-1a8a72637b1f"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0293 mm)",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.0250 mm",
+                    "pos": {
+                        "x": 105.45,
+                        "y": 126.525
+                    },
+                    "uuid": "2f563186-96e5-4180-b237-937877403f46"
+                },
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 100.25,
+                        "y": 100.25
+                    },
+                    "uuid": "7aba8d96-58b3-4cef-a13b-cf0c2900215f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        }
+    ]
+}

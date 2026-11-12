@@ -1,0 +1,47 @@
+{
+  "inputs": {
+    "h_mm": 0.0994,
+    "t_mm": 0.035,
+    "er": 4.1,
+    "frequency_Hz": 2450000000.0
+  },
+  "limitations": "Model-based cross-check, not fab guarantee; solder mask, trapezoidal etch, trace corners, component pads and transitions excluded. KiCad 10.0 coplanar source calcAnalyze equations independently evaluated with AGM complete elliptic integrals. Correctly uses KiCad10 ellipke parameter convention sqrt(1-arg), not modulus convention sqrt(1-arg^2).",
+  "rows": [
+    {
+      "width_mm": 0.15,
+      "gap_mm": 0.15,
+      "kicad_grounded_coplanar_ohm": 58.3481,
+      "simple_microstrip_ohm": 49.8185
+    },
+    {
+      "width_mm": 0.15,
+      "gap_mm": 0.3,
+      "kicad_grounded_coplanar_ohm": 61.9837,
+      "simple_microstrip_ohm": 49.8185
+    },
+    {
+      "width_mm": 0.15,
+      "gap_mm": 0.5,
+      "kicad_grounded_coplanar_ohm": 63.5079,
+      "simple_microstrip_ohm": 49.8185
+    },
+    {
+      "width_mm": 0.18,
+      "gap_mm": 0.15,
+      "kicad_grounded_coplanar_ohm": 52.083,
+      "simple_microstrip_ohm": 44.4828
+    },
+    {
+      "width_mm": 0.18,
+      "gap_mm": 0.3,
+      "kicad_grounded_coplanar_ohm": 55.198,
+      "simple_microstrip_ohm": 44.4828
+    },
+    {
+      "width_mm": 0.18,
+      "gap_mm": 0.5,
+      "kicad_grounded_coplanar_ohm": 56.5022,
+      "simple_microstrip_ohm": 44.4828
+    }
+  ]
+}

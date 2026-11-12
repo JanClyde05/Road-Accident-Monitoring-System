@@ -1,0 +1,46 @@
+Refs,Qty,Value,Footprint,Source,Side,Notes
+ANT1,1,2450AT18B100E,Johanson_2450AT18B100_3216,You own it,Top,Terminal 2 is NC. Keep ALL copper (all layers) out of the antenna keep-out. Tune with pi-network.
+BZ1,1,Buzzer 9650 active 3V,Buzzer_SMD_9650,You own it,Top,Footprint from Rev A (2 pads 3.25 mm off-centre): MEASURE your buzzer.
+C1 C2,2,4.7uF,C_0603_1608Metric,You own it,Top,VBUS bulk / charger input; charger BAT cap
+C3 C7 C9 C10 C11 C12 C14 C25 C26,9,100nF,C_0402_1005Metric,You own it,Top,ADC filter; DW01A VCC filter; LED bypass (place at LED1 pin 4); LoRa HF decoupling; VDD3P3 decoupling; VDD3P3_CPU (pin 46); VDD3P3_RTC (pin 20); VDDA (pins 55/56); VDD_SPI (Espressif: add 0.1uF + 1uF)
+C4 C5 C8 C16 C24,5,10uF,C_0603_1608Metric,You own it,Top,"3V3 bulk next to MCU (TX bursts); LDO input; LDO output; LoRa TX burst reservoir (placed on top, above the module); VDD3P3 bulk (Espressif: 10uF at VDD3P3)"
+C6 C15 C17,3,1uF,C_0402_1005Metric,You own it,Top,EN RC delay; LDO output HF; VDD_SPI
+C13,1,10nF,C_0402_1005Metric,You own it,Top,VDDA HF
+C18 C19,2,12pF,C_0402_1005Metric,You own it,Top,crystal load cap
+C20 C21,2,1.5pF,C_0402_1005Metric,BUY on Shopee,Top,"chip-end shunt (Espressif range 1.2-1.8pF, C0G 0402); shunt (Espressif range 1.2-1.8pF, C0G 0402)"
+C22 C23,2,DNP,C_0402_1005Metric,Do not fit (tuning slot),Top,antenna pi shunt slot
+D1,1,USBLC6-2SC6,SOT-23-6,You own it,Top,
+D2,1,SS14,D_SMA,You own it,Top,"VBUS -> system, blocks back-feed"
+D3,1,1N4148W,D_SOD-123,You own it,Top,buzzer clamp diode
+FB1 L1 R16,3,0R,R_0402_1005Metric,You own it,Top,"VDD3P3 LC-filter slot: 0R now; try ferrite/inductor if RF noisy; antenna pi-network series slot; series on XTAL_P: Espressif suggests 24 nH (optional buy), 0R works first"
+J1,1,USB-C 16P,USB_C_Receptacle_HRO_TYPE-C-31-M-12,You own it,Top,"Your 16P USB-C (Shopee clone). Footprint = HRO TYPE-C-31-M-12: MEASURE your part (pad pitch, shell legs) before ordering."
+J2,1,Battery JST-SH 2P,JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal,You own it,Top,"Pin1 = +, Pin2 = -. CHECK your battery plug polarity before connecting!"
+L2,1,2.0nH,L_0402_1005Metric,You own it,Top,series L (Espressif range 2.0-3.0 nH)
+LED1,1,WS2812B-2020,LED_WS2812B-2020_PLCC4_2.0x2.0mm,You own it,Top,"Your 2020 LED (pin1 DOUT, 2 GND, 3 DIN, 4 VDD). Runs from +3V3. Worldsemi: V6 version is rated 3.3-5.3 V; older 2020 is rated 3.7-5.3 V - check your listing."
+Q1,1,AO3401,SOT-23,You own it,Top,"P-FET power path: ON on battery, OFF when USB present"
+Q2,1,BC817-25,SOT-23,You own it,Top,NPN low-side buzzer switch
+Q3,1,FS8205A,SOT-23-6,You own it,Top,SOT-23-6 pinout is vendor-dependent: verify with a multimeter before soldering (see test list).
+R1 R2,2,5.1k,R_0805_2012Metric,Your 0805 kit (verify value),Top,USB-C CC1 pulldown; USB-C CC2 pulldown
+R3 R4 R17,3,33R,R_0402_1005Metric,You own it,Top,LED data series; USB D+ series; USB D- series
+R5,1,4.3k,R_0402_1005Metric,You own it,Top,PROG: ~233 mA charge (if chip follows LTC4054 equation)
+R6 R13,2,100k,R_0805_2012Metric,Your 0805 kit (verify value),Top,Q1 gate pulldown (gate is the VBUS net); base pulldown
+R7,1,330R,R_0805_2012Metric,Your 0805 kit (verify value),Top,DW01A VCC filter
+R8 R12,2,1k,R_0805_2012Metric,Your 0805 kit (verify value),Top,DW01A current-sense input -> system GND (not B_MINUS); base resistor
+R9 R10,2,10k,R_0805_2012Metric,Your 0805 kit (verify value),Top,EN pull-up (Espressif RC: 10k + 1uF); GPIO0 pull-up (Espressif: recommended)
+R14,1,330k,R_0402_1005Metric,You own it,Top,battery divider top
+R15,1,180k,R_0402_1005Metric,You own it,Top,battery divider bottom (ratio 2.833)
+SW1,1,MSK12C02,SW_SPDT_PCM12,You own it,Top,Slide switch drives AP2112K EN. Footprint = C&K PCM12 as in Rev A: verify against your MSK-12C02.
+SW2,1,RESET,SW_Push_1P1T_NO_CK_KMR2,You own it,Top,Tact 3x4x2 2-pin SMD (your Order 8/23)
+SW3,1,BOOT/CANCEL,SW_Push_1P1T_NO_CK_KMR2,You own it,Top,Hold at power-up = download mode; app may use as cancel button
+TP1,1,3V3,TestPoint_Pad_D1.5mm,You own it,Top,
+TP2,1,GND,TestPoint_Pad_D1.5mm,You own it,Top,
+TP3,1,VBUS,TestPoint_Pad_D1.5mm,You own it,Top,
+TP4,1,B+,TestPoint_Pad_D1.5mm,You own it,Top,
+TP5,1,TX,TestPoint_Pad_D1.5mm,You own it,Top,UART0 TX (GPIO43) bring-up pad
+TP6,1,RX,TestPoint_Pad_D1.5mm,You own it,Top,UART0 RX (GPIO44) bring-up pad
+U1,1,ESP32-S3FH4R2,QFN-56-1EP_7x7mm_P0.4mm_EP4x4mm,You own it,Top,EP footprint = KiCad stock 4x4 (as in the KiCad symbol). Confirm vs Espressif FH4R2 drawing.
+U3,1,LTC4054ES5-4.2 (LTH7R),SOT-23-5,You own it,Top,Li-ion charger. CHRG left open (no indicator).
+U4,1,DW01A,SOT-23-6,You own it,Top,
+U5,1,AP2112K-3.3,SOT-23-5,You own it,Top,
+U6,1,Ra-02 SX1278,Ai-Thinker-Ra-01-LoRa,You own it,Bottom,"Bottom side, hand soldered. Ra-02 has an ONBOARD spring antenna (no U.FL / external antenna)."
+Y1,1,40MHz 3225,Crystal_SMD_3225-4Pin_3.2x2.5mm,You own it,Top,Espressif needs +/-10 ppm; unknown for your Shopee crystal. Check CL and tune C9/C10 if Wi-Fi/BLE flaky.

@@ -1,0 +1,102 @@
+Selected manufacturing pages only; consult original PDF for complete context.
+
+--- PDF PAGE 31 ---
+ 
+Page 31 of 148  
+3.Manufacturing (MAN) Services    
+ 
+3.1 PCB Fabrication 
+Note: Maximum Board Dimension = 190 x 250 mm      
+Board Area 
+(mm2) Layer/s New Rate (Green 
+Solder Mask) 
+New Rate Other 
+Solder mask Colors 
+(Black, Blue, Red, 
+Orange, White, 
+Yellow, Pink, Purple) 
+PCB 
+Socialized 
+Rate 
+LEAD 
+TIME 
+(Working 
+Hours) 
+Rush (LEAD 
+TIME Fee per 4 
+hours advance) 
+Rubout Fee for 2 
+layers (divide by 2 
+if only one layer is 
+rubout 
+<=  
+6,781  
+1 ₱         300  ₱         450 
+ 
+ 
+ 
+Less 20%  
+ 
+ 
+8 
+ 
+ 
+ 
+₱ 582 
+ 
+ 
+Design Dependent 
+(to be calculated 
+by software) 
+2  ₱        320  ₱        470  10 
+<= 13,563  1  ₱        600  ₱         750  16 
+2  ₱        630  ₱         780  24 
+<=  
+28710  
+1  ₱     1,270   ₱      1,420  16 
+2  ₱     1,320   ₱      1,470 24 
+<= 29,318  1  ₱     1,290  ₱      1,440 16 
+2  ₱     1,350  ₱      1,500 24 
+<= 62,060  1  ₱     2,730   ₱      2,880 24 
+2  ₱     2,860  ₱      3,010 36 
+ 
+ 
+ 
+ 
+ 
+--- PDF PAGE 32 ---
+ 
+Page 32 of 148  
+3.2 Additional and Extended Services of PCB Fabrication 
+Type Unit Regular Rate Socialized Rate 
+Silkscreen Printing / 
+Labelling Hour ₱ 275 
+Less 20% Design For 
+Manufacturability 
+Adjustments Hour ₱ 500 
+ 
+ 
+3.3 PCB Assembly 
+Type Unit New Regular Rate Socialized Rate 
+QFP/QFN 
+Component 
+₱         100.00 
+Less 20% IC ₱           60.00 
+THT (2 to 4 leads) ₱           30.00 
+SMD (2 to 4 leads) ₱           22.00 
+ 
+3.4 Solder Paste Stencil 
+Board Area (mm) Layer/s Stencil (Polymide) 
+Stencil  
+(PCB Assembly)  
+Socialized Rate 
+</=13,563 1  ₱         900.00  
+Less 20% 
+2  ₱      1,800.00  
+</=28,710 1  ₱      1,800.00  
+2  ₱      3,600.00  
+</=29,318 1  ₱      1,800.00  
+2  ₱      3,600.00  
+</=62,060 1  ₱      3,600.00  
+2  ₱      7,200.00  
+ 

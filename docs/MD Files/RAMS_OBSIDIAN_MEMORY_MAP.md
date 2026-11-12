@@ -259,7 +259,8 @@ graph TD
   - Bare PCB + Stainless Steel Stencil ordering package (~$15 total from JLCPCB).
   - `PARTS_LIST_FOR_ORDERING.md`: Sourcing matrix for Shopee Philippines.
   - Critical Footprint Matches: `FS8205A` (TSSOP-8), `SS14W` (SOD-123FL), `2450AT18B100E` (3216 / 1206), `FB1` (`MGGB1005M800HT-LF` 0402 200mA).
-  - DIY SMT Reflow Protocol: Mechanic IX5 Ultra preheater ($150^\circ	ext{C}$ soak $ightarrow$ $205^\circ	ext{C}$ reflow) + Relife RL-403 ($183^\circ	ext{C}$ Sn63Pb37 leaded paste).
+  - DIY SMT Reflow Protocol: Mechanic IX5 Ultra preheater ($150^\circ	ext{C}$ soak $
+ightarrow$ $205^\circ	ext{C}$ reflow) + Relife RL-403 ($183^\circ	ext{C}$ Sn63Pb37 leaded paste).
 
 ---
 
@@ -284,9 +285,14 @@ graph TD
 | **Where are the latest KiCad schematic ERC audit logs?** | [[KiCAD Files/Antigravity Build/RAMS - PCB/ERC reports/ERC_current.rpt]] | 0 Errors, 4 benign lib_mismatch warnings |
 | **Where is the Gemini-to-RAMS knowledge distillation cache?** | [[android_app/.../RamsAiAssistantEngine.kt]] | `distilledKnowledgeCache`, `persistDistilledSample()`, `lookupDistilledAnswer()`, file: `rams_distilled_knowledge.jsonl` |
 | **Where is the Tuguegarao offline reverse geocoding & anti-capacity engine?** | [[android_app/.../TuguegaraoOfflineSpatialEngine.kt]] | `reverseGeocode()`, `generateOfflineDirections()`, `getTricycleFareAndScamAdvisory()`, `normalizeLocalPhonetics()` |
-| **Where is the comprehensive error and bug fix ledger?** | [[docs/MD Files/RAMS_ERROR_LOG_AND_FIXES.md]] | 16 documented bugs, root causes, diffs, and prevention directives |
+| **Where is the comprehensive error and bug fix ledger?** | [[docs/MD Files/RAMS_ERROR_LOG_AND_FIXES.md]] | 17 documented bugs, root causes, diffs, and prevention directives |
+| **Where is the automatic category classifier and voice mode switch?** | [[android_app/.../RamsViewModel.kt]] & [[android_app/.../VoiceAlarmCanceler.kt]] | `AutomaticCategoryClassifier`, `checkCategoryChangeCommand()`, red-light hold, cooldown |
+| **Where are the battery optimization directives implemented?** | [[android_app/.../PhoneSensorEngine.kt]] & [[android_app/.../Esp32SyncEngine.kt]] | GPS 1.5s/1.5m throttle, exponential BLE backoff (max 12 attempts), 600ms RMS idle |
 | **Where is the AI acoustic training methodology specification?** | [[docs/MD Files/RAMS_AI_TRAINING_METHODOLOGY.md]] | Wake word corpus, phonetic homophone matrix, Levenshtein calibration |
 | **Where are the master CS/ECE function-by-function flowcharts?** | [[docs/MD Files/RAMS_CODE_FLOWCHARTS.md]] | 7 detailed Mermaid flowcharts covering all subsystems |
 | **Where are the complete hardware & system block diagrams?** | [[docs/MD Files/RAMS_SYSTEM_BLOCK_DIAGRAMS.md]] | Full system topology, data collection, multi-tier stack, LoRa ping benchmark |
 | **Where is the LoRa ping propagation delay & distance benchmark?** | [[firmware/shared/protocol.h]], [[desktop_app/Program.cs]] & [[android_app/.../SettingsScreen.kt]] | `PKT_PING = 7`, `PingPacket`, `sendPingBenchmarkPacket()`, `/api/ping-log` |
+| **Where is the OpenRouter multi-model switcher (GLM, Qwen, Gemma)?** | [[scripts/switch_model.py]], [[switch_model.bat]], [[claude-or.bat]] | switch_model qwen|gemma|glm, .claude/settings.local.json, Kilo Code sync |
+| **Where is OpenRouter GLM-5.3-Flash local CLI & proxy configured?** | [[scripts/openrouter_glm.py]], [[scripts/local_llm_proxy.py]], [[ask_glm.bat]], [[ask_pcb.bat]] | call_openrouter(), LocalLlmProxyHandler, z-ai/glm-5.3-flash, http://127.0.0.1:5000/v1 |
+| **Where is the OpenRouter fallback skill documentation?** | [[.agents/skills/openrouter-glm/SKILL.md]] | CLI commands, proxy endpoints, Kilo Code configuration |
 

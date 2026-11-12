@@ -1,0 +1,289 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-08T14:37:29",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f",
+            "violations": [
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol L3 [L]",
+                            "pos": {
+                                "x": 1.5748,
+                                "y": 1.4732
+                            },
+                            "uuid": "e06ea413-3ed5-5ba7-b447-132cb09e85cd"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol U5 [TPS63020]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 1.9304
+                            },
+                            "uuid": "e38355e7-6628-5f03-b09c-55f141d1f553"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol U5 [TPS63020]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 1.9304
+                            },
+                            "uuid": "e38355e7-6628-5f03-b09c-55f141d1f553"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol U4 [DW01A_Slkor]",
+                            "pos": {
+                                "x": 2.8702,
+                                "y": 0.7874
+                            },
+                            "uuid": "d1ded9bc-cf44-535f-ab10-39df355426d3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol Q3 [FS8205A_Fuxin]",
+                            "pos": {
+                                "x": 3.556,
+                                "y": 0.7874
+                            },
+                            "uuid": "7936e4c1-e53b-5d01-8fa3-ea687527976d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol U1 [ESP32-S3]",
+                            "pos": {
+                                "x": 0.8382,
+                                "y": 1.397
+                            },
+                            "uuid": "b42191dc-c9ee-5f4d-9047-1cd2c6663062"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol Y1 [Crystal_GND24_Small]",
+                            "pos": {
+                                "x": 2.0828,
+                                "y": 1.5494
+                            },
+                            "uuid": "64e359e5-5d08-5194-9016-0e8439b0328a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol U7 [TLV803EA30]",
+                            "pos": {
+                                "x": 3.2258,
+                                "y": 1.1684
+                            },
+                            "uuid": "1e9ede50-3b28-583d-bf1c-e135240e8fcc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 [Antenna_Chip]",
+                            "pos": {
+                                "x": 3.5052,
+                                "y": 2.3114
+                            },
+                            "uuid": "6021f985-686a-51e9-9bc6-5c4402fa4abe"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+                    "items": [
+                        {
+                            "description": "Symbol BZ1 [Buzzer]",
+                            "pos": {
+                                "x": 3.2766,
+                                "y": 0.5588
+                            },
+                            "uuid": "36066696-3cd4-5311-9bac-2c54432b2dfe"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                }
+            ]
+        },
+        {
+            "path": "/USB, protected battery and regulated power/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+            "violations": [
+                {
+                    "description": "Pins of type Power output and Power output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U5 Pin 4 [VOUT, Power output, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 1.8415
+                            },
+                            "uuid": "7927583d-2424-5f15-8b50-085fc6f2b08e"
+                        },
+                        {
+                            "description": "Symbol U5 Pin 5 [VOUT, Power output, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 1.8669
+                            },
+                            "uuid": "5b09fe84-b4ce-5628-b65c-62bd7402c002"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Open collector and Power output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol U6 Pin 5 [QOD, Open collector, Line]",
+                            "pos": {
+                                "x": 3.3274,
+                                "y": 1.8288
+                            },
+                            "uuid": "f53fee79-36e7-58a9-bb38-aaf80fbb1ad0"
+                        },
+                        {
+                            "description": "Symbol U6 Pin 6 [OUT, Power output, Line]",
+                            "pos": {
+                                "x": 3.3274,
+                                "y": 1.778
+                            },
+                            "uuid": "01fb2be7-07da-5201-bb5c-501fc5e0f02d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/ESP32-S3FH4R2, clock and 2.4GHz RF/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+            "violations": [
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol U1 Pin 29 [VDD_SPI, Power input, Line]",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 1.016
+                            },
+                            "uuid": "f700fb5d-2f6a-5e52-9e4d-8fcd9ccaf99e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                }
+            ]
+        },
+        {
+            "path": "/LoRa, indicators, controls and test access/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+            "violations": [
+                {
+                    "description": "Pins of type Power output and Power output are connected",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG003 Pin 1 [Power output, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.6924
+                            },
+                            "uuid": "b93de25b-b34b-5059-9d48-99f22aea894b"
+                        },
+                        {
+                            "description": "Symbol U3 Pin 3 [BAT, Power output, Line]",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 0.6604
+                            },
+                            "uuid": "15f6865a-dd6b-5932-b5d1-bf848b276683"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "RAMS_JLC_S3.kicad_sch"
+}

@@ -1,0 +1,8 @@
+{
+  "physical_components_checked": 89,
+  "connected_pins_checked": 245,
+  "explicit_nc_pins_checked": 41,
+  "identity_manifest_unchanged": true,
+  "netlist_sha256": "d9ef380fc57d24bca02739281e41b8e2768eeb07f4016439312c5af9f9ad133c",
+  "errors": []
+}

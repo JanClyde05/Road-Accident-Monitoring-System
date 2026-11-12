@@ -1,0 +1,31 @@
+# Mistake register: what went wrong, how to detect it, how to avoid it
+
+Purpose: stop repeating defects. Every entry is a real event in this project,
+not a hypothetical. Add a line when something fails; do not delete entries when
+they are fixed, mark them CLOSED with the date.
+
+| ID | Mistake | How it was caught | Rule for next time | Status |
+|---|---|---|---|---|
+| M01 | Declared a defect before confirming the pin table. U1 pin 36 is named `SPICLK_N`, which looks like a flash-only pin, so the NeoPixel net was called broken. It is GPIO48 and the design is correct. | Cross-checked the pin against the package GPIO count and the module pin groups before writing it up | A single pin-name string is never evidence. Confirm the pin's alternate function from two independent sources before reporting a defect. | CLOSED, no action |
+| M02 | A KiCad parser returned zero pads and it was nearly read as "the board has no nets". The file uses tab-indented, multi-line pad records. | Printed a known footprint block and compared with the regex | Before trusting a parser, run it against one record whose expected output you already know. A silent zero is a parser bug until proven otherwise. | CLOSED |
+| M03 | Equated "DRC clean" with "board complete". The J2 board reports 0 DRC violations while five nets are unrouted. | Read the unconnected count, which is reported separately | Acceptance needs three numbers: DRC violations, unconnected items, schematic parity. Never quote one without the others. | OPEN by design, documented in `00_CONTINUATION_STATUS.md` |
+| M04 | Ran a full autorouter pass because routing was incomplete, burnt 10 minutes and got 19 unrouted nets plus 73 violations | Compared the result with the hand-routed baseline | Diagnose the geometry first. If a whole pin row is walled in, no router setting will fix it. | CLOSED, Freerouting not re-run |
+| M05 | Placed decoupling capacitors (C12, C13) directly in front of the QFN pad row, sealing the only escape corridor | Occupancy map of the F.Cu band in front of the pads | Count the escape corridors before placing parts near a fine-pitch edge. Decouplers belong on the far side, or on the same side but off the fanout axis. | OPEN, blocks routing |
+| M06 | Attempted a board fix without the matching schematic change, which would have created a board that DRC accepts but the schematic does not describe | Reviewing what parity would compare | Fix the schematic first, regenerate, then route. A board change that has no schematic counterpart is a future silent failure. | AVOIDED |
+| M07 | Firmware defaults to the SuperMini divider ratio because `RAMS_JLC_S3_J2` is defined nowhere in the repository, so battery voltage reads half of truth on this board | Grep of the whole repository for the build switch | A conditional build path that is never enabled is dead code with a bug inside. Verify the switch is set by a build file, not by hope. | OPEN, finding S7 |
+| M08 | **Reported a hardware defect that existed only in my own tool.** Claimed the translator had `B` and `DIR` swapped on U6. TI SCES515 Table 4-1 gives DBV pin 4 = `B` and pin 5 = `DIR`, so the board (4=`NEO_SHIFT`, 5=`+3V3`) was right and the audit script's pin table was wrong. | Re-deriving the pinout from the vendor table row instead of from the script, after the docs, `circuit_spec.json` and the script disagreed | A pin-function table inside a checking tool is code, not evidence. Every row must cite the datasheet table it came from, and a HIGH finding must be re-derived from the vendor page before it is written into a review. Wrong tools manufacture false defects and waste a spin. | CLOSED 2026-11-11, no action; finding S1 withdrawn |
+| M09 | Nearly accepted a fixture where a status LED was counted as working because a net existed, without checking that the net reached a pin that can drive it | Same review pass as M08 | Connectivity is not function. For every output, name the pin that sources it and the part that receives it. | CLOSED |
+| M10 | Treated "part is DNP" as "part is verified". LED1 is DNP, which meant the invented data-path defect in S1 was never contradicted by a failing functional test. | Reviewing the DNP list against the findings | A DNP part still needs a correct schematic, and it also cannot falsify a defect claim. Test the path before declaring it broken. | CLOSED |
+| M11 | Read a schematic-parity count out of an earlier record (0) and treated it as current; when the live board measured 41, the save step was blamed first. | Re-ran the same DRC on an untouched copy: 41 appeared with and without the save, and every item was a warning on an auto-generated `unconnected-(...)` net. | A number in a document is stale until it is re-measured on the file in front of you. Before blaming a tool, reproduce on an untouched copy. | CLOSED 2026-11-11 |
+| M12 | Reported the 3D model set as present while two footprints pointed at files that do not exist (`SW_SPDT_Shouhan_MSK12C02.step`, `LED_WS2812B-2020_PLCC4_2.0x2.0mm.step`). A path string in a project file proves nothing about the installed library. | `kicad-cli pcb export step --subst-models` printed "Could not add 3D model" for both. | Resolve every asset path against the installed library, and prove the whole set loads with one export, before saying parts have bodies. | CLOSED 2026-11-11 |
+| M13 | Sized the LDO thermal rise from 5 V, which is the USB connector voltage, not the regulator's input voltage. The SS14 sits in that path. | Recomputing `P = (V_in - 3.3) * I` with `V_in` = 4.55 V gave +57 C instead of +96 C at 250 mA. | Read the input voltage off the netlist at the specific pin, never from the connector. | CLOSED 2026-11-11 |
+
+## Recurring project-level failures already known
+
+The inherited failure register in
+`hardware/KiCAD Files/DeepSeek Build/05_FAILURE_MODES_AND_AI_RULES.md` lists
+F01 - F38. The ones that keep coming back here are F21 (divider ratio versus
+firmware), F13 (pin number versus GPIO number), F31 (clean DRC hiding an
+incomplete board) and F34 (accepting a router result without reading it).
+M03, M07 and M01 above are the same mistakes in a new costume; check that
+register first before declaring a new class of problem.

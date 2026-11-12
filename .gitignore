@@ -33,3 +33,7 @@ local.properties
 # Logs
 *.log
 npm-debug.log*
+
+# Local AI & Editor configuration
+.claude/
+*.local.json

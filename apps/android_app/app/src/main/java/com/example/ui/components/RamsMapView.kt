@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.NearMe
@@ -71,6 +72,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.model.DestinationRoute
 import com.example.model.GpsData
 import com.example.model.ImuData
 import com.example.model.IncidentEvent
@@ -135,12 +137,14 @@ fun RamsMapView(
   onSelectEvent: (IncidentEvent) -> Unit,
   riderProfile: RiderProfile? = null,
   onOpenLoginDialog: () -> Unit = {},
+  destinationRoute: DestinationRoute? = null,
   modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
   val showNearby = riderProfile?.showNearbyIncidents ?: false
   var isOfflineMode by remember { mutableStateOf(!isDeviceOnline(context)) }
   var webViewRef by remember { mutableStateOf<WebView?>(null) }
+  var isBeamFacingTop by remember { mutableStateOf(true) }
 
   // Prioritize real-time IMU compass orientation, fallback to GPS heading
   val heading = if (imu.yawDegrees != 0f) imu.yawDegrees else gps.headingDegrees
@@ -180,11 +184,32 @@ fun RamsMapView(
     }
   }
 
+  // Sync beam mode (Forward / Top of Phone vs Compass) with Leaflet
+  LaunchedEffect(isBeamFacingTop, isOfflineMode) {
+    if (!isOfflineMode && webViewRef != null) {
+      val modeStr = if (isBeamFacingTop) "forward" else "compass"
+      webViewRef?.evaluateJavascript("if(window.setBeamMode){ window.setBeamMode('$modeStr'); }", null)
+    }
+  }
+
   // Update direction beam in real-time when phone rotates
   LaunchedEffect(heading, isOfflineMode) {
     if (!isOfflineMode && webViewRef != null) {
       val jsHdg = "if(window.updateUserHeading){ window.updateUserHeading($heading); }"
       webViewRef?.evaluateJavascript(jsHdg, null)
+    }
+  }
+
+  // Update destination pin and route polyline when route state changes
+  LaunchedEffect(destinationRoute, isOfflineMode) {
+    if (!isOfflineMode && webViewRef != null) {
+      if (destinationRoute != null) {
+        val cleanLabel = destinationRoute.destinationName.replace("'", "\\'")
+        val jsRoute = "if(window.setDestinationPinAndRoute){ window.setDestinationPinAndRoute(${destinationRoute.destLat}, ${destinationRoute.destLon}, '$cleanLabel', ${destinationRoute.waypointsJson}); }"
+        webViewRef?.evaluateJavascript(jsRoute, null)
+      } else {
+        webViewRef?.evaluateJavascript("if(window.clearDestinationRoute){ window.clearDestinationRoute(); }", null)
+      }
     }
   }
 
@@ -255,7 +280,12 @@ fun RamsMapView(
                     val initialLon = if (gps.hasFix) gps.longitude else 121.7270
                     val initialHdg = heading
                     val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
-                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); }", null)
+                    val modeStr = if (isBeamFacingTop) "forward" else "compass"
+                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); if(window.setBeamMode){ window.setBeamMode('$modeStr'); } }", null)
+                    if (destinationRoute != null) {
+                      val cleanLabel = destinationRoute.destinationName.replace("'", "\\'")
+                      view?.evaluateJavascript("if(window.setDestinationPinAndRoute){ window.setDestinationPinAndRoute(${destinationRoute.destLat}, ${destinationRoute.destLon}, '$cleanLabel', ${destinationRoute.waypointsJson}); }", null)
+                    }
                   }
                 }
 
@@ -308,7 +338,8 @@ fun RamsMapView(
 
             // Google Maps-style Direction Beam in Offline Vector Mode
             if (gps.hasFix) {
-              rotate(degrees = heading, pivot = Offset(centerX, centerY)) {
+              val beamRotation = if (isBeamFacingTop) 0f else heading
+              rotate(degrees = beamRotation, pivot = Offset(centerX, centerY)) {
                 val beamPath = Path().apply {
                   moveTo(centerX, centerY)
                   val rad1 = Math.toRadians(-30.0)
@@ -370,8 +401,28 @@ fun RamsMapView(
             }
           }
 
-          // Controls on Right: Recenter only (vector map toggle removed)
+          // Controls on Right: Beam Mode & Recenter Buttons
           Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+
+            // Beam Alignment Toggle Button (Forward/Top of Phone vs Compass)
+            Box(
+              modifier = Modifier
+                .size(28.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(Color(0xE618181B))
+                .border(1.dp, if (isBeamFacingTop) RamsSyncBlue else Color(0xFF27272A), RoundedCornerShape(4.dp))
+                .clickable {
+                  isBeamFacingTop = !isBeamFacingTop
+                },
+              contentAlignment = Alignment.Center
+            ) {
+              Icon(
+                imageVector = Icons.Default.Explore,
+                contentDescription = "Beam Mode",
+                tint = if (isBeamFacingTop) RamsSyncBlue else Color(0xFFA1A1AA),
+                modifier = Modifier.size(15.dp)
+              )
+            }
 
             // Recenter Button
             Box(
@@ -413,11 +464,12 @@ fun RamsMapView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
+            val beamLabel = if (isBeamFacingTop) "BEAM: FORWARD (TOP)" else String.format(Locale.US, "HDG %03.0f°", heading)
             Text(
               text = if (gps.hasFix) {
-                String.format(Locale.US, "%.5f, %.5f • HDG %03.0f°", gps.latitude, gps.longitude, heading)
+                String.format(Locale.US, "%.5f, %.5f • %s", gps.latitude, gps.longitude, beamLabel)
               } else {
-                String.format(Locale.US, "ACQUIRING FIX • HDG %03.0f°", heading)
+                String.format(Locale.US, "ACQUIRING FIX • %s", beamLabel)
               },
               fontFamily = FontFamily.Monospace,
               fontWeight = FontWeight.Bold,

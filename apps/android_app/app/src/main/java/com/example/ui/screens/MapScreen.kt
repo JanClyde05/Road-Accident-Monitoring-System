@@ -6,10 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import com.example.model.DestinationRoute
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +43,8 @@ fun MapScreen(
   filteredEvents: List<IncidentEvent> = events,
   activeFilter: String = "ALL",
   searchQuery: String = "",
+  destinationRoute: DestinationRoute? = null,
+  onClearRoute: () -> Unit = {},
   onFilterChange: (String) -> Unit = {},
   onSearchChange: (String) -> Unit = {}
 ) {
@@ -60,8 +66,88 @@ fun MapScreen(
       selectedEvent = selectedEvent,
       onSelectEvent = onSelectEvent,
       riderProfile = riderProfile,
-      onOpenLoginDialog = onOpenLoginDialog
+      onOpenLoginDialog = onOpenLoginDialog,
+      destinationRoute = destinationRoute
     )
+
+    // Active Navigation & Route Destination Banner
+    if (destinationRoute != null) {
+      Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        color = Color(0xFF18181B),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF38BDF8).copy(alpha = 0.6f))
+      ) {
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Column(modifier = Modifier.weight(1f)) {
+            Row(
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+              Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = Color(0xFFE11D48)
+              ) {
+                Text(
+                  text = "DESTINATION",
+                  modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+                  fontSize = 8.sp,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Black,
+                  color = Color.White
+                )
+              }
+              Text(
+                text = destinationRoute.destinationName.uppercase(java.util.Locale.US),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                maxLines = 1
+              )
+            }
+            if (destinationRoute.distanceKm > 0f) {
+              Text(
+                text = String.format(java.util.Locale.US, "%.1f km away  •  ~%.0f min", destinationRoute.distanceKm, destinationRoute.durationMin),
+                fontSize = 10.sp,
+                fontFamily = FontFamily.Monospace,
+                color = Color(0xFF38BDF8)
+              )
+            } else {
+              Text(
+                text = "Live Route Active • Following Road Corridor",
+                fontSize = 10.sp,
+                fontFamily = FontFamily.Monospace,
+                color = Color(0xFF38BDF8)
+              )
+            }
+          }
+
+          Button(
+            onClick = onClearRoute,
+            shape = RoundedCornerShape(6.dp),
+            colors = ButtonDefaults.buttonColors(
+              containerColor = Color(0xFF27272A),
+              contentColor = Color(0xFFEF4444)
+            ),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+            modifier = Modifier.height(28.dp)
+          ) {
+            Text(
+              text = "CLEAR ROUTE",
+              fontSize = 9.sp,
+              fontFamily = FontFamily.Monospace,
+              fontWeight = FontWeight.Bold
+            )
+          }
+        }
+      }
+    }
 
     // 2. Scrollable Telemetry & Incidents Area below the Map
     Column(
@@ -189,6 +275,9 @@ fun MapScreen(
         }
       }
     }
+
+    // Bottom breathing room to scroll above floating Voice AI button
+    androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(bottom = 88.dp))
   }
 }
 }
@@ -213,14 +302,18 @@ private fun MetricTile(
         fontSize = 9.sp,
         fontWeight = FontWeight.Bold,
         fontFamily = FontFamily.Monospace,
-        color = Color(0xFF71717A)
+        color = Color(0xFF71717A),
+        maxLines = 1,
+        softWrap = false
       )
       Text(
         text = value,
         fontSize = 13.sp,
         fontWeight = FontWeight.Black,
         fontFamily = FontFamily.Monospace,
-        color = Color.White
+        color = Color.White,
+        maxLines = 1,
+        softWrap = false
       )
     }
   }

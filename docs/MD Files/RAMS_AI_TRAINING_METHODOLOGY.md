@@ -139,3 +139,63 @@ flowchart TD
 - **Physical Testbed**: Rouser 135 motorcycle road testing in Brgy. Carig Sur, Tuguegarao City.
 - **Wake Word Precision**: 94.2% across 120 live trials under 40 km/h wind buffeting.
 - **Cancel Response Latency**: 240 ms from utterance onset to emergency alarm disarm.
+
+
+---
+
+## 9. Real-Time Automatic Kinematic Category Classification
+To eliminate manual mode selection while preventing false transitions during stop-and-go commuting, RAMS implements a dual-stage kinematic accumulator (`AutomaticCategoryClassifier` in `RamsViewModel.kt`):
+
+```mermaid
+flowchart TD
+    A[Live 50Hz IMU + GPS Speed] --> B[Feature Extraction: SVM, Jerk, Zero-Crossing, Tilt]
+    B --> C[SensorAiInferenceEngine Tier 1 Cognition]
+    C --> D{Candidate Mode Identification}
+    D -- "Walking / Running (<12 km/h)" --> E[Pedestrian Mode Candidate]
+    D -- "Normal Cruising (>=20 km/h, Low Vibration, Flat Chassis)" --> F[Car Driver Mode Candidate]
+    D -- "Speed < 3 km/h (Stationary / Red Light)" --> G[Red Light Hold: Preserve Current Category]
+    E --> H[15-Second Temporal Accumulator]
+    F --> H
+    H --> I{Sustained 15s & Cooldown > 60s & Manual Hold > 5min?}
+    I -- Yes --> J[Commit Mode Switch & Persist Profile]
+    I -- No --> K[Accumulating / Guarded]
+    J --> L[Voice Announcement via TTS]
+```
+
+### Invariant Safety Guards
+1. **Red Light Hold**: When vehicle speed drops below 3.0 km/h at traffic lights or stops, the engine preserves the current vehicle category unless cyclic pedestrian gait (`WALKING` / `RUNNING`) is sustained for a full 15 seconds.
+2. **Manual Override Hold**: Any category selected via voice command ("RAMS I will walk") or the UI drawer locks for 5 minutes (`300,000 ms`), preventing immediate automatic reclassification.
+3. **Switch Cooldown**: A 60-second lockout between consecutive automatic transitions prevents oscillatory flip-flops.
+
+---
+
+## 10. Multilingual Voice Category Switching & Phonetic Biasing
+`VoiceAlarmCanceler.kt` intercepts natural language category adjustment commands in both English and Tagalog before wake-word parsing:
+
+| Target Category | English Utterance Corpus | Tagalog / Taglish Utterance Corpus |
+| :--- | :--- | :--- |
+| **Pedestrian** | *"I will walk"*, *"I want to walk"*, *"walk mode"*, *"walking mode"*, *"switch to pedestrian"* | *"lakad ako"*, *"maglalakad ako"*, *"maglakad ako"*, *"lakad lang"*, *"mag walking"* |
+| **Car Driver** | *"use my car"*, *"going to use my car"*, *"car mode"*, *"driving mode"*, *"switch to car"* | *"gamitin ko kotse"*, *"magmamaneho ako"*, *"gamitin ang kotse"*, *"mag kotse"*, *"sasakyan mode"* |
+| **Motorcycle Rider** | *"ride my motorcycle"*, *"use my motorcycle"*, *"motor mode"*, *"motorbike mode"* | *"magmomotor ako"*, *"mag motor ako"*, *"gamitin ko motor"*, *"motor rider mode"* |
+| **Bicycle / Cyclist**| *"ride my bike"*, *"use my bicycle"*, *"cycling mode"*, *"switch to bike"* | *"magbibisikleta ako"*, *"mag bike ako"*, *"gamitin ko bisikleta"*, *"padyak mode"*, *"magpadyak"* |
+
+Upon detection:
+1. `handleCategoryChangeSpotted()` updates the conversational transcript bubble.
+2. Vocal confirmation is rendered via on-device TTS.
+3. `onCategoryChangeRequested` persists the new user type to `RiderProfile` in `SharedPreferences`.
+
+---
+
+## 11. Speech Recognizer Chime Buffering & Two-Stage Filtering
+To resolve the race condition where `SpeechRecognizer` recorded its own listening tone (resulting in premature cut-offs):
+- **Chime Buffer Window**: The tone playback lasts 350 ms. Microphone arming via `restartListeningForCommand()` is delayed by 380 ms to ensure acoustic silence.
+- **Wake Word Discard in Command Stage**: In `AWAITING_COMMAND` mode, if the partial speech recognition buffer reports residual wake words ("hey rams", "rams", "hi rams"), it is discarded and the microphone remains listening rather than feeding residual wake tokens to the NLP engine.
+
+---
+
+## 12. Corpus v3.0 Acoustic & Intent Dataset Metrics
+The unified acoustic and intent corpus (`voice_wake_patterns.json`) incorporates:
+- **Total Acoustic & Intent Samples**: 716 verified phrases across 19 domain categories.
+- **Noise Rejection Profiles**: 23 vehicular and environmental noise categories (wind buffeting, horns, sirens, engine rumble, gravel rattle).
+- **Spatial Landmark Dictionary**: 19 Tuguegarao City key hubs with bounding radii and reverse geocoding centroids.
+- **Regulatory Fare Matrices**: 100% compliance with Tuguegarao City Ordinance No. 50-09-2022.

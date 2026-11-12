@@ -1,0 +1,217 @@
+{
+  "revision": "J2 LDO",
+  "pin_font": 1.0,
+  "field_font": 1.0,
+  "sheets": {
+    "power": {
+      "title": "01 Power and USB",
+      "notes": [
+        {
+          "x": 20,
+          "y": 23,
+          "text": "Single-cell LiPo. CHG_LINK DNP pending cell/harness check. AP2112 3.3 V LDO; no switching converter.",
+          "size": 1.1
+        },
+        {
+          "x": 20,
+          "y": 118,
+          "text": "USB-C input and ESD",
+          "size": 1.3
+        },
+        {
+          "x": 165,
+          "y": 118,
+          "text": "100 mA charger; R30 initially DNP",
+          "size": 1.3
+        },
+        {
+          "x": 250,
+          "y": 137,
+          "text": "Cell B_MINUS is separate from protected system GND",
+          "size": 1.3
+        },
+        {
+          "x": 20,
+          "y": 130,
+          "text": "USB / battery load sharing",
+          "size": 1.3
+        },
+        {
+          "x": 135,
+          "y": 132,
+          "text": "3.3 V linear regulator (owned AP2112)",
+          "size": 1.3
+        },
+        {
+          "x": 300,
+          "y": 153,
+          "text": "4:1 battery ADC; Q4 gate follows 3V3",
+          "size": 1.3
+        }
+      ]
+    },
+    "mcu": {
+      "title": "02 ESP32-S3 and 2.4 GHz RF",
+      "notes": [
+        {
+          "x": 150,
+          "y": 23,
+          "text": "RF reference values require tuning with the assembled board and final enclosure.",
+          "size": 1.1
+        },
+        {
+          "x": 150,
+          "y": 96,
+          "text": "Enable, boot and strap bias",
+          "size": 1.3
+        },
+        {
+          "x": 150,
+          "y": 139,
+          "text": "40 MHz crystal oscillator",
+          "size": 1.3
+        },
+        {
+          "x": 150,
+          "y": 211,
+          "text": "Chip match, feed and antenna tuning",
+          "size": 1.3
+        }
+      ]
+    },
+    "io": {
+      "title": "03 LoRa and I-O",
+      "notes": [
+        {
+          "x": 295,
+          "y": 23,
+          "text": "Phone supplies IMU/GPS over BLE. Hand-solder bottom Ra-02 after top-side reflow.",
+          "size": 1.1
+        },
+        {
+          "x": 20,
+          "y": 143,
+          "text": "433 MHz LoRa radio",
+          "size": 1.3
+        },
+        {
+          "x": 150,
+          "y": 143,
+          "text": "2020 RGB: switched SYS_IN supply + data translation",
+          "size": 1.1
+        },
+        {
+          "x": 295,
+          "y": 143,
+          "text": "Active buzzer and low-side driver",
+          "size": 1.3
+        },
+        {
+          "x": 20,
+          "y": 154,
+          "text": "Reset / boot-cancel buttons and USB series resistors",
+          "size": 1.3
+        },
+        {
+          "x": 20,
+          "y": 183,
+          "text": "ERC source declarations: physical sources identified in circuit specification",
+          "size": 1.3
+        },
+        {
+          "x": 20,
+          "y": 211,
+          "text": "Bring-up test pads",
+          "size": 1.3
+        },
+        {
+          "x": 150,
+          "y": 148,
+          "text": "Verify exact LED pinout, timing and low-battery operation before fitting.",
+          "size": 1.0
+        }
+      ]
+    }
+  },
+  "components": {
+    "#FLG001": {
+      "x": 25.4,
+      "y": 195.58
+    },
+    "#FLG002": {
+      "x": 57.15,
+      "y": 195.58
+    },
+    "#FLG003": {
+      "x": 88.9,
+      "y": 195.58
+    },
+    "#FLG004": {
+      "x": 120.65,
+      "y": 195.58
+    },
+    "#FLG005": {
+      "x": 152.4,
+      "y": 195.58
+    },
+    "#FLG006": {
+      "x": 184.15,
+      "y": 195.58
+    },
+    "#FLG007": {
+      "x": 215.9,
+      "y": 195.58
+    },
+    "#FLG008": {
+      "x": 247.65,
+      "y": 195.58
+    },
+    "#FLG009": {
+      "x": 279.4,
+      "y": 195.58
+    },
+    "U6": {
+      "x": 177.8,
+      "y": 67.31
+    },
+    "LED1": {
+      "x": 243.84,
+      "y": 67.31
+    },
+    "R13": {
+      "x": 213.36,
+      "y": 33.02
+    },
+    "C28": {
+      "x": 265.43,
+      "y": 33.02
+    },
+    "R42": {
+      "x": 154.94,
+      "y": 111.76
+    },
+    "Q5": {
+      "x": 184.15,
+      "y": 111.76
+    },
+    "R41": {
+      "x": 218.44,
+      "y": 111.76
+    },
+    "R43": {
+      "x": 245.11,
+      "y": 111.76
+    },
+    "C34": {
+      "x": 267.97,
+      "y": 111.76
+    },
+    "D3": {
+      "wire_length": 7.62
+    },
+    "C35": {
+      "x": 165.1,
+      "y": 33.02
+    }
+  }
+}

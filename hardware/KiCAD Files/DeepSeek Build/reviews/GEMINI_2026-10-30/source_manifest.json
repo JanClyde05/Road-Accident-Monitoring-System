@@ -1,0 +1,180 @@
+{
+  "source": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\Antigravity Build\\RAMS Wearable - PCB\\GEMINI Build",
+  "captured_at": "2026-10-30T19:29:20.342493+08:00",
+  "files": [
+    {
+      "path": "00_REVISION_PLAN.md",
+      "sha256": "5414e18446fa83dcd9038a727a87f46d093fa299430ed181c33c66d9b0423a71",
+      "bytes": 23190,
+      "source_mtime": "2026-10-30T13:10:43.350605+08:00"
+    },
+    {
+      "path": "BOM_CROSS_REFERENCE.md",
+      "sha256": "d07faa869060f92aca94893a5f15995cf1092273a732da6ce7d302a7db2bcdfd",
+      "bytes": 7285,
+      "source_mtime": "2026-10-30T14:20:55.478804+08:00"
+    },
+    {
+      "path": "circuit_spec.json",
+      "sha256": "a8dc1ab000e39b2e1dabbea4b1079c93b885eb72f0f0b240a77c54883d1427d0",
+      "bytes": 43413,
+      "source_mtime": "2026-10-30T19:04:24.540532+08:00"
+    },
+    {
+      "path": "DECISIONS.md",
+      "sha256": "455fee4d3dc161c54fccd2a836673ccc678729f750bc7afc0974093ad3e9b27c",
+      "bytes": 1264,
+      "source_mtime": "2026-10-30T13:32:33.114936+08:00"
+    },
+    {
+      "path": "EPDC_DESIGN_RULES.md",
+      "sha256": "ae5e8e2977be6e0e82e1afd05601c3092f1396cd90857d35e00ee75b5ad93f8c",
+      "bytes": 3807,
+      "source_mtime": "2026-10-30T13:14:35.171999+08:00"
+    },
+    {
+      "path": "ERROR_LOG.md",
+      "sha256": "5ebd8a805712b0f7f7a4faae7fbcf7ac4b7272dcd9d5e3ac33981f79a1b2e2b3",
+      "bytes": 4830,
+      "source_mtime": "2026-10-30T13:15:18.597256+08:00"
+    },
+    {
+      "path": "fp-lib-table",
+      "sha256": "71f2a562eaecf41f2d37f5c16978c9e10f481074f8de1ee1ad0a0b922a4b8aa6",
+      "bytes": 160,
+      "source_mtime": "2026-10-30T14:30:04.948248+08:00"
+    },
+    {
+      "path": "RAMS_Local.kicad_sym",
+      "sha256": "185bbc3bf8c3a12c30b41edec74700315d12e15673dd78ad75e19d3a6dc174db",
+      "bytes": 1754,
+      "source_mtime": "2026-10-30T18:12:38.872380+08:00"
+    },
+    {
+      "path": "RAMS_RevC.kicad_dru",
+      "sha256": "bce9f3d47342a83ed7fae9f9cea29df21ddd859552903632dda7e3acf8958f61",
+      "bytes": 317,
+      "source_mtime": "2026-10-30T18:25:36.663359+08:00"
+    },
+    {
+      "path": "RAMS_RevC.kicad_pcb",
+      "sha256": "3b3cd5dfd37bc1eb89fa52a72fef844f725ba48c2dcbab6d405219559165fa06",
+      "bytes": 524050,
+      "source_mtime": "2026-10-30T18:28:42.598460+08:00"
+    },
+    {
+      "path": "RAMS_RevC.kicad_pro",
+      "sha256": "4307fead9c6f146b71e719264cf8ab5cc8159c6b1117f64b4ce6b06144974ddd",
+      "bytes": 9607,
+      "source_mtime": "2026-10-30T18:28:42.604722+08:00"
+    },
+    {
+      "path": "RAMS_RevC.kicad_sch",
+      "sha256": "58c4fdb6c484db5807529c963e8d65cb3811584ca77c63302f7b82afbe9adb7b",
+      "bytes": 204661,
+      "source_mtime": "2026-10-30T18:18:18.867314+08:00"
+    },
+    {
+      "path": "README.md",
+      "sha256": "17204a29b1c7793c02b486a91f0249b662402b715cb638cadf88742eb356833d",
+      "bytes": 5554,
+      "source_mtime": "2026-10-30T17:33:38.070827+08:00"
+    },
+    {
+      "path": "RESEARCH_LEDGER.md",
+      "sha256": "60b29b5f75de227e54c2772e75974404b21ac5b91b52a8bae8d3fecc422bda37",
+      "bytes": 2983,
+      "source_mtime": "2026-10-30T13:13:58.452362+08:00"
+    },
+    {
+      "path": "sym-lib-table",
+      "sha256": "cd27e0d68387117ea8d46ff7878e0a123dea8ebf73ea3c7dc114627046b39024",
+      "bytes": 153,
+      "source_mtime": "2026-10-30T18:12:01.516521+08:00"
+    },
+    {
+      "path": "RAMS_Local.pretty/Buzzer_SMD_9650.kicad_mod",
+      "sha256": "7e2ab65d9cc98db06a616ffd0c8429466c1f9b551b323d1d26a89ea438b49ce7",
+      "bytes": 2706,
+      "source_mtime": "2026-10-30T14:33:53.033527+08:00"
+    },
+    {
+      "path": "RAMS_Local.pretty/ESP32-S3-WROOM-1_EPDC.kicad_mod",
+      "sha256": "1708b620b96b482404584fb42860958c1aa5bdd17bf37711cd318c5ae1abd70f",
+      "bytes": 14030,
+      "source_mtime": "2026-10-30T16:58:24.194437+08:00"
+    },
+    {
+      "path": "RAMS_Local.pretty/Johanson_2450AT18B100_3216.kicad_mod",
+      "sha256": "45906e5f310bb0a02fd1998770f40b9b7dd59828d08651d5f8f19ab7380df509",
+      "bytes": 2323,
+      "source_mtime": "2026-10-30T13:34:03.937780+08:00"
+    },
+    {
+      "path": "RAMS_Local.pretty/SW_Tactile_SPST_3x4mm.kicad_mod",
+      "sha256": "352a00f57746de31b056e85f62096b05cf7677cecb2cf8dccfb0daf85ea6dece",
+      "bytes": 2340,
+      "source_mtime": "2026-10-30T14:29:26.864833+08:00"
+    },
+    {
+      "path": "RAMS_Local.pretty/USB_C_16P_USB4105_EPDC.kicad_mod",
+      "sha256": "29e2a14012da4a0e0c04f0f9b9838b116fdc055cab31418acbd6311e7545de26",
+      "bytes": 7114,
+      "source_mtime": "2026-10-30T14:31:39.022591+08:00"
+    },
+    {
+      "path": "build/01_build_schematic_astra.py",
+      "sha256": "82afb1c602b99ceda15c95a2f2a38e9a3402faa863614d71007757185b609179",
+      "bytes": 23691,
+      "source_mtime": "2026-10-30T18:17:53.160043+08:00"
+    },
+    {
+      "path": "build/01_build_schematic_old.py",
+      "sha256": "adf2b7987e3adacf644559281c8240ee496e7d1bdf8c6168d23ff68a1b82e1ab",
+      "bytes": 16119,
+      "source_mtime": "2026-10-30T16:26:58.276592+08:00"
+    },
+    {
+      "path": "build/02_build_pcb.py",
+      "sha256": "e32ffa32aa2cf938ca8f04f37faa35a5637c88dddfae10b0bb0f7bcd5ffa50eb",
+      "bytes": 20421,
+      "source_mtime": "2026-10-30T18:28:24.656268+08:00"
+    },
+    {
+      "path": "build/clean_placement.json",
+      "sha256": "7fcd9163a438985e1a49ce3d423292732b9caa5ccdaf106a968c54208ecaa2f7",
+      "bytes": 3323,
+      "source_mtime": "2026-10-30T18:20:05.346928+08:00"
+    },
+    {
+      "path": "build/find_perfect_placement.py",
+      "sha256": "76b2732aaa781bc5ff74b26e12837bc694534045207b6a9cad8cc21991026ce8",
+      "bytes": 8573,
+      "source_mtime": "2026-10-30T17:27:04.155808+08:00"
+    },
+    {
+      "path": "build/RAMS_RevC_route_test.kicad_pcb",
+      "sha256": "54e828612d28c7e19ca5aa5031ab92b6d30b984dd0edd083c66b65dbe19bde68",
+      "bytes": 556028,
+      "source_mtime": "2026-10-30T19:21:43.103662+08:00"
+    },
+    {
+      "path": "build/RAMS_RevC_route_test.kicad_pro",
+      "sha256": "ced2580d5ef57995cf44e6d8c70eb845abbd8a9cf44fbddeb0e0a4e3bb9d86c8",
+      "bytes": 9614,
+      "source_mtime": "2026-10-30T19:16:59.342608+08:00"
+    },
+    {
+      "path": "build/run_pcb_build.py",
+      "sha256": "d447be0af069f918174a9b523d2e0e88276d6bb69f022fa3f54bc7174d281001",
+      "bytes": 444,
+      "source_mtime": "2026-10-30T16:31:56.576705+08:00"
+    },
+    {
+      "path": "build/test_pcb_minimal.py",
+      "sha256": "9772037e4ce79294cfa6e624e1173c6dcd5556af4875d6efd0cbc2c4d12c7fa0",
+      "bytes": 5041,
+      "source_mtime": "2026-10-30T16:36:29.130381+08:00"
+    }
+  ]
+}

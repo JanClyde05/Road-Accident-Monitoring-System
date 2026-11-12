@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-11T13:56:03",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "PCB text '-' on F.Silkscreen",
+                    "pos": {
+                        "x": 115.65,
+                        "y": 131.15
+                    },
+                    "uuid": "05a6aaad-57bd-43c9-9441-7759d44b8628"
+                },
+                {
+                    "description": "PCB text '+' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.8,
+                        "y": 131.15
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Segment of J2 on F.Silkscreen",
+                    "pos": {
+                        "x": 114.26,
+                        "y": 130.785
+                    },
+                    "uuid": "c4272368-326b-4f1f-9d2b-b563d819202f"
+                },
+                {
+                    "description": "PCB text '+' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.8,
+                        "y": 131.15
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0140 mm)",
+            "items": [
+                {
+                    "description": "Footprint text of BZ1 (+)",
+                    "pos": {
+                        "x": 129.8,
+                        "y": 121.8
+                    },
+                    "uuid": "65d27113-5b6f-459d-9ac6-e15b1c1c49cd"
+                },
+                {
+                    "description": "Segment of BZ1 on F.Silkscreen",
+                    "pos": {
+                        "x": 130.35,
+                        "y": 123.4
+                    },
+                    "uuid": "ca2f92c4-7feb-473d-97b4-a9e36d043e3f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        }
+    ]
+}

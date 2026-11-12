@@ -1,0 +1,100 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-11T13:37:56",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [BOOT_BTN] on In2.Cu, length 0.3182 mm",
+                    "pos": {
+                        "x": 110.175,
+                        "y": 110.925
+                    },
+                    "uuid": "58d2e438-e023-4fc2-84f9-5be7577f3125"
+                },
+                {
+                    "description": "Pad 2 [BOOT_BTN] of R34 on F.Cu",
+                    "pos": {
+                        "x": 110.2,
+                        "y": 114.79
+                    },
+                    "uuid": "0db73026-940f-4667-8f71-ab30efbbb095"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [+3V3] on F.Cu, length 0.5368 mm",
+                    "pos": {
+                        "x": 114.4,
+                        "y": 116.72
+                    },
+                    "uuid": "1245b67a-c6ad-4e19-bd4e-0b72b94310d1"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 110.2,
+                        "y": 117.15
+                    },
+                    "uuid": "4f03c05e-cdcb-450b-8b02-1417be63488b"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [+3V3] on B.Cu, length 0.0500 mm",
+                    "pos": {
+                        "x": 108.95,
+                        "y": 112.2
+                    },
+                    "uuid": "18076bd9-dcf3-4ade-b3b0-6ee2279a2718"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [+3V3] on B.Cu, length 0.6500 mm",
+                    "pos": {
+                        "x": 111.65,
+                        "y": 108.85
+                    },
+                    "uuid": "38a89272-ed3e-40ff-ad02-cb78ecf13904"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-09T21:35:10",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f",
+            "violations": []
+        },
+        {
+            "path": "/01 Power and USB/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+            "violations": []
+        },
+        {
+            "path": "/02 ESP32-S3 and 2.4 GHz RF/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+            "violations": []
+        },
+        {
+            "path": "/03 LoRa and I-O/",
+            "uuid_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+            "violations": []
+        }
+    ],
+    "source": "RAMS_JLC_S3.kicad_sch"
+}

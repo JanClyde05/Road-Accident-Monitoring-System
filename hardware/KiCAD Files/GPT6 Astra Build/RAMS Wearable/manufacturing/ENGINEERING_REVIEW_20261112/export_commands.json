@@ -1,0 +1,264 @@
+[
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "gerbers",
+      "--layers",
+      "F.Cu,In1.Cu,In2.Cu,B.Cu,F.Mask,B.Mask,F.SilkS,B.SilkS,Edge.Cuts",
+      "--subtract-soldermask",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board/",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-F_Cu.gtl'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-In1_Cu.g1'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-In2_Cu.g2'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-B_Cu.gbl'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-F_Silkscreen.gto'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-B_Silkscreen.gbo'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-F_Mask.gts'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-B_Mask.gbs'.\nPlotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-Edge_Cuts.gm1'.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "drill",
+      "--format",
+      "excellon",
+      "--drill-origin",
+      "absolute",
+      "--excellon-units",
+      "mm",
+      "--excellon-oval-format",
+      "route",
+      "--excellon-separate-th",
+      "--generate-map",
+      "--generate-report",
+      "--map-format",
+      "pdf",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board/",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Created file 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-PTH.drl'\nCreated file 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-NPTH.drl'\nCreated file 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-PTH-drl_map.pdf'.\nCreated file 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\bare_board\\RAMS_JLC_S3-NPTH-drl_map.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "sch",
+      "export",
+      "pdf",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\schematic.pdf",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_sch"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\schematic.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "F.Fab,Edge.Cuts",
+      "--sketch-pads-on-fab-layers",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "1",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_1x.pdf",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_1x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "F.Fab,Edge.Cuts",
+      "--sketch-pads-on-fab-layers",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "4",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_4x.pdf",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_4x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "B.Fab,Edge.Cuts",
+      "--sketch-pads-on-fab-layers",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "1",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_1x.pdf",
+      "--mirror",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_1x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "B.Fab,Edge.Cuts",
+      "--sketch-pads-on-fab-layers",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "4",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_4x.pdf",
+      "--mirror",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_4x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "gerbers",
+      "--layers",
+      "F.Paste",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\normal_after_qualification/",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\normal_after_qualification\\normal_after_qualification_PASTE_ONLY.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\normal_after_qualification\\normal_after_qualification_PASTE_ONLY-F_Paste.gtp'.\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+      "pcb",
+      "export",
+      "gerbers",
+      "--layers",
+      "F.Paste",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\first_power/",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\first_power\\first_power_PASTE_ONLY.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\stencils\\first_power\\first_power_PASTE_ONLY-F_Paste.gtp'.\n",
+    "stderr": ""
+  },
+  {
+    "purpose": "Separate readable assembly from numbered pad map",
+    "args": [
+      "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "F.Fab,Edge.Cuts",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "1",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_1x.pdf",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_1x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "purpose": "Separate readable assembly from numbered pad map",
+    "args": [
+      "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "F.Fab,Edge.Cuts",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "4",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_4x.pdf",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_top_4x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "purpose": "Separate readable assembly from numbered pad map",
+    "args": [
+      "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "B.Fab,Edge.Cuts",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "1",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_1x.pdf",
+      "--mirror",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_1x.pdf'.\nDone.\n",
+    "stderr": ""
+  },
+  {
+    "purpose": "Separate readable assembly from numbered pad map",
+    "args": [
+      "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
+      "pcb",
+      "export",
+      "pdf",
+      "--layers",
+      "B.Fab,Edge.Cuts",
+      "--black-and-white",
+      "--mode-single",
+      "--scale",
+      "4",
+      "--output",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_4x.pdf",
+      "--mirror",
+      "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\source\\RAMS_JLC_S3.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "stdout": "Plotted to 'D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\manufacturing\\ENGINEERING_REVIEW_20261112\\drawings\\assembly_bottom_4x.pdf'.\nDone.\n",
+    "stderr": ""
+  }
+]

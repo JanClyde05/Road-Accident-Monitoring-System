@@ -1,0 +1,237 @@
+
+--- PAGE 1 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+1/ 9
+Features and Benefits
+ ThecontrolintegratedcircuitandtheLEDsharetheonlypowersource.
+ 12mAoperatingcurrentperchannel.
+ ControlcircuitandRGBchipareintegratedinapackageof 2020components,toformacompleteaddressablepixel.
+ Built-insignalreshapingcircuit,afterwavereshapingtothenextdriver,ensurewave-formdistortionnotaccumulate.
+ Built-inelectricresetcircuitandpowerlostresetcircuit.
+ Each pixel of the three primary color can achieve 256 brightness display, completed 16777216 color full color display,
+andscanfrequencyisof 2KHz.
+ Cascadingporttransmissionsignalbysingleline.
+ Anytwopointthedistancenotmorethan3mtransmissionsignalwithoutanyincreasecircuit.
+ Whentherefreshrateis30fps,cascadenumberarenotlessthan1024pixels.
+ Senddataatspeedsof800Kbps.
+● Thecolorofthelightishighlyconsistent,cost-effective.
+● Withreversepowerconnection,itwillnotbedamaged.
+● Allexternalelectroniccomponentsincludingcapacitorsarenotrequired.
+Applications
+ ConsumerElectronics,LEDlighting.
+ LEDdecorativelighting,Indoor/outdoorLEDirregularscreen,gamemachineandamusementequipmentetc.
+General description
+WS2812B-2020 is an intelligent control LED light source, its exterior adopts the latest MOLDING packaging technology,
+the control circuit and RGB chips are integrated in a package of 2020 component. Its internal includes intelligent digital port
+data latch and signal reshaping amplification drive circuit. Also include a precision internal oscillator and a voltage
+programmableconstantcurrentcontrolpart,effectivelyensuringthepixelpointlightcolorheightconsistent.
+The data transfer protocol use single NZR communication mode.After the pixel power-on reset, the DIN port receive data
+fromcontroller,thefirst pixelcollectinitial24bitdatathensenttotheinternaldatalatch,theotherdatawhichreshapingbythe
+internal signal reshaping amplification circuit sent to the next cascade pixel through the DO port.After transmission for each
+pixel, the signal to reduce 24bit. pixel adopt auto reshaping transmit technology, making the pixel cascade number is not
+limitedthesignaltransmission,onlydependonthespeedofsignaltransmission.
+RESETtime >280μs,itwon'tcausewrongresetwhileinterruption,itsupportsthelowerfrequencyandinexpensiveMCU.
+Refresh Frequency updates to 2KHz, Low Frame Frequency and No Flicker appear in HD Video Camera, it improve
+excellentdisplayeffect.
+LED with low driving voltage, environmental protection and energy saving, high brightness, large scattering angle, good
+consistency, low power, long life and other advantages. The control chip integrated in LED above becoming more simple
+circuit,smallvolume,convenientinstallation.
+Mechanical Dimensions
+
+--- PAGE 2 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+2/ 9
+Back View Top View
+Side View PCB Solder Pad
+PIN Configuration
+PIN Function
+NO. Symbol PIN Function description
+1 DO DATAOUT Controldatasignaloutput
+2 GND GROUND Ground,data&powergrounding
+3 DI DATAIN Controldatasignalinput
+4 VDD POWERSUPPLY Powersupply
+
+--- PAGE 3 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+3/ 9
+Absolute Maximum Ratings
+Parameter Symbol Ratings Unit
+Powersupplyvoltage VDD +3.7~+5.3 V
+LogicalInputVoltage VI VDD-0.3V～VDD+0.7 V
+Operationjunctiontemperature Topt -25～+85 ℃
+Storagetemperaturerange Tstg -40~+105 ℃
+Electrical Characteristics（TA=25℃,VDD=5V,VSS=0V,unlessotherwisespecified）
+Switching Characteristics（TA=25℃,VDD=5V,VSS=0V,unlessotherwisespecified）
+Parameter Symbol Min Tpy Max Unit Condition
+Transmissiondelaytime tPLZ —— —— 300 ns CL=15pF,DIN→DOUT,RL=10KΩ
+Falltime tTHZ —— —— 120 µs CL=300pF,OUTR/OUTG/OUTB
+Inputcapacity CI —— —— 15 pF ——
+LED Characteristics
+Parameter Symbol Color Quiescent Current:< 0.6mA Test Condition
+(Working current)Min. Typ. Max. Unit
+Luminous
+intensity
+IV
+RED 150 200 250
+mcd 12mAGREEN 500 600 700
+BLUE 100 160 200
+Wavelength λd
+RED 620 622.6 630
+nm 12mAGREEN 515 515.6 525
+BLUE 465 470.4 475
+Parameter Symbol Min Tpy Max Unit Conditions
+Inputcurrent II —— —— ±1 µA VI=VDD/VSS
+HighVoltageInput VIH 2.7V —— VDD+0.7V V DIN，SET
+LowVoltageInput VIL -0.3V —— 0.7V V DIN，SET
+
+--- PAGE 4 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+4/ 9
+Data Transfer Time
+T0H 0code,highvoltagetime 220ns~380ns
+T1H 1code,highvoltagetime 580ns~1µs
+T0L 0code,lowvoltagetime 580ns~1µs
+T1L 1code,lowvoltagetime 580ns~1µs
+RES Frameunit,lowvoltagetime >280µs
+Sequence Chart
+Cascade Method
+DIN DIN DINDO DO DO
+PIX1
+D1 D2 D3 D4
+PIX2 PIX3
+Data Transmission Method
+Note:ThedataofD1issendbyMCU,andD2,D3,D4throughpixelinternalreshapingamplificationto
+transmit.
+Composition of 24bit Data
+G7 G6 G5 G4 G3 G2 G1 G0 R7 R6 R5 R4 R3 R2 R1 R0 B7 B6 B5 B4 B3 B2 B1 B0
+Note:DatatransmitinorderofGRB,highbitdataatfirst.
+
+--- PAGE 5 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+5/ 9
+Typical Application Circuit:The peripheral circuit don’t need to add filter capacitor.
+Tape Size (Unit: mm)
+Inspector:
+UNIT:mm
+CARRIER TAPES TEST REPORTS
+SYMBOL A0 B0 K0 P0 P1 P2 T E F D0 D1 W
+SPEC 2.20 2.40 1.01 4.00 4.00 2.00 0.18 1.75 3.50 1.50 1.00 8.00
+LEDTapingPosition
+
+--- PAGE 6 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+6/ 9
+Reel Packing Specifications (Unit: mm)
+.
+Moistureproof bag packing
+SPQ: 4500PCS /Reel
+Top SMD LED Using Instructions
+Internallabel
+Moisture-proofbag Desiccant Externallabel
+
+--- PAGE 7 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+7/ 9
+1. Summary
+TomakethebestuseofWORLDSEMI’sLED,pleaserefertothebelowprecautions,theyareofsameusage
+methodasotherelectroniccomponents.
+2. Cautions
+2.1. Dust&Cleaning
+ThesurfaceoftheLEDisencapsulatedwithmodifiedepoxyresinbecauseitplaysaverygoodroleinprotecting
+theopticalperformanceandagingresistance.Themodifiedepoxyresiniseasytostickwithdustandmustbekept
+clean.Whenthere’sacertainamountofdustonthesurfaceoftheLED,itwon’taffectbrightness,butdustproof
+shouldbetakencareof.PromotingtheuseofunsealedpackageinpreferencetoothersandtheassembledLEDs
+shouldbeplacedinacleancontainer.
+AvoidusingtheorganicsolventstocleanthedustontheLEDsurfaceandit’snecessarytoconfirmwhetherthe
+cleaningfluidwilldissolvetheLED.
+DonotcleantheLEDsbytheultrasonic.SomeparametersaffectingtheLEDperformancemustbeevaluatedif
+havenoalternativebuttotheultrasoniccleaningmethod,suchasultrasonicpower,bakingtimeandassembly
+conditions,etc.
+2.2. Moisture-proofpackaging
+TOPSMDLEDsaremoisturesensitivecomponents.LEDsarepackagedinaluminumfoilbagtopreventthe
+fromabsorbingmoistureduringtransportandstorage.Adesiccantisplacedinthebagstoabsorbmoisture.Ifthe
+LEDabsorbsmoisture,thenitevaporatesandexpandswheninreflowprocess,whichmaybreakthecolloidfrom
+thebracketanddamagetheopticalperformanceofLED.Forthisreason,moisture-proofpackagingistopreventthe
+fromabsorbingmoistureduringtransportandstorage.ThemoistureresistanceratingofWORLDSEMI’sLEDis:
+LEVEL 5a.
+Tabel I - IPC/JEDEC J-STD-020 Moisture/Reflow Sensitivity Classification
+MSL Level Workshop Life
+Time Conditions
+LEVEL1 Unlimited ≤30℃/85%RH
+LEVEL2 1Year ≤30℃/60%RH
+LEVEL2a 4Weeks ≤30℃/60%RH
+LEVEL3 168Hours ≤30℃/60%RH
+LEVEL4 72Hours ≤30℃160%RH
+LEVEL5 48Hours ≤30℃/60%RH
+LEVEL5a 24Hours ≤30℃/60%RH
+LEVEL6 Take-outandUseimmediately ≤30℃/60%RH
+2.3. SMTpatchdescription
+
+--- PAGE 8 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+8/ 9
+1. PleaseuseitundertheconditionofT<30°CandRH<60%;
+2. Theproductopeningperiodtothereflowsolderingcompletiontimeperiodiscontrolledwithin24H;
+3. Iftime-outoccurs,itisnecessarytodehumidifyandbaketheLED.
+2.4Demandfordehumidification:75℃/>24H
+3. SMT Reflow
+Refertotheparameterslistedbelow,theexperimentalresultsprovethattheTOPSMDLEDmeetstheJEDEC
+J-STD-020Cstandards.Asageneralguideline,itisrecommendedtofollowtheSMTreflowtemperaturecurve
+recommendedbythesolderpastemanufacturer.
+Remarks:1.ThesegeneralguidelinesmaynotapplytoallPCBdesignsandreflowsolderingconfigurations.
+2. Alltemperaturesreferredaremeasuredonthesurfaceofthepackagebody.
+Curve Description Lead-free
+ReflowThelowestpreheattemperature(Tsmin) 150℃
+Thehighestpreheattemperature(Tsmax) 200℃
+Preheatingtime(TsmintoTsmax)(ts) 60-180S
+Averagerateoftemperaturerise(TsmaxtoTp) <3℃/S
+LIQUIDREGIONtemperature(TL) 217℃
+LIQUIDREGIONHoldingTime(tL) 60-150S
+PeakTemperature(Tp) 240℃
+HighTemperatureRegion(Tp=-5℃)Holding
+Time(tp)
+<10S
+CoolingRate <6℃/S
+RoomTemperaturetoPeakHoldingTime <6min
+
+
+--- PAGE 9 ---
+WS2812B-2020
+Intelligent control LED
+integrated light source
+9/ 9
+4. Assembly Precautions
+1. CliptheLEDfromitsside. 2. Neitherdirectlytouchthegelsurfacewiththehand
+orsharpinstrument,itmaydamageitsinternalcircuit.
+3. Not to be double stacked, it may damage its
+internalcircuit.
+4. Cannotbestoredinorappliedintheacidicsitesof
+PH<7.
+Modify Record
+Version № Status Bar Modify Content Summary Date Reviser Approved
+V1.0 N New-Officialrelease 20180808 ShenJinGuo YinHuaPing
+V1.1 M Maximumrating,brightnessvalue 20181004 ShenJinGuo YinHuaPing
+V1.2 M Electricalparameters,cautionssection 20181220 ShenJinGuo YinHuaPing
+V1.3 A Thereverseconnectionofthepowersupplywill
+notbedamaged;thereisnoneedforany
+electroniccomponentsincludingcapacitorson
+theperiphery.
+20190125 ShenJinGuo YinHuaPing
+Remarks: Initialversion:V1.0；Versionnumberplus"0.1"aftereachrevision;
+Statusbar:N--New,A--Add,M--Modify,D--Delete.

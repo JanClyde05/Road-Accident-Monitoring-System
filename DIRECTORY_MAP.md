@@ -97,6 +97,9 @@ Production-ready client, dashboard, and backend software.
 | **Next-Gen AI Rework** | Kotlin, C#, LiteRT, SLM, Sherpa-ONNX | IECEP Nationals AI Integration modules: Dual-tier sensor AI, offline "RAMS" wake-word canceler, in-app developer training suite, and desktop hotspot predictor. | [`apps/planned_rework/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/planned_rework/) |
 
 ### Quick Launch Scripts in `apps/`
+* [`auto_train_rams.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/auto_train_rams.bat) — 1-Click automated edge AI training pipeline & APK re-baker (synthesizes 2,573 multimodal training entities in <1s).
+* [`scripts/train_rams_ai.py`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/scripts/train_rams_ai.py) — Master multi-parameter AI training synthesizer (distilled Q&A, voice wake, 50Hz motion benchmarks).
+* [`tools/launchers/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/tools/launchers/) — Dedicated folder containing OpenRouter model switchers (`switch_model.bat/.ps1`), Claude Code CLI wrappers (`claude-or.bat`), and local LLM/PCB assistance tools (`ask_glm.bat`, `ask_pcb.bat`, `start_local_glm_proxy.bat`).
 * [`apps/Build_Android_APK.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/Build_Android_APK.bat) — 1-Click compiler for Android APK (`app-debug.apk`) via Gradle.
 * [`apps/Build_And_Install_Android_App.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/Build_And_Install_Android_App.bat) — Builds and deploys the Android app to a connected phone over ADB.
 * [`apps/Launch_Desktop_Rescuer.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/Launch_Desktop_Rescuer.bat) — Compiles and runs the Rescuer Operations Desktop application.
@@ -110,6 +113,7 @@ All electronics engineering files, schematics, and manufacturing packages.
 
 | Directory / File | Description |
 |---|---|
+| `hardware/KiCAD Files/GPT6 Astra Build/RAMS Wearable/` | **JLCPCB J2 routed engineering candidate, 2026-11-12:** bare S3, Ra-02, owned active9650, AP2112 3.3V LDO, ratio4 ADC and switched raw-supply2020RGB/translator. Zero native ERC/DRC/unconnected/parity findings; source-bound review package and staged stencils. NativePCB authoritative; initial generators guarded. Supplier/part-fit/process and physical validation remain open; no manufacturing release. DOST deferred. |
 | [`hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/) | **Active Production PCB:** DOST-ASTI EPDC compliant redesign. 2-layer, 42x32mm, 0.3mm min trace, 0.254mm clearance, 1.0mm round USB-C shell holes, corrected FS8205A SOT-23-6 pinout, DW01A protection, and Johanson 2450AT18B100E 3216 ceramic BLE antenna. |
 | [`hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev B/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20B/) | Intermediate revision draft (superseded by Rev C). |
 | [`hardware/KiCAD Files/Antigravity Build/RAMS - PCB/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB/) | Rev A design (ordered JLCPCB board; documented in `PCB_REVIEW_2026-10-30.md`). |

@@ -1,0 +1,47 @@
+{
+  "eda": "KiCad 10.0.6 pcbnew",
+  "sources": [
+    {
+      "url": "https://abracon.com/Resonators/abm8.pdf",
+      "sha256": "564ac331d8bf38b4ae1222444b0d9cfea3a6ba29148a8be906b2e0ffe40471d8",
+      "file": "ABM8_20200729.pdf"
+    },
+    {
+      "url": "https://gct.co/files/drawings/usb4105.pdf",
+      "sha256": "fb331fbabee8392ed2937ed757c1610cb0f174b84625147c0b580a18eea8c0e5",
+      "file": "GCT_USB4105.pdf"
+    },
+    {
+      "url": "https://api.puiaudio.com/filename/SMI-1027-TW-3V-R.pdf",
+      "sha256": "e2806ad196632f7fcfa89ad7445a9b279cdf7cbe98d61b6f48a8e69f9fd0c3fd",
+      "file": "PUI_SMI-1027-TW-3V-R_RevD_20240808.pdf"
+    },
+    {
+      "url": "https://www.ti.com/lit/ds/symlink/tps22919.pdf",
+      "sha256": "743c59b01fb0891d2d0f1faba779161cd2d2b6c18edf68e6d5b3279016240c84",
+      "file": "TPS22919_SLVSEN5B.pdf"
+    },
+    {
+      "url": "https://www.ti.com/lit/ds/symlink/tlv803e.pdf",
+      "sha256": "74ac4474d86c3597c4fff6ffa61a59e850130a40eda28085ece9765fb380e844",
+      "file": "TLV803E_SLVSES2J.pdf"
+    }
+  ],
+  "timezone": "Asia/Manila",
+  "date": "2026-11-08",
+  "footprints": [
+    {
+      "native_load": "passed",
+      "sha256": "28d9fe3acad9925c291faff5930e529aba0adb5554782214efdc428eebb1fbb6",
+      "pad_geometry_assertions": "passed",
+      "name": "Buzzer_PUI_SMI-1027-TW-3V-R"
+    },
+    {
+      "native_load": "passed",
+      "sha256": "7767f690dfee6463f7ac30a60f0f65f3e4f0bbf731cba2e43239b51441f4ecd5",
+      "pad_geometry_assertions": "passed",
+      "name": "Crystal_Abracon_ABM8_3225"
+    }
+  ],
+  "limits": "Part selection and footprint geometry checks only. Final board DRC and physical assembly not covered."
+}

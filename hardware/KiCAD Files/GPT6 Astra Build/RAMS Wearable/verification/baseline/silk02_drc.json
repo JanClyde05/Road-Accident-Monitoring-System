@@ -1,0 +1,200 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-11T13:52:18",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Silkscreen clipped by board edge (board setup constraints silk clearance 0.1500 mm; actual 0.0702 mm)",
+            "items": [
+                {
+                    "description": "Segment on Edge.Cuts",
+                    "pos": {
+                        "x": 142.0,
+                        "y": 132.0
+                    },
+                    "uuid": "40c1ae7f-421d-4fc0-8cd3-6f8b02425b1c"
+                },
+                {
+                    "description": "PCB text 'BAT +  -' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.3,
+                        "y": 131.4
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0140 mm)",
+            "items": [
+                {
+                    "description": "Footprint text of BZ1 (+)",
+                    "pos": {
+                        "x": 129.8,
+                        "y": 122.8
+                    },
+                    "uuid": "65d27113-5b6f-459d-9ac6-e15b1c1c49cd"
+                },
+                {
+                    "description": "Segment of BZ1 on F.Silkscreen",
+                    "pos": {
+                        "x": 130.35,
+                        "y": 123.4
+                    },
+                    "uuid": "ca2f92c4-7feb-473d-97b4-a9e36d043e3f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0548 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RST' on F.Silkscreen",
+                    "pos": {
+                        "x": 118.9,
+                        "y": 105.1
+                    },
+                    "uuid": "409d4cfd-19c7-463e-8c12-c9aa30a2d54c"
+                },
+                {
+                    "description": "Segment of SW2 on F.Silkscreen",
+                    "pos": {
+                        "x": 116.8,
+                        "y": 104.35
+                    },
+                    "uuid": "b9f2808a-8b1a-4bd9-b829-9c4765d55ecd"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0548 mm)",
+            "items": [
+                {
+                    "description": "Segment of SW3 on F.Silkscreen",
+                    "pos": {
+                        "x": 123.2,
+                        "y": 104.35
+                    },
+                    "uuid": "2cfb6e39-a06e-4ea6-b02b-6ae923337854"
+                },
+                {
+                    "description": "PCB text 'BOOT' on F.Silkscreen",
+                    "pos": {
+                        "x": 125.3,
+                        "y": 105.1
+                    },
+                    "uuid": "31a7ad21-ae60-4a02-8804-05e087ae2359"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'BAT +  -' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.3,
+                        "y": 131.4
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                },
+                {
+                    "description": "PTH pad SH [GND] of J1",
+                    "pos": {
+                        "x": 110.82,
+                        "y": 130.075
+                    },
+                    "uuid": "597450f3-1e3f-435c-89e5-4b188b72451e"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'BAT +  -' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.3,
+                        "y": 131.4
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                },
+                {
+                    "description": "Pad MP [<no net>] of J2 on F.Cu",
+                    "pos": {
+                        "x": 113.4,
+                        "y": 129.975
+                    },
+                    "uuid": "c367794f-e82f-4fa6-97cc-da56db55030c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'RST' on F.Silkscreen",
+                    "pos": {
+                        "x": 118.9,
+                        "y": 105.1
+                    },
+                    "uuid": "409d4cfd-19c7-463e-8c12-c9aa30a2d54c"
+                },
+                {
+                    "description": "Pad 2 [GND] of R35 on F.Cu",
+                    "pos": {
+                        "x": 118.5,
+                        "y": 105.89
+                    },
+                    "uuid": "a756b203-305f-472d-8667-f5519444a208"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "PCB text 'RST' on F.Silkscreen",
+                    "pos": {
+                        "x": 118.9,
+                        "y": 105.1
+                    },
+                    "uuid": "409d4cfd-19c7-463e-8c12-c9aa30a2d54c"
+                },
+                {
+                    "description": "Pad 2 [GND] of R36 on F.Cu",
+                    "pos": {
+                        "x": 119.7,
+                        "y": 105.89
+                    },
+                    "uuid": "76a27390-3be5-4134-9242-bb5f61c5be84"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        }
+    ]
+}

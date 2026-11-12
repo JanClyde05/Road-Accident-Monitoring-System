@@ -1,0 +1,62 @@
+[
+  {
+    "id": "13734e7a-8d0c-446c-8832-053dde46d1de",
+    "net": "DW_CS"
+  },
+  {
+    "id": "2192b1c9-0e8d-4e3c-9c24-d2ea16838efc",
+    "net": "DW_CS"
+  },
+  {
+    "id": "21ae4f6f-e9e7-405c-9046-05adb517d63a",
+    "net": "DW_CS"
+  },
+  {
+    "id": "2c335571-a300-4098-866b-6d0bf85d306f",
+    "net": "DW_CS"
+  },
+  {
+    "id": "7e4f455a-4cdc-48ad-8a04-80115b83cbf8",
+    "net": "DW_CS"
+  },
+  {
+    "id": "a79eff79-e28a-476b-a3f5-9cbecdbe5c9f",
+    "net": "DW_CS"
+  },
+  {
+    "id": "c18c146a-cdb9-41f6-a418-4d57e19ce7a1",
+    "net": "DW_CS"
+  },
+  {
+    "id": "c429fdc8-4331-4d49-9d9d-a29047fe3c31",
+    "net": "DW_CS"
+  },
+  {
+    "id": "0f7e65be-715a-4d65-89ac-d257c8587250",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "2d6d6e15-c348-4908-a4de-de9d74203540",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "5bd76ece-59e6-465d-9e75-e3eb399aa4f7",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "866a381d-5660-41d7-8b4e-9f7bb7dc31f4",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "a299acb9-7d10-4d09-935b-7bbe959d79e9",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "aa4a2b2a-a4c4-4bbe-942a-2034801c4984",
+    "net": "LORA_SCK"
+  },
+  {
+    "id": "d44051c4-9ac2-475f-ad7c-3237653d11c8",
+    "net": "LORA_SCK"
+  }
+]

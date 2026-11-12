@@ -78,7 +78,7 @@ class RamsAiAssistantEngine(
 ) {
     companion object {
         private const val TAG = "RAMS_AI_Assistant"
-        private const val HTTP_TIMEOUT_MS = 3500
+        private const val HTTP_TIMEOUT_MS = 1200
 
         // RAMS Model Identity
         const val MODEL_NAME = "RAMS-1.8B-Edge"
@@ -106,22 +106,76 @@ class RamsAiAssistantEngine(
         "when", "why", "how", "can", "could", "do", "does", "did", "will",
         "would", "should", "tell", "me", "about", "please", "hey", "rams",
         "ok", "okay", "just", "really", "very", "much", "some", "my", "your",
-        "i", "you", "it", "that", "this", "to", "of", "in", "for", "on", "with"
+        "i", "you", "it", "that", "this", "to", "of", "in", "for", "on", "with",
+        "ano", "ang", "mga", "ba", "po", "ko", "mo", "ng", "na", "sa", "at", "ay"
     )
+
+    var appActionHandler: RamsAppActionHandler? = null
+
+    // Dynamic user-taught / learned voice patterns
+    private val dynamicLearnedPatterns = mutableMapOf<String, String>()
+    private val LEARNED_PATTERNS_FILE = "learned_voice_patterns.json"
 
     init {
         loadDistilledCache()
+        loadLearnedVoicePatterns()
+    }
+
+    private fun loadLearnedVoicePatterns() {
+        try {
+            val file = File(context.filesDir, LEARNED_PATTERNS_FILE)
+            if (file.exists()) {
+                val json = JSONObject(file.readText())
+                val keys = json.keys()
+                while (keys.hasNext()) {
+                    val k = keys.next()
+                    dynamicLearnedPatterns[k.lowercase(Locale.US)] = json.getString(k)
+                }
+                Log.i(TAG, "Loaded ${dynamicLearnedPatterns.size} dynamic learned voice patterns.")
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to load learned voice patterns: ${e.message}")
+        }
+    }
+
+    fun learnVoicePattern(query: String, response: String) {
+        try {
+            val key = query.lowercase(Locale.US).trim()
+            dynamicLearnedPatterns[key] = response
+            val file = File(context.filesDir, LEARNED_PATTERNS_FILE)
+            val json = if (file.exists()) {
+                try { JSONObject(file.readText()) } catch (_: Exception) { JSONObject() }
+            } else {
+                JSONObject()
+            }
+            json.put(key, response)
+            file.writeText(json.toString(2))
+            Log.i(TAG, "Saved dynamic voice pattern: '$key' -> '$response'")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to save dynamic voice pattern: ${e.message}")
+        }
     }
 
     /**
      * Normalizes a query into a canonical cache key:
-     * lowercase, strip punctuation, remove filler words, sort remaining tokens alphabetically.
+     * expands arithmetic symbols to spoken words, lowercase, strip punctuation,
+     * retains numeric digits and non-filler words, sort remaining tokens alphabetically.
      */
-    private fun normalizeQueryKey(query: String): String {
-        val tokens = query.lowercase(Locale.US)
-            .replace(Regex("[^a-z0-9\\s]"), "")
+    fun normalizeQueryKey(query: String): String {
+        val mathExpanded = query.lowercase(Locale.US)
+            .replace("+", " plus ")
+            .replace("-", " minus ")
+            .replace("*", " times ")
+            .replace("/", " divided by ")
+            .replace("=", " equals ")
+            .replace("%", " percent ")
+
+        val tokens = mathExpanded
+            .replace(Regex("[^a-z0-9\\s]"), " ")
             .split(Regex("\\s+"))
-            .filter { it.length > 1 && it !in FILLER_WORDS }
+            .filter { token ->
+                token.isNotBlank() && (token.length > 1 || token.all { it.isDigit() }) && token !in FILLER_WORDS
+            }
             .sorted()
         return tokens.joinToString(" ")
     }
@@ -131,32 +185,60 @@ class RamsAiAssistantEngine(
      */
     private fun loadDistilledCache() {
         try {
+            // 1. Seed from pre-packaged APK assets if present
+            try {
+                context.assets.open(DISTILLED_FILE_NAME).bufferedReader().useLines { lines ->
+                    for (line in lines) {
+                        if (line.isBlank()) continue
+                        try {
+                            val obj = JSONObject(line)
+                            val sample = DistilledKnowledgeSample(
+                                query = obj.optString("query", ""),
+                                normalizedKey = obj.optString("normalizedKey", ""),
+                                response = obj.optString("response", ""),
+                                timestamp = obj.optLong("timestamp", 0L),
+                                speedKmh = obj.optDouble("speedKmh", 0.0).toFloat(),
+                                userRole = obj.optString("userRole", ""),
+                                vehicleModel = obj.optString("vehicleModel", ""),
+                                source = obj.optString("source", "prepackaged-distillation")
+                            )
+                            if (sample.normalizedKey.isNotBlank() && sample.response.isNotBlank()) {
+                                distilledKnowledgeCache[sample.normalizedKey] = sample
+                            }
+                        } catch (_: Exception) {}
+                    }
+                }
+                Log.d(TAG, "Loaded ${distilledKnowledgeCache.size} distilled samples from APK assets.")
+            } catch (_: Exception) {}
+
+            // 2. Overlay dynamically learned user samples from filesDir
             val file = File(context.filesDir, DISTILLED_FILE_NAME)
-            if (!file.exists()) return
-            file.bufferedReader().useLines { lines ->
-                for (line in lines) {
-                    if (line.isBlank()) continue
-                    try {
-                        val obj = JSONObject(line)
-                        val sample = DistilledKnowledgeSample(
-                            query = obj.optString("query", ""),
-                            normalizedKey = obj.optString("normalizedKey", ""),
-                            response = obj.optString("response", ""),
-                            timestamp = obj.optLong("timestamp", 0L),
-                            speedKmh = obj.optDouble("speedKmh", 0.0).toFloat(),
-                            userRole = obj.optString("userRole", ""),
-                            vehicleModel = obj.optString("vehicleModel", ""),
-                            source = obj.optString("source", "gemini-2.0-flash-distillation")
-                        )
-                        if (sample.normalizedKey.isNotBlank() && sample.response.isNotBlank()) {
-                            distilledKnowledgeCache[sample.normalizedKey] = sample
+            if (file.exists()) {
+                file.bufferedReader().useLines { lines ->
+                    for (line in lines) {
+                        if (line.isBlank()) continue
+                        try {
+                            val obj = JSONObject(line)
+                            val sample = DistilledKnowledgeSample(
+                                query = obj.optString("query", ""),
+                                normalizedKey = obj.optString("normalizedKey", ""),
+                                response = obj.optString("response", ""),
+                                timestamp = obj.optLong("timestamp", 0L),
+                                speedKmh = obj.optDouble("speedKmh", 0.0).toFloat(),
+                                userRole = obj.optString("userRole", ""),
+                                vehicleModel = obj.optString("vehicleModel", ""),
+                                source = obj.optString("source", "gemini-2.0-flash-distillation")
+                            )
+                            if (sample.normalizedKey.isNotBlank() && sample.response.isNotBlank()) {
+                                distilledKnowledgeCache[sample.normalizedKey] = sample
+                            }
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Skipping malformed distilled sample: ${e.message}")
                         }
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Skipping malformed distilled sample: ${e.message}")
                     }
                 }
             }
-            Log.d(TAG, "Loaded ${distilledKnowledgeCache.size} distilled knowledge samples from disk.")
+            Log.d(TAG, "Total active distilled knowledge samples: ${distilledKnowledgeCache.size}")
         } catch (e: Exception) {
             Log.w(TAG, "Failed to load distilled knowledge cache: ${e.message}")
         }
@@ -208,6 +290,219 @@ class RamsAiAssistantEngine(
     fun getDistilledSampleCount(): Int = distilledKnowledgeCache.size
 
     /**
+     * Evaluates deterministic arithmetic and percentages offline in English, Tagalog, and symbols.
+     * Supports +, -, *, /, %, number words (one..twenty, isa..sampu), and division-by-zero guards.
+     */
+    fun evaluateBasicMathExpression(query: String): String? {
+        var q = query.lowercase(Locale.US).trim()
+
+        val prefixes = listOf(
+            "what is", "what's", "calculate", "solve", "compute", "tell me", "how much is",
+            "ano ang", "paki solve ang", "magkano ang", "paki kwenta ang", "kwentahin mo ang"
+        )
+        for (prefix in prefixes) {
+            if (q.startsWith(prefix)) {
+                q = q.removePrefix(prefix).trim()
+                break
+            }
+        }
+        q = q.replace("?", "").replace("=", "").trim()
+
+        val numberWords = mapOf(
+            "zero" to 0, "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5,
+            "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9, "ten" to 10,
+            "eleven" to 11, "twelve" to 12, "thirteen" to 13, "fourteen" to 14, "fifteen" to 15,
+            "sixteen" to 16, "seventeen" to 17, "eighteen" to 18, "nineteen" to 19, "twenty" to 20,
+            "thirty" to 30, "forty" to 40, "fifty" to 50, "sixty" to 60, "seventy" to 70,
+            "eighty" to 80, "ninety" to 90, "hundred" to 100,
+            "isa" to 1, "dalawa" to 2, "tatlo" to 3, "apat" to 4, "lima" to 5,
+            "anim" to 6, "pito" to 7, "walo" to 8, "siyam" to 9, "sampu" to 10
+        )
+        for ((word, num) in numberWords) {
+            q = q.replace(Regex("\\b$word\\b"), num.toString())
+        }
+
+        val pctMatch = Regex("([\\d.]+)\\s*(?:%|percent)\\s+(?:of|ng)\\s+([\\d.]+)").find(q)
+        if (pctMatch != null) {
+            val pct = pctMatch.groupValues[1].toDoubleOrNull() ?: return null
+            val base = pctMatch.groupValues[2].toDoubleOrNull() ?: return null
+            val res = (pct * base) / 100.0
+            val resStr = if (res % 1.0 == 0.0) res.toLong().toString() else "%.2f".format(Locale.US, res)
+            return "${pctMatch.groupValues[1]} percent of ${pctMatch.groupValues[2]} is $resStr."
+        }
+
+        q = q.replace("multiplied by", "*")
+            .replace("times", "*")
+            .replace(Regex("(\\d+)\\s*[xX]\\s*(\\d+)"), "$1 * $2")
+            .replace("divided by", "/")
+            .replace("over", "/")
+            .replace("hati sa", "/")
+            .replace("plus", "+")
+            .replace("dagdag", "+")
+            .replace("minus", "-")
+            .replace("bawas", "-")
+
+        val mathMatch = Regex("([\\d.]+)\\s*([+\\-*/])\\s*([\\d.]+)").find(q)
+        if (mathMatch != null) {
+            val a = mathMatch.groupValues[1].toDoubleOrNull() ?: return null
+            val op = mathMatch.groupValues[2]
+            val b = mathMatch.groupValues[3].toDoubleOrNull() ?: return null
+
+            val res: Double
+            val opWord: String
+            when (op) {
+                "+" -> {
+                    res = a + b
+                    opWord = "plus"
+                }
+                "-" -> {
+                    res = a - b
+                    opWord = "minus"
+                }
+                "*" -> {
+                    res = a * b
+                    opWord = "times"
+                }
+                "/" -> {
+                    if (b == 0.0) return "Division by zero is undefined."
+                    res = a / b
+                    opWord = "divided by"
+                }
+                else -> return null
+            }
+
+            val aStr = if (a % 1.0 == 0.0) a.toLong().toString() else a.toString()
+            val bStr = if (b % 1.0 == 0.0) b.toLong().toString() else b.toString()
+            val resStr = if (res % 1.0 == 0.0) res.toLong().toString() else "%.2f".format(Locale.US, res)
+            return "$aStr $opWord $bStr is $resStr."
+        }
+        return null
+    }
+
+    /**
+     * Appends online conversational exchanges to persistent local logs for offline retraining.
+     */
+    fun logOnlineConversation(query: String, response: String, sys: RamsSystemContext) {
+        try {
+            val convFile = File(context.filesDir, "rams_conversations.jsonl")
+            val obj = JSONObject().apply {
+                put("timestamp", System.currentTimeMillis())
+                put("query", query)
+                put("response", response)
+                put("userRole", sys.userType)
+                put("speedKmh", sys.speedKmh.toDouble())
+                put("latitude", sys.latitude)
+                put("longitude", sys.longitude)
+                put("source", "gemini-online")
+            }
+            convFile.appendText(obj.toString() + "\n")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed logging online conversation: ${e.message}")
+        }
+    }
+
+    /**
+     * Auto-compacts distilled knowledge, user voice patterns, and conversation logs:
+     * - Deduplicates identical normalized keys, retaining richest responses.
+     * - Caps active distilled cache at 400 entries with atomic file rewrite.
+     * - Prunes conversation history beyond 200 turns to conserve mobile flash memory.
+     */
+    fun autoCompactDistilledKnowledge(): Int {
+        var totalPruned = 0
+        try {
+            val file = File(context.filesDir, DISTILLED_FILE_NAME)
+            if (file.exists()) {
+                val lines = file.readLines().filter { it.isNotBlank() }
+                val sampleMap = mutableMapOf<String, DistilledKnowledgeSample>()
+                for (line in lines) {
+                    try {
+                        val obj = JSONObject(line)
+                        val s = DistilledKnowledgeSample(
+                            query = obj.optString("query", ""),
+                            normalizedKey = obj.optString("normalizedKey", ""),
+                            response = obj.optString("response", ""),
+                            timestamp = obj.optLong("timestamp", 0L),
+                            speedKmh = obj.optDouble("speedKmh", 0.0).toFloat(),
+                            userRole = obj.optString("userRole", ""),
+                            vehicleModel = obj.optString("vehicleModel", ""),
+                            source = obj.optString("source", "distilled")
+                        )
+                        if (s.normalizedKey.isNotBlank() && s.response.isNotBlank()) {
+                            val existing = sampleMap[s.normalizedKey]
+                            if (existing == null || s.timestamp >= existing.timestamp || s.response.length > existing.response.length) {
+                                sampleMap[s.normalizedKey] = s
+                            }
+                        }
+                    } catch (_: Exception) {}
+                }
+
+                val capped = if (sampleMap.size > 400) {
+                    sampleMap.values.sortedByDescending { it.timestamp }.take(400)
+                } else {
+                    sampleMap.values.toList()
+                }
+
+                val tempFile = File(context.filesDir, "${DISTILLED_FILE_NAME}.tmp")
+                tempFile.bufferedWriter().use { writer ->
+                    for (s in capped) {
+                        val obj = JSONObject().apply {
+                            put("query", s.query)
+                            put("normalizedKey", s.normalizedKey)
+                            put("response", s.response)
+                            put("timestamp", s.timestamp)
+                            put("speedKmh", s.speedKmh.toDouble())
+                            put("userRole", s.userRole)
+                            put("vehicleModel", s.vehicleModel)
+                            put("source", s.source)
+                        }
+                        writer.write(obj.toString())
+                        writer.newLine()
+                    }
+                }
+                tempFile.renameTo(file)
+
+                for (s in capped) {
+                    distilledKnowledgeCache[s.normalizedKey] = s
+                }
+
+                totalPruned += (lines.size - capped.size)
+            }
+
+            val patternsFile = File(context.filesDir, LEARNED_PATTERNS_FILE)
+            if (patternsFile.exists()) {
+                val pJson = JSONObject(patternsFile.readText())
+                val cleanJson = JSONObject()
+                val keys = pJson.keys()
+                while (keys.hasNext()) {
+                    val k = keys.next()
+                    val v = pJson.getString(k).trim()
+                    if (k.isNotBlank() && v.isNotBlank()) {
+                        cleanJson.put(k.lowercase(Locale.US).trim(), v)
+                    }
+                }
+                patternsFile.writeText(cleanJson.toString(2))
+            }
+
+            val convFile = File(context.filesDir, "rams_conversations.jsonl")
+            if (convFile.exists()) {
+                val convLines = convFile.readLines().filter { it.isNotBlank() }
+                if (convLines.size > 200) {
+                    val retained = convLines.takeLast(200)
+                    val tmpConv = File(context.filesDir, "rams_conversations.jsonl.tmp")
+                    tmpConv.writeText(retained.joinToString("\n") + "\n")
+                    tmpConv.renameTo(convFile)
+                    totalPruned += (convLines.size - retained.size)
+                }
+            }
+
+            Log.i(TAG, "Distilled knowledge and conversations auto-compacted. Total entries pruned: $totalPruned")
+        } catch (e: Exception) {
+            Log.w(TAG, "Auto-compaction error: ${e.message}")
+        }
+        return totalPruned
+    }
+
+    /**
      * Exports the entire distilled knowledge base as JSONL text for clipboard/share.
      */
     fun exportDistilledKnowledgeJson(): String {
@@ -243,6 +538,250 @@ class RamsAiAssistantEngine(
         val trimmed = normalized.trim()
         val lower = trimmed.lowercase(Locale.US)
         val sys = getSystemContext()
+
+        // 0A. DYNAMIC LEARNED VOICE PATTERNS (Checked first for personalized recall)
+        val learned = dynamicLearnedPatterns[lower] ?: dynamicLearnedPatterns[normalizeQueryKey(lower)]
+        if (learned != null) {
+            Log.i(TAG, "Matched dynamic learned pattern for '$lower'")
+            return@withContext learned
+        }
+
+        // 0B. EXPLICIT VOICE TEACHING INTENT ("remember that X is Y", "learn that X is Y")
+        if (lower.startsWith("remember that ") || lower.startsWith("learn that ") || lower.startsWith("tandaan mo na ")) {
+            val rest = lower.removePrefix("remember that ").removePrefix("learn that ").removePrefix("tandaan mo na ").trim()
+            val parts = if (rest.contains(" is ")) rest.split(" is ", limit = 2) 
+                        else if (rest.contains(" means ")) rest.split(" means ", limit = 2)
+                        else if (rest.contains(" ay ")) rest.split(" ay ", limit = 2) else null
+            if (parts != null && parts.size == 2) {
+                val qKey = parts[0].trim()
+                val ans = parts[1].trim()
+                learnVoicePattern(qKey, ans)
+                return@withContext "I have learned that pattern. Next time you say '$qKey', I will answer '$ans'."
+            }
+        }
+
+        // 0C. APPLICATION ACTION EXECUTION (Empowering RAMS to alter parameters and navigate UI)
+
+        // 1. Pedestrian / Walking Mode Execution
+        val matchesWalk = (lower.contains("walk") || lower.contains("walking") || lower.contains("pedestrian") ||
+            lower.contains("lakad") || lower.contains("maglakad") || lower.contains("lumakad") ||
+            lower.contains("maglalakad") || lower.contains("on foot") || lower.contains("jogging") ||
+            lower.contains("running")) && !lower.contains("don't walk") && !lower.contains("dont walk") && !lower.contains("cannot walk")
+
+        if (matchesWalk) {
+            appActionHandler?.setTransitCategory("Pedestrian")
+            learnVoicePattern(lower, "Your transit mode is active as Pedestrian (Walking). Kinematic fall detection is armed.")
+            return@withContext "Understood. I have updated your transit mode to Pedestrian (Walking). Kinematic fall detection and walking stride monitoring are now active in the system."
+        }
+
+        // 2. Motorcycle Rider Mode Execution
+        val matchesMotor = (lower.contains("motorcycle") || lower.contains("motor") || lower.contains("ride bike") ||
+            lower.contains("mag motor") || lower.contains("magmotor") || lower.contains("ride my motorcycle") ||
+            lower.contains("two wheels") || lower.contains("motorbike")) && !lower.contains("don't") && !lower.contains("dont")
+
+        if (matchesMotor) {
+            appActionHandler?.setTransitCategory("Motorcycle Rider")
+            learnVoicePattern(lower, "Your transit mode is active as Motorcycle Rider. 50 Hertz lean attitude and crash detection are armed.")
+            return@withContext "Understood. I have updated your transit mode to Motorcycle Rider. 50 Hertz lean attitude and high-velocity collision algorithms are armed."
+        }
+
+        // 3. Car Driver Mode Execution
+        val matchesCar = (lower.contains("car") || lower.contains("drive") || lower.contains("automobile") ||
+            lower.contains("kotse") || lower.contains("magdrive") || lower.contains("use my car") ||
+            lower.contains("driving mode") || lower.contains("four wheels")) && !lower.contains("don't")
+
+        if (matchesCar) {
+            appActionHandler?.setTransitCategory("Car Driver")
+            return@withContext "Understood. I have updated your transit mode to Car Driver. High-speed collision deceleration algorithms active."
+        }
+
+        // 4. Tricycle Mode Execution
+        if (lower.contains("tricycle") || lower.contains("trike") || lower.contains("tatlong gulong")) {
+            appActionHandler?.setTransitCategory("Tricycle")
+            return@withContext "Understood. I have updated your transit mode to Tricycle. Passenger safety and roll angle monitoring are active."
+        }
+
+        // 5. Bicycle / Cyclist Mode Execution
+        if (lower.contains("bicycle") || lower.contains("cyclist") || lower.contains("bisikleta") || lower.contains("magbike")) {
+            appActionHandler?.setTransitCategory("Cyclist")
+            return@withContext "Understood. I have updated your transit mode to Cyclist. Low-mass impact and stability algorithms armed."
+        }
+
+        // 6. Navigation Tabs Execution
+        if (lower.contains("show map") || lower.contains("open map") || lower.contains("view map") || lower.contains("go to map") || lower.contains("tingnan ang mapa")) {
+            appActionHandler?.navigateToTab("MAP")
+            return@withContext "Navigating to Live GPS Map view."
+        }
+        if (lower.contains("show telemetry") || lower.contains("open telemetry") || lower.contains("speed dashboard") || lower.contains("go to telemetry")) {
+            appActionHandler?.navigateToTab("TELEMETRY")
+            return@withContext "Navigating to Telemetry Dashboard."
+        }
+        if (lower.contains("open settings") || lower.contains("show settings") || lower.contains("go to settings")) {
+            appActionHandler?.navigateToTab("SETTINGS")
+            return@withContext "Opening System Settings."
+        }
+        if (lower.contains("open wearable") || lower.contains("show wearable") || lower.contains("wearable tab") || lower.contains("wearable settings")) {
+            appActionHandler?.navigateToTab("WEARABLE")
+            return@withContext "Opening Safety Wearable Manager."
+        }
+        if (lower.contains("open ai") || lower.contains("show ai") || lower.contains("ai suite") || lower.contains("neural suite")) {
+            appActionHandler?.navigateToTab("AI_SUITE")
+            return@withContext "Opening Edge AI Suite."
+        }
+
+        // 7. System Toggles Execution
+        if (lower.contains("toggle theme") || lower.contains("dark mode") || lower.contains("light mode")) {
+            appActionHandler?.toggleDarkMode()
+            return@withContext "Display theme toggled successfully."
+        }
+        if (lower.contains("calibrate sensor") || lower.contains("zero imu") || lower.contains("calibrate imu") || lower.contains("zero sensor")) {
+            appActionHandler?.zeroImuCalibration()
+            return@withContext "IMU sensors zeroed. Baseline level calibrated and stored."
+        }
+        if (lower.contains("record csv") || lower.contains("start recording") || lower.contains("stop recording") || lower.contains("log telemetry")) {
+            appActionHandler?.toggleCsvRecording()
+            return@withContext "Telemetry CSV logging toggled."
+        }
+        if (lower.contains("connect wearable") || lower.contains("reconnect wearable") || lower.contains("pair wearable") || lower.contains("connect bluetooth")) {
+            appActionHandler?.reconnectWearable()
+            return@withContext "Initiating Bluetooth connection to RAMS Safety Wearable..."
+        }
+        if (lower.contains("cancel alarm") || lower.contains("stop alarm") || lower.contains("i am safe") || lower.contains("stop alert") || lower.contains("false alarm")) {
+            appActionHandler?.cancelEmergencyAlarm()
+            return@withContext "Emergency alarm cancelled. All systems nominal."
+        }
+        if (lower.contains("test crash") || lower.contains("simulate crash") || lower.contains("simulate accident")) {
+            appActionHandler?.triggerSimulation()
+            return@withContext "Initiating simulated crash impact sequence."
+        }
+
+        // 8. Location Pinning and Routing Execution ("pin X", "route to X", "and route X on my map", "navigate to X", etc.)
+        val routeRegex = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|show route to|how to go to|paano pumunta sa|papunta sa|punta sa|dalhin mo ako sa|pin)\\s+(.+)")
+        val matchResult = routeRegex.find(lower)
+        val isPinOrRouteQuery = matchResult != null || lower.contains("ルート") || lower.contains("案内して")
+
+        if (isPinOrRouteQuery) {
+            val rawTarget = matchResult?.groupValues?.get(1) ?: lower
+                .removePrefix("pin ")
+                .removePrefix("route to ")
+                .removePrefix("route ")
+                .removePrefix("navigate to ")
+                .removePrefix("directions to ")
+                .removePrefix("take me to ")
+                .removePrefix("show route to ")
+                .removePrefix("punta sa ")
+                .removePrefix("dalhin mo ako sa ")
+                .removePrefix("punta tayo sa ")
+                .removePrefix("how to go to ")
+                .removePrefix("paano pumunta sa ")
+                .removePrefix("papunta sa ")
+                .replace("ルート", "")
+                .replace("へ案内して", "")
+                .replace("案内して", "")
+
+            var targetLoc = rawTarget
+                .replace(Regex("(?i)\\s+(on my map|on the map|on my phone|on map|on the app|please|sa mapa|sa phone|sa app)$"), "")
+                .trim()
+            targetLoc = TuguegaraoOfflineSpatialEngine.normalizeLocalPhonetics(targetLoc)
+
+            if (targetLoc.isNotBlank()) {
+                val matchedLandmark = TuguegaraoOfflineSpatialEngine.findTargetLandmark(targetLoc)
+                val displayTarget = matchedLandmark?.name ?: targetLoc.replaceFirstChar { it.uppercase() }
+
+                appActionHandler?.navigateToTab("MAP")
+                appActionHandler?.pinAndRouteToLocation(targetLoc)
+                val reply = if (lower.contains("ルート") || lower.contains("案内")) {
+                    "${displayTarget}へのルートを計算し、マップ上にピン留めしました。案内を開始します。"
+                } else if (lower.contains("punta") || lower.contains("sa ") || lower.contains("paano")) {
+                    "Na-pin na ang $displayTarget sa mapa at kinakalkula na ang pinakamabilis na ruta. Mag-ingat sa pagmamaneho!"
+                } else {
+                    "Destination $displayTarget pinned on map. Route polyline plotted and active."
+                }
+                return@withContext reply
+            }
+        }
+
+        if (lower.contains("clear route") || lower.contains("remove pin") || lower.contains("cancel route") ||
+            lower.contains("alisin ang ruta") || lower.contains("burahin ang ruta") || lower.contains("ルート解除") || lower.contains("ピン解除")) {
+            appActionHandler?.clearMapRoute()
+            val reply = if (lower.contains("ルート") || lower.contains("解除")) {
+                "目的地ピンとナビゲーションルートを解除しました。"
+            } else if (lower.contains("alisin") || lower.contains("burahin")) {
+                "Inalis na ang ruta at destination pin sa mapa."
+            } else {
+                "Destination pin and navigation route cleared from map."
+            }
+            return@withContext reply
+        }
+
+        // 9. Japanese & Tagalog Native Language Intents (Spoken with native phonology)
+        if (lower.contains("こんにちは") || lower.contains("おはよう") || lower.contains("こんばんは")) {
+            return@withContext "こんにちは、ジャン・クライドさん！RAMS セーフティガードが安全なドライブを見守っています。"
+        }
+        if (lower.contains("ありがとう") || lower.contains("サンキュー")) {
+            return@withContext "どういたしまして！常に安全第一で運転してくださいね。"
+        }
+        if (lower.contains("どこですか") || lower.contains("現在地")) {
+            val locDesc = if (sys.hasGpsFix) "現在地はトゥゲガラオ市、座標 ${String.format(Locale.US, "%.4f", sys.latitude)}, ${String.format(Locale.US, "%.4f", sys.longitude)} です。" else "GPS衛星を探索中です。"
+            return@withContext locDesc
+        }
+
+        if (lower.contains("kamusta") || lower.contains("kumusta") || lower.contains("magandang araw") || lower.contains("magandang umaga")) {
+            return@withContext "Kumusta, Jan Clyde! Handa na ang RAMS safety guard para sa ligtas mong biyahe."
+        }
+        if (lower.contains("salamat") || lower.contains("maraming salamat")) {
+            return@withContext "Walang anuman, Jan Clyde! Laging mag-ingat sa kalsada."
+        }
+        if (lower.contains("nasaan ako") || lower.contains("nasaan tayo") || lower.contains("lokasyon ko")) {
+            val locDesc = if (sys.hasGpsFix) "Nasa Tuguegarao City tayo, koordinato ${String.format(Locale.US, "%.4f", sys.latitude)}, ${String.format(Locale.US, "%.4f", sys.longitude)}." else "Naghahanap pa ng GPS signal."
+            return@withContext locDesc
+        }
+
+        // 0D. REGULATED TECHNICAL EXPLANATIONS (Strictly controlled, high-level, elite engineering explanation without revealing secrets)
+
+        // 1. System Architecture
+        if (lower.contains("how does the system work") || lower.contains("how does rams work") ||
+            lower.contains("system architecture") || lower.contains("explain rams") ||
+            lower.contains("paano gumagana ang rams") || lower.contains("how it works") || lower.contains("what is rams")) {
+            return@withContext "RAMS operates as a distributed edge-computing road safety ecosystem. A body-worn ESP32-S3 sensor node and companion smartphone evaluate fused kinematic telemetry at up to 100 Hertz. If an anomalous impact shock followed by sudden immobility is detected, a 10-second fail-safe countdown begins. If not cancelled by voice or tactile controls, an emergency 433 MHz LoRa radio packet is transmitted off-grid to nearby base stations, while cellular links dispatch real-time incident coordinates to emergency rescue centers."
+        }
+
+        // 2. Program Flow & Data Pipeline
+        if (lower.contains("program flow") || lower.contains("data flow") || lower.contains("workflow") ||
+            lower.contains("flowchart") || lower.contains("process flow") || lower.contains("pipeline") || lower.contains("how data moves")) {
+            return@withContext "The RAMS pipeline executes across five distinct processing tiers: First, 3-axis acceleration and gyroscope matrices are sampled at high frequency with baseline bias filtering. Second, a kinematic finite-state engine classifies motion signatures. Third, potential impact triggers activate an audiovisual countdown with voice cancellation fail-safes. Fourth, uncancelled alerts generate compact 26-byte binary packets transmitted via 433 MHz chirp spread spectrum radio. Fifth, rescue stations ingest serial payloads and render real-time telemetry on incident maps."
+        }
+
+        // 3. Crash & Fall Detection Algorithm
+        if (lower.contains("how does crash detection work") || lower.contains("crash detection algorithm") ||
+            lower.contains("fall detection") || lower.contains("how do you detect accidents") ||
+            lower.contains("accident detection") || lower.contains("impact algorithm")) {
+            return@withContext "Crash identification relies on multi-axis kinematic threshold fusion. An impact candidate is flagged when resultant acceleration exceeds calibrated G-force envelopes with high jerk rates. To prevent false positives from speed bumps or potholes, the finite state machine requires simultaneous angular orientation shifts and a post-impact immobility window before escalating to an emergency state."
+        }
+
+        // 4. LoRa RF Transmission
+        if (lower.contains("how does lora work") || lower.contains("lora transmission") ||
+            lower.contains("radio frequency") || lower.contains("sx1278") || lower.contains("long range rf") || lower.contains("433mhz")) {
+            return@withContext "RAMS uses Semtech SX1278 radio transceivers modulated with Chirp Spread Spectrum on 433 Megahertz. This physical layer achieves long-range transmission through urban concrete and rural terrain with high link budget, operating independently of cellular networks or power infrastructure."
+        }
+
+        // 5. Safety Wearable Relay Node
+        if (lower.contains("how does the wearable work") || lower.contains("hardware specs") ||
+            lower.contains("esp32") || lower.contains("safety wearable") || lower.contains("wearable node")) {
+            return@withContext "The RAMS Wearable is an ESP32-S3 embedded platform acting as a personal safety relay. It maintains real-time Bluetooth Low Energy GATT communication with the rider's device, drives a 90-decibel piezoelectric emergency alarm, controls high-visibility status LEDs, and includes a dedicated hardware tactile switch for instantaneous false-alarm abort."
+        }
+
+        // 6. Rescuer Desktop Operations Center
+        if (lower.contains("how does the desktop app work") || lower.contains("desktop app") ||
+            lower.contains("command center") || lower.contains("rescuer app") || lower.contains("desktop operations")) {
+            return@withContext "The Desktop Command Center is a high-reliability Windows application that interfaces directly with base station USB transceivers. It ingests binary radio packets, maps incident locations against local geographic layers, logs rider medical and vehicle metadata, and initiates automated emergency dispatch protocols without requiring third-party cloud intermediaries."
+        }
+
+        // 7. Edge AI & Cognitive Models
+        if (lower.contains("what ai") || lower.contains("machine learning") || lower.contains("edge ai") ||
+            lower.contains("neural") || lower.contains("how smart is rams")) {
+            return@withContext "RAMS deploys a localized dual-tier artificial intelligence engine. Tier 1 executes real-time pattern classification on raw sensor streams directly on the device. Tier 2 provides on-device heuristic cognition and pre-distilled domain reasoning for hands-free command execution, localized navigation, and traffic safety law guidance, functioning autonomously without external server dependencies."
+        }
 
         // 1. PROFILE & USER REGISTRATION QUERIES
         if (lower.contains("edit profile") || lower.contains("change profile") || lower.contains("change name") ||
@@ -423,6 +962,34 @@ class RamsAiAssistantEngine(
             return@withContext "In a verified collision, RAMS sounds an SOS Morse audio beacon, transmits a LoRa packet to base stations, and automatically sends an SMS with your GPS coordinates and medical token to ${if (sys.emergencyContactName.isNotBlank()) sys.emergencyContactName else "your emergency contact"}."
         }
 
+        // 5B. DATA AUTO-COMPACTION & STORAGE OPTIMIZATION COMMANDS
+        if (lower.contains("compact data") || lower.contains("auto compact") || lower.contains("optimize storage") ||
+            lower.contains("compact cache") || lower.contains("compact memory") || lower.contains("clean memory") || lower.contains("compact storage")) {
+            val distPruned = autoCompactDistilledKnowledge()
+            val motionPruned = appActionHandler?.compactMotionData() ?: 0
+            return@withContext "Data auto-compaction complete. Retained ${distilledKnowledgeCache.size} optimal knowledge entries and purged redundant records. Storage is fully optimized."
+        }
+
+        // 5C. DETERMINISTIC OFFLINE MATH EVALUATOR (Zero-Latency Arithmetic & Percentages)
+        val mathAnswer = evaluateBasicMathExpression(trimmed)
+        if (mathAnswer != null) {
+            val normalizedKey = normalizeQueryKey(trimmed)
+            if (normalizedKey.isNotBlank()) {
+                persistDistilledSample(DistilledKnowledgeSample(
+                    query = trimmed,
+                    normalizedKey = normalizedKey,
+                    response = mathAnswer,
+                    timestamp = System.currentTimeMillis(),
+                    speedKmh = sys.speedKmh,
+                    userRole = sys.userType,
+                    vehicleModel = sys.vehicleModel,
+                    source = "deterministic-math-evaluator"
+                ))
+            }
+            learnVoicePattern(trimmed, mathAnswer)
+            return@withContext mathAnswer
+        }
+
         // 6. DISTILLATION CACHE LOOKUP (Gemini-taught answers, works offline too)
         val cachedAnswer = lookupDistilledAnswer(trimmed)
         if (!cachedAnswer.isNullOrBlank()) {
@@ -444,24 +1011,25 @@ class RamsAiAssistantEngine(
                             timestamp = System.currentTimeMillis(),
                             speedKmh = sys.speedKmh,
                             userRole = sys.userType,
-                            vehicleModel = sys.vehicleModel
+                            vehicleModel = sys.vehicleModel,
+                            source = "gemini-2.0-flash-distillation"
                         ))
                     }
+                    learnVoicePattern(trimmed, geminiReply)
+                    logOnlineConversation(trimmed, geminiReply, sys)
+
+                    // Auto-compact dynamically when dynamic cache grows
+                    if (distilledKnowledgeCache.size % 25 == 0) {
+                        autoCompactDistilledKnowledge()
+                    }
+
                     return@withContext geminiReply
                 }
             } catch (e: Exception) {
                 Log.w(TAG, "Gemini online reasoning error: ${e.message}")
             }
 
-            // Fallback to encyclopedic Wikipedia / DuckDuckGo if Gemini key is unset or unreachable
-            try {
-                val instantAnswer = fetchOnlineKnowledge(trimmed)
-                if (!instantAnswer.isNullOrBlank()) {
-                    return@withContext instantAnswer
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "Online knowledge fetch error: ${e.message}")
-            }
+            // If Gemini is unreachable or times out, immediately fall through to instant offline cognition (<5ms) without hanging
         }
 
         // 8. OFFLINE COGNITIVE REASONING ENGINE (RICH SITUATIONAL & IN-DEPTH DOMAIN COGNITION)
@@ -720,8 +1288,8 @@ class RamsAiAssistantEngine(
                 val url = URL(endpoint)
                 val conn = (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
-                    connectTimeout = 8500
-                    readTimeout = 8500
+                    connectTimeout = 1500
+                    readTimeout = 2000
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json; charset=UTF-8")
                     setRequestProperty("User-Agent", "RAMS-AI-CoPilot/3.2")
@@ -765,6 +1333,7 @@ class RamsAiAssistantEngine(
                 }
             } catch (e: Exception) {
                 Log.w(TAG, "Gemini network call failed for $model: ${e.message}")
+                break // Stop cascading through candidate models on network failure or timeout
             }
         }
         return null
@@ -986,100 +1555,44 @@ class RamsAiAssistantEngine(
             }
         }
 
-        // 4. Question about why or how: "why", "how does", "how do"
-        if (lower.contains("why") || lower.contains("how")) {
-            return "Regarding $rawQuery: on your $vehicle, safety depends on smooth inputs, tire grip, and situational awareness. At ${"%.1f".format(Locale.US, speed)} km/h with baseline G at ${"%.2f".format(Locale.US, g)} G, stability is nominal."
+        // 4. Specific vehicular dynamics question
+        if ((lower.contains("why") || lower.contains("how")) && (lower.contains("stability") || lower.contains("lean") || lower.contains("corner") || lower.contains("brake") || lower.contains("grip"))) {
+            return "Regarding $rawQuery: on your $vehicle, stability depends on smooth throttle modulation, progressive braking, and road friction. At ${"%.1f".format(Locale.US, speed)} km/h with baseline G at ${"%.2f".format(Locale.US, g)} G, dynamics are nominal."
         }
 
-        // 5. Varied dynamic contextual briefing as smart fallback
-        return generateDynamicContextualResponse(sys)
+        // 5. Explicit User Category & Mode Queries
+        if (lower.contains("category") || lower.contains("mode") || lower.contains("profile") ||
+            lower.contains("user type") || lower.contains("anong mode") || lower.contains("ano mode")) {
+            return "You are currently in ${sys.userType} mode. Telemetry and crash detection algorithms are calibrated for ${sys.userType}. You can change it by saying 'I will walk', 'use my car', or 'ride my motorcycle'."
+        }
+
+        // 6. Traffic Law & Legal Compliance
+        if (lower.contains("batas") || lower.contains("speed limit") ||
+            lower.contains("ra 10666") || lower.contains("ra 4136")) {
+            return "Under Republic Act 10054, all motorcycle riders and passengers must wear standard protective motorcycle helmets. Republic Act 10666 prohibits transporting children on motorcycles where speed exceeds 60 kilometers per hour."
+        }
+
+        // 7. Tuguegarao Emergency Hotlines
+        if (lower.contains("hotline") || lower.contains("rescue") || lower.contains("police") ||
+            lower.contains("pnp") || lower.contains("hospital") || lower.contains("cvmc") || lower.contains("ambulansya")) {
+            return "In Tuguegarao City, call City Rescue at (078) 304-1111 or 0917-573-0911 for emergency medical dispatch, PNP Emergency 911 for police, and CVMC Hospital Emergency at (078) 304-1410."
+        }
+
+        // 8. Explicit Safety Tips (Only when user explicitly asks for advice/tips)
+        if (lower.contains("tip") || lower.contains("advice") || lower.contains("suggestion") ||
+            lower.contains("payo") || lower.contains("rekomenda") || lower.contains("what should i do")) {
+            if (sys.speedKmh > 40f) {
+                return "Cruising at ${"%.1f".format(java.util.Locale.US, speed)} km/h on your $vehicle. Maintain at least a 3-second following distance and scan intersections two blocks ahead."
+            } else if (sys.speedKmh > 5f) {
+                return "Steady pace at ${"%.1f".format(java.util.Locale.US, speed)} km/h. Keep smooth throttle inputs and watch for pedestrian crossings along Tuguegarao roads."
+            } else {
+                return "You are stationary at 0 km/h. Good time to inspect your tire pressure, verify helmet strap tension, and confirm your phone mount is tight."
+            }
+        }
+
+        // 9. Default Honest & Helpful Fallback (Never spams unsolicited bluetooth complaints)
+        return "I'm still learning that topic and don't have an exact answer yet. You can ask me about road safety, your speed and G-force, Tuguegarao tricycle fares, offline directions, or say 'I will walk' or 'use my car' to change your category."
     }
 
-    /**
-     * Generates a varied, context-aware response using live telemetry data.
-     * Rotates through multiple response strategies so the user never hears the same reply twice consecutively.
-     */
-    private fun generateDynamicContextualResponse(sys: RamsSystemContext): String {
-        val cal = java.util.Calendar.getInstance()
-        val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
-        val name = if (sys.riderName.isNotBlank()) sys.riderName else "Rider"
-        val role = sys.userType
-        val vehicle = if (sys.vehicleModel.isNotBlank()) sys.vehicleModel else "vehicle"
-        val wearableStatus = if (sys.isWearableConnected) "Wearable linked at ${sys.wearableBatteryPct}%" else "Wearable offline"
-        val motionDesc = sys.aiMotionProfile
-        val confPct = "%.0f".format(Locale.US, sys.aiConfidence * 100f)
-        val speedStr = "%.1f km/h".format(Locale.US, sys.speedKmh)
-        val gStr = "%.2f G".format(Locale.US, sys.liveG)
-
-        val timeGreeting = when {
-            hour < 6 -> "Late night"
-            hour < 12 -> "Morning"
-            hour < 14 -> "Midday"
-            hour < 18 -> "Afternoon"
-            hour < 21 -> "Evening"
-            else -> "Night"
-        }
-
-        // Build pool of contextual responses, each referencing live data differently
-        val pool = mutableListOf<String>()
-
-        // --- Contextual status reports ---
-        pool.add("$timeGreeting check, $name. $MODEL_NAME inference running at $confPct%% confidence. Your motion state reads $motionDesc. $wearableStatus. All crash detection tiers are armed.")
-        pool.add("$name, your current profile reads $motionDesc at $speedStr with $gStr live acceleration. $wearableStatus. Edge AI cognition is fully operational on-device.")
-        pool.add("$role mode active. $MODEL_NAME sees your kinematic state as $motionDesc with $confPct%% certainty. If you need guidance, ask about speed, location, weather, or your safety gear.")
-
-        // --- Proactive tips based on live state ---
-        if (sys.speedKmh > 40f) {
-            pool.add("You are cruising at $speedStr on your $vehicle. At this speed, maintain at least a 3-second following distance and keep your eyes scanning two blocks ahead.")
-            pool.add("$speedStr detected. High-speed defensive positioning matters: stay visible, avoid blind spots of larger vehicles, and anticipate intersection conflicts ahead.")
-        } else if (sys.speedKmh > 5f) {
-            pool.add("Steady pace at $speedStr. Good riding form. I am tracking your lean angles and shock events in real time at 50 Hertz. Everything looks nominal, $name.")
-            pool.add("Moving at $speedStr. Your G-force baseline is $gStr which is within normal operating range. $MODEL_NAME is watching for any sudden kinematic anomalies.")
-        } else {
-            pool.add("You are stationary right now. Good time to verify your tire pressure, check your mirrors, or ensure your phone mount is secure before your next ride.")
-            pool.add("$timeGreeting, $name. Since you are at rest, your IMU baseline is calibrated at $gStr. All six kinematic axes are logging normally. What would you like to know?")
-            pool.add("Resting state confirmed at $gStr baseline gravity. $wearableStatus. If you need to recalibrate your IMU offset, go to Settings and select IMU Studio Calibration.")
-        }
-
-        // --- Time-of-day contextual advice ---
-        if (hour >= 18 || hour < 6) {
-            pool.add("$timeGreeting ride, $name. Visibility drops significantly after sunset. Make sure your headlights and reflective gear are active. $MODEL_NAME remains fully armed in low-light conditions.")
-        }
-        if (hour in 6..8) {
-            pool.add("$timeGreeting commute detected. Peak traffic hours mean higher intersection risk. Stay defensive, signal early, and keep a buffer from public utility vehicles.")
-        }
-
-        // --- Wearable-specific ---
-        if (sys.isWearableConnected) {
-            pool.add("Your Safety Wearable is synchronized via BLE GATT with ${sys.wearableBatteryPct}%% battery. Dual-axis fall detection from the wristband supplements your phone IMU for 360-degree coverage.")
-        } else {
-            pool.add("I notice your Safety Wearable is not connected. For maximum crash detection accuracy, pair it via the Wearable tab. The dual-sensor fusion significantly reduces false negatives.")
-        }
-
-        // --- Alarm-state specific ---
-        if (sys.isAlarmActive) {
-            pool.add("Crash alarm is currently sounding. Say 'Cancel', 'Stop', or 'I am safe' to abort. You can also press the physical button on your wearable or tap the red Cancel button on screen.")
-        }
-
-        // --- GPS/location contextual ---
-        if (sys.hasGpsFix && sys.locationAddress.isNotBlank()) {
-            pool.add("Current position near ${sys.locationAddress}. GPS is locked with high precision. All emergency dispatch coordinates are pre-loaded if an incident triggers.")
-        } else if (!sys.hasGpsFix) {
-            pool.add("GPS satellite lock is still acquiring. For best accuracy, move to an area with open sky. Emergency dispatch will use your last known coordinates until a full fix is established.")
-        }
-
-        // --- General knowledge / conversational ---
-        pool.add("$name, I am $MODEL_NAME version $MODEL_VERSION, your on-device safety intelligence. Ask me anything: live telemetry, road safety protocols, first aid guidance, or system diagnostics.")
-        pool.add("As your $role safety companion, I process 50 Hertz kinematic data through a dual-tier neural pipeline. Nothing leaves your device. What would you like to explore?")
-        pool.add("All $MODEL_PARAMS of $MODEL_NAME are running locally on your phone for zero-latency crash cognition. Feel free to ask about your ride stats, navigation tips, or equipment checks.")
-
-        // Select a response, ensuring it differs from the last one
-        var idx = (System.currentTimeMillis() % pool.size).toInt()
-        if (idx == lastDynamicIndex && pool.size > 1) {
-            idx = (idx + 1) % pool.size
-        }
-        lastDynamicIndex = idx
-        return pool[idx]
-    }
 }
 

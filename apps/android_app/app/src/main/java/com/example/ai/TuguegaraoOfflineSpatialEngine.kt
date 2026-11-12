@@ -37,20 +37,20 @@ object TuguegaraoOfflineSpatialEngine {
         Landmark(
             id = "sm_city",
             name = "SM City Tuguegarao",
-            lat = 17.6258,
-            lon = 121.7182,
+            lat = 17.62805,
+            lon = 121.71890,
             barangay = "Caritan Norte",
-            corridor = "Bagay Road",
+            corridor = "Bagay Road / Diversion Road II",
             category = "MALL",
-            aliases = listOf("sm city", "sm city tuguegarao", "sm caritan", "sm bagay", "bagay road sm"),
+            aliases = listOf("sm city", "sm city tuguegarao", "sm caritan", "sm bagay", "bagay road sm", "new sm"),
             navigationTips = "Accessible via Bagay Road from Centro or through the Caritan bypass road. Major tricycle terminal located at the main transport bay."
         ),
         Landmark(
             id = "sm_center",
             name = "SM Center Tuguegarao Downtown",
-            lat = 17.6133,
-            lon = 121.7289,
-            barangay = "Centro 01",
+            lat = 17.61275,
+            lon = 121.72379,
+            barangay = "Ugac Sur / Centro 01",
             corridor = "Luna Street cor. Mabini Street",
             category = "MALL",
             aliases = listOf("sm downtown", "sm center", "sm centro", "old sm", "sm mall downtown"),
@@ -59,41 +59,30 @@ object TuguegaraoOfflineSpatialEngine {
         Landmark(
             id = "robinsons",
             name = "Robinsons Place Tuguegarao",
-            lat = 17.6045,
-            lon = 121.7345,
+            lat = 17.62806,
+            lon = 121.73350,
             barangay = "Tanza",
             corridor = "Maharlika Highway (AH26)",
             category = "MALL",
             aliases = listOf("robinsons", "robinsons place", "rob", "robinsons tuguegarao", "robinsons tanza"),
-            navigationTips = "Positioned along southern Maharlika Highway in Brgy. Tanza near the boundary of Pengue Ruyu."
+            navigationTips = "Positioned along Maharlika Highway in Brgy. Tanza with direct arterial access and dedicated transport terminal."
         ),
         Landmark(
-            id = "mall_of_the_valley",
-            name = "Mall of the Valley",
-            lat = 17.6138,
-            lon = 121.7270,
-            barangay = "Centro 02",
-            corridor = "Gomez Street cor. Luna Street",
-            category = "MALL",
-            aliases = listOf("mall of the valley", "mov", "mall valley"),
-            navigationTips = "Historic shopping center in Centro near St. Peter Cathedral."
-        ),
-        Landmark(
-            id = "brickstone",
-            name = "Brickstone Mall",
-            lat = 17.6152,
-            lon = 121.7258,
-            barangay = "Pengue-Ruyu / Centro",
-            corridor = "Gomez Street",
-            category = "MALL",
-            aliases = listOf("brickstone", "brickstone mall", "unitop centro"),
-            navigationTips = "Commercial shopping mall along Gomez Street leading toward the river dike."
+            id = "mcnp",
+            name = "Medical Colleges of Northern Philippines (MCNP / ISAP)",
+            lat = 17.64210,
+            lon = 121.76150,
+            barangay = "Alimannao Hills",
+            corridor = "Maharlika Highway / Alimannao Road",
+            category = "UNIVERSITY",
+            aliases = listOf("mcnp", "isap", "mcnp isap", "medical college of northern philippines", "medical colleges of northern philippines", "alimannao", "alimannao hills"),
+            navigationTips = "Head east toward Alimannao Hills along Maharlika Highway/Alimannao road. Serviced by eastern line tricycles and Alimannao-Peñablanca PUJs."
         ),
         Landmark(
             id = "csu_carig",
             name = "Cagayan State University - Carig Campus",
-            lat = 17.6542,
-            lon = 121.7516,
+            lat = 17.65905,
+            lon = 121.75318,
             barangay = "Carig Sur",
             corridor = "Regional Government Center Avenue",
             category = "UNIVERSITY",
@@ -103,8 +92,8 @@ object TuguegaraoOfflineSpatialEngine {
         Landmark(
             id = "csu_andrews",
             name = "Cagayan State University - Andrews Campus",
-            lat = 17.6186,
-            lon = 121.7225,
+            lat = 17.61860,
+            lon = 121.72250,
             barangay = "Caritan Centro",
             corridor = "Andrews Road / Caritan",
             category = "UNIVERSITY",
@@ -114,8 +103,8 @@ object TuguegaraoOfflineSpatialEngine {
         Landmark(
             id = "usl",
             name = "University of Saint Louis Tuguegarao (USL)",
-            lat = 17.6198,
-            lon = 121.7315,
+            lat = 17.61016,
+            lon = 121.72327,
             barangay = "Ugac Norte / Balzain",
             corridor = "Mabini Street cor. College Avenue",
             category = "UNIVERSITY",
@@ -125,99 +114,128 @@ object TuguegaraoOfflineSpatialEngine {
         Landmark(
             id = "spup",
             name = "Saint Paul University Philippines (SPUP)",
-            lat = 17.6155,
-            lon = 121.7170,
-            barangay = "Buntun / Mabini",
-            corridor = "Mabini Street cor. Buntun Highway",
+            lat = 17.61733,
+            lon = 121.72351,
+            barangay = "Balzain West / Mabini",
+            corridor = "Mabini Street cor. College Avenue",
             category = "UNIVERSITY",
             aliases = listOf("spup", "saint paul", "st paul", "paulinian"),
             navigationTips = "Situated along western Mabini Street leading directly toward Buntun Bridge."
         ),
         Landmark(
+            id = "ucv",
+            name = "University of Cagayan Valley (UCV)",
+            lat = 17.62402,
+            lon = 121.72871,
+            barangay = "Balzain West",
+            corridor = "Balzain Highway",
+            category = "UNIVERSITY",
+            aliases = listOf("ucv", "cagayan valley university", "university of cagayan valley", "ucv balzain"),
+            navigationTips = "Located along Balzain Highway between Centro and Caritan. Main academic campus."
+        ),
+        Landmark(
             id = "cvmc",
             name = "Cagayan Valley Medical Center (CVMC)",
-            lat = 17.6592,
-            lon = 121.7540,
+            lat = 17.65661,
+            lon = 121.74702,
             barangay = "Carig Sur",
-            corridor = "Maharlika Highway / RGC",
+            corridor = "Dalan na Pagayaya / Maharlika Highway",
             category = "HOSPITAL",
-            aliases = listOf("cvmc", "cagayan valley medical center", "provincial hospital", "carig hospital", "regional hospital"),
-            navigationTips = "Primary tertiary government hospital in Region 02. Located at the northern tip of Carig Sur along Maharlika Highway with 24/7 trauma emergency room."
+            aliases = listOf("cvmc", "cagayan valley medical center", "provincial hospital", "carig hospital", "regional hospital", "ospital"),
+            navigationTips = "Primary tertiary government hospital in Region 02. Located in Carig Sur with 24/7 trauma emergency room."
         ),
         Landmark(
             id = "buntun_bridge",
             name = "Buntun Bridge",
-            lat = 17.6148,
-            lon = 121.6912,
+            lat = 17.61437,
+            lon = 121.68643,
             barangay = "Buntun",
-            corridor = "Santiago-Tuguegarao Road",
+            corridor = "Luna Extension / Santiago-Tuguegarao Road",
             category = "BRIDGE",
-            aliases = listOf("buntun bridge", "buntun", "tulay ng buntun", "cagayan river bridge"),
-            navigationTips = "The second longest bridge in the Philippines spanning the Cagayan River toward Enrile and Solana. Strong crosswinds; two-wheelers must maintain lane discipline."
+            aliases = listOf("buntun bridge", "buntun", "tulay ng buntun", "cagayan river bridge", "tulay"),
+            navigationTips = "The second longest bridge in the Philippines spanning the Cagayan River toward Solana. Strong crosswinds; two-wheelers must maintain lane discipline."
         ),
         Landmark(
             id = "cathedral",
             name = "Saint Peter Metropolitan Cathedral",
-            lat = 17.6131,
-            lon = 121.7295,
+            lat = 17.61359,
+            lon = 121.73050,
             barangay = "Centro 02",
             corridor = "Rizal Street",
             category = "HISTORIC",
-            aliases = listOf("cathedral", "st peter cathedral", "saint peter cathedral", "simbahan ng tuguegarao"),
+            aliases = listOf("cathedral", "st peter cathedral", "saint peter cathedral", "simbahan ng tuguegarao", "simbahan"),
             navigationTips = "18th-century Baroque cathedral facing the central plaza in downtown Centro."
         ),
         Landmark(
             id = "city_hall",
             name = "Tuguegarao City Hall (People's Gymnasium)",
-            lat = 17.6515,
-            lon = 121.7505,
+            lat = 17.65053,
+            lon = 121.75381,
             barangay = "Carig Sur",
             corridor = "Enrile Boulevard / Carig",
             category = "GOVERNMENT",
-            aliases = listOf("city hall", "tuguegarao city hall", "peoples gym", "new city hall"),
+            aliases = listOf("city hall", "tuguegarao city hall", "peoples gym", "people's gym", "peoples gymnasium", "gym"),
             navigationTips = "Located inside the Carig Regional Government Center. Houses the City Traffic Management Group (TMG) and Mayor's Office."
         ),
         Landmark(
             id = "capitol",
             name = "Cagayan Provincial Capitol",
-            lat = 17.6558,
-            lon = 121.7522,
-            barangay = "Carig Sur",
-            corridor = "Regional Government Center",
+            lat = 17.64848,
+            lon = 121.76037,
+            barangay = "Carig Sur / Caggay",
+            corridor = "Capitol Drive / Regional Government Center",
             category = "GOVERNMENT",
-            aliases = listOf("capitol", "provincial capitol", "cagayan capitol"),
+            aliases = listOf("capitol", "provincial capitol", "cagayan capitol", "kapitolyo"),
             navigationTips = "Provincial government seat in Carig Sur with large public park grounds."
         ),
         Landmark(
             id = "airport",
             name = "Tuguegarao Domestic Airport (TUG)",
-            lat = 17.6432,
-            lon = 121.7325,
+            lat = 17.64374,
+            lon = 121.73407,
             barangay = "Pengue-Ruyu",
-            corridor = "Airport Road",
+            corridor = "Badaje Avenue / Airport Road",
             category = "TRANSIT",
             aliases = listOf("airport", "tuguegarao airport", "paliparan"),
             navigationTips = "Commercial airport terminal in Pengue-Ruyu with direct flights to Manila."
         ),
         Landmark(
+            id = "mall_of_the_valley",
+            name = "Mall of the Valley",
+            lat = 17.61449,
+            lon = 121.72806,
+            barangay = "Centro 04",
+            corridor = "Bonifacio Street cor. Luna Street",
+            category = "MALL",
+            aliases = listOf("mall of the valley", "mov", "mall valley"),
+            navigationTips = "Historic shopping center in Centro near St. Peter Cathedral."
+        ),
+        Landmark(
+            id = "brickstone",
+            name = "Brickstone Mall",
+            lat = 17.62850,
+            lon = 121.73249,
+            barangay = "Tanza",
+            corridor = "Maharlika Highway",
+            category = "MALL",
+            aliases = listOf("brickstone", "brickstone mall", "unitop centro"),
+            navigationTips = "Commercial shopping mall along Maharlika Highway near Robinsons Place."
+        ),
+        Landmark(
             id = "don_domingo",
             name = "Don Domingo Public Market",
-            lat = 17.6190,
-            lon = 121.7320,
-            barangay = "Balzain East",
-            corridor = "Balzain Highway",
+            lat = 17.62499,
+            lon = 121.73296,
+            barangay = "Centro II / Tanza",
+            corridor = "Liban Street / Balzain Highway",
             category = "MARKET",
             aliases = listOf("don domingo", "don domingo market", "balzain market", "pamilihan"),
             navigationTips = "Major wet and dry market and northern provincial bus/van dispatch station."
         )
     )
 
-    /**
-     * Contextual vocabulary biasing keywords provided to Android SpeechRecognizer.
-     * Dramatically boosts recognition accuracy for local Tuguegarao terminology.
-     */
     val TUGUEGARAO_VOCABULARY_BIASING = arrayOf(
-        "Tuguegarao", "Tuguegarao City", "SM City", "SM City Tuguegarao", "SM Downtown",
+        "Tuguegarao", "Tuguegarao City", "SM City", "SM City Tuguegarao", "SM Downtown", "MCNP", "ISAP", "Alimannao", "UCV",
         "Robinsons", "Robinsons Place", "Mall of the Valley", "Brickstone", "Don Domingo",
         "CSU", "CSU Carig", "CSU Andrews", "USL", "Saint Louis", "SPUP", "Saint Paul",
         "CVMC", "Cagayan Valley Medical Center", "Buntun", "Buntun Bridge", "Carig", "Carig Sur",
@@ -236,6 +254,10 @@ object TuguegaraoOfflineSpatialEngine {
 
         // Tuguegarao misrecognitions
         text = text.replace(Regex("(?i)\\b(to get a row|to gegarao|to garao|tugegarao|two get a row|tugi garao|tugi garao city|tugegarao city)\\b"), "Tuguegarao")
+        // MCNP & ISAP misrecognitions
+        text = text.replace(Regex("(?i)\\b(m c n p|em see en pee|em c n p|mcnp isap|mcnp-isap|medical college)\\b"), "MCNP")
+        text = text.replace(Regex("(?i)\\b(i s a p|eye sap|isap)\\b"), "ISAP")
+        text = text.replace(Regex("(?i)\\b(you see vee|u c v)\\b"), "UCV")
         // SM City misrecognitions
         text = text.replace(Regex("(?i)\\b(smct|s m city|es em city|es em|s m)\\b"), "SM City")
         // CSU misrecognitions
@@ -375,7 +397,7 @@ object TuguegaraoOfflineSpatialEngine {
 
         // If user GPS is not yet locked, use Tuguegarao Centro as default origin
         val fromLat = if (userLat != 0.0) userLat else 17.6133
-        val fromLon = if (userLon != 0.0) userLon else 17.7289
+        val fromLon = if (userLon != 0.0) userLon else 121.7289
         val hasRealGps = userLat != 0.0
 
         val distanceMeters = calculateDistanceMeters(fromLat, fromLon, target.lat, target.lon)
@@ -427,7 +449,7 @@ object TuguegaraoOfflineSpatialEngine {
     fun getTricycleFareAndScamAdvisory(userLat: Double, userLon: Double, query: String): String {
         val target = findTargetLandmark(query)
         val fromLat = if (userLat != 0.0) userLat else 17.6133
-        val fromLon = if (userLon != 0.0) userLon else 17.7289
+        val fromLon = if (userLon != 0.0) userLon else 121.7289
 
         val distanceKm = if (target != null) {
             calculateDistanceMeters(fromLat, fromLon, target.lat, target.lon) / 1000.0

@@ -1,0 +1,63 @@
+{
+  "revision": "J2 LDO engineering",
+  "intended_connected_pins": 236,
+  "mismatches": [
+    [
+      "#FLG001",
+      "1",
+      "GND",
+      null
+    ],
+    [
+      "#FLG002",
+      "1",
+      "B_MINUS",
+      null
+    ],
+    [
+      "#FLG003",
+      "1",
+      "VBUS",
+      null
+    ],
+    [
+      "#FLG004",
+      "1",
+      "CHG_IN",
+      null
+    ],
+    [
+      "#FLG005",
+      "1",
+      "SYS_IN",
+      null
+    ],
+    [
+      "#FLG006",
+      "1",
+      "VDD_RF",
+      null
+    ],
+    [
+      "#FLG007",
+      "1",
+      "LORA_VDD",
+      null
+    ],
+    [
+      "#FLG008",
+      "1",
+      "DW_VCC",
+      null
+    ]
+  ],
+  "hashes": {
+    "circuit_spec.json": "b7cadb014b10c29158cfaa385062a776121d528a42f0ea7fce0e381236f14bed",
+    "netlist.xml": "d8505b54e2107655fdb5abb1f4e2fcc0e7349ef3f90e066318754d4ccbc1f73c",
+    "RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
+    "RAMS_JLC_S3_io.kicad_sch": "085cab7834dff3412b7ed5fd9db97a9327171a4b56ab94ca06f201b8772d3781",
+    "RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
+    "RAMS_JLC_S3_power.kicad_sch": "b04d0036741374a0b1d9ba2bacc3646a196c40ad479fa23012f81e34d081dc48"
+  },
+  "netlist_design": "<design>\n    <source>D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3.kicad_sch</source>\n    <date>2026-11-09T01:50:38</date>\n    <tool>Eeschema 10.0.6</tool>\n    <sheet number=\"1\" name=\"/\" tstamps=\"/\">\n      <title_block>\n        <title>RAMS JLCPCB bare ESP32-S3 wearable</title>\n        <company>RAMS</company>\n        <rev>J2 LDO</rev>\n        <date>2026-11-09</date>\n        <source>RAMS_JLC_S3.kicad_sch</source>\n        <comment number=\"1\" value=\"\" />\n        <comment number=\"2\" value=\"\" />\n        <comment number=\"3\" value=\"\" />\n        <comment number=\"4\" value=\"\" />\n        <comment number=\"5\" value=\"\" />\n        <comment number=\"6\" value=\"\" />\n        <comment number=\"7\" value=\"\" />\n        <comment number=\"8\" value=\"\" />\n        <comment number=\"9\" value=\"\" />\n      </title_block>\n    </sheet>\n    <sheet number=\"2\" name=\"/01 Power and USB/\" tstamps=\"/7b4071a8-ec71-5051-8292-5115d714e254/\">\n      <title_block>\n        <title>01 Power and USB</title>\n        <company>RAMS</company>\n        <rev>J2 LDO</rev>\n        <date>2026-11-09</date>\n        <source>RAMS_JLC_S3_power.kicad_sch</source>\n        <comment number=\"1\" value=\"\" />\n        <comment number=\"2\" value=\"\" />\n        <comment number=\"3\" value=\"\" />\n        <comment number=\"4\" value=\"\" />\n        <comment number=\"5\" value=\"\" />\n        <comment number=\"6\" value=\"\" />\n        <comment number=\"7\" value=\"\" />\n        <comment number=\"8\" value=\"\" />\n        <comment number=\"9\" value=\"\" />\n      </title_block>\n    </sheet>\n    <sheet number=\"3\" name=\"/02 ESP32-S3 and 2.4 GHz RF/\" tstamps=\"/00a6382b-a79c-5b20-a91a-ca816ddf5b62/\">\n      <title_block>\n        <title>02 ESP32-S3 and 2.4 GHz RF</title>\n        <company>RAMS</company>\n        <rev>J2 LDO</rev>\n        <date>2026-11-09</date>\n        <source>RAMS_JLC_S3_mcu.kicad_sch</source>\n        <comment number=\"1\" value=\"\" />\n        <comment number=\"2\" value=\"\" />\n        <comment number=\"3\" value=\"\" />\n        <comment number=\"4\" value=\"\" />\n        <comment number=\"5\" value=\"\" />\n        <comment number=\"6\" value=\"\" />\n        <comment number=\"7\" value=\"\" />\n        <comment number=\"8\" value=\"\" />\n        <comment number=\"9\" value=\"\" />\n      </title_block>\n    </sheet>\n    <sheet number=\"4\" name=\"/03 LoRa and I-O/\" tstamps=\"/33930185-a46c-52d6-be30-704203710a55/\">\n      <title_block>\n        <title>03 LoRa and I-O</title>\n        <company>RAMS</company>\n        <rev>J2 LDO</rev>\n        <date>2026-11-09</date>\n        <source>RAMS_JLC_S3_io.kicad_sch</source>\n        <comment number=\"1\" value=\"\" />\n        <comment number=\"2\" value=\"\" />\n        <comment number=\"3\" value=\"\" />\n        <comment number=\"4\" value=\"\" />\n        <comment number=\"5\" value=\"\" />\n        <comment number=\"6\" value=\"\" />\n        <comment number=\"7\" value=\"\" />\n        <comment number=\"8\" value=\"\" />\n        <comment number=\"9\" value=\"\" />\n      </title_block>\n    </sheet>\n  </design>\n  "
+}

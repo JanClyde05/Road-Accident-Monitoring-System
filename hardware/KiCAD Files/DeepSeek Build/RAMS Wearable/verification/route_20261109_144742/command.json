@@ -1,0 +1,22 @@
+[
+  "C:\\Program Files\\Java\\jdk-25.0.4\\bin\\java.exe",
+  "-Xmx3g",
+  "-Dgui.enabled=false",
+  "-Djava.awt.headless=true",
+  "-jar",
+  "C:\\Users\\Jan Clyde Talosig\\Documents\\KiCad\\10.0\\3rdparty\\plugins\\app_freerouting_kicad-plugin\\jar\\freerouting-2.5.0.jar",
+  "-de",
+  "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\verification\\route_20261109_144742\\input.dsn",
+  "-do",
+  "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\verification\\route_20261109_144742\\output.ses",
+  "-mp",
+  "20",
+  "-mt",
+  "1",
+  "-is",
+  "Sequential",
+  "--router.automatic_neckdown=false",
+  "--router.neck_width_um=0",
+  "--router.fanout.enabled=false",
+  "--router.strict_drc=true"
+]

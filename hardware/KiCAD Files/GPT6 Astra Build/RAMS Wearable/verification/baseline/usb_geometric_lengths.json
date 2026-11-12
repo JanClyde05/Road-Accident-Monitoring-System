@@ -1,0 +1,7 @@
+{
+  "plus_mm": 19.17408729652605,
+  "minus_mm": 19.174087296526046,
+  "pad_branch_symmetry_mm": 0.0,
+  "through_vias_per_signal": 2,
+  "equal_via_barrel_length_not_in_planar_total_mm": 3.2
+}

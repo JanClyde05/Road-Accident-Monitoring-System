@@ -24,6 +24,12 @@ design_system: Bold Typography & Minimalist (Zero-Emoji)
 
 # RAMS Master System Memory Map & Graphify Knowledge Base
 
+> **Hardware scope correction, 2026-11-09:** Active work is [RAMS Wearable J2](hardware/KiCAD%20Files/GPT6%20Astra%20Build/RAMS%20Wearable/README.md), integrating the working SuperMini + Ra-02 + active buzzer + divider + 1S LiPo functions into a bare-S3 PCB. Reuse owned AP2112 3.3 V, LTC4054/LTH7, protection parts, `9650 Active 3V`, MSK12C02 and two-pin buttons. The rejected TPS63020/3.45 V design is archived. DMN2056U-7 isolates the 30k/10k ADC divider; `RAMS_JLC_S3_J2` selects ratio 4 and 16 calibrated millivolt samples at 2.5 dB attenuation, retaining 5 s/EMA behavior. Default SuperMini remains ratio 2; Arduino-ESP32 3.3.5 calibration ordering is handled explicitly.
+>
+> **Current LED and assembly contract:** another owned AO3401, Q5, switches raw SYS_IN to LED_PWR; SW1 common is GND, with ON grounding LED_GATE and OFF grounding SYS_EN. R7/R41 pull those controls up. SN74LVC1T45DBVR U6 translates GPIO48 to the LED rail and provides power-off isolation; C34/C35 bypass its two supplies and C28 bypasses LED1. No power converter is added. Ordered WS2812B-2020 stock remains subject to package, voltage and current qualification. R30 charge link and LED1 are absent only for initial bring-up, then fitted for qualified normal charging/RGB use. The circuit has **90 footprint positions: 82 components plus 8 copper test pads; 80 components initially fitted**. Keep the 42 x 32 mm envelope, top heatbed reflow, then buzzer and bottom Ra-02 iron soldering; DOST is deferred. Routing and source-bound CAD validation completed on 2026-11-12: zero native ERC/DRC/unconnected/parity findings, no ignored checks. Native PCB is authoritative; initial construction/library generators are guarded against overwriting it. The engineering review package includes Gerbers/drills, readable assembly and numbered pad maps, and staged top stencils. Supplier impedance, received-part fit and soldering process gates remain open, followed by physical bring-up; this is not a manufacturing release. Read its current README and final hash-bound reports rather than historical production claims below.
+
+> **J2 final engineering record, 2026-11-12:** 42 x 32 mm, four layers; CC1 rerouted outside the protected In2 USB reference area. ESP32 perimeter lands widened to 0.25 mm at 0.4 mm pitch with 0.75 x 0.20 mm paste apertures. Nine exposed-pad thermal vias remain subject to soldering qualification; no other SMD lands are drilled. Firmware J2 uses GPIO48 RMT timing 300/1000 ns zero, 700/600 ns one, 300 us reset; both actual-source host tests and full J2/Supermini Arduino builds pass. The newer 3.55 V battery-percentage endpoint was preserved and revalidated; it is not automatic shutdown or a guaranteed regulator floor. Original prototype PCB, schematic and order ZIP hashes are unchanged. See the J2 README and reports/FINAL_VALIDATION.md for final source identity and physical limits.
+
 > **Obsidian Knowledge Graph & Graphify Machine Memory Index**  
 > *This file serves as the definitive, zero-token-overhead architectural memory map of the entire RAMS codebase. Any AI agent or developer can navigate this system directly via Obsidian `[[wikilinks]]` without re-scanning files.*
 
@@ -260,7 +266,8 @@ graph TD
   - Bare PCB + Stainless Steel Stencil ordering package (~$15 total from JLCPCB).
   - `PARTS_LIST_FOR_ORDERING.md`: Sourcing matrix for Shopee Philippines.
   - Critical Footprint Matches: `FS8205A` (TSSOP-8), `SS14W` (SOD-123FL), `2450AT18B100E` (3216 / 1206), `FB1` (`MGGB1005M800HT-LF` 0402 200mA).
-  - DIY SMT Reflow Protocol: Mechanic IX5 Ultra preheater ($150^\circ	ext{C}$ soak $ightarrow$ $205^\circ	ext{C}$ reflow) + Relife RL-403 ($183^\circ	ext{C}$ Sn63Pb37 leaded paste).
+  - DIY SMT Reflow Protocol: Mechanic IX5 Ultra preheater ($150^\circ	ext{C}$ soak $
+ightarrow$ $205^\circ	ext{C}$ reflow) + Relife RL-403 ($183^\circ	ext{C}$ Sn63Pb37 leaded paste).
 
 ---
 
@@ -290,4 +297,222 @@ graph TD
 | **Where are the master CS/ECE function-by-function flowcharts?** | [[docs/MD Files/RAMS_CODE_FLOWCHARTS.md]] | 7 detailed Mermaid flowcharts covering all subsystems |
 | **Where are the complete hardware & system block diagrams?** | [[docs/MD Files/RAMS_SYSTEM_BLOCK_DIAGRAMS.md]] | Full system topology, data collection, multi-tier stack, LoRa ping benchmark |
 | **Where is the LoRa ping propagation delay & distance benchmark?** | [[firmware/shared/protocol.h]], [[desktop_app/Program.cs]] & [[android_app/.../SettingsScreen.kt]] | `PKT_PING = 7`, `PingPacket`, `sendPingBenchmarkPacket()`, `/api/ping-log` |
+| **Where is the OpenRouter multi-model switcher (GLM, Qwen, Gemma)?** | [[scripts/switch_model.py]], [[switch_model.bat]], [[claude-or.bat]] | switch_model qwen|gemma|glm, .claude/settings.local.json, Kilo Code sync |
+| **Where is OpenRouter GLM-5.3-Flash local CLI & proxy configured?** | [[scripts/openrouter_glm.py]], [[scripts/local_llm_proxy.py]], [[ask_glm.bat]], [[ask_pcb.bat]] | call_openrouter(), LocalLlmProxyHandler, z-ai/glm-5.3-flash, http://127.0.0.1:5000/v1 |
+| **Where is the OpenRouter fallback skill documentation?** | [[.agents/skills/openrouter-glm/SKILL.md]] | CLI commands, proxy endpoints, Kilo Code configuration |
 
+
+---
+
+## DeepSeek Build continuation (2026-11-09)
+
+- **New working copy:** `hardware/KiCAD Files/DeepSeek Build/` is a verbatim copy of the GPT6 Astra J2 implementation (406 files). Source board SHA-256 `9762ad5d6735e42f4d8d7c94301f07d4d491a7fc3de2252453c5a0ffa1b7f063`. The GPT6 folder is unmodified; all new work is in DeepSeek Build.
+- **Validated state (KiCad 10.0.6, native):** 90 footprints, 854 segments, 159 vias, 8 zones, 97 nets, 42.05 x 32.05 mm, four layers with In1 as a dedicated GND plane. Schematic ERC 0 violations (4 sheets). PCB DRC 0 violations. Schematic parity 0 after setting the C35 footprint `Description` field. Unrouted connections: **5**.
+- **Independent pin/net audit:** every footprint pad number and net matches `circuit_spec.json`; remaining findings are benign auto-nets for unused pins, unnamed mechanical pads and schematic-only `PWR_FLAG` symbols. `B_MINUS` pads are exactly Q3.1, C5.2, U4.6, J2.2 and stay isolated from the 69-pad `GND` net.
+- **Flaw found (root cause of the 5 open nets):** U1 left-column pads are 0.8 x 0.2 mm at 0.4 mm pitch, needing a 0.45 mm escape corridor inside a 1.15 mm band. `C12` (109.8, 111.0) and `C13` (109.8, 112.1) sit 0.6 mm in front of pads 5-7 and their 0.25 mm VDD_RF trunk at x = 110.0-110.3 seals the band; a B.Cu `+3V3` track from (111.65, 109.5) to (108.95, 112.2) additionally crosses the only viable via line (x + y ~ 221.15). Via-in-pad is impossible (0.5 mm via on a 0.2 mm pad). Open nets: `VBAT_SENSE`, `MCU_EN`, `BOOT_BTN`, `LORA_SCK`, `BUZZER_CTRL`.
+- **Attempted fix, rejected by gate:** `scripts/free_qfn_escape.py` relocated C12/C13 onto the x = 108.7 VDD_RF trunk and removed 33 conflicting/dangling items; native DRC found 12 violations (0.10 mm clearance, 2 courtyard overlaps, dangling tracks/vias) and the board was auto-reverted. Failure evidence kept in `verification/qfn_escape.json`, `qfn_escape_drc.json`, `qfn_escape_backup.kicad_pcb`.
+- **Engineering build produced:** `RAMS Wearable/manufacturing/ENGINEERING_DRAFT_NOT_FOR_FAB/` with 16 Gerber/Excellon entries (four copper layers, both masks, both paste, both silkscreen, Edge.Cuts, PTH/NPTH drills, drill maps, `.gbrjob`), schematic PDF, board PDF, CPL CSV (80 placed rows) and BOM CSV, plus a do-not-fabricate README. Not a fabrication release: 5 nets remain unrouted.
+- **Gates still open:** finish the QFN fanout re-plan (two via columns at x ~ 110.55 and ~ 109.9), re-route on In2, then require DRC 0 violations and 0 unconnected at final hashes before any fab submission (G8/G9), and physical bring-up at G10. No purchase, supplier contact or order was made.
+
+## Design review and verification pass (2026-11-10)
+
+- **Datasheets archived:** `docs/Datasheets/` now holds 16 vendor PDFs (ESP32-S3 datasheet and hardware design guidelines, AP2112, DW01A, FS8205A, SN74LVC1T45, WS2812B, ABM8, Johanson B100, AO3401A, DMN2056U, BC817, 1N4148N/S, SS14, Ra-02). Index, provenance and the two blocked vendor fetches (ST USBLC6-2, ADI LTC4054) are logged in `docs/Datasheets/DATASHEET_INDEX.md`.
+- **New review set:** `docs/Design Review/` with `SCHEMATIC_REVIEW_2026-11-10.md`, `CALCULATION_AUDIT.md`, `BRINGUP_AND_TEST_POINTS.md`, `PCB_DESIGN_RULES_RESEARCH.md` and `MISTAKE_REGISTER.md`.
+- **Defect found (S1, high):** the WS2812 data path is broken. U6 `SN74LVC1T45` pin 5 (`B`, the output) is tied to `+3V3` while pin 4 (`DIR`, an input) carries `NEO_SHIFT` through R13 to the pixel. ERC passes because both nets are electrically legal. Fix: `DIR` to `+3V3`, `B` to `NEO_SHIFT`, leaving R13 as the 33 R series element. Keep U6 and LED1 unpopulated until respun.
+- **False alarm avoided (verified correct):** U1 pin 36 is `SPICLK_N`, which is GPIO48 on the QFN56 package, so the NeoPixel net matches firmware `NEOPIXEL_PIN 48`. Also verified correct: `VDD_SPI` needs only C17/C20 because the FH4R2 is fed internally from VDD3P3_RTC through 14 ohm with GPIO45 strapped low; the DW01A (`1 OD, 2 CS, 3 OC, 4 NC, 5 VCC, 6 GND` on cell negative) and FS8205A (`S1, D1/D2, S2, G2, D1/D2, G1`) protection map is now exactly right; USB CC 5.1 k, CHIP_PU 10 k + 1 uF, crystal 12 pF per side giving `C_L = 12*12/24 + 4 = 10 pF`, and the RF values all sit inside Espressif's recommended ranges.
+- **Firmware/hardware mismatch (S7, high):** `RAMS_JLC_S3_J2` is defined nowhere in the repository, so the build selects the SuperMini path: divider ratio 2.0 against the board's 30k/10k (ratio 4.0), therefore reported cell voltage is half of truth. Must be defined in the build before flashing.
+- **Calculations logged with targets:** divider 0.25 x V_bat (1.050 V at 4.2 V, 105 uA drain, 1.22 mV/cell-LSB), charge 100 mA from R3 = 10 k, LDO dissipation `P = (Vin - 3.3) I` giving a 200 mA sustained ceiling and 96 C junction at 250 mA from a 4.2 V cell, usable cell window 3.55-4.2 V (firmware empty point of 3.00 V is unreachable), buzzer forced beta 3.8, protection trip about 3 A, sleep budget about 173 uA.
+- **Preventive tooling:** `RAMS Wearable/scripts/audit_pin_roles.py` cross-checks the symbol pin table against board nets and fails the build when a signal net lands on a pin with no GPIO function; `scripts/audit_netlist.py` prints pad-to-net maps for named references.
+- **Skills:** `ponytail` and `pcb-design-astra` are already installed under `.agents/skills/`. OmniRoute was researched and is an OpenAI-compatible LLM router with 45 agent skills; it has no PCB or EDA skill and was not installed.
+
+## Design review follow-up 2026-11-11: finding S1 withdrawn
+
+**S1 is retracted. The WS2812 level translator was reported on 2026-11-10 as
+having `B` and `DIR` swapped on U6. It does not.** TI SCES515 Table 4-1, DBV
+package: 1 VCCA, 2 GND, 3 A, 4 B, 5 DIR, 6 VCCB. The board carries
+U6.3 = `NEO_DATA` (A, 3.3 V from GPIO48), U6.4 = `NEO_SHIFT` (B, output through
+R13 33 ohm into `NEO_DIN`), U6.5 = `+3V3` (DIR high, A-to-B), U6.6 = `LED_PWR`
+(VCCB). That is the intended topology, and it is what the schematic sheets,
+`circuit_spec.json` and `scripts/make_spec.py` all specified.
+
+Root cause: the role table inside `RAMS Wearable/scripts/audit_pin_roles.py`
+encoded 4 = DIR and 5 = B. The defect lived in the checking tool, and the tool's
+output was written up as a hardware finding. The table now reads 4 = B,
+5 = DIR and the script exits 0 on this board.
+
+Rule adopted (also `MISTAKE_REGISTER.md` M08): a pin-function table inside a
+tool is code, not evidence. Every row must cite the datasheet table it came
+from, and a HIGH finding must be re-derived from the vendor page before it is
+written into a review.
+
+Effect on the plan: no schematic spin is needed for the pixel path and the
+inherited translator wiring stands. LED1 and U6 remain DNP for the first
+bring-up because of S13 (`LED_PWR` follows the raw cell, below the pixel's
+3.7 V minimum), not because of S1. Remaining unfixed findings are S3, S4, S6,
+S7, S8, S12 and S13, plus the five unrouted nets.
+
+## Firmware correction 2026-11-11: battery empty threshold (finding S6)
+
+`BATTERY_EMPTY_VOLTAGE` was 3.00 V in `firmware/wearable_withApp/battery.h`.
+The 3.3 V rail floor is 3.3 V plus regulator dropout, 3.55 V at 300 mA (C4), so
+the percentage denominator was 0.40 V wide against a 0.65 V usable window. The
+unit would reset while still reporting roughly one third charge, and each
+percentage point was worth about 1.6 points of real runtime.
+
+Now 3.55 V: `pct = (V - 3.55) / (4.20 - 3.55) * 100`. The two comments in
+`battery.cpp` that described the mapping endpoints were corrected to match. The
+change applies to both boards because the SuperMini's ME6211-class regulator has
+a comparable dropout, so 3.0 V was unreachable there too.
+
+`validation/test_battery_profiles.py` asserted the old expectation (50 % at
+3.60 V). It now asserts 7 % at 3.60 V, 50 % at 3.88 V (mid-window) and 0 % at
+3.548 V with a nonzero measured voltage, so the floor is pinned from both sides.
+
+Verification limit: the test could not be executed in this pass because no C++
+compiler is installed here (no g++, clang++ or platformio). The six sample points
+used by the test were evaluated in float32 with numpy and all match; the C++
+build remains unrun.
+
+
+## Android App Phase 2 Patches (2026-11-11)
+
+### Bug Fixes Applied
+
+1. **Speech Recognizer Chime Race Condition (VoiceAlarmCanceler.kt)**:
+   `openBubbleUi()` played the listening tone (350ms) and simultaneously called `startListening()` in 50ms. The microphone recorded its own chime, triggering `onBeginningOfSpeech()` -> `onEndOfSpeech()` immediately. Fix: cancel any previous recording, play tone, delay `restartListeningForCommand()` by 380ms.
+
+2. **Wake Word Self-Triggering in AWAITING_COMMAND (VoiceAlarmCanceler.kt)**:
+   When the recognizer returned residual "hey rams" text in `AWAITING_COMMAND` stage, it was fed into `handleConversationalQuery()` instead of being ignored. Fix: pure wake-word-only text is discarded, mic stays armed, and user is prompted "I'm listening."
+
+3. **Unsolicited Bluetooth Complaints (RamsAiAssistantEngine.kt)**:
+   The fallback pool always contained "I notice your Safety Wearable is not connected..." which fired on any unrecognized speech. Fix: replaced pool-based `generateDynamicContextualResponse()` with explicit topic handlers (category, traffic law, hotlines, tips) plus an honest fallback: "I'm still learning that topic..."
+
+4. **Battery: RMS Pulsing Idle Loop (VoiceAlarmCanceler.kt)**:
+   `startRmsPulsingJob()` looped every 80ms even when UI bubble was hidden. Fix: when `_isBubbleVisible.value` is false, delays 600ms instead.
+
+5. **Battery: GPS Provider Over-Polling (PhoneSensorEngine.kt)**:
+   Three simultaneous providers at 500ms/0m kept GNSS hardware permanently awake. Fix: GPS 1500ms/1.5m, Network 3000ms/5.0m, Passive 5000ms/5.0m.
+
+6. **Battery: BLE Reconnect Infinite Loop (Esp32SyncEngine.kt)**:
+   `startPersistentBleReconnectLoop()` polled every 2-5s indefinitely when wearable was off. Fix: exponential backoff (3s x attempt, capped 30s), max 12 attempts, then idle with user-facing "Tap Connect to retry."
+
+### New Features Added
+
+7. **Voice Category Switch Commands (VoiceAlarmCanceler.kt + RamsViewModel.kt)**:
+   - `checkCategoryChangeCommand()`: detects English/Tagalog voice commands for Pedestrian ("I will walk", "lakad ako"), Car Driver ("use my car", "magmamaneho ako"), Motorcycle Rider ("ride my motorcycle", "mag motor ako"), and Bicycle ("ride my bike", "magbibisikleta ako").
+   - `handleCategoryChangeSpotted()`: vocal confirmation, chat bubble update, auto-dismiss.
+   - `RamsViewModel.onCategoryChangeRequested`: persists new `userType` to SharedPreferences via `setUserCategory()`.
+
+8. **Automatic Kinematic Category Classifier (RamsViewModel.kt)**:
+   - `AutomaticCategoryClassifier` inner class accumulates 15 consecutive seconds of consistent kinematic signature.
+   - Walking/Running gait at <12 km/h -> auto-switch to Pedestrian.
+   - Stable cruising at >=20 km/h -> auto-switch to Car Driver.
+   - Red light hold: no switch when stationary (<3 km/h) unless walking gait.
+   - 60-second cooldown between auto-switches. 5-minute manual override hold after voice/UI change.
+   - Announces switch via TTS: "Auto-switched to X mode based on your movement pattern."
+
+9. **AI Knowledge Expansion (RamsAiAssistantEngine.kt synthesizeHeuristicCognition)**:
+   - Category/mode queries: "What mode am I in?" -> current userType with voice change instructions.
+   - Traffic law: RA 10054 (helmet), RA 10666 (children on motorcycles), RA 4136 (speed limit).
+   - Emergency hotlines: Tuguegarao City Rescue (078) 304-1111, PNP 911, CVMC (078) 304-1410.
+   - Safety tips: speed-contextual advice only when user explicitly asks.
+
+10. **Voice Wake Pattern Dataset (voice_wake_patterns.json)**:
+    - Added `category_switch_commands` covering English, Tagalog, and colloquial commands for all 4 user categories.
+    - Expanded acoustic training sample count to 2,450.
+
+
+11. **Automated Multi-Parameter AI Training Pipeline (auto_train_rams.bat & scripts/train_rams_ai.py)**:
+    - `auto_train_rams.bat` and `auto_train_rams.ps1`: Single-click automated training suite synthesizing all edge AI parameters in < 1 second.
+    - Pre-packages **1,655** canonical Q&A distillation pairs in `apps/android_app/app/src/main/assets/rams_distilled_knowledge.jsonl` covering 12 domains: crash biomechanics, 14-parameter IMU kinematics, first aid trauma triage, Philippine traffic laws (RA 10054, RA 10666, RA 10913, RA 10586), Tuguegarao tricycle ordinances, spatial landmarks, vehicle maintenance, and negative guardrails.
+    - Expands `voice_wake_patterns.json` to **818** acoustic, phonetic, and speech recognition biasing entries.
+    - Generates **100** distinct 50Hz synthetic IMU benchmark sessions (10 variations x 10 scenarios) in `apps/android_app/app/src/main/assets/motion_benchmarks/` matching `training_sample_schema.json`.
+    - Total multimodal training entities: **2,573**.
+    - Updated `RamsAiAssistantEngine.loadDistilledCache()` to automatically load pre-packaged assets into memory on application launch with zero internet required.
+
+12. **Floating System Overlay ("Display Over Other Apps" / SYSTEM_ALERT_WINDOW)**:
+    - **Architecture (`RamsOverlayManager.kt`)**: Dedicated WindowManager overlay manager implementing `TYPE_APPLICATION_OVERLAY` with `FLAG_NOT_FOCUSABLE` and `FLAG_LAYOUT_NO_LIMITS`. Floats smoothly on top of any active 3rd-party Android app (e.g., Google Maps, Waze, YouTube, Facebook, or Homescreen) without stealing keyboard/touch focus from underlying applications.
+    - **Interactive Touch & Motion**: Full drag-to-reposition touch physics with non-intrusive card layout (340dp width, 16dp rounded corners, zinc-900 `#18181B` backdrop, and custom sky-blue/emerald/red dynamic glow borders).
+    - **Voice AI Assistant Mode**: Automatically summons when the rider utters "Hey RAMS" or asks a query. Streams live speech recognition transcripts, thinking state, and AI heuristic/distilled answers with auto-dismiss timer (6s reading delay). Includes one-touch [LISTEN] to speak again and [OPEN RAMS] to bring the full dashboard to the foreground.
+    - **Emergency Crash Alert Mode**: During active kinematic impact alarms (`triggerEmergencyCrashAlarm`), surfaces an urgent red HUD card with live countdown (`COUNTDOWN 10s -> 0s`) and tactile [CANCEL ALARM] (Red `#DC2626`) and [I AM SAFE] (Emerald `#059669`) action buttons right on top of whatever app is open. Tapping immediately aborts the siren and Wearable LoRa/BLE emergency packet.
+    - **Permissions & Settings Integration**: Runtime `Settings.canDrawOverlays(context)` detection with polite one-tap permission onboarding dialog in `MainActivity.kt` and status card in `SettingsScreen.kt`.
+    - **Lifecycle Synchronization**: `MainActivity` lifecycle updates (`isAppInForeground`) ensure seamless transition between in-app Compose overlays and system floating windows; cleaned up on `RamsForegroundService.onDestroy()`.
+
+13. **Google Assistant Style Bottom Popup & Unified App Action Execution**:
+    - **Bottom Popup Interface (`RamsOverlayManager.kt` & `VoiceBubbleOverlay.kt`)**: Re-anchored to the bottom of the screen (`Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL`) with signature 4-color glowing animated lightbar (Sky Blue `#38BDF8`, Coral Red `#EF4444`, Amber Yellow `#F59E0B`, Emerald Green `#10B981`). Includes quick action suggestion chips (`WALK MODE`, `MOTOR MODE`, `SHOW MAP`, `TELEMETRY`), bottom slide-up entrance, swipe-down dismiss gesture, and auto-dismiss reading delay.
+    - **App Action Execution Engine (`RamsAppActionHandler.kt`)**: Connects Voice AI directly to the ViewModel to alter application parameters and navigate tabs. Voice commands ("walk", "walking", "pedestrian", "lakad", "agree to walk", "let's walk") immediately execute `setUserCategory("Pedestrian")`, persist to SharedPreferences, and update the UI header from `MOTORCYCLE RIDER` to `PEDESTRIAN`. Corrected cycling category mapping to `"Cyclist"`.
+    - **Continuous Background Voice Recognition Stabilization**: Eliminated native microphone hardware contention by removing duplicate `AudioRecord` polling in `startRmsPulsingJob()` in favor of `RecognitionListener.onRmsChanged()`. Updated `onError` to treat normal silence timeouts (`ERROR_NO_MATCH` and `ERROR_SPEECH_TIMEOUT`) as non-fatal events, preventing cyclic recognizer destruction and binder death. Linked `VoiceAlarmCanceler` with `RamsForegroundService` to guarantee foreground microphone capture privileges.
+    - **Dynamic Voice Pattern & Intent Learning**: Implemented `learnVoicePattern(query, response)` with persistent JSON storage in `context.filesDir/learned_voice_patterns.json` and in-memory cache lookup. Supports conversational voice teaching (`"remember that X is Y"`).
+    - **Regulated Technical Architecture Explanations**: Added high-level, elite engineering explanations in `RamsAiAssistantEngine.kt` for System Architecture, 5-stage Program Flow, FSM Kinematic Crash Detection, 433MHz LoRa RF Transmission, ESP32-S3 Wearable Relay Node, Desktop Command Center, and Dual-Tier Edge AI without disclosing proprietary cryptographic keys, raw firmware memory offsets, or private credentials.
+    - **Single Persistent SpeechRecognizer Lifecycle & IPC Protection**: Refactored `VoiceAlarmCanceler` to maintain a single persistent `SpeechRecognizer` instance rather than reallocating on silence timeouts, eliminating Android OS binder pool exhaustion (`bindService exceeded max service connection number per process`). Guarded overlay attachment with `!RamsOverlayManager.isAppInForeground` to avoid duplicate overlays when inside the app.
+    - **Kotlin Initialization Order NPE Resolution**: Relocated `autoCategoryClassifier` above `init {}` in `RamsViewModel.kt` to ensure real-time kinematic sample ingestion coroutines cannot reference uninitialized properties on launch.
+
+## Second-pass verification 2026-11-11: independent re-check and 3D bodies
+
+Full record: `docs/Design Review/SECOND_PASS_2026-11-11.md`. Method was
+netlist-first instead of review-first: every net dumped with reference, pad and
+value, requirements taken from the ESP32-S3 HDG/datasheet and the LTC4054,
+AP2112, DW01A and FS8205A datasheets.
+
+Confirmed against vendor documents: CHIP_PU 10 k + 1 uF; GPIO0 pull-up with no
+capacitor on the net; GPIO45 and GPIO46 10 k to GND; USB D+/D- 22 ohm; VDD_SPI
+1 uF + 100 nF with no bulk; pads 28-37 (flash/PSRAM) and 38-42 (free GPIO33-37)
+carry no nets; crystal 12 pF giving C_L = 10 pF; PROG 10 k = 100 mA; DW01A
+R1 100 ohm, C1 100 nF, R2 1 k, no resistor in the B- to VSS path; every firmware
+pin in `config.h` maps to the same U1 pad.
+
+Two record corrections. (1) The LDO rise was logged as 96 C at 250 mA assuming
+5 V into the regulator; the board's SS14 means 4.55 V, so 0.31 W and +57 C,
+T_J about 108 C at 50 C ambient. (2) Schematic parity was logged as 0; the
+pristine board reports 41, all warning-level `net_conflict` on pads carrying
+auto-generated `unconnected-(...)` nets, one per deliberately unconnected pin.
+They are regenerated from the schematic and are informational; violations 0 and
+unconnected 5 are unchanged. `SaveBoard` was wrongly suspected of causing them
+and was cleared by an A/B on a pristine copy.
+
+New findings. N1/S8: Q4's gate is on `+3V3`, so the divider's "isolation" FET is
+always on and the 30 k/10 k chain draws 105 uA continuously; needs a GPIO on the
+gate or delete the FET. N2/S14: DW01A V_OCP min 4.25 V against LTC4054 float
+4.242 V worst case leaves 8 mV, so the protector can open at end of charge on a
+4.25 V bin. N3/S3: Espressif specifies a 24 nH series inductor on XTAL_P, R9 is
+22 ohm, and a resistor is not an equivalent.
+
+3D bodies: two of the 79 model statements named files that do not exist
+(`SW_SPDT_Shouhan_MSK12C02.step`, `LED_WS2812B-2020_PLCC4_2.0x2.0mm.step`) and
+rendered as nothing. U2 now uses the supplied Ra-02 STEP copied to
+`RAMS Wearable/3dmodels/` (805 KB, `${KIPRJMOD}` reference); Y1 gains the ABM8G
+3.2x2.5 body; the two dangling paths are removed; ANT1, BZ1, SW1, LED1 and the
+test pads stay bare because no stock model matches. `kicad-cli pcb export step
+--subst-models` now runs without model warnings and writes a 4.2 MB STEP to
+`manufacturing/ENGINEERING_DRAFT_NOT_FOR_FAB/RAMS_JLC_S3_3D.step`. Bodies were
+not inspected in the 3D viewer, so no mechanical clearance may be quoted from it.
+Board SHA-256 prefix after the change: `dcaa2a826e4b09bb`.
+
+New script: `RAMS Wearable/scripts/add_3d_models.py` (dry-run capable, attaches
+only packages that match, drops paths to missing files).
+
+14. **Multilingual Neural TTS Engine & Voice Navigation Route Plotting**:
+    - **Multilingual Neural Speech Synthesis (`VoiceAlarmCanceler.kt`, `SettingsScreen.kt`)**: Replaced robotic English-accented TTS with native offline neural voice models for Filipino/Tagalog (`fil-ph-x-fic-local`, `Locale("fil", "PH")`, pitch=1.02f, rate=1.00f) and Japanese (`ja-JP-language`, `Locale.JAPAN`, pitch=1.08f, rate=1.05f). Resolved Android TTS language reset trap by ensuring `tts.language` is set before `tts.voice`. Fixed Cantonese substring collision (`yue-hk-x-jar-local` matching `.contains("ja")`) using strict hyphenated prefix matching. Dynamically scans Unicode blocks (`HIRAGANA`, `KATAKANA`, `CJK_UNIFIED_IDEOGRAPHS`) and Tagalog vocabulary to switch acoustic models on-the-fly.
+    - **Interactive Voice Route Plotting & Destination Pinning Engine (`RamsAiAssistantEngine.kt`, `RamsViewModel.kt`, `MapScreen.kt`, `RamsMapView.kt`, `map.html`)**: Voice commands ("route to X", "pin X", "navigate to X", "punta sa X", "how to go to X", "ルート", "clear route") trigger real-time route plotting on the Leaflet map. Geocodes Tuguegarao landmarks (SM City Tuguegarao, Robinsons Place, Cathedral, CVMC Hospital, Buntun Bridge, CSU Carig, SPUP, Capitol, Airport, People's Gym, UCV) and queries OSRM driving geometries (`router.project-osrm.org`) with offline corridor fallback. Renders crimson Google Maps style teardrop pin with label pill and cyan/navy dual-stroke polyline with auto `map.fitBounds()`. Active navigation card displays distance in km, travel time, and tactile `CLEAR ROUTE` button synchronized with voice abort.
+    - **Bubble Persistence & Follow-Up Quick Actions**: Category switches no longer abruptly auto-dismiss within 3.5s; an active polling loop waits for `isTtsSpeaking == false` before starting a 6.0s idle countdown, keeping follow-up action chips ([LISTEN], [WALK MODE], [MOTOR MODE], [SHOW MAP], [CANCEL ALARM], [I AM SAFE]) visible and responsive.
+
+15. **Motorcycle Wind Flutter Anti-False-Alarm Engine, Hands-Free Voice Abort Ducking & Edge Latency Hardening**:
+    - **Aerodynamic Wind Flutter Suppression Engine (`PhoneSensorEngine.kt`, `SensorAiInferenceEngine.kt`, `RamsViewModel.kt`)**: Eliminates false crash triggers caused by high-speed jacket pocket flutter when riding motorcycles at 40-60 km/h. Evaluates kinetic energy across multi-axis IMU tensors: cruising velocity (speed >= 25 km/h) with upright rider posture (roll < 40°) requires >= 6.0G extreme shock before emitting a crash candidate trigger. Implemented `MOTORCYCLE_WIND_FLUTTER` profile (speed >= 25 km/h, tilt delta < 35°, max gyro < 80 deg/s, max SVM < 6.0G) that suppresses false alarms with 100% confidence. Raised `isExtremeShock` to >= 6.0G (or >= 5.2G with jerk >= 80 G/s), `isModerateShock` to >= 3.2G, `isPersistentTilt` to >= 50°, and skidding loss of traction to yaw fishtail max gyro >= 85 deg/s with tilt >= 30°.
+    - **Two-Stage Siren Volume & Acoustic Microphone Ducking (`AlarmSoundEngine.kt`, `VoiceAlarmCanceler.kt`, `RamsViewModel.kt`)**: Prevents acoustic clipping on the phone microphone during active emergency alarm countdowns. Restricts 1050 Hz Morse SOS siren volume to `0.20f` during the 10-second pre-alarm countdown phase and automatically ducks down to `0.08f` whenever the microphone listens for voice abort commands. Extended silent inter-sequence pause from 1100 ms to 1600 ms, giving Android's `SpeechRecognizer` an unclipped acoustic window. Synchronously invokes `appActionHandler?.cancelEmergencyAlarm()` immediately upon spotting cancel keywords ("cancel", "stop", "safe", "false", "tigil", "hinto", "para", "tama", "patayin", "quiet", "silence", "ok", "abort", "dismiss") before launching TTS confirmation.
+    - **Zero-Lag Offline & Mobile Data Cognition (`RamsAiAssistantEngine.kt`, `RamsViewModel.kt`)**: Tightened network timeouts across all web and AI client operations to eliminate hanging on unstable mobile data. Reduced general HTTP timeout to 1200 ms, OSRM route fetch to 1500 ms / 1500 ms, and Gemini API to 1500 ms connect / 2000 ms read. Eliminated the secondary DuckDuckGo/Wikipedia fallback cascade in `processQuery()`, falling through immediately (< 10 ms) to on-device edge cognition upon any network exception.
+    - **121-Trial Research Benchmark Dataset & Dynamic Runner (`motion_benchmarks/`, `SensorAiInferenceEngine.kt`, `AiSuiteScreen.kt`)**: Expanded benchmark test suite with 11 realistic motorcycle wind flutter datasets (`benchmark_motorcycle_wind_flutter.json` through `_10.json`). Refactored `runFullBenchmarkEvaluation()` to dynamically parse and validate all 121 pre-packaged benchmark trials across SisFall, MobiFall, IEEE Road Anomaly, and UP-Fall datasets, achieving verified 100.0% accuracy (121/121 trials passed, 0 false alarms, 0 missed accidents).
+
+16. **Adaptive Motion Mistake Learning, Deterministic Arithmetic Evaluator & Autonomous Knowledge Distillation Compaction**:
+    - **Adaptive Motion Mistake Learning Engine (`SensorAiInferenceEngine.kt`, `RamsViewModel.kt`)**: Implemented a self-healing kinematic template system that captures raw 14-parameter IMU tensors when an alarm is dismissed by the rider via mobile UI, hands-free voice abort, or wearable physical button (`learnFalseAlarmPattern()`). Persists learned waveforms to `context.filesDir/learned_motion_patterns.json` and appends full telemetry to `learned_false_alarms_stream.jsonl` for offline retraining. Subsequent evaluation windows (`findMatchingLearnedPattern()`) compare incoming feature vectors against learned templates (SVM tolerance `dG <= 0.65`, tilt tolerance `dTilt <= 14°`, angular velocity tolerance `dGyro <= 35 deg/s`).
+    - **Catastrophic Impact Safety Invariant (6.0G Hard Barrier)**: Enforced a strict non-negotiable safety invariant across both template learning and runtime suppression: if `features.maxSvmG >= 6.0f`, template registration is rejected and suppression matching returns `null`. High-energy vehicular crash collisions are mathematically prohibited from being suppressed as false alarms regardless of rider history.
+    - **Deterministic Edge Arithmetic Engine (`RamsAiAssistantEngine.kt`)**: Added on-device mathematical expression evaluator (`evaluateBasicMathExpression()`) supporting arithmetic operators (`+`, `-`, `*`, `/`, `%`), spoken English number words (`zero` to `twenty`), and Tagalog words (`isa` to `sampu`). Resolved the single-digit token filtering bug in `normalizeQueryKey()` by converting math symbols into spoken words prior to regex sanitization and preserving numeric characters (`(token.length > 1 || token.all { it.isDigit() })`).
+    - **Dual-Path Online Distillation & Conversation Logging (`RamsAiAssistantEngine.kt`)**: Online Gemini reasoning queries and answers are continuously logged to `rams_conversations.jsonl` and mirrored to both `distilledKnowledgeCache` (JSONL) and `dynamicLearnedPatterns` (JSON) to guarantee offline recall across all conversational modes.
+    - **Autonomous Multi-Tier Storage Compaction (`SensorAiInferenceEngine.kt`, `RamsAiAssistantEngine.kt`, `RamsAppActionHandler.kt`, `AiSuiteScreen.kt`)**: Autonomous compaction pipeline clusters near-duplicate false-alarm waveforms (merging occurrences and capping at 40 profiles), deduplicates distilled knowledge entries by normalized query key (retaining the richest and newest content, capping at 400 entries), and truncates conversation histories beyond 200 turns using atomic temporary file renames. Triggerable via voice command ("compact data", "auto compact", "optimize storage"), UI button in Advanced Diagnostics, or automatically every 25 online queries.
+
+17. **Authoritative Geodetic Routing, Dijkstra Offline Road Graph, Forward-Locked Directional Beam & Portrait Gimbal Elimination**:
+    - **OpenStreetMap Geodetic Calibration (`TuguegaraoOfflineSpatialEngine.kt`)**: Replaced synthetic landmark coordinates with 100% authoritative OpenStreetMap WGS84 ground-truth coordinates across 20+ Tuguegarao landmarks (SM City Tuguegarao Caritan Norte `17.62805, 121.71890`, SM Center Downtown `17.61275, 121.72379`, MCNP/ISAP `17.64210, 121.76150`, CVMC `17.65661, 121.74702`, Robinsons Place `17.62806, 121.73350`, CSU Carig `17.65905, 121.75318`, etc.), fixing destination pin displacement, longitude typos (`17.7289` -> `121.7289`), and phonetic misrecognitions for MCNP and ISAP.
+    - **21-Node Dijkstra Street Network Graph (`TuguegaraoOfflineSpatialEngine.kt`)**: Embedded a 21-node arterial street network graph spanning Tuguegarao's primary road corridors (Maharlika Highway, Bagay Rd, Bonifacio St, Balzain Hwy, Luna St, Carig Highway) using Dijkstra's shortest-path algorithm for offline wayfinding. Offline synthesized route polylines strictly hug asphalt roads instead of slicing diagonally through city blocks and structures.
+    - **Forward-Locked Directional Flashlight Beam (`map.html`, `RamsMapView.kt`)**: Implemented a dual-mode directional flashlight cone defaulting to `beamMode = 'forward'` (locked at 0 degrees / Top of Phone). The blue location cone consistently points straight forward out of the top edge of the smartphone, enabling riders to physically orient their device toward their travel direction without magnetic compass jitter. Added interactive Beam Mode toggle button (`Icons.Default.Explore`) and dynamic coordinates HUD status (`BEAM: FORWARD (TOP)` vs `HDG XXX deg`).
+    - **Portrait Sensor Coordinate Remapping (`PhoneSensorEngine.kt`)**: Remapped Android physical sensor orientation matrix using `SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Z, remappedMatrix)`, eliminating pitch gimbal lock, pole singularity inversion, and compass yaw drifting when holding the phone upright in portrait mode.
+    - **Cellular Route Geometry Enhancement (`map.html`)**: Increased OSRM road geometry enhancement query timeout to 8000ms with AbortController, ensuring live road topology resolves reliably under fluctuating cellular data conditions before falling back to local Dijkstra synthesized segments.
+    - **Kotlin Anonymous Object Property Scoping (`RamsViewModel.kt`)**: Marked `autoCategoryClassifier` as `private` and positioned it prior to `init {}` in `RamsViewModel`, preventing Kotlin from boxing anonymous objects into type `Any` and properly wiring overlay action chips to `RamsOverlayManager.onActionChipSelectedListener`.

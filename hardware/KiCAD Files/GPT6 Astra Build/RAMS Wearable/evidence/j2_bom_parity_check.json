@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "spec_sha256": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+  "footprint_rows": 90,
+  "initial_fit": 80,
+  "normal_fit_after_qualification": 82,
+  "test_pads": 8,
+  "checks": [
+    "exact current reference/value/footprint parity",
+    "spec hashes in CSV and markdown",
+    "DNP/normal population separation",
+    "stock reuse for AP2112, Q5, buzzer, switches and bypasses",
+    "retired converter/supervisor/mechanical selections absent from procurement",
+    "preserved archived documents unchanged"
+  ],
+  "limitations": [
+    "actual stock fit, current, voltage and RF performance need physical checks",
+    "routing/DRC not assessed by this documentation audit"
+  ]
+}

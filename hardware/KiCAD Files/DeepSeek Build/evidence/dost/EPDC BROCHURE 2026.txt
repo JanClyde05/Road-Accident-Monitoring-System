@@ -1,0 +1,203 @@
+
+--- PDF PAGE 1 ---
+EPDC Bldg., DOST South, MIRDC Compound,
+Gen. Santos Ave., Bicutan, Taguig City, 1631 Philippines
+8249-8500 ext. 6021- 6023
+epdc@asti.dost.gov.ph
+www.facebook/com/EPDCDOST
+https://epdc.asti.dost.gov.ph
+CONTACT US
+Build products, create solutions.
+Make it happen at EPDC.
+ABOUT US
+Franz A de Leon, Ph.D.
+Director, DOST-ASTI
+ENABLING ELECTRONICS
+PRODUCT DEVELOPMENT
+IN THE                         PHILIPPINES
+TEST ENGINEERING
+MANUFACTURING
+RESEARCH, ENGINEERING
+AND DEVELOPMENT
+TECHNICAL TRAINING  
+AND CONSULTATION
+Established in 2015, the Electronics Product Develo pment
+Center (EPDC) is a DOST Advanced Science and
+Technology Institute (DOST-ASTI)'s strategic initia tive to
+support and accelerate innovation in the electronic s
+industry. Backed by seasoned professionals and equi pped
+with state-of-the-art facilities, EPDC transforms i deas into
+reality by offering end-to-end support for electron ics and
+emerging technology development—from research and
+design to manufacturing and testing.
+ 
+By bridging the gap between concept and
+commercialization, EPDC empowers startups, SMEs,
+academic institutions, and industry partners to bri ng their
+electronic innovations to life. Whether launching a  new
+product, enhancing an existing one, or validating d esigns
+for market readiness, EPDC delivers the technical
+expertise, advanced tools, and modern facilities es sential
+for development. Through accessible services and a
+commitment to engineering excellence, EPDC drives l ocal
+innovation and strengthens Filipino-made technologi es for
+global competitiveness.
+DOST
+--- PDF PAGE 2 ---
+Logic Analyzer (Keysight 16851A)  
+Oscilloscope (Rohde & Schwarz RTO1044)  
+Oscilloscope (Keysight DSO-X-4024)  
+Spectrum Analyzer (Rohde & Schwarz FSV-13)  
+Near Field Probe (Rohde & Schwarz HZ-15)  
+Thermal Imager (Fluke Ti125)  
+Vector Signal Generator (Keysight N5172B)  
+Digital Multimeter (Keysight 34461A)  
+Semi Anechoic Chamber Rental
+Thermal Shock Chamber Rental (-40 to +150°C)
+      AC Source (Preen AFC 11005G)  
+      AC & DC Power Source (Pacific 3150AFX)  
+      Memory Hilogger (Hioki LR8402-20)
+      DC Electronic Load (Keithley 2380-120-60)  
+      Temperature and Humidity Chamber Rental (-40 to +15 0°C / 10% to 98% RH)  
+      Temperature Oven Chamber Rental (+50 to 300°C)  
+NOTES:
+      Equipment listed “    ” may be operated in the following modes:
+            Actual time  - equipment is operated by our test engineer
+            Time sharing  - equipment is operated by client’s team
+TEST ENGINEERING SERVICES
+Emission Testing
+RF Conducted Emission (FCC Part 15 Subpart B; CISPR  32; EN
+55032; IEC/EN 61000-6-3; IEC/EN 61000-6-4; CISPR 25  Automotive
+Component Level)
+RF Radiated Emission (CISPR 32; EN 55032; FCC Part 15 Subpart B;
+IEC/EN 61000-6-3; IEC/EN 61000-6-4; CISPR 11; CISPR  14-1 & CISPR
+14-1 Disturbance Power; CISPR 15* ; CISPR 25 Automotive
+Component Level)
+Power Line Harmonics (<16A) (IEC 61000-3-2)
+Power Line Flicker (<16A) (IEC 61000-3-3)
+Immunity Testing
+RF Conducted Immunity (IEC/EN 61000-4-6; CISPR 35; ISO 11452-4
+Automotive Component Level - BCI)
+RF Radiated Immunity (CISPR 14-2; CISPR 35; IEC/EN 61000-4-3;
+IEC/EN 61000-6-1; ISO 11452-2 Automotive Component Level)
+Transient Testing
+Electrostatic Discharge (IEC/EN 61000-4-2; CISPR 35 ; EN 55035;
+IEC/EN 61000-6-1; CISPR 14-2)
+Electrical Fast Transient/Burst (IEC/EN 61000-4-4; CISPR 35; EN
+55035; IEC/EN 61000-6-1; CISPR 14-2)
+Surge (IEC/EN 61000-4-5; CISPR 35; EN 55035; IEC/EN  61000-6-1;
+CISPR 14-2)
+Power Magnetic Field (IEC/EN 61000-4-8; CISPR 35; E N 55035;
+IEC/EN 61000-6-1)
+Impulse Magnetic Field (IEC/EN 61000-4-9; CISPR 35;  IEC 61000-6-
+1; IEC 61000-6-3; IEC 61000-6-4; EN 55035*
+Voltage Dip, Variations, Interruption (IEC/EN 61000 -4-11; CISPR 35;
+EN 55035; IEC 61000-6-1; CISPR 14-2)
+ELECTROMAGNETIC COMPATIBILITY TESTING
+MANUFACTURING SERVICES
+Printed Circuit Board (PCB) Fabrication
+      PCB Allowable Design Dimension (x,y): 190mm x 250mm  Maximun
+      Layers: 1-2
+      PCB Material: FR4 only
+Solder Mask Color: Green, Black, Blue, Red, Orange,  White, Yellow,
+Pink, Purple (subject to color availability)
+Silkscreen Color: Black and White (subject to color  availability)
+Solder Paste Stencil (Stencil Fabrication)
+      Polymide
+3D Printing
+      300 x 300 x 350mm
+      Material: PLA and ABS
+PCB Assembly
+       Parts Acquisition: Service available in Consignment
+       Surface Mount Components: 0201 Minimum Chip Package  | All kinds  
+       except Grid Array Types
+       Through-Hole Components: Radial and Axial
+OTHERS *
+Storage Fee (less than or equal to 1m x 1m x 1.7m v olumetric size)
+Storage Fee (more than 1m x 1m x 1.7m volumetric si ze)
+Full Test Report
+Test Results
+TEST EQUIPMENT RENTAL *
+*  - not covered by the accreditation scope
+IEC 60068-2-1 Environmental Test A: Cold
+IEC 60068-2-2 Environmental Test B: Dry Heat
+CHAMBER RENTAL
+Temperature and Humidity
+Oven Chamber
+Thermal Shock Chamber
+PARAMETRIC TESTING
+RoHS Directive 1 Measurement*
+BioPac System Verification
+Creepage and Clearance
+Distance Measurement
+Durability of Marketing
+Cord Anchorage and Strain Relief
+Test
+Stability Test
+Impact Test
+Drop Test
+Steady Force Test
+Wall/Ceiling Mounted Equipment
+Knob Pull/Handle Loading
+Direct Plug-In Equipment-Moment
+Ball Pressure Test
+Heating Test
+Enclosure Distortion
+Stress Relief
+Resistance to Heat and Fire*
+PRODUCT SAFETY TESTING
+IEC 62368-1:2023
+Maximum Voltage, Ampere  
+      and Volt-Ampere Measurement
+Input Test
+Reversed DC Input Polarity Test
+Touch Current Strength Test
+Determination or Working Voltage
+Fan Malfunction Test
+Locked Rotor Test
+Blocked Ventilation Opening
+Component Failure
+Output Short Circuit
+Output Overload
+Limited Power Source
+Measurement
+Separation Requirements
+SELV Reliability Test
+RESEARCH, ENGINEERING  
+AND DEVELOPMENT SERVICES
+Electronic Equipment Servicing
+Hardware Design
+Mechanical Design
+Additional Services for Hardware Design and Mechani cal Design
+Hardware Assembly
+Mechanical Assembly
+GENERAL SERVICES
+Technical Training
+Technical Consultation
+Training Room Rental
+Contract Services and Contract Research and Develop ment
+OUR SERVICES
+The Electronics Product Development Center (EPDC)
+offers a wide range of quality services that suppor t the
+development of electronic products in the country.  
+The Research, Engineering, and Development (RED)
+Unit transforms innovative ideas into practical sol utions
+by offering comprehensive support for Research and
+Development (R&D) initiatives. With core expertise in
+Hardware and Mechanical Design, the unit provides t he
+foundational services essential for electronics
+development. The RED Unit also offers Electronics
+Equipment Servicing, specializing in the repair and
+upkeep of custom and specialized equipment.  
+From design to production, the Manufacturing Unit
+provides end-to-end solutions—offering precise PCB
+Fabrication and Assembly, along with custom 3D-
+Printed enclosures—crafted to meet your product’s
+technical and functional requirements.  
+Whether in building, refining, or validating existi ng
+electronics technology, the Test Engineering Unit
+houses state-of-the-art resources for its product
+testing services which include EMC Compliant Testin g
+based on various standards and Product Safety Testi ng
+for electrical, thermal, mechanical, and structural
+reliability, and Parametric Testing.

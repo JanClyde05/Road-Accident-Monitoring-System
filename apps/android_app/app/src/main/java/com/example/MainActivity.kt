@@ -10,6 +10,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import com.example.service.RamsForegroundService
+import com.example.ui.overlay.RamsOverlayManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -125,6 +126,21 @@ class MainActivity : ComponentActivity() {
       }
     } catch (_: Exception) {}
 
+    // 3. Initialize Floating System Overlay Manager (Display Over Other Apps)
+    RamsOverlayManager.init(applicationContext)
+    RamsOverlayManager.onAlarmCancelledListener = {
+      viewModel.cancelFalseAlarm()
+    }
+    RamsOverlayManager.onMicTappedListener = {
+      viewModel.voiceAlarmCanceler.restartListeningForCommand()
+    }
+    RamsOverlayManager.onOpenAppListener = {
+      val openIntent = Intent(this@MainActivity, MainActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+      }
+      startActivity(openIntent)
+    }
+
     setContent {
       val isDarkTheme by viewModel.isDarkTheme.collectAsStateWithLifecycle()
 
@@ -141,6 +157,23 @@ class MainActivity : ComponentActivity() {
     super.onNewIntent(intent)
     setIntent(intent)
     handleIntent(intent)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    RamsOverlayManager.isAppInForeground = true
+    if (androidx.core.content.ContextCompat.checkSelfPermission(
+        this,
+        android.Manifest.permission.RECORD_AUDIO
+      ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+    ) {
+      viewModel.voiceAlarmCanceler.startListeningForCancel(promptDirectly = false)
+    }
+  }
+
+  override fun onPause() {
+    super.onPause()
+    RamsOverlayManager.isAppInForeground = false
   }
 
   private fun handleIntent(intent: Intent?) {
@@ -190,6 +223,14 @@ fun RamsDashboardScreen(
     selectedTab = initialTab
   }
 
+  val requestedNavTab by viewModel.activeNavTabFlow.collectAsStateWithLifecycle()
+  LaunchedEffect(requestedNavTab) {
+    if (requestedNavTab != null) {
+      selectedTab = requestedNavTab!!
+      viewModel.consumeNavTab()
+    }
+  }
+
   // Bluetooth enable launcher
   val bluetoothEnableLauncher = rememberLauncherForActivityResult(
     contract = ActivityResultContracts.StartActivityForResult()
@@ -236,6 +277,7 @@ fun RamsDashboardScreen(
   val recordedCsvCount by viewModel.csvExportManager.recordedCount.collectAsStateWithLifecycle()
 
   val alertCount = allEvents.count { it.type == com.example.model.IncidentType.ALERT }
+  val destinationRoute by viewModel.destinationRouteFlow.collectAsStateWithLifecycle()
 
   Scaffold(
     modifier = modifier
@@ -358,6 +400,8 @@ fun RamsDashboardScreen(
             filteredEvents = filteredEvents,
             activeFilter = activeFilter,
             searchQuery = searchQuery,
+            destinationRoute = destinationRoute,
+            onClearRoute = { viewModel.clearMapRoute() },
             onFilterChange = { viewModel.setFilter(it) },
             onSearchChange = { viewModel.setSearch(it) }
           )
@@ -498,6 +542,59 @@ fun RamsDashboardScreen(
       onClearImported = { viewModel.clearImportedData() },
       initialTab = csvDialogInitialTab,
       onDismiss = { viewModel.setCsvDialogVisible(false) }
+    )
+  }
+
+  // Floating Overlay Permission Dialog (Display Over Other Apps)
+  val context = androidx.compose.ui.platform.LocalContext.current
+  var showOverlayPermissionDialog by rememberSaveable { mutableStateOf(false) }
+
+  androidx.compose.runtime.LaunchedEffect(Unit) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(context)) {
+      showOverlayPermissionDialog = true
+    }
+  }
+
+  if (showOverlayPermissionDialog) {
+    androidx.compose.material3.AlertDialog(
+      onDismissRequest = { showOverlayPermissionDialog = false },
+      title = {
+        Text(
+          text = "FLOATING OVERLAY PERMISSION",
+          fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+          fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+          fontSize = 13.sp,
+          color = Color.White
+        )
+      },
+      text = {
+        Text(
+          text = "Enable 'Display over other apps' so RAMS can respond hands-free and surface floating emergency crash abort cards over Google Maps, Waze, and background apps.",
+          fontSize = 12.sp,
+          color = Color(0xFFA1A1AA)
+        )
+      },
+      confirmButton = {
+        androidx.compose.material3.Button(
+          onClick = {
+            showOverlayPermissionDialog = false
+            RamsOverlayManager.requestOverlayPermission(context)
+          },
+          colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF0284C7)
+          )
+        ) {
+          Text("ENABLE OVERLAY", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 11.sp)
+        }
+      },
+      dismissButton = {
+        androidx.compose.material3.TextButton(
+          onClick = { showOverlayPermissionDialog = false }
+        ) {
+          Text("LATER", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace, fontSize = 11.sp, color = Color(0xFFA1A1AA))
+        }
+      },
+      containerColor = Color(0xFF18181B)
     )
   }
 }

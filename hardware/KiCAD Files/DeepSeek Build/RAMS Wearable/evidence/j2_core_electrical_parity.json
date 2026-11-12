@@ -1,0 +1,40 @@
+{
+  "revision": "J2 LDO engineering",
+  "independently_exported_with": "KiCad CLI 10.0.6",
+  "core_connected_pin_count": 221,
+  "core_mismatches": [],
+  "unexpected_nc_connections": [],
+  "excluded_LED_components": [
+    "LED1",
+    "R13",
+    "C28"
+  ],
+  "virtual_power_flags_not_exported": [
+    "#FLG001",
+    "#FLG002",
+    "#FLG003",
+    "#FLG004",
+    "#FLG005",
+    "#FLG006",
+    "#FLG007",
+    "#FLG008"
+  ],
+  "hashes": {
+    "circuit_spec.json": "b7cadb014b10c29158cfaa385062a776121d528a42f0ea7fce0e381236f14bed",
+    "evidence\\j2_independent_netlist.xml": "73924c323518ec9ef5d58a204f40319ed14c2548b0b37887e48edb425a0d7646",
+    "RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
+    "RAMS_JLC_S3_io.kicad_sch": "085cab7834dff3412b7ed5fd9db97a9327171a4b56ab94ca06f201b8772d3781",
+    "RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
+    "RAMS_JLC_S3_power.kicad_sch": "b04d0036741374a0b1d9ba2bacc3646a196c40ad479fa23012f81e34d081dc48"
+  },
+  "erc_report_keys": [
+    "$schema",
+    "coordinate_units",
+    "date",
+    "ignored_checks",
+    "included_severities",
+    "kicad_version",
+    "sheets",
+    "source"
+  ]
+}

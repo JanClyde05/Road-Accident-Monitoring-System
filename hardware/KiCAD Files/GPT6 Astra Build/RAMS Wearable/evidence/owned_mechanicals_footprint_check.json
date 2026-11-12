@@ -1,0 +1,116 @@
+{
+  "kicad_version": "10.0.6",
+  "scope": "Library parse and numeric pad inspection only, no physical stock verification",
+  "footprints": {
+    "Buzzer_9650_SMD_Stock_HandSolder": [
+      {
+        "number": "1",
+        "x_mm": -3.8,
+        "y_mm": 0.0,
+        "width_mm": 4.2,
+        "height_mm": 2.6,
+        "paste": false
+      },
+      {
+        "number": "2",
+        "x_mm": 3.8,
+        "y_mm": 0.0,
+        "width_mm": 4.2,
+        "height_mm": 2.6,
+        "paste": false
+      }
+    ],
+    "SW_SPDT_Shouhan_MSK12C02": [
+      {
+        "number": "",
+        "x_mm": -1.5,
+        "y_mm": 0.0,
+        "width_mm": 0.85,
+        "height_mm": 0.85,
+        "paste": false
+      },
+      {
+        "number": "",
+        "x_mm": 1.5,
+        "y_mm": 0.0,
+        "width_mm": 0.85,
+        "height_mm": 0.85,
+        "paste": false
+      },
+      {
+        "number": "1",
+        "x_mm": -2.25,
+        "y_mm": -1.95,
+        "width_mm": 0.6,
+        "height_mm": 1.3,
+        "paste": true
+      },
+      {
+        "number": "2",
+        "x_mm": 0.75,
+        "y_mm": -1.95,
+        "width_mm": 0.6,
+        "height_mm": 1.3,
+        "paste": true
+      },
+      {
+        "number": "3",
+        "x_mm": 2.25,
+        "y_mm": -1.95,
+        "width_mm": 0.6,
+        "height_mm": 1.3,
+        "paste": true
+      },
+      {
+        "number": "SH",
+        "x_mm": -3.675,
+        "y_mm": -1.1,
+        "width_mm": 1.05,
+        "height_mm": 0.7,
+        "paste": true
+      },
+      {
+        "number": "SH",
+        "x_mm": -3.675,
+        "y_mm": 1.1,
+        "width_mm": 1.05,
+        "height_mm": 0.7,
+        "paste": true
+      },
+      {
+        "number": "SH",
+        "x_mm": 3.675,
+        "y_mm": -1.1,
+        "width_mm": 1.05,
+        "height_mm": 0.7,
+        "paste": true
+      },
+      {
+        "number": "SH",
+        "x_mm": 3.675,
+        "y_mm": 1.1,
+        "width_mm": 1.05,
+        "height_mm": 0.7,
+        "paste": true
+      }
+    ],
+    "SW_SPST_TS-1088-xR020": [
+      {
+        "number": "1",
+        "x_mm": -2.225,
+        "y_mm": 0.0,
+        "width_mm": 1.05,
+        "height_mm": 2.0,
+        "paste": true
+      },
+      {
+        "number": "2",
+        "x_mm": 2.225,
+        "y_mm": 0.0,
+        "width_mm": 1.05,
+        "height_mm": 2.0,
+        "paste": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "net": "VBAT_SENSE",
+    "result": "exhausted"
+  },
+  {
+    "net": "MCU_EN",
+    "result": "exhausted"
+  },
+  {
+    "net": "BOOT_BTN",
+    "result": "exhausted"
+  },
+  {
+    "net": "LORA_SCK",
+    "result": "exhausted"
+  },
+  {
+    "net": "BUZZER_CTRL",
+    "result": "exhausted"
+  }
+]

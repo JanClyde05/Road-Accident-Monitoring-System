@@ -107,6 +107,7 @@ fun AiSuiteScreen(
     val slmResult by aiEngine.slmDiagnosticFlow.collectAsStateWithLifecycle()
     val isSlmRunning by aiEngine.isSlmRunning.collectAsStateWithLifecycle()
     val cognition by aiEngine.cognitionFlow.collectAsStateWithLifecycle()
+    val learnedFaCount by aiEngine.learnedPatternsCountFlow.collectAsStateWithLifecycle()
 
     val isAlarmActive by viewModel.isAlarmActive.collectAsStateWithLifecycle()
     val countdownSeconds by viewModel.alarmCountdownSeconds.collectAsStateWithLifecycle()
@@ -281,11 +282,13 @@ fun AiSuiteScreen(
                                     .background(primaryStateColor, CircleShape)
                             )
                             Text(
-                                text = if (isAlarmActive) "ALARM SOUNDING" else if (isAiEnabled) "RAMS RIDER GUARD ACTIVE" else "GUARD STANDBY",
+                                text = if (isAlarmActive) "ALARM SOUNDING" else if (isAiEnabled) "GUARD ARMED" else "STANDBY",
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Black,
                                 fontFamily = FontFamily.Monospace,
-                                color = primaryStateColor
+                                color = primaryStateColor,
+                                maxLines = 1,
+                                softWrap = false
                             )
                         }
                     }
@@ -470,10 +473,10 @@ fun AiSuiteScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    SpecPill(label = "PARAMETERS", value = "1.8B INT4", color = Color(0xFF38BDF8))
-                    SpecPill(label = "ARCH", value = "GQA+RoPE", color = Color(0xFFA855F7))
-                    SpecPill(label = "CONTEXT", value = "4096 TOK", color = Color(0xFF10B981))
-                    SpecPill(label = "LATENCY", value = "<12ms", color = Color(0xFFF59E0B))
+                    SpecPill(label = "PARAMETERS", value = "1.8B INT4", color = Color(0xFF38BDF8), modifier = Modifier.weight(1f))
+                    SpecPill(label = "ARCH", value = "GQA+RoPE", color = Color(0xFFA855F7), modifier = Modifier.weight(1f))
+                    SpecPill(label = "CONTEXT", value = "4096 TOK", color = Color(0xFF10B981), modifier = Modifier.weight(1f))
+                    SpecPill(label = "LATENCY", value = "<12ms", color = Color(0xFFF59E0B), modifier = Modifier.weight(1f))
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -705,7 +708,7 @@ fun AiSuiteScreen(
                     MovementPill(label = "WALK", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.WALKING, modifier = Modifier.weight(1f))
                     MovementPill(label = "RUN", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.RUNNING, modifier = Modifier.weight(1f))
                     MovementPill(label = "SHAKE", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.PHONE_SHAKING, modifier = Modifier.weight(1f))
-                    MovementPill(label = "BUMP", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.ROAD_POTHOLE || cognition.movement == SensorAiInferenceEngine.MovementCategory.SPEED_BUMP, modifier = Modifier.weight(1f))
+                    MovementPill(label = "BUMP", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.ROAD_POTHOLE || cognition.movement == SensorAiInferenceEngine.MovementCategory.SPEED_BUMP || cognition.movement == SensorAiInferenceEngine.MovementCategory.MOTORCYCLE_WIND_FLUTTER || cognition.movement == SensorAiInferenceEngine.MovementCategory.LEARNED_FALSE_ALARM, modifier = Modifier.weight(1f))
                     MovementPill(label = "CRASH", isActive = cognition.movement == SensorAiInferenceEngine.MovementCategory.SEVERE_CRASH || cognition.movement == SensorAiInferenceEngine.MovementCategory.FALL_AND_SLIDE, isDanger = true, modifier = Modifier.weight(1f))
                 }
             }
@@ -1134,6 +1137,75 @@ fun AiSuiteScreen(
             exit = fadeOut() + shrinkVertically()
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                // Adaptive Mistake Learning & Auto-Compaction Diagnostics Card
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF18181B)),
+                    border = BorderStroke(1.dp, Color(0xFF27272A))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "ADAPTIVE MISTAKE LEARNING & COMPACTION",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color.White
+                            )
+                            Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                color = Color(0xFF10B981).copy(alpha = 0.15f),
+                                border = BorderStroke(1.dp, Color(0xFF10B981))
+                            ) {
+                                Text(
+                                    text = "AUTONOMOUS",
+                                    fontSize = 8.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = Color(0xFF10B981),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "Auto-learns from false-alarm dismissals and compacts offline knowledge.",
+                            fontSize = 10.sp,
+                            color = Color(0xFFA1A1AA)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FeatureChip(label = "LEARNED FA PATTERNS", value = "$learnedFaCount profiles", modifier = Modifier.weight(1f))
+                            FeatureChip(label = "DISTILLED KNOWLEDGE", value = "${voiceCanceler.assistantEngine.getDistilledSampleCount()} Q&A pairs", modifier = Modifier.weight(1f))
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Button(
+                            onClick = {
+                                val (mPruned, vPruned) = viewModel.compactAllLearnedData()
+                                statusMessage = "Compaction complete! Pruned $mPruned motion clusters and $vPruned distilled samples."
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0EA5E9)),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = "AUTO-COMPACT DATA & CACHE",
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.Monospace,
+                                color = Color.Black
+                            )
+                        }
+                    }
+                }
                 // Canonical 14-Parameter IMU Tensor
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -1224,7 +1296,7 @@ fun AiSuiteScreen(
                                     }
                                     benchmarkSummary = summary
                                     isRunningBenchmarks = false
-                                    statusMessage = "Evaluated 10/10 benchmarks: " +
+                                    statusMessage = "Evaluated ${summary.totalTrials}/${summary.totalTrials} benchmarks: " +
                                             String.format(Locale.US, "Acc: %.0f%%, False Alarm Suppr: %.0f%%", summary.accuracyPercent, summary.suppressionRatePercent)
                                 }
                             },
@@ -1234,7 +1306,7 @@ fun AiSuiteScreen(
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Text(
-                                text = if (isRunningBenchmarks) "EVALUATING 10 RESEARCH DATASETS..." else "RUN 10-BENCHMARK VALIDATION",
+                                text = if (isRunningBenchmarks) "EVALUATING RESEARCH DATASETS..." else "RUN BENCHMARK VALIDATION SUITE",
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily.Monospace
@@ -1429,7 +1501,9 @@ private fun MovementPill(
                 fontSize = 8.sp,
                 fontWeight = if (isActive) FontWeight.Black else FontWeight.Bold,
                 fontFamily = FontFamily.Monospace,
-                color = if (isActive) activeColor else Color(0xFF71717A)
+                color = if (isActive) activeColor else Color(0xFF71717A),
+                maxLines = 1,
+                softWrap = false
             )
         }
     }
@@ -1613,7 +1687,9 @@ private fun BentoStatusCard(
                         fontWeight = FontWeight.Black,
                         fontFamily = FontFamily.Monospace,
                         color = statusColor,
-                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
+                        maxLines = 1,
+                        softWrap = false
                     )
                 }
             }
@@ -1806,22 +1882,30 @@ private fun SoundwaveBarAnimation(
 private fun SpecPill(
     label: String,
     value: String,
-    color: Color
+    color: Color,
+    modifier: Modifier = Modifier
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = label,
-            fontSize = 8.sp,
+            fontSize = 7.5.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
-            color = Color(0xFF71717A)
+            color = Color(0xFF71717A),
+            maxLines = 1,
+            softWrap = false
         )
         Text(
             text = value,
-            fontSize = 10.sp,
+            fontSize = 9.5.sp,
             fontWeight = FontWeight.Black,
             fontFamily = FontFamily.Monospace,
-            color = color
+            color = color,
+            maxLines = 1,
+            softWrap = false
         )
     }
 }

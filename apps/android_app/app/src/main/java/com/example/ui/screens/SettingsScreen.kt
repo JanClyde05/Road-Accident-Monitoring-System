@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import java.util.Locale
+
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -173,20 +175,35 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.width(8.dp))
 
+            val rawCat = selectedCategory.lowercase(Locale.US).trim()
+            val (badgeLabel, badgeColor) = when {
+                rawCat.contains("motor") -> Pair("MOTORCYCLE", Color(0xFFF59E0B))
+                rawCat.contains("pedestrian") || rawCat.contains("walk") -> Pair("PEDESTRIAN", Color(0xFF10B981))
+                rawCat.contains("cyclist") || rawCat.contains("bike") -> Pair("CYCLIST", Color(0xFF06B6D4))
+                rawCat.contains("car") || rawCat.contains("drive") -> Pair("CAR DRIVER", Color(0xFF818CF8))
+                else -> Pair(selectedCategory.uppercase(Locale.US), Color(0xFF10B981))
+            }
             Surface(
-              shape = RoundedCornerShape(4.dp),
-              color = Color(0xFF10B981).copy(alpha = 0.15f),
-              border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF10B981).copy(alpha = 0.4f))
+              shape = RoundedCornerShape(6.dp),
+              color = badgeColor.copy(alpha = 0.15f),
+              border = androidx.compose.foundation.BorderStroke(1.dp, badgeColor.copy(alpha = 0.5f))
             ) {
-              Text(
-                text = selectedCategory.uppercase(),
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                fontFamily = FontFamily.Monospace,
-                fontWeight = FontWeight.Bold,
-                fontSize = 10.sp,
-                color = Color(0xFF10B981),
-                softWrap = false
-              )
+              Row(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+              ) {
+                Box(modifier = Modifier.size(5.dp).background(badgeColor, CircleShape))
+                Text(
+                  text = badgeLabel,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Black,
+                  fontSize = 9.5.sp,
+                  color = badgeColor,
+                  maxLines = 1,
+                  softWrap = false
+                )
+              }
             }
           }
 
@@ -206,9 +223,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Pedestrian"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Pedestrian")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Pedestrian"))
+                  Toast.makeText(context, "[OK] Switched to Pedestrian mode", Toast.LENGTH_SHORT).show()
                 }
               )
 
@@ -220,9 +236,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Cyclist"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Cyclist")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Cyclist"))
+                  Toast.makeText(context, "[OK] Switched to Cyclist mode", Toast.LENGTH_SHORT).show()
                 }
               )
             }
@@ -233,15 +248,14 @@ fun SettingsScreen(
             ) {
               CategoryButton(
                 title = "Motorcycle",
-                subtitle = "Motorcycle",
+                subtitle = "Scooter / Big Bike",
                 icon = Icons.Default.TwoWheeler,
                 isSelected = selectedCategory == "Motorcycle Rider",
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Motorcycle Rider"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Motorcycle Rider")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Motorcycle Rider"))
+                  Toast.makeText(context, "[OK] Switched to Motorcycle Rider mode", Toast.LENGTH_SHORT).show()
                 }
               )
 
@@ -253,9 +267,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Tricycle"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Tricycle")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Tricycle"))
+                  Toast.makeText(context, "[OK] Switched to Tricycle mode", Toast.LENGTH_SHORT).show()
                 }
               )
             }
@@ -272,9 +285,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Car Driver"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Car Driver")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Car Driver"))
+                  Toast.makeText(context, "[OK] Switched to Car Driver mode", Toast.LENGTH_SHORT).show()
                 }
               )
 
@@ -286,9 +298,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Van"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Van")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Van"))
+                  Toast.makeText(context, "[OK] Switched to Van mode", Toast.LENGTH_SHORT).show()
                 }
               )
             }
@@ -305,9 +316,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Bus"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Bus")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Bus"))
+                  Toast.makeText(context, "[OK] Switched to Bus mode", Toast.LENGTH_SHORT).show()
                 }
               )
 
@@ -319,9 +329,8 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f),
                 onClick = {
                   selectedCategory = "Truck"
-                  if (riderName.isNotBlank()) {
-                    generatedToken = RiderProfile.generateFriendlyToken(riderName, "Truck")
-                  }
+                  onSaveProfile(riderProfile.copy(userType = "Truck"))
+                  Toast.makeText(context, "[OK] Switched to Truck mode", Toast.LENGTH_SHORT).show()
                 }
               )
             }
@@ -423,7 +432,7 @@ fun SettingsScreen(
             value = driveLink,
             onValueChange = { driveLink = it },
             label = { Text("Google Drive 2x2 Photo URL", fontSize = 12.sp) },
-            placeholder = { Text("Input you GDrive 2x2 Picture here", color = Color(0xFF71717A), fontSize = 12.sp) },
+            placeholder = { Text("Input your Google Drive 2x2 Photo link", color = Color(0xFF71717A), fontSize = 12.sp) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
@@ -642,6 +651,69 @@ fun SettingsScreen(
                 uncheckedTrackColor = Color(0xFF27272A)
               )
             )
+          }
+        }
+      }
+
+      // 4B. Display Over Other Apps (Floating System Overlay)
+      val canDrawOverlays = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        android.provider.Settings.canDrawOverlays(context)
+      } else {
+        true
+      }
+
+      Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+      ) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            Column(modifier = Modifier.weight(1f)) {
+              Text(
+                text = "Display Over Other Apps",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+              )
+              Text(
+                text = "Surface floating voice AI, live transcripts, and emergency crash abort popup over Google Maps, Waze, and other apps.",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF71717A),
+                fontSize = 11.sp
+              )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Surface(
+              shape = RoundedCornerShape(6.dp),
+              color = if (canDrawOverlays) Color(0xFF064E3B) else Color(0xFF1E293B),
+              border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                if (canDrawOverlays) Color(0xFF10B981) else Color(0xFF38BDF8)
+              ),
+              modifier = Modifier.clickable {
+                com.example.ui.overlay.RamsOverlayManager.requestOverlayPermission(context)
+              }
+            ) {
+              Text(
+                text = if (canDrawOverlays) "ACTIVE" else "ENABLE",
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = if (canDrawOverlays) Color(0xFF10B981) else Color(0xFF38BDF8),
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+              )
+            }
           }
         }
       }
@@ -989,6 +1061,140 @@ fun SettingsScreen(
               }
             }
           }
+
+          // B2. Acoustic Voice Personality & Natural Prosody Card
+          var selectedVoiceStyle by remember(riderProfile.ttsVoicePreference) {
+            mutableStateOf(riderProfile.ttsVoicePreference)
+          }
+          Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            color = Color(0xFF09090B),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
+          ) {
+            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+              ) {
+                Column(modifier = Modifier.weight(1f)) {
+                  Text(
+                    text = "Acoustic Voice Personality",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                  )
+                  Text(
+                    text = "High-Fidelity Neural / Natural Non-Robotic Speech",
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily.Monospace,
+                    color = RamsSuccessEmerald
+                  )
+                }
+                Surface(
+                  shape = RoundedCornerShape(4.dp),
+                  color = RamsSuccessEmerald.copy(alpha = 0.15f),
+                  border = androidx.compose.foundation.BorderStroke(1.dp, RamsSuccessEmerald.copy(alpha = 0.4f))
+                ) {
+                  Text(
+                    text = selectedVoiceStyle,
+                    fontSize = 9.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Bold,
+                    color = RamsSuccessEmerald,
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                  )
+                }
+              }
+
+              Text(
+                text = "Select speech timbre and cadence for conversational and safety alerts:",
+                fontSize = 9.5.sp,
+                color = Color(0xFFA1A1AA)
+              )
+
+              // 3-Option Voice Style Selector
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+              ) {
+                listOf(
+                  Triple("NATURAL_FEMALE", "WARM ASSISTANT", "Natural Female"),
+                  Triple("CRISP_MALE", "CRISP NAVIGATOR", "Clear Male"),
+                  Triple("PHILIPPINE", "TAGALOG RESCUER", "PH / Filipino"),
+                  Triple("JAPANESE", "TOKYO NAVIGATOR", "Japanese")
+                ).forEach { (key, label, desc) ->
+                  val isSelected = selectedVoiceStyle == key
+                  Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = if (isSelected) RamsSuccessEmerald.copy(alpha = 0.15f) else Color(0xFF18181B),
+                    border = androidx.compose.foundation.BorderStroke(
+                      1.dp,
+                      if (isSelected) RamsSuccessEmerald else Color(0xFF27272A)
+                    ),
+                    modifier = Modifier
+                      .weight(1f)
+                      .clickable {
+                        selectedVoiceStyle = key
+                        voiceCanceler?.setVoicePreference(key)
+                        onSaveProfile(riderProfile.copy(ttsVoicePreference = key))
+                        Toast.makeText(context, "[OK] Voice set to $label", Toast.LENGTH_SHORT).show()
+                      }
+                  ) {
+                    Column(
+                      modifier = Modifier.padding(8.dp),
+                      horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                      Text(
+                        text = label,
+                        fontSize = 8.5.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Black,
+                        color = if (isSelected) RamsSuccessEmerald else Color.White,
+                        maxLines = 1
+                      )
+                      Text(
+                        text = desc,
+                        fontSize = 7.5.sp,
+                        color = Color(0xFF71717A),
+                        maxLines = 1
+                      )
+                    }
+                  }
+                }
+              }
+
+              // Test Voice Audio Button
+              Button(
+                onClick = {
+                  voiceCanceler?.setVoicePreference(selectedVoiceStyle)
+                  val sampleText = when (selectedVoiceStyle) {
+                    "JAPANESE" -> "RAMS システム準備完了。安全運転をサポートします。"
+                    "PHILIPPINE" -> "Kumusta, Jan Clyde. Handa na ang RAMS safety guard para sa biyahe."
+                    "CRISP_MALE" -> "RAMS Danger Monitoring System ready. 50 Hertz safety telemetry active."
+                    else -> "RAMS Emergency and Hazard Monitoring System ready. Safety guard active."
+                  }
+                  voiceCanceler?.speak(sampleText)
+                },
+                modifier = Modifier.fillMaxWidth().height(36.dp),
+                shape = RoundedCornerShape(6.dp),
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = Color(0xFF18181B),
+                  contentColor = RamsSuccessEmerald
+                ),
+                border = androidx.compose.foundation.BorderStroke(1.dp, RamsSuccessEmerald.copy(alpha = 0.4f))
+              ) {
+                Text(
+                  text = "TEST VOICE AUDIO",
+                  fontSize = 10.sp,
+                  fontFamily = FontFamily.Monospace,
+                  fontWeight = FontWeight.Bold
+                )
+              }
+            }
+          }
+
 
           // C. RAMS Knowledge Distillation Cache (Gemini-teaches-RAMS)
           val knowledgeCount = voiceCanceler?.assistantEngine?.getDistilledSampleCount() ?: 0
@@ -1606,8 +1812,8 @@ fun SettingsScreen(
         }
       }
 
-      // Bottom breathing room
-      Spacer(modifier = Modifier.height(16.dp))
+      // Bottom breathing room to scroll cleanly above floating Voice AI pill
+      Spacer(modifier = Modifier.height(88.dp))
     }
 
     // Credits Overlay
@@ -1886,11 +2092,19 @@ private fun CategoryButton(
   icon: ImageVector,
   isSelected: Boolean,
   modifier: Modifier = Modifier,
+  activeColor: Color = when {
+    title.contains("Motor", ignoreCase = true) -> Color(0xFFF59E0B)
+    title.contains("Pedestrian", ignoreCase = true) || title.contains("Walk", ignoreCase = true) -> Color(0xFF10B981)
+    title.contains("Cyclist", ignoreCase = true) || title.contains("Bike", ignoreCase = true) -> Color(0xFF06B6D4)
+    title.contains("Car", ignoreCase = true) -> Color(0xFF818CF8)
+    title.contains("Tricycle", ignoreCase = true) -> Color(0xFFA855F7)
+    else -> Color(0xFF10B981)
+  },
   onClick: () -> Unit
 ) {
-  val borderColor = if (isSelected) Color(0xFF10B981) else Color(0xFF27272A)
-  val bgColor = if (isSelected) Color(0xFF10B981).copy(alpha = 0.12f) else Color(0xFF09090B)
-  val iconColor = if (isSelected) Color(0xFF10B981) else Color(0xFF71717A)
+  val borderColor = if (isSelected) activeColor else Color(0xFF27272A)
+  val bgColor = if (isSelected) activeColor.copy(alpha = 0.12f) else Color(0xFF09090B)
+  val iconColor = if (isSelected) activeColor else Color(0xFF71717A)
 
   Surface(
     modifier = modifier
@@ -1901,28 +2115,32 @@ private fun CategoryButton(
     border = androidx.compose.foundation.BorderStroke(1.dp, borderColor)
   ) {
     Row(
-      modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
+      modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.spacedBy(10.dp)
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       Icon(
         imageVector = icon,
         contentDescription = null,
         tint = iconColor,
-        modifier = Modifier.size(20.dp)
+        modifier = Modifier.size(18.dp)
       )
-      Column {
+      Column(modifier = Modifier.weight(1f, fill = false)) {
         Text(
           text = title,
-          fontSize = 12.sp,
+          fontSize = 11.sp,
           fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-          color = if (isSelected) Color.White else Color(0xFFA1A1AA)
+          color = if (isSelected) Color.White else Color(0xFFA1A1AA),
+          maxLines = 1,
+          softWrap = false
         )
         Text(
           text = subtitle,
-          fontSize = 9.sp,
+          fontSize = 8.5.sp,
           fontFamily = FontFamily.Monospace,
-          color = Color(0xFF71717A)
+          color = if (isSelected) activeColor.copy(alpha = 0.85f) else Color(0xFF71717A),
+          maxLines = 1,
+          softWrap = false
         )
       }
     }

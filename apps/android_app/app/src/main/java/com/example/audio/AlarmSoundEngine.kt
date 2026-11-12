@@ -44,7 +44,7 @@ class AlarmSoundEngine(private val context: Context) {
         private const val DASH_DURATION_MS = 420L
         private const val ELEMENT_GAP_MS = 100L
         private const val LETTER_GAP_MS = 220L
-        private const val SEQUENCE_REPEAT_PAUSE_MS = 1100L // Acoustic quiet window for voice cancellation detection
+        private const val SEQUENCE_REPEAT_PAUSE_MS = 1600L // Acoustic quiet window for voice cancellation detection
 
         // Morse SOS vibration sequence: [delay, on, off, on, off, ...]
         val SOS_VIBRATION_PATTERN = longArrayOf(
@@ -66,6 +66,10 @@ class AlarmSoundEngine(private val context: Context) {
     private var sosLoopJob: Job? = null
     @Volatile
     private var isAlarmActive = false
+    @Volatile
+    private var isCountdownPhase = true
+    @Volatile
+    private var currentVolume = 0.20f
 
     private val vibrator: Vibrator? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -149,7 +153,12 @@ class AlarmSoundEngine(private val context: Context) {
                     minBufferSize * 2,
                     AudioTrack.MODE_STREAM,
                     AudioManager.AUDIO_SESSION_ID_GENERATE
-                ).apply { play() }
+                ).apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setVolume(currentVolume)
+                    }
+                    play()
+                }
 
                 val dotPcm = generateSinePcm(DOT_DURATION_MS)
                 val dashPcm = generateSinePcm(DASH_DURATION_MS)
@@ -223,10 +232,13 @@ class AlarmSoundEngine(private val context: Context) {
 
     /**
      * Dynamically ducks siren volume during voice speech detection to prevent mic clipping.
+     * During the 10-second pre-alarm countdown, default volume is a non-deafening 0.20f,
+     * and ducks down to 0.08f during voice listening so the user can easily speak "cancel alarm".
      */
     fun duckVolume(duck: Boolean) {
         try {
-            val vol = if (duck) 0.22f else 1.0f
+            val vol = if (duck) 0.08f else (if (isCountdownPhase) 0.20f else 1.0f)
+            currentVolume = vol
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 audioTrack?.setVolume(vol)
             }
@@ -234,22 +246,31 @@ class AlarmSoundEngine(private val context: Context) {
     }
 
     /**
+     * Sets whether the alarm is in pre-alarm countdown mode (warning level) or post-countdown full dispatch.
+     */
+    fun setCountdownPhase(countdown: Boolean) {
+        isCountdownPhase = countdown
+        duckVolume(false)
+    }
+
+    /**
      * Immediately silences the SOS distress beacon, stops vibration, and releases audio resources.
      */
     fun stopEmergencyAlarm() {
-        if (!isAlarmActive) return
         Log.i(TAG, "Stopping SOS distress beacon.")
         isAlarmActive = false
+        isCountdownPhase = true
+        currentVolume = 0.20f
 
         sosLoopJob?.cancel()
         sosLoopJob = null
 
         try {
             audioTrack?.let { track ->
-                track.pause()
-                track.flush()
-                track.stop()
-                track.release()
+                try { track.pause() } catch (_: Exception) {}
+                try { track.flush() } catch (_: Exception) {}
+                try { track.stop() } catch (_: Exception) {}
+                try { track.release() } catch (_: Exception) {}
             }
         } catch (_: Exception) {}
         audioTrack = null

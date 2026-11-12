@@ -117,8 +117,10 @@ class Esp32SyncEngine(
     reconnectLoopJob?.cancel()
     reconnectLoopJob = scope.launch(Dispatchers.IO) {
       var attempt = 1
-      while (!isManualDisconnect && pendingBleReconnectDevice != null && !_syncStatus.value.isSyncActive) {
-        val delayMs = if (attempt <= 2) 2000L else if (attempt <= 8) 3500L else 5000L
+      val maxAttempts = 12
+      while (!isManualDisconnect && pendingBleReconnectDevice != null && !_syncStatus.value.isSyncActive && attempt <= maxAttempts) {
+        // Exponential backoff: 3s, 5s, 8s, 13s, 20s, 30s (capped)
+        val delayMs = minOf(3000L * attempt, 30_000L)
         _syncStatus.value = _syncStatus.value.copy(
           isConnecting = true,
           statusMessage = "Reconnecting to Safety Wearable (Attempt $attempt)..."
@@ -137,6 +139,13 @@ class Esp32SyncEngine(
           Log.w("RAMS_BLE", "Auto-reconnect attempt $attempt failed: ${e.message}")
         }
         attempt++
+      }
+      // Entered low-power idle after exhausting reconnect attempts
+      if (attempt > maxAttempts && !_syncStatus.value.isSyncActive) {
+        _syncStatus.value = _syncStatus.value.copy(
+          isConnecting = false,
+          statusMessage = "Wearable reconnect paused after $maxAttempts attempts. Tap Connect to retry."
+        )
       }
     }
   }

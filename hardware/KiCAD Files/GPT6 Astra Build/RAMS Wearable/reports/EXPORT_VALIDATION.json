@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-12",
+  "status": "export structure/geometry checks passed; supplier and physical gates remain open",
+  "board_sha256": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
+  "gerber_file_functions": {
+    ".gtl": "Copper,L1,Top",
+    ".g1": "Copper,L2,Inr",
+    ".g2": "Copper,L3,Inr",
+    ".gbl": "Copper,L4,Bot",
+    ".gts": "Soldermask,Top",
+    ".gbs": "Soldermask,Bot",
+    ".gto": "Legend,Top",
+    ".gbo": "Legend,Bot",
+    ".gm1": "Profile,NP"
+  },
+  "drills": {
+    "plated": 185,
+    "nonplated": 4,
+    "units": "mm",
+    "plated_slots": 4
+  },
+  "top_stencil_flashes": {
+    "normal": 285,
+    "first_power": 279,
+    "omitted": "2 R30 + 4 LED1 pads; BZ1/Ra02 absent in both"
+  },
+  "pdf_checks": {
+    "assembly_bottom_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "assembly_bottom_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "assembly_top_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "assembly_top_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "pad_map_bottom_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "pad_map_bottom_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "pad_map_top_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "pad_map_top_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "schematic.pdf": {
+      "pages": 4
+    }
+  }
+}

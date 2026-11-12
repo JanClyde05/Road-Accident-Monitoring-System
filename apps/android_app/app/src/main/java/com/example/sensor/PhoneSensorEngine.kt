@@ -92,6 +92,7 @@ class PhoneSensorEngine(
   private val gravityMatrix = FloatArray(9)
   private val magneticMatrix = FloatArray(9)
   private val rotationMatrix = FloatArray(9)
+  private val remappedMatrix = FloatArray(9)
   private val orientationAngles = FloatArray(3)
 
   private var hasGravity = false
@@ -204,28 +205,28 @@ class PhoneSensorEngine(
         }
         bestLoc?.let { onLocationChanged(it) }
 
-        // Continuous high-precision updates (500ms, 0 meters) from GPS, Network, and Passive providers
+        // Battery-optimized location updates: GPS 1.5s/1.5m, Network 3s/5m, Passive 5s/5m
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
           locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
-            500L,
-            0.0f,
+            1500L,
+            1.5f,
             this
           )
         }
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
           locationManager.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER,
-            1000L,
-            0.0f,
+            3000L,
+            5.0f,
             this
           )
         }
         if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
           locationManager.requestLocationUpdates(
             LocationManager.PASSIVE_PROVIDER,
-            500L,
-            0.0f,
+            5000L,
+            5.0f,
             this
           )
         }
@@ -278,7 +279,10 @@ class PhoneSensorEngine(
         )
         _phoneImuState.value = updatedImu
 
-        if (isShock) {
+        val curSpeed = _phoneGpsState.value.speedKmh
+        val isUprightCruising = curSpeed >= 25f && kotlin.math.abs(currentRoll) < 40f
+        val shouldTriggerShock = isShock && (!isUprightCruising || aMag >= 6.0f)
+        if (shouldTriggerShock) {
           scope.launch {
             _crashTriggerFlow.emit(Pair(_phoneGpsState.value, updatedImu))
           }
@@ -365,14 +369,16 @@ class PhoneSensorEngine(
         magneticReading
       )
       if (success) {
-        val east = rotationMatrix[1].toDouble()
-        val north = rotationMatrix[4].toDouble()
-        val azimuth = if (east != 0.0 || north != 0.0) {
-          ((Math.toDegrees(atan2(east, north)) + 360.0) % 360.0).toFloat()
-        } else {
-          SensorManager.getOrientation(rotationMatrix, orientationAngles)
-          ((orientationAngles[0] * RAD_TO_DEG) + 360f) % 360f
-        }
+        // Remap coordinate system for handheld portrait usage (X=East, Z=North/Top of phone)
+        SensorManager.remapCoordinateSystem(
+          rotationMatrix,
+          SensorManager.AXIS_X,
+          SensorManager.AXIS_Z,
+          remappedMatrix
+        )
+        SensorManager.getOrientation(remappedMatrix, orientationAngles)
+        val rawAzimuth = ((orientationAngles[0] * RAD_TO_DEG) + 360f) % 360f
+        val filteredYaw = filterAzimuth(rawAzimuth)
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles)
         val rawPitch = orientationAngles[1] * RAD_TO_DEG
@@ -383,7 +389,7 @@ class PhoneSensorEngine(
         _phoneImuState.value = _phoneImuState.value.copy(
           pitchDegrees = smoothedPitch,
           rollDegrees = smoothedRoll,
-          yawDegrees = azimuth
+          yawDegrees = filteredYaw
         )
       }
     }

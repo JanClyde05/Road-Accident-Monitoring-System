@@ -1,0 +1,38 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "bbe7e63cc6ee61002443d516ae00c30f54441e1b45b0066fc73d8dbef6aab148"
+  },
+  {
+    "path": "docs/Parts List I Currently Have/product_list_expense_breakdown.md",
+    "sha256": "af51a775be9ac2e24ea7a55daf9ca818fa834fd529b6816cb4fcb6ac6821851d"
+  },
+  {
+    "path": "firmware/wearable_withApp/config.h",
+    "sha256": "bda046bf29b8215c50c57c50bbd978f051ce070169a66496bbbe0d14e78fc384"
+  },
+  {
+    "path": "firmware/wearable_withApp/battery.h",
+    "sha256": "593c1f0ea06be9033378d8414af888e7b22d8cc264e1773375b7366f0ca7287b"
+  },
+  {
+    "path": "firmware/wearable_withApp/battery.cpp",
+    "sha256": "c9d1119ceac069851653a9b988cc3663d722bd7554cc4207661b5e766239ac45"
+  },
+  {
+    "path": "firmware/shared/protocol.h",
+    "sha256": "1698e3ff5acd3209841d6b8cf69e8eef85ec7bed40c1c698464210f02863aaaa"
+  },
+  {
+    "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pcb",
+    "sha256": "cccc6209cfafdab1f8c6d15217eb72f07c533188559bad071022571ead0909b4"
+  },
+  {
+    "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_sch",
+    "sha256": "3ddf52db5ac92523645c3d15b23b8716f3e7580660e0a7f1cd5ffea082acef26"
+  },
+  {
+    "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/1_GERBERS_RAMS_PCB.zip",
+    "sha256": "0c74cf696dfba11d9b9548588514f9f0b6437286112295032579ac4183284c24"
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "revision": "J2 LDO engineering",
+  "review": "2026-11-09 LED2020 / USB channel swap / 330R update",
+  "independently_exported_with": "KiCad CLI 10.0.6",
+  "connected_pin_count": 228,
+  "core_connected_pin_count": 221,
+  "mismatches": [],
+  "unexpected_nc_connections": [],
+  "virtual_power_flags_not_exported": [
+    "#FLG001",
+    "#FLG002",
+    "#FLG003",
+    "#FLG004",
+    "#FLG005",
+    "#FLG006",
+    "#FLG007",
+    "#FLG008"
+  ],
+  "LED1": {
+    "library": {
+      "lib": "LED",
+      "part": "WS2812B-2020",
+      "description": "RGB LED with integrated controller, 2.0 x 2.0 mm, 12 mA"
+    },
+    "value": "WS2812B-2020 STOCK VERIFY",
+    "footprint": "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm",
+    "dnp": true,
+    "pins": {
+      "1": "unconnected-(LED1-DOUT-Pad1)",
+      "2": "GND",
+      "3": "NEO_DIN",
+      "4": "+3V3"
+    }
+  },
+  "hashes": {
+    "circuit_spec.json": "2818413649f66937b466412c084cfa0ebc104ceb87c61187143d99bd9bec48ec",
+    "evidence\\j2_led2020_independent_netlist.xml": "a80b92a7654fdcd8ffad95eb686fff391161f7f7df3d9419e0859dfa8eac0eee",
+    "RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
+    "RAMS_JLC_S3_io.kicad_sch": "a7fbe50d9175114aa6ba646f27d04c773ba948a14aaea300a4f1bb513d9c1e9c",
+    "RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
+    "RAMS_JLC_S3_power.kicad_sch": "c9c86b7e9cd91dc8a2645bff0bc0e2c0cfd4b25cd119be44146e39d26c00a4fe"
+  }
+}

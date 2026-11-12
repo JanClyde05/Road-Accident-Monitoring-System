@@ -1,0 +1,265 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-11T13:51:25",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RST' on F.Silkscreen",
+                    "pos": {
+                        "x": 118.9,
+                        "y": 105.1
+                    },
+                    "uuid": "409d4cfd-19c7-463e-8c12-c9aa30a2d54c"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.6000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RST' on F.Silkscreen",
+                    "pos": {
+                        "x": 118.9,
+                        "y": 105.1
+                    },
+                    "uuid": "409d4cfd-19c7-463e-8c12-c9aa30a2d54c"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'BOOT' on F.Silkscreen",
+                    "pos": {
+                        "x": 125.3,
+                        "y": 105.1
+                    },
+                    "uuid": "31a7ad21-ae60-4a02-8804-05e087ae2359"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.6000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'BOOT' on F.Silkscreen",
+                    "pos": {
+                        "x": 125.3,
+                        "y": 105.1
+                    },
+                    "uuid": "31a7ad21-ae60-4a02-8804-05e087ae2359"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text '3V3' on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 112.3
+                    },
+                    "uuid": "abe618a6-00ec-40f6-a91f-6b1efd8938f8"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.6000 mm)",
+            "items": [
+                {
+                    "description": "PCB text '3V3' on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 112.3
+                    },
+                    "uuid": "abe618a6-00ec-40f6-a91f-6b1efd8938f8"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'BAT +  -' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.3,
+                        "y": 131.4
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.8000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'BAT +  -' on F.Silkscreen",
+                    "pos": {
+                        "x": 114.3,
+                        "y": 131.4
+                    },
+                    "uuid": "edd436c2-789d-4f99-92b1-7898bf0aaa15"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RAMS J2' on F.Silkscreen",
+                    "pos": {
+                        "x": 131.0,
+                        "y": 130.9
+                    },
+                    "uuid": "5634f282-27f4-4265-a502-3235d511799a"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.8000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RAMS J2' on F.Silkscreen",
+                    "pos": {
+                        "x": 131.0,
+                        "y": 130.9
+                    },
+                    "uuid": "5634f282-27f4-4265-a502-3235d511799a"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Text thickness out of range (board setup constraints silk text thickness min thickness 0.1500 mm; actual 0.1000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RA-02 433MHz' on B.Silkscreen",
+                    "pos": {
+                        "x": 129.5,
+                        "y": 123.1
+                    },
+                    "uuid": "d6ed1781-81c1-4cd3-8849-dfd629df4bcd"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_thickness"
+        },
+        {
+            "description": "Text height out of range (board setup constraints silk text height min height 1.0000 mm; actual 0.8000 mm)",
+            "items": [
+                {
+                    "description": "PCB text 'RA-02 433MHz' on B.Silkscreen",
+                    "pos": {
+                        "x": 129.5,
+                        "y": 123.1
+                    },
+                    "uuid": "d6ed1781-81c1-4cd3-8849-dfd629df4bcd"
+                }
+            ],
+            "severity": "warning",
+            "type": "text_height"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0290 mm)",
+            "items": [
+                {
+                    "description": "Footprint text of BZ1 (+)",
+                    "pos": {
+                        "x": 129.8,
+                        "y": 122.8
+                    },
+                    "uuid": "65d27113-5b6f-459d-9ac6-e15b1c1c49cd"
+                },
+                {
+                    "description": "Segment of BZ1 on F.Silkscreen",
+                    "pos": {
+                        "x": 130.35,
+                        "y": 123.4
+                    },
+                    "uuid": "ca2f92c4-7feb-473d-97b4-a9e36d043e3f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.1070 mm)",
+            "items": [
+                {
+                    "description": "PCB text '3V3' on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 112.3
+                    },
+                    "uuid": "abe618a6-00ec-40f6-a91f-6b1efd8938f8"
+                },
+                {
+                    "description": "Circle of TP2 on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 111.2
+                    },
+                    "uuid": "dc0de96a-f4b2-444f-ab42-6113e8c65dc2"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0776 mm)",
+            "items": [
+                {
+                    "description": "Circle of TP3 on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 113.4
+                    },
+                    "uuid": "6e6f10ce-d5e9-4ac7-8c58-dcb7ea0f944b"
+                },
+                {
+                    "description": "PCB text '3V3' on F.Silkscreen",
+                    "pos": {
+                        "x": 139.8,
+                        "y": 112.3
+                    },
+                    "uuid": "abe618a6-00ec-40f6-a91f-6b1efd8938f8"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        }
+    ]
+}

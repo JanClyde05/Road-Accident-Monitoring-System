@@ -1,0 +1,24 @@
+{
+  "revision": "J2 LDO engineering",
+  "spec_sha256": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+  "footprint_positions": 90,
+  "copper_test_pads": 8,
+  "component_positions": 82,
+  "initial_fit": 80,
+  "dnp": [
+    "R30",
+    "LED1"
+  ],
+  "files": {
+    "BOM_PROCUREMENT.csv": "22563a159078a9ae9e84b6c6c281f38774bc16cbdc51a02b9f43cafb32df8a13",
+    "PARTS_AND_FIRMWARE.md": "929092e19febdba3af2b755e446955431a48fe6a4677414441ce0be75a462f22",
+    "ASSEMBLY_AND_BRINGUP.md": "32b82136e3464aa9194db172052fdad0e594702d367e2702f96fbb8657ae0765"
+  },
+  "preserved_files": {
+    "BOM_PROCUREMENT.csv": "62060fc9f43282692177af3b02bb43602b2376f35af055bd2936404376cf9b20",
+    "ASSEMBLY_AND_BRINGUP.md": "8dc7261c02a323daa6deadfad229ec9a1c5c0726447672b7b72ad7f4177ba1f3",
+    "PARTS_AND_FIRMWARE.md": "745ad555103a47d02d20227414ec298a90f3b7e95d09fd877d3b19cd7dbcaa57"
+  },
+  "normal_fit_after_qualification": 82,
+  "refresh_note": "Raw LED power revision: Q5 plus SN74LVC1T45, dedicated C34/C35 bypass; no CAD/scripts modified. Earlier evidence/update_j2_parts_docs.py targets prior snapshot and must not regenerate this current BOM without review."
+}

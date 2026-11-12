@@ -1,0 +1,1 @@
+(sym_lib_table (lib (name "RAMS_JLC") (type "KiCad") (uri "${KIPRJMOD}/lib/RAMS_JLC.kicad_sym") (options "") (descr "Verified selected devices")))

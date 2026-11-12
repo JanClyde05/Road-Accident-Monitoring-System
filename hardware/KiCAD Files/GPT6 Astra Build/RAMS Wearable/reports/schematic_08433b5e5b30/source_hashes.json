@@ -1,0 +1,10 @@
+{
+  "RAMS_JLC_S3.kicad_sch": "503ff3066c262ae0b47fea6f39d55c816b818de3b45fa62156eb1112bbb233ac",
+  "RAMS_JLC_S3_io.kicad_sch": "590cfda9034b5823b4022828fb69f223a5df1121bbbb89a43361d85b0c9d8bdf",
+  "RAMS_JLC_S3_mcu.kicad_sch": "bac443c17f350398bdfc2c629fdf5c6613b2c2ec55cbbd8894a97905fdf1ca8a",
+  "RAMS_JLC_S3_power.kicad_sch": "182c72f37c3f2770c66bcbd28824c080b12c942f37e13bc1c3a3c5fe265a8771",
+  "RAMS_JLC_S3.kicad_pro": "6cff8feee93924d5c6e5b96697971dfe1c2df9878620081adfad5d7d0a67d9de",
+  "schematic_positions.json": "4ff09b36d4a4587dd1526cce5dd234b3f43ca78e428b28c7bc4aa9363debad3a",
+  "circuit_spec.json": "22ba6cd0f81a4863abdd75595a044274076d4f2def3b1f115a6af1126712e7d0",
+  "lib\\RAMS_JLC.kicad_sym": "0c1f71b6e0d3982bfe0ac38721d82f39619b78ea9c699cc55c20b4c824f0d7d1"
+}

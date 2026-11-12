@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-11T14:04:25",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [CC1] on F.Cu, length 3.9228 mm",
+                    "pos": {
+                        "x": 113.1435,
+                        "y": 123.1535
+                    },
+                    "uuid": "8401de07-8bef-4f2d-8c12-b1ac5ebf9aff"
+                },
+                {
+                    "description": "Track [CC1] on F.Cu, length 0.9861 mm",
+                    "pos": {
+                        "x": 105.25,
+                        "y": 126.3061
+                    },
+                    "uuid": "ea54659d-2cbe-4f75-9c6f-3e2852205fd1"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 105.25,
+                        "y": 126.3061
+                    },
+                    "uuid": "25dbcc6a-67b6-46a5-bf26-f5a63c4be039"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [CC1] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 109.2207,
+                        "y": 123.1535
+                    },
+                    "uuid": "d6bb0655-4724-4194-9650-d3d2ec442c60"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        }
+    ]
+}

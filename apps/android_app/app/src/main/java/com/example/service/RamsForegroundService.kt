@@ -10,8 +10,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.MainActivity
+import com.example.ui.overlay.RamsOverlayManager
 
 /**
  * RAMS Always-On Rider Protection Foreground Service.
@@ -25,6 +27,7 @@ import com.example.MainActivity
 class RamsForegroundService : Service() {
 
     companion object {
+        private const val TAG = "RamsForegroundService"
         const val CHANNEL_ID = "rams_safety_monitoring_channel"
         const val NOTIFICATION_ID = 1001
         const val ACTION_START = "ACTION_START_PROTECTION"
@@ -33,6 +36,9 @@ class RamsForegroundService : Service() {
         @Volatile
         var isServiceRunning = false
             private set
+
+        @Volatile
+        var activeVoiceCanceler: com.example.ai.VoiceAlarmCanceler? = null
 
         fun start(context: Context) {
             val intent = Intent(context, RamsForegroundService::class.java).apply {
@@ -50,6 +56,50 @@ class RamsForegroundService : Service() {
                 action = ACTION_STOP
             }
             context.stopService(intent)
+        }
+
+        /**
+         * Posts a high-priority heads-up notification when voice assistant is activated
+         * while overlay permission (SYSTEM_ALERT_WINDOW) is not yet granted.
+         */
+        fun postHeadsUpNotification(context: Context, title: String, content: String) {
+            try {
+                val openIntent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra("OPEN_VOICE_BUBBLE", true)
+                }
+                val pendingOpen = PendingIntent.getActivity(
+                    context,
+                    101,
+                    openIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val overlayIntent = Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                val pendingOverlay = PendingIntent.getActivity(
+                    context,
+                    102,
+                    overlayIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val notif = NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setSmallIcon(android.R.drawable.ic_lock_idle_charging)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingOpen)
+                    .setAutoCancel(true)
+                    .addAction(android.R.drawable.ic_menu_help, "ALLOW POPUP", pendingOverlay)
+                    .build()
+
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                manager?.notify(2002, notif)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to post assistant heads up: ${e.message}")
+            }
         }
     }
 
@@ -142,6 +192,9 @@ class RamsForegroundService : Service() {
         super.onDestroy()
         isServiceRunning = false
         try {
+            RamsOverlayManager.dismiss()
+        } catch (_: Exception) {}
+        try {
             if (wakeLock?.isHeld == true) {
                 wakeLock?.release()
             }
@@ -150,4 +203,3 @@ class RamsForegroundService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 }
-

@@ -337,6 +337,9 @@ fun TelemetryScreen(
                 }
             }
         }
+
+        // Bottom breathing room to scroll above floating Voice AI button
+        Spacer(modifier = Modifier.height(88.dp))
     }
 }
 
@@ -358,14 +361,18 @@ private fun MetricCell(
                 fontSize = 8.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Monospace,
-                color = Color(0xFF71717A)
+                color = Color(0xFF71717A),
+                maxLines = 1,
+                softWrap = false
             )
             Text(
                 text = value,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Black,
                 fontFamily = FontFamily.Monospace,
-                color = Color.White
+                color = Color.White,
+                maxLines = 1,
+                softWrap = false
             )
         }
     }

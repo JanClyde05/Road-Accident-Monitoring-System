@@ -1,0 +1,30 @@
+{
+  "board_sha256": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
+  "note": "Native layer plots; SVG canvas padded 2mm. 3D models incomplete/illustrative, not physical fit evidence.",
+  "files": {
+    "assembly_bottom.png": "b829b40d409b4259f4c0d37dd8185a2480e69b60d621b7352c735110c84b4f88",
+    "assembly_bottom.svg": "d9182b54f54d76e15708e9eecb5445c0545d943759b4fad6cb23be0d220e572b",
+    "assembly_top.png": "6b34bffa8650d35d7a0f317f436bca053356e658fa0356e6a8bbfa65e0032dd4",
+    "assembly_top.svg": "b09ab78a8ec752a7d64ce863f11ad219b3df36f04ac10ced84590506c1cc0e28",
+    "bottom_3d.png": "15664eac5e0d2b490ea9929d94b263bb2deda831e212b7703c890d901fd0d07b",
+    "bottom_copper.png": "d331373e781dff49276e8b52bbe1c910c2239e28a5157d787f2b5b5b2b81257f",
+    "bottom_copper.svg": "37bb31f261690cfa4c70d1534a7f09dcc6031a5403da5a1eae691a76d518ac61",
+    "bottom_mask.png": "75415af934f33aa30c40273557c6e5a9f32778c1b0bc5ec29bc435df47202362",
+    "bottom_mask.svg": "6757fbee8c9cabc88311ad1b19977319d417502d16f3364216c55c02e713d0e4",
+    "bottom_silk.png": "591cbdbcb01c02a415559e4147c51f463fe8230d1bfa0cbc0e6464f65e313d6a",
+    "bottom_silk.svg": "15de416234ea877fd6f88c038da31ec33c4bd18095b56f6f22b42e1f1c289f8b",
+    "ground_L2.png": "4e2904f34a34d2f83b43f156ebacf213a4ac2cf7310c8ebbd721506a1c582126",
+    "ground_L2.svg": "f3b66d7012846989d27181bc1298b0c47dbee48f3689c720c0103f37b1affc78",
+    "signal_L3.png": "90af54cb7b2ed14ebf4466671146edea741898a847a67f9e6d25f791f78ede33",
+    "signal_L3.svg": "2834b530ed196e5c7b272e83f415bea1831e15d3235b36ab9d25cfc0a878d12e",
+    "top_3d.png": "abea939817ebe2f02c5cae79ba9ded6eb9e57c35abf37a8d297a2b3be97fe775",
+    "top_copper.png": "44f2406e90ef99ac576cf111ea5acca28f2036a09388a453528185cec6212632",
+    "top_copper.svg": "76bd181736291083214512e5b41e5dcd3372e4af1a814ef265370deabdc85add",
+    "top_mask.png": "daf2df334e516d4ab91431832366e291fdd7c2d25092548179e0137c3106c367",
+    "top_mask.svg": "85db94bcf4f113dfdd31076fd4165c19952485ccac269dcd898fd7156cc3eeeb",
+    "top_paste.png": "08d1966fed7d9ef10e6f5e9998e52041c17b49249508b819d705d88db6a490a7",
+    "top_paste.svg": "cd8d61063569be2ba044f28ab27efa48762e8bf0be77a462c282cbcc4c1283d1",
+    "top_silk.png": "f3d121aae1b8c840910ef341c36a98ef23fa67d81d0ac9e946b3b6c55485798e",
+    "top_silk.svg": "8f0385859c2b6bba6b4c247d1d8d7881cece84058551d8cadbf570a81553d8f9"
+  }
+}

@@ -1,0 +1,540 @@
+
+--- PAGE 1 ---
+深圳市首韩科技有限公司
+SHENZHEN SHOUHAN TECHNOLOGY CO.,LTD
+Tel: 0755-27597601 Fax: 0755-27597491
+承
+SPECIFICATION
+认
+书
+客
+户Customer：
+产品名称Project：
+规格型号 PartNo：
+贵公司承认印 Approal slgnatures
+料 号/Part No.
+签
+章/Signatures
+日期 Date:
+拟制/Drawn 李春风
+审核/Check 刘学
+批准/Approved 罗孝金
+1
+FOR APPROVAL
+拨动开关
+MSK12C02
+
+--- PAGE 2 ---
+Page
+Version
+MODEL Date
+1、 概述
+    GENERAL
+1/8
+A/0
+2015.03.26
+1.1 适用范围
+    APPLICATION
+    此规格书适用于机械式拨动开关的相关要求
+    This specification is applied to the requirements for TACTILE SWITCH (MECHANICAL CONTACT)
+1.2 工作温度范围
+    Operating Temperature Range
+   －20℃～70℃(在标准大气压、标准湿度条件下)
+   -20℃～70℃（Normal humidity, normal air pressure）
+1.3 贮藏温度范围
+    Storage Temperature Range
+    -30℃～80℃(在标准大气压、标准湿度条件下)
+    -30℃～80℃（Normal humidity, normal air pressure）
+1.4  测试条件
+     Test Conditions
+     在没有其它特定的条件下，应该在以下的条件下进行测试和测量：
+     Unless otherwise specified, tests and measurement shall be made in
+     the following standard conditions:
+     常温…………………………………5℃～35℃
+     Normal temperature………………5℃～35℃
+     标准湿度……………………………相对湿度25%～85%
+     Normal humidity…………………relative humidity 25%～85%
+     标准大气压…………………………86KPa～106Kpa
+     Normal air pressure…………………86Kpa～106Kpa
+     在制造过程中，测试和测量应该在以下的条件下进行：
+     If any doubt arise from the judgment, tests shall be conducted
+     at the following conditions:
+     温度…………………………………20℃±2℃
+     Temperature………………………20℃±2℃
+     相对湿度……………………………65%±5%
+     Relative humidity………………65%±5%
+     环境气压…………………………86KPa～106Kpa
+     Air pressure…………………………86KPa～106Kpa
+SPECIFICATION
+MSK12C02
+
+--- PAGE 3 ---
+Page
+Version
+MODEL Date
+2、 详细说明
+    Detailed specification
+　　　Ratings: 12V DC, 50mA (effective value) 
+2/8
+A/0
+2015.03.26
+2.1 外观：应无影响、降低产品性能的缺陷；
+    Appearance: There should be no defects that affect the serviceability of product.
+2.2　结构尺寸和安装尺寸：应符合装配图要求
+     Style and dimension: shall conform to the assemble drawings.
+NO.
+3.1
+3.2
+3.3
+绝缘电阻
+Insulation
+Resistance
+在端子之间施加DC 100V /1min的条件下,测量端
+子之间底座、盖板的电阻值
+Measurement shall be made following
+application of 100V DC potential, across
+terminals, and across terminals and cover,
+for one minute.
+介质耐压
+Dielectric
+voltage proof
+试验条件
+TEST CONDITIONS
+在端子之间施加250V AC(50HZ或60HZ)/1min
+250V AC (50HZ or 60HZ) shall be applied
+across terminals, for one minute.
+无击穿、无飞弧
+There should be no breakdown
+and flashover
+≥100MΩ
+在以 5V  10mA的直流电源或不低于1KHz的交流
+电源的电路中，以一个等于2倍按力的静负荷施
+加于手柄中心
+Applying a static load of 2 times
+operating force to the center of the stem,
+measurements shall be made by 5V DC 10mA
+or more than 1KHZ AC small-current contact
+resistance meter.
+接触电阻
+Contact Resistance ≤100mΩ
+要求
+REQUIREMENTS
+项目
+ITEM
+SPECIFICATION
+2.4  开关工作额定值：DC 12V，50mA（有效值）
+3、 　电气性能：
+　　　ELECTRICAL SPECIFICATION
+2.3  操作形式：有触觉反应的操作
+  　Type of actuating: Tactile feedback.
+MSK12C02
+
+--- PAGE 4 ---
+Page
+Version
+MODEL Date
+3/8
+SPECIFICATION
+4.1
+4.2
+开关垂直于操作方向放置，在开关驱动件顶端中
+心逐渐施力，测量开关导通所需的最大力度
+Placing the switch such that the direction
+of switch operation is vertical and then
+gradually increasing the load applied to
+the center of the stem, the maximum load
+required for the switch to come to a stop
+shall be measured
+refer to chart 3
+按力：130±50gf
+ 
+Operating Force:130±50gf
+ 
+按力
+Operating Force
+最大行程
+Full Travel
+开关垂直于操作方向放置，以一个等于2倍按力
+的静负荷施加在开关驱动件顶端中心，测量顶端
+移动的距离。
+Placing the switch such that the direction
+of switch operation is vertical and then
+applying static load of 2times operating
+force to the center of the stem; the
+travel distance for the switch to come to
+a stop shall be measured.
+项目
+ITEM
+试验条件
+TEST CONDITIONS
+      MECHANICAL SPECIFICATION
+A/0
+2015.03.26
+4、 　机械性能：
+NO.
+3.4
+要求
+REQUIREMENTS
+ON-3msec.max
+OFF-8msec.max
+1.6±0.1mm
+按照正常使用时的力度轻按手柄中心（每秒3～4
+次），
+在导通和断开过程中测试开关抖动
+Lightly striking the center of the stem at
+a rate encountered in normal use (3 to 4
+times per second), and bounce shall be
+tested at “ON” and “OFF”
+触点抖动Bounce
+"导通"
+"ON"
+"断开"
+"OFF"
+示波器
+Oscillograph
+10K¦ Έ
+开关
+Switch
+10V DC
+MSK12C02
+
+--- PAGE 5 ---
+Page
+Version
+MODEL Date 2015.03.26
+NO.
+4.3
+4.4
+4.5
+4.6
+除边缘外涂层应均匀覆盖90%以上
+Except for the edge, the
+coating should cover a
+minimum 90%
+开关垂直于操作方向放置，反方向实施最大操作
+力，并测量手柄的行程范围。
+Placing the switch such that the direction
+of switch operation is vertical, and then
+the maximum force to withstand a pull
+applied opposite to the direction of stem
+operation shall be measured.
+要求
+REQUIREMENTS
+20N.min.
+试验条件
+TEST CONDITIONS
+开关垂直于操作方向放置，在开关驱动件顶端中
+心下降至全行程后，测量顶端向自由位置转换的
+力度。
+The sample switch is installed such that
+the direction of switch operation is
+vertical and upon depressing the stem in
+its center to the whole travel distance,
+the force of the stem to return to its
+free position shall be measured.
+4/8
+A/0
+回弹力
+Return Force /
+手柄拔出强度
+Stem
+Strength
+开关垂直于操作方向放置，从操作方向驱动件施
+加30N的静负荷持续1min。
+Placing the switch such that the direction
+of switch operation is vertical, and then
+a static load of 30N shall be applied in
+the direction of stem operation for a
+period of 1 min.
+停止强度
+Stop Strength /
+可焊性Solderability
+在以下设定条件下进行测量:
+Measurements shall be made following the
+test set forth below:
+(1) 焊接温度:245±5℃
+Solder temperature : 245±5℃
+(2) 浸入时间:2s±0.5s
+Immersion time: 2s±0.5s
+对于其它步骤参考《GB 5095.6—86》试验12a
+The other steps please refer to《GB
+5095.6-86》TEST 12a
+项目
+ITEM
+SPECIFICATION
+MSK12C02
+
+--- PAGE 6 ---
+Page
+Version
+MODEL Date
+      ENVIRONMENTAL SPECIFICATION
+5.3
+接触电阻：≤200mΩ
+Contact resistance: ≤200mΩ
+项目3,4.1,4.2,4.3
+Item 3,4.1,4.2,4.3
+根据下面的测试要求进行5次循环的温度周期性
+测试， 实验后样品应放在常温及标准湿度的环
+境中1小时后做性能测试。测试期间样品应保持
+干燥.
+After 5 cycles of following conditions,
+the sample shall be allowed to stand under
+normal temperature and humidity conditions
+for 1 h. and measurements shall be made.
+During the test water drops shall be
+removed.温度周期性测试
+Change of
+temperature
+样品应按照以下实验条件进行测试，实验后样品
+应放在常温及标准湿度的环境中1小时后做性能
+测试：
+Following the test set forth below the
+sample shall be left in normal temperature
+and humidity conditions for 1 h before
+measurements are made:
+（1） 温度：-30±2℃
+      Temperature : -30±2℃
+（2） 时间：96h
+      Time: 96h
+样品应按照以下实验条件进行测试，实验后样品
+应放在常温及标准湿度的环境中1小时后做性能
+测试：Following the test set forth below
+the sample shall be left in normal
+temperature and humidity conditions for 1
+h before measurements are made:
+（1） 温度：80±2℃
+      temperature:80±2℃
+（2） 时间：96h
+      time: 96h
+NO.
+5.1
+5.2
+5、   极限电气性能：
+5/8
+A/0
+2015.03.26
+低温测试
+Resistance to low
+temperature
+高温测试
+Heat resistance
+SPECIFICATION
+试验条件
+TEST CONDITIONS
+要求
+REQUIREMENTS
+项目
+ITEM
++65±2℃
+-10±2℃
+1 cycle
+1(hour)
+2(hour)
+1(hour)
+2(hour)
+MSK12C02
+
+--- PAGE 7 ---
+Page
+Version
+MODEL Date
+6/8
+A/0
+2015.03.26
+NO.
+硫化试验
+Sulfuration
+resistance
+SPECIFICATION
+在以下设定条件下进行测量:
+The switch  shall be checked after
+following test:
+（1）温度：35℃±2℃
+     temperature: 35℃±2℃
+（2）盐溶液浓度：5±1%（质量百分比）
+     salt solution : 5±1%(solids by
+     mass)
+（3）时间：8h±1h
+     Time: 8h±1 hour
+实验后的盐沉积物后水冲掉
+After test, salt deposit shall be removed
+by running water.
+接触电阻：≤200mΩ
+Contact resistance: ≤200mΩ
+项目3,4.1,4.2,4.3
+Item 3,4.1,4.2,4.3
+5.4
+5.5
+5.6
+盐雾试验
+Salt Mist
+金属件上没有腐蚀斑点
+No remarkable corrosion shall
+be recognized in metal part.
+项目
+ITEM
+试验条件
+TEST CONDITIONS
+要求
+REQUIREMENTS
+湿温测试
+Moisture resistance
+样品应按照以下实验条件进行测试，实验后样品
+应放在常温及标准湿度的环境中1小时后做性能
+测试：Following the test set forth below
+the sample shall be left in normal
+temperature and humidity conditions for 1
+h before measurements are made:
+（1） 温度：60±2℃
+      temperature: 60±2℃
+（2） 相对湿度：90%～95%
+      relative humidity:90% to 95%
+（3） 时间：96h
+      time: 96h
+样品应按照以下实验条件进行测试，实验后样品
+应放在常温及标准湿度的环境中1小时后做性能
+测试：Following the test set forth below
+the sample shall be left in normal
+temperature and humidity conditions for 1
+h before measurements are made:
+（1） H2S气体浓度：3ppm±1ppm
+      H2S gas concentration:  3ppm±1ppm
+（2） 时间：72h
+      Time: 72h
+（3） 温度：40±2℃（90～95%RH）
+      temperature: 40±2℃（90～95%RH）
+MSK12C02
+
+--- PAGE 8 ---
+Page
+Version
+MODEL Date
+7、  焊接条件：
+     SOLDERING CONDITIONS:
+NO.
+6.1
+6.2
+要求
+REQUIREMENTS
+工作寿命
+Operation life
+根据下面的测试要求进行测试：
+Measurement shall be made following the
+test set forth below:
+（1） DC 12V，50mA带负载
+      DC 12V, 50 mA resistive load
+（1） 按动速率：2次/秒
+      Rate of operation: 2 times/s
+（3） 按力：200G
+（4） Operating Force：Operating Force
+      200G
+（5） 平均无故障寿命/Average fault-free
+      life:20000次
+项目
+ITEM
+试验条件
+TEST CONDITIONS
+SPECIFICATION
+6、  极限机械性能：
+     ENDURANCE SPECIFICATION
+7/8
+A/0
+2015.03.26
+请按以下条件进行焊接：
+(1) 焊锡温度：≤350℃
+(2) 连续焊接时间：≤3 s
+Please practice according to below conditions:
+(1) Soldering temperature:  350℃ Max.
+(2) Continuous soldering time: 3 s Max.
+接触电阻≤200mΩContact
+resistance≤200mΩ
+触点弹力≤10ms
+ Contact bounce≤10ms
+按力：初值的±30%
+Operating Force:
+initial value±30%
+项目3,4.1,4.2,4.3
+Item 3,4.1,4.2,4.3
+根据以下给定条件进行测试：
+Measurement shall be made following the
+test set forth below:
+（1） 振动频率范围：10～55～10Hz
+Vibration frequency range: 10 to 55 to
+10Hz
+（2） 振幅（峰－峰）：1.5mm
+       Amplitude: 1.5mm
+（3） 振动方向：包括手柄行程方向在内的三个
+相互垂直的方向
+Direction of vibration:Three mutually
+perpendicular direction including the
+direction of stem travel
+（4） 测试时间：每次2hours .
+        Duration: Each 2hours.
+项目3,4.1,4.2,4.3
+Item 3,4.1,4.2,4.3
+手工焊接
+Hand soldering
+振动Vibration
+7.1
+MSK12C02
+
+--- PAGE 9 ---
+Page
+Version
+MODEL Date
+8/8
+A/0
+2015.03.26
+NO.
+7.2
+8、  Other precautions其他注意事项
+8.1  印刷基板的安装孔尺寸参见产品图。
+     Follow recommended P.W.B. piercing plan in outside drawing page.
+8.2  注意不要施加超负荷的压力或晃动开关。
+     Please be cautions not to give excessive static load or shock to swiches.
+8.3  进行焊接过程中，不可以用溶剂或类似品清洗开关
+     Following the soldering process,do not try to clean the switch with a solvent or the like.
+8.4  防止助焊剂从开关的顶端渗入
+     Safeguard the switch assembly against flux penetration from its topside.
+8.5  保管时尤其应注意避开高湿高温和有腐蚀性气体的环境。如需要长时间保存，请不要打开包装箱。
+     Preservation under high temperature and high high humidity or corrosive gas should be
+     avoided Especially . When you need to preserve for a long period ,do not open the carton.
+条件
+ CONDITIONS
+自动焊接
+Automatic soldering
+在使用的情况下自动焊接
+In case the automatic flow soldering is to be used
+(1)预热     -------------- 150℃ ~ 175℃, 40 ~ 80 sec
+　　Preheat -------------- 150℃ ~ 175℃, 40 ~ 80 sec
+(2)峰值温度----- 260℃ (max)
+   Peak temperature ----- 260℃ (max)
+(3)焊接区温度------ 260℃, 1 ~ 4 sec, 2 times (max)
+　　Soldering area temperature ------ 260℃, 1 ~ 4 sec, 2 times (max)
+项目
+ITEM
+SPECIFICATION
+0
+70
+140
+210
+280
+T:℃
+Time:S
+140℃
+170℃
+260℃ max
+240℃
+5-6minute 
+< Tem
+p
+erature 
+p
+rofile >
+MSK12C02
+
+--- PAGE 10 ---
+深圳市首韩科技有限公司
+MSK12C02
+柄长=1.5mm

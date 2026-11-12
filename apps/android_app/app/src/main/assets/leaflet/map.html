@@ -208,9 +208,25 @@
     var isUserPanning = false;
     var lastUserPanTime = 0;
 
+    // Direction beam alignment mode: 'forward' (default: locked to North/top of phone) or 'compass'
+    var beamMode = 'forward';
+
     // Continuous 360-degree angle unwrap tracker to eliminate jitter and 359/1 spin
     var cumulativeHdg = 0;
     var lastRawHdg = null;
+
+    window.setBeamMode = function(mode) {
+      beamMode = mode;
+      var beam = document.getElementById('directionBeam');
+      if (beam) {
+        if (beamMode === 'forward') {
+          beam.style.transform = 'rotate(0deg)';
+        } else {
+          beam.style.transform = 'rotate(' + cumulativeHdg + 'deg)';
+        }
+      }
+      console.log("RAMS: setBeamMode switched to " + beamMode);
+    };
 
     function applySmoothHeading(rawHdg) {
       if (typeof rawHdg !== 'number' || isNaN(rawHdg)) return;
@@ -224,12 +240,17 @@
       }
       var beam = document.getElementById('directionBeam');
       if (beam) {
-        beam.style.transform = 'rotate(' + cumulativeHdg + 'deg)';
+        if (beamMode === 'forward') {
+          beam.style.transform = 'rotate(0deg)';
+        } else {
+          beam.style.transform = 'rotate(' + cumulativeHdg + 'deg)';
+        }
       }
     }
 
     function createUserIcon(hdg) {
-      var beamSvg = '<svg class="direction-beam-container" id="directionBeam" viewBox="0 0 160 160" style="transform: rotate(' + hdg + 'deg);">' +
+      var initRot = (beamMode === 'forward') ? 0 : hdg;
+      var beamSvg = '<svg class="direction-beam-container" id="directionBeam" viewBox="0 0 160 160" style="transform: rotate(' + initRot + 'deg);">' +
         '<defs>' +
         '<radialGradient id="beamGrad" cx="80" cy="80" r="75" fx="80" fy="80" gradientUnits="userSpaceOnUse">' +
         '<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.85"/>' +
@@ -473,6 +494,120 @@
         updateMarkerZoomMode();
         console.log("RAMS: setMapZoom triggered to " + z);
       }
+    };
+
+    var destinationMarker = null;
+    var routePolyline = null;
+    var routeGlowLine = null;
+
+    function createDestinationPinIcon(label) {
+      var pinSvg = '<svg width="34" height="44" viewBox="0 0 36 46" fill="none" style="filter:drop-shadow(0 6px 14px rgba(225,29,72,0.75));">' +
+        '<path d="M18 1C8.611 1 1 8.611 1 18C1 28.5 15.5 42.5 17.2 44.3C17.6 44.8 18.4 44.8 18.8 44.3C20.5 42.5 35 28.5 35 18C35 8.611 27.389 1 18 1Z" fill="#e11d48" stroke="#ffffff" stroke-width="2.2" />' +
+        '<circle cx="18" cy="18" r="8" fill="#ffffff" />' +
+        '<circle cx="18" cy="18" r="4.2" fill="#e11d48" />' +
+        '</svg>';
+
+      var cleanLabel = label || 'DESTINATION';
+      var html = '<div style="position:relative;width:34px;height:44px;margin-left:-17px;margin-top:-44px;display:flex;flex-direction:column;align-items:center;">' +
+        pinSvg +
+        '<div style="position:absolute;bottom:-2px;background:#09090b;border:1px solid #e11d48;border-radius:4px;padding:1px 5px;font-family:monospace;font-size:7.5px;font-weight:900;color:#f43f5e;white-space:nowrap;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.7);">' + cleanLabel.toUpperCase() + '</div>' +
+        '</div>';
+
+      return L.divIcon({
+        className: 'destination-pin-marker',
+        html: html,
+        iconSize: [34, 44],
+        iconAnchor: [17, 44]
+      });
+    }
+
+    window.setDestinationPinAndRoute = function(destLat, destLon, label, waypoints) {
+      if (!map) return;
+      window.clearDestinationRoute();
+
+      destinationMarker = L.marker([destLat, destLon], {
+        icon: createDestinationPinIcon(label)
+      }).addTo(map);
+
+      var points = [];
+      if (waypoints && Array.isArray(waypoints) && waypoints.length > 0) {
+        points = waypoints;
+      } else {
+        // Direct flight path fallback between user and destination
+        points = [[currentLat, currentLon], [destLat, destLon]];
+      }
+
+      // Google Maps style dual-stroke route: Dark cyan border casing + electric light blue core
+      routeGlowLine = L.polyline(points, {
+        color: '#0369a1',
+        weight: 8,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+
+      routePolyline = L.polyline(points, {
+        color: '#38bdf8',
+        weight: 4.5,
+        opacity: 1.0,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+
+      // Dynamic road-geometry enhancement: query OSRM directly in WebView for pixel-perfect road curvature
+      if (points.length < 35 && typeof fetch === 'function') {
+        var osrmClientUrl = "https://router.project-osrm.org/route/v1/driving/" + currentLon.toFixed(6) + "," + currentLat.toFixed(6) + ";" + destLon.toFixed(6) + "," + destLat.toFixed(6) + "?overview=full&geometries=geojson";
+        var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 8000) : null;
+        var fetchOpts = { headers: { 'Accept': 'application/json' } };
+        if (controller) fetchOpts.signal = controller.signal;
+
+        fetch(osrmClientUrl, fetchOpts)
+          .then(function(res) { 
+            if (timeoutId) clearTimeout(timeoutId);
+            return res.json(); 
+          })
+          .then(function(data) {
+            if (data && data.routes && data.routes.length > 0) {
+              var coords = data.routes[0].geometry.coordinates;
+              var highResRoadPoints = coords.map(function(c) { return [c[1], c[0]]; });
+              if (highResRoadPoints.length > 0 && routePolyline && routeGlowLine) {
+                routeGlowLine.setLatLngs(highResRoadPoints);
+                routePolyline.setLatLngs(highResRoadPoints);
+                var g = new L.featureGroup([userMarker, destinationMarker, routePolyline]);
+                map.fitBounds(g.getBounds().pad(0.22), { animate: true, duration: 0.8 });
+                console.log("RAMS: Leaflet upgraded route to " + highResRoadPoints.length + " high-res road coordinates.");
+              }
+            }
+          })
+          .catch(function(err) {
+            console.warn("Client OSRM upgrade skipped: " + err);
+          });
+      }
+
+      try {
+        var group = new L.featureGroup([userMarker, destinationMarker, routePolyline]);
+        map.fitBounds(group.getBounds().pad(0.22), { animate: true, duration: 0.8 });
+      } catch (e) {
+        console.warn("fitBounds failed: " + e);
+      }
+      console.log("RAMS: Destination pin & route successfully plotted to [" + destLat + ", " + destLon + "] (" + label + ")");
+    };
+
+    window.clearDestinationRoute = function() {
+      if (destinationMarker && map) {
+        map.removeLayer(destinationMarker);
+        destinationMarker = null;
+      }
+      if (routeGlowLine && map) {
+        map.removeLayer(routeGlowLine);
+        routeGlowLine = null;
+      }
+      if (routePolyline && map) {
+        map.removeLayer(routePolyline);
+        routePolyline = null;
+      }
+      console.log("RAMS: Destination route cleared.");
     };
   </script>
 </body>

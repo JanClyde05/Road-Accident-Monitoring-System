@@ -306,34 +306,54 @@ fun RiderLoginDialog(
             ) {
               for (cat in chunk) {
                 val isSelected = selectedCategory.equals(cat, ignoreCase = true)
+                val catColor = when {
+                  cat.contains("Motor", ignoreCase = true) -> Color(0xFFF59E0B)
+                  cat.contains("Pedestrian", ignoreCase = true) || cat.contains("Walk", ignoreCase = true) -> Color(0xFF10B981)
+                  cat.contains("Cyclist", ignoreCase = true) || cat.contains("Bike", ignoreCase = true) -> Color(0xFF06B6D4)
+                  cat.contains("Car", ignoreCase = true) -> Color(0xFF818CF8)
+                  cat.contains("Tricycle", ignoreCase = true) -> Color(0xFFA855F7)
+                  else -> Color(0xFF38BDF8)
+                }
                 Surface(
                   modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp))
                     .border(
                       width = 1.dp,
-                      color = if (isSelected) Color.White else Color(0xFF27272A),
+                      color = if (isSelected) catColor else Color(0xFF27272A),
                       shape = RoundedCornerShape(8.dp)
                     )
                     .clickable {
                       selectedCategory = cat
                       generatedToken = RiderProfile.generateFriendlyToken(riderName, selectedCategory)
                     },
-                  color = if (isSelected) Color(0xFF27272A) else Color(0xFF18181B)
+                  color = if (isSelected) catColor.copy(alpha = 0.15f) else Color(0xFF18181B)
                 ) {
-                  Box(
+                  Row(
                     modifier = Modifier
                       .fillMaxWidth()
-                      .padding(vertical = 10.dp),
-                    contentAlignment = Alignment.Center
+                      .padding(horizontal = 8.dp, vertical = 9.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                   ) {
+                    if (isSelected) {
+                      Box(
+                        modifier = Modifier
+                          .size(5.dp)
+                          .background(catColor, CircleShape)
+                      )
+                      Spacer(modifier = Modifier.width(5.dp))
+                    }
                     Text(
                       text = cat.uppercase(),
                       fontFamily = FontFamily.Monospace,
-                      fontWeight = FontWeight.Bold,
-                      fontSize = 10.sp,
-                      letterSpacing = 0.5.sp,
-                      color = if (isSelected) Color.White else Color(0xFFA1A1AA)
+                      fontWeight = if (isSelected) FontWeight.Black else FontWeight.Bold,
+                      fontSize = 9.sp,
+                      letterSpacing = 0.3.sp,
+                      color = if (isSelected) catColor else Color(0xFFA1A1AA),
+                      maxLines = 1,
+                      softWrap = false,
+                      overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                   }
                 }

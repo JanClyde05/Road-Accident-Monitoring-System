@@ -1,0 +1,1205 @@
+{
+  "date": "2026-11-09",
+  "scope": "90-part circuit/spec/native netlist and footprint library pad sets; no volatile PCB/pro",
+  "physical_components": 90,
+  "connected_pins_checked": 247,
+  "explicit_nc_pins_checked": 41,
+  "manufacturer_pin_contracts": {
+    "Q1": {
+      "1": "VBUS",
+      "2": "SYS_IN",
+      "3": "B_PLUS"
+    },
+    "Q5": {
+      "1": "LED_GATE",
+      "2": "SYS_IN",
+      "3": "LED_PWR"
+    },
+    "SW1": {
+      "1": "LED_GATE",
+      "2": "GND",
+      "3": "SYS_EN",
+      "SH": "GND"
+    },
+    "R7": {
+      "1": "SYS_IN",
+      "2": "SYS_EN"
+    },
+    "R41": {
+      "1": "SYS_IN",
+      "2": "LED_GATE"
+    },
+    "U6": {
+      "1": "+3V3",
+      "2": "GND",
+      "3": "NEO_DATA",
+      "4": "NEO_SHIFT",
+      "5": "+3V3",
+      "6": "LED_PWR"
+    },
+    "LED1": {
+      "1": null,
+      "2": "GND",
+      "3": "NEO_DIN",
+      "4": "LED_PWR"
+    },
+    "C35": {
+      "1": "LED_PWR",
+      "2": "GND"
+    },
+    "C34": {
+      "1": "+3V3",
+      "2": "GND"
+    },
+    "U5": {
+      "1": "SYS_IN",
+      "2": "GND",
+      "3": "SYS_EN",
+      "4": null,
+      "5": "+3V3"
+    },
+    "U3": {
+      "1": null,
+      "2": "GND",
+      "3": "B_PLUS",
+      "4": "CHG_IN",
+      "5": "CHG_PROG"
+    },
+    "U4": {
+      "1": "DW_OD",
+      "2": "DW_CS",
+      "3": "DW_OC",
+      "4": null,
+      "5": "DW_VCC",
+      "6": "B_MINUS"
+    },
+    "Q3": {
+      "1": "B_MINUS",
+      "2": "FET_DRAIN",
+      "3": "GND",
+      "4": "DW_OC",
+      "5": "FET_DRAIN",
+      "6": "DW_OD"
+    },
+    "Q4": {
+      "1": "+3V3",
+      "2": "VBAT_SENSE",
+      "3": "VBAT_DIV"
+    },
+    "R15": {
+      "1": "B_PLUS",
+      "2": "VBAT_DIV"
+    },
+    "R16": {
+      "1": "VBAT_SENSE",
+      "2": "GND"
+    },
+    "D2": {
+      "1": "SYS_IN",
+      "2": "VBUS"
+    },
+    "Q2": {
+      "1": "BUZZER_BASE",
+      "2": "GND",
+      "3": "BUZZER_NEG"
+    },
+    "D3": {
+      "1": "+3V3",
+      "2": "BUZZER_NEG"
+    },
+    "Y1": {
+      "1": "XTAL_P",
+      "2": "GND",
+      "3": "XTAL_N",
+      "4": "GND"
+    },
+    "D1": {
+      "1": "USB_DN_CONN",
+      "2": "GND",
+      "3": "USB_DP_CONN",
+      "4": "USB_DP_ESD",
+      "5": "VBUS",
+      "6": "USB_DN_ESD"
+    }
+  },
+  "firmware_gpio_contract": [
+    [
+      "LORA_NSS_PIN",
+      10,
+      "15",
+      "LORA_NSS"
+    ],
+    [
+      "LORA_SCK_PIN",
+      12,
+      "17",
+      "LORA_SCK"
+    ],
+    [
+      "LORA_MISO_PIN",
+      13,
+      "18",
+      "LORA_MISO"
+    ],
+    [
+      "LORA_MOSI_PIN",
+      11,
+      "16",
+      "LORA_MOSI"
+    ],
+    [
+      "LORA_RST_PIN",
+      9,
+      "14",
+      "LORA_RST"
+    ],
+    [
+      "LORA_DIO0_PIN",
+      8,
+      "13",
+      "LORA_DIO0"
+    ],
+    [
+      "BUTTON_PIN",
+      0,
+      "5",
+      "BOOT_BTN"
+    ],
+    [
+      "BUZZER_PIN",
+      1,
+      "6",
+      "BUZZER_CTRL"
+    ],
+    [
+      "NEOPIXEL_PIN",
+      48,
+      "36",
+      "NEO_DATA"
+    ],
+    [
+      "BATTERY_ADC_PIN",
+      2,
+      "7",
+      "VBAT_SENSE"
+    ]
+  ],
+  "footprint_pad_checks": [
+    {
+      "ref": "J1",
+      "footprint": "RAMS_JLC:USB_C_Receptacle_GCT4105_NPTH",
+      "numbered_pads": [
+        "A1",
+        "A12",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "A9",
+        "B1",
+        "B12",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B9",
+        "SH"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R1",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R2",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "D1",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C1",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C2",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "U3",
+      "footprint": "Package_TO_SOT_SMD:TSOT-23-5",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R3",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R30",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C3",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C4",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "J2",
+      "footprint": "Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+      "numbered_pads": [
+        "1",
+        "2",
+        "MP"
+      ],
+      "unconnected_mechanical_pads": [
+        "MP"
+      ]
+    },
+    {
+      "ref": "U4",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Q3",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R4",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R5",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C5",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "D2",
+      "footprint": "Diode_SMD:D_SMA",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Q1",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R6",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "SW1",
+      "footprint": "Button_Switch_SMD:SW_SPDT_Shouhan_MSK12C02",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "SH"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R7",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "U5",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C7",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C10",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Q4",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R15",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R16",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C29",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "U1",
+      "footprint": "RAMS_JLC:ESP32-S3FH4R2_QFN56_EP5p7",
+      "numbered_pads": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "4",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "5",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "L1",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C11",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C12",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C13",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C14",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C15",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C16",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C17",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C20",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C21",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C22",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R8",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R34",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R35",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R36",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R9",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Y1",
+      "footprint": "RAMS_JLC:Crystal_Abracon_ABM8_3225",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C24",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C25",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C18",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "L2",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C19",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C32",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "L4",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "L5",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "ANT1",
+      "footprint": "RAMS_JLC:Johanson_B100_3216",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C33",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "U2",
+      "footprint": "RF_Module:Ai-Thinker-Ra-01-LoRa",
+      "numbered_pads": [
+        "1",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "FB1",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C26",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C27",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R11",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R37",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "LED1",
+      "footprint": "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R13",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C28",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Q5",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R41",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "U6",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C34",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "C35",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R42",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R43",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "BZ1",
+      "footprint": "RAMS_JLC:Buzzer_9650_SMD_Stock_HandSolder",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "Q2",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "numbered_pads": [
+        "1",
+        "2",
+        "3"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R12",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R14",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "D3",
+      "footprint": "Diode_SMD:D_SOD-123",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "SW2",
+      "footprint": "Button_Switch_SMD:SW_SPST_TS-1088-xR020",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "SW3",
+      "footprint": "Button_Switch_SMD:SW_SPST_TS-1088-xR020",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R38",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "R39",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "numbered_pads": [
+        "1",
+        "2"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP1",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP2",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP3",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP4",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP5",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP6",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP7",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    },
+    {
+      "ref": "TP8",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "numbered_pads": [
+        "1"
+      ],
+      "unconnected_mechanical_pads": []
+    }
+  ],
+  "calculations": {
+    "adc_nominal_ratio": 4.0,
+    "adc_at_4p2_V": 1.05,
+    "adc_divider_4p2_current_uA": 105.0,
+    "adc_1pct_max_at_4p2_V": 1.0658291457286433,
+    "adc_min_gate_overdrive_at_3p0_V": 1.9341708542713567,
+    "adc_on_RC_us": 7.5,
+    "adc_off_RC_us": 10.0,
+    "q5_nominal_drop_at_36p6_mA_mV": 3.1110000000000007,
+    "slider_steady_at_5p5_V_uA": 55.0,
+    "nominal_charger_mA": 100.0,
+    "buzzer_base_nominal_mA": 7.567757575757576,
+    "buzzer_base_conservative_mA": 3.624363636363638,
+    "LDO_usb_5p25V_250mA_W": 0.48750000000000004,
+    "LDO_usb_5p25V_250mA_40C_estimated_Tj_C": 129.7,
+    "LDO_125C_target_40C_5p25V_no_diode_credit_max_average_mA": 236.90078037904124,
+    "source_example_BLE9dBm_LoRa_buzzer_base_LED_charge_mA": 472.6,
+    "source_example_BLE21dBm_LoRa_buzzer_base_LED_charge_mA": 614.6,
+    "timing_zero_ns": [
+      300,
+      1000
+    ],
+    "timing_one_ns": [
+      700,
+      600
+    ],
+    "timing_bit_total_ns": 1300,
+    "reset_low_us": 300
+  },
+  "source_sha256": {
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\circuit_spec.json": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\j2_final_electrical\\independent_netlist.xml": "13f24d70f01d74795b5b5936e967732c093543ce6c80d385447a1e3c829c6d89",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.kicad_sym": "8bcd9548d36207e85076f6e2aec3ce29b009391ce600953f87af42c106730f46",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3_io.kicad_sch": "d4185ab24f93aa62eaf955612395db1ca800bc078907832ca8cba8098e5cd507",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3_power.kicad_sch": "b1a052a552f4ff7a6112b94e4dda088f12df9138c8c9a9b0949b9449eac89be4",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.pretty\\USB_C_Receptacle_GCT4105_NPTH.kicad_mod": "8faac80e0c59fd61e87198a7836e0308c41d2bda6cab12e70d2d256780572708",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Resistor_SMD.pretty\\R_0402_1005Metric.kicad_mod": "6ed88b70926af431471c0ccaf6a55485f8cedab01cce4d1d4f3298a6cb6cef2c",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Package_TO_SOT_SMD.pretty\\SOT-23-6.kicad_mod": "ea29040bed73e5dfa455e36f2c9324b0de7782c5a6cf79040b7d885ff766fdb4",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Capacitor_SMD.pretty\\C_0402_1005Metric.kicad_mod": "3d8a1dc70b71dbc3a5786560f7f9d0cabe99f1182653b072cde5046e4e3f6fc4",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Package_TO_SOT_SMD.pretty\\TSOT-23-5.kicad_mod": "71f6273140abfcc0d80187f64cc2b9862e3f62814673e9cc9989f5c548cae166",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Capacitor_SMD.pretty\\C_0603_1608Metric.kicad_mod": "d45eebd5cb9faace255d4ec95a0f9484efde898359507b02e2ba9bbb3ef6d857",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Connector_JST.pretty\\JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal.kicad_mod": "eae5fb2dc2cfa27b8fb40061a31f0ad255fc9b8055104f90d1b295b12fd82cc4",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Diode_SMD.pretty\\D_SMA.kicad_mod": "e2d049a54ef961e231eb8e7e769078a3c44feb8475a7bdafba01c6646a5144f3",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Package_TO_SOT_SMD.pretty\\SOT-23.kicad_mod": "7fb2859c6463f3a37966a1a20c31d8bfe7d4e8459d00bb165d5a7488270816c5",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Button_Switch_SMD.pretty\\SW_SPDT_Shouhan_MSK12C02.kicad_mod": "2ed9d359e48ab026551c140019a247cbf29f3063885c060c19b7c7ad5b606ae5",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Package_TO_SOT_SMD.pretty\\SOT-23-5.kicad_mod": "684a94089f59798a46492dac8dd0242edfa4d915e76a210abdca369e4faa4f9b",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.pretty\\ESP32-S3FH4R2_QFN56_EP5p7.kicad_mod": "d83eac5ca9443f93536f1fe4e044861e84cd7150b3bdab32947b1da67ba35b57",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Inductor_SMD.pretty\\L_0402_1005Metric.kicad_mod": "6419f2d4bf2736ba4afea3839fc79d0ddf05d09f9047dca3d70b65dfe5280da2",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.pretty\\Crystal_Abracon_ABM8_3225.kicad_mod": "7767f690dfee6463f7ac30a60f0f65f3e4f0bbf731cba2e43239b51441f4ecd5",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.pretty\\Johanson_B100_3216.kicad_mod": "ed0370c75712ee7818770850f7e1516bd693246001fe5b32d8025ce0a99d9e85",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\RF_Module.pretty\\Ai-Thinker-Ra-01-LoRa.kicad_mod": "e159ce33e432541cfef8f9234ebe192861d9fb03ed449d5f2adae5bc1a914e2f",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\LED_SMD.pretty\\LED_WS2812B-2020_PLCC4_2.0x2.0mm.kicad_mod": "e569c5c306aaef0e8ebdfdf0dfa525ad91edaa7494d67b25f3c2862e4d1cdacb",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\RAMS_JLC.pretty\\Buzzer_9650_SMD_Stock_HandSolder.kicad_mod": "fef313a4a998878d35bdb004df5e07c360f781305af731b47ff6ba7f52f0c52f",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Diode_SMD.pretty\\D_SOD-123.kicad_mod": "1594c737edf4922415ffb3768701c033c5cd3288f99bb0e2a6d273f83d843a35",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\Button_Switch_SMD.pretty\\SW_SPST_TS-1088-xR020.kicad_mod": "add8704300b5fc07181e6a0feeb535dc7516376cbe0e66301f6db49741982496",
+    "C:\\Program Files\\KiCad\\10.0\\share\\kicad\\footprints\\TestPoint.pretty\\TestPoint_Pad_D1.0mm.kicad_mod": "eb7c629059d07f6b09617273ed038a415763363e2db41669c0d65af6d34c05eb",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\firmware\\wearable_withApp\\config.h": "bda046bf29b8215c50c57c50bbd978f051ce070169a66496bbbe0d14e78fc384",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\firmware\\wearable_withApp\\battery.h": "698d4d2b29c555cd6368ce3510998f193618b1363cc99f92e63fd0bc0a73fbfa",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\firmware\\wearable_withApp\\battery.cpp": "4e92703dfad5c2cff42faf08537d726f10688b44d88222f1df1a946d18fbbe41",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\firmware\\wearable_withApp\\neopixel.cpp": "c44a6e7d833cb6df28135b8cbc2803919f7b029d0cd3c5cc4019407ecc07a318",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\ABM8_20200729.pdf": "564ac331d8bf38b4ae1222444b0d9cfea3a6ba29148a8be906b2e0ffe40471d8",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\aos_ao3401a_rev3_1.pdf": "0d8e3261ae280e007b5837fff60c55142f2d92af71edc4d02aee6f7a760a785c",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\diodes_ap2112_sparkfun_mirror.pdf": "ef8d376f2ec356e29172eb9e053819a0ebdcc576dba7fc9ab0505c568427920f",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\esp32_s3_v2_2.pdf": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\Fengming_YS-SBZ9650DYB05_geometry_only.pdf": "668b11ca216b71bb4f15452d5652204c695c979f88689fdcf44188910a0afea2",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\fuxin_fs8205a_v2_1.pdf": "7896e3ce79a3accfd6cd8b7aecd420c72c173cef8ff2e552fa03e6c9bd67e796",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\GCT_USB4105.pdf": "fb331fbabee8392ed2937ed757c1610cb0f174b84625147c0b580a18eea8c0e5",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\johanson_b100_rev5.pdf": "732b9d2a047e19bd9625fd5dbe794b4946bc26cb06b3b3b449550a6d14dc163a",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\PUI_SMI-1027-TW-3V-R_RevD_20240808.pdf": "e2806ad196632f7fcfa89ad7445a9b279cdf7cbe98d61b6f48a8e69f9fd0c3fd",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\Shouhan_MSK12C02_KiCad_reference.pdf": "a596d32b2510ac6a6a7460bde16a5a9d76866e5e10f33f2d6220de37880602b5",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\Shouhan_MSK12C02_manufacturer_revA0.pdf": "d2aeae48c5607c858a56a3eac19fc5ca5b02c90488555945798feb27b9de2817",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\slkor_dw01a_rev2.pdf": "b0d78970ec138017341dd1d91563f8fab8c2cc2b703cef7a7d4dd0ed6ed46b6a",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\SS_SMD-9650-3327_manufacturer.pdf": "3ce559610dde705b7e8cc8f31f51ee6065bb6526cdd01a60dd19ed6c8bcaad17",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\ti_sn74lvc1t45_sces515n.pdf": "e6fbd8400161399554fe905326e73236e74bb3af0b546ea1942deed14310536e",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\TLV803E_SLVSES2J.pdf": "74ac4474d86c3597c4fff6ffa61a59e850130a40eda28085ece9765fb380e844",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\TPS22919_SLVSEN5B.pdf": "743c59b01fb0891d2d0f1faba779161cd2d2b6c18edf68e6d5b3279016240c84",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\tps63020_slvs916i.pdf": "d117773bb7370fd79377bc70ce987eec3469ea5979547a09df52fca5f95b2e69",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\worldsemi_ws2812b_2020_v1_3.pdf": "4af8693e601ffee4a361e4a6f5f6815efba0b580541a1321bbf83ed7fb090e3f",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\worldsemi_ws2812b_v6_1_0_official.pdf": "76129225a8cd2661b4b26d21d57b658cad137ae940b621bffd41efdd16caa12f",
+    "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\evidence\\sources\\XUNPU_TS-1088-AR02016_KiCad_reference.pdf": "368d4cc2c26b08cb63e1b67193f671d0860b6d3fb2e6b9f2696ffade401afc30"
+  },
+  "errors": [],
+  "physical_validation": "not performed",
+  "open_gates": [
+    "actual LED identity/voltage/current/waveform",
+    "powerup/off/handover voltage capture",
+    "USB current and LDO thermal envelope",
+    "cell polarity/rating/charge/protection recovery",
+    "ADC calibration and off-state transient",
+    "assembled buzzer current/tone",
+    "RF tuning and crystal startup",
+    "final PCB routing/DRC/pin-net parity"
+  ]
+}

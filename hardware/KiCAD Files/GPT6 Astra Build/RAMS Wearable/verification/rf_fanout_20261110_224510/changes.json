@@ -1,0 +1,384 @@
+[
+  {
+    "removed": "a295d293-1bf6-45d4-9cea-372f4ff38dfe",
+    "net": "GND"
+  },
+  {
+    "removed": "d8f93b2d-4bfb-49a8-9557-aaf4a28614eb",
+    "net": "GND"
+  },
+  {
+    "removed": "d4973f54-d8da-4599-afad-a18c030308f0",
+    "net": "GND"
+  },
+  {
+    "removed": "e44cc94a-bced-4c3b-a325-e5c6a82bb19f",
+    "net": "GND"
+  },
+  {
+    "removed": "483ee8d2-4d1a-4f4b-bef3-86f2fb85f1b9",
+    "net": "+3V3"
+  },
+  {
+    "removed": "0c5e4fab-afe3-43d0-9d03-13fc6e5e1816",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "1972e5db-1acf-4e53-8d63-521e53ab0a03",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "25aa34e2-689d-4102-8bd8-4c56e408fd14",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "2ff0e318-f81c-497e-8038-c7a59e108a6f",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "34059b4c-f3cd-4efd-8260-5efe57b11d68",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "42b0912f-ac4a-49c3-8e58-fddf509fb470",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "446f67ae-bfd6-4469-b782-6023cb797456",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "55173c03-f955-4774-9746-a70456be46ea",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "5d93e445-235b-4ff3-986d-26fe0edac72e",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "68fb50db-4642-4766-ab94-5a37869da92f",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "6ddcfb8b-bc56-4bcc-8a4d-56a363fe729a",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "7687ea54-9973-4caa-84d9-f268544a2501",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "789321b3-5c04-413b-b5de-e1e4c6cb0ab0",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "78c0978d-5bed-4255-a5ea-784a44d73833",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "7a7435d3-943e-4506-9202-a983da0dcbd7",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "81c5dafc-ac7e-4aa3-b96c-12d69f15c8da",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "83810758-9b3d-4559-8e8e-e09cd73ba522",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "8697d72f-0b21-4fdc-b62a-a71698ba9f62",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "8ebf8125-3d10-4809-9d2a-1078e981ce0f",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "95f5b47b-6ee2-46be-a312-ae87841ead2e",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "96256c9d-6334-431d-a463-66f1ea63cd9c",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "9e28ebc7-0ff7-46a5-aa88-88c6dc69d6db",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "a3266b68-f135-4b06-9a44-68d88ebee8ba",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "ca89b657-97bf-40c5-a811-0502e0b609e5",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "d8ab0cf0-e373-4791-8a14-20d1e0a02143",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "df186e48-9149-4ebc-81d4-91d47e3dfa6e",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "ee5fcc32-82fc-453e-ae86-b548912e856f",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "f4931709-1904-4d16-acbb-f438388dae39",
+    "net": "VDD_RF"
+  },
+  {
+    "removed": "f79ddd6c-d30d-42aa-b276-9d1066ebb74a",
+    "net": "VDD_RF"
+  },
+  {
+    "net": "VDD_RF",
+    "points": [
+      [
+        111.55,
+        110.2
+      ],
+      [
+        111.55,
+        109.8
+      ],
+      [
+        110.15,
+        109.8
+      ],
+      [
+        110.15,
+        110.4
+      ],
+      [
+        109.55,
+        111.0
+      ],
+      [
+        109.28,
+        111.0
+      ]
+    ],
+    "width": 0.15
+  },
+  {
+    "net": "VDD_RF",
+    "points": [
+      [
+        109.28,
+        111.0
+      ],
+      [
+        109.28,
+        112.1
+      ]
+    ],
+    "width": 0.25
+  },
+  {
+    "net": "VDD_RF",
+    "points": [
+      [
+        109.28,
+        112.1
+      ],
+      [
+        110.0,
+        112.82
+      ],
+      [
+        110.0,
+        113.5
+      ],
+      [
+        108.425,
+        113.5
+      ]
+    ],
+    "width": 0.25
+  },
+  {
+    "net": "VDD_RF",
+    "points": [
+      [
+        106.5,
+        110.915
+      ],
+      [
+        106.5,
+        112.6
+      ],
+      [
+        107.5,
+        113.6
+      ],
+      [
+        107.5,
+        114.4
+      ],
+      [
+        110.2,
+        114.4
+      ],
+      [
+        108.425,
+        113.5
+      ]
+    ],
+    "width": 0.25
+  },
+  {
+    "net": "MCU_EN",
+    "points": [
+      [
+        111.55,
+        110.6
+      ],
+      [
+        110.8,
+        110.6
+      ],
+      [
+        110.7,
+        110.5
+      ],
+      [
+        110.65,
+        110.5
+      ]
+    ],
+    "width": 0.15
+  },
+  {
+    "net": "MCU_EN",
+    "via": [
+      110.65,
+      110.5
+    ]
+  },
+  {
+    "net": "BOOT_BTN",
+    "points": [
+      [
+        111.55,
+        111.0
+      ],
+      [
+        110.1,
+        111.0
+      ],
+      [
+        109.95,
+        111.15
+      ]
+    ],
+    "width": 0.15
+  },
+  {
+    "net": "BOOT_BTN",
+    "via": [
+      109.95,
+      111.15
+    ]
+  },
+  {
+    "net": "BUZZER_CTRL",
+    "points": [
+      [
+        111.55,
+        111.4
+      ],
+      [
+        110.55,
+        111.4
+      ],
+      [
+        110.3,
+        111.65
+      ]
+    ],
+    "width": 0.15
+  },
+  {
+    "net": "BUZZER_CTRL",
+    "via": [
+      110.3,
+      111.65
+    ]
+  },
+  {
+    "net": "VBAT_SENSE",
+    "points": [
+      [
+        111.55,
+        111.8
+      ],
+      [
+        110.85,
+        111.8
+      ],
+      [
+        110.85,
+        112.15
+      ],
+      [
+        109.95,
+        112.15
+      ]
+    ],
+    "width": 0.15
+  },
+  {
+    "net": "VBAT_SENSE",
+    "via": [
+      109.95,
+      112.15
+    ]
+  },
+  {
+    "net": "GND",
+    "points": [
+      [
+        108.32,
+        111.0
+      ],
+      [
+        108.32,
+        110.2
+      ]
+    ],
+    "width": 0.2
+  },
+  {
+    "net": "GND",
+    "via": [
+      108.32,
+      110.2
+    ]
+  },
+  {
+    "net": "GND",
+    "points": [
+      [
+        108.32,
+        112.1
+      ],
+      [
+        107.65,
+        112.7
+      ]
+    ],
+    "width": 0.2
+  },
+  {
+    "net": "GND",
+    "via": [
+      107.65,
+      112.7
+    ]
+  }
+]

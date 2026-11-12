@@ -1,0 +1,369 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-10T22:45:26",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [+3V3] on B.Cu, length 0.5500 mm",
+                    "pos": {
+                        "x": 109.1,
+                        "y": 114.75
+                    },
+                    "uuid": "3bc27ea8-aaf0-4c56-987e-44a2c6d82b0f"
+                },
+                {
+                    "description": "Pad 1 [+3V3] of R34 on F.Cu",
+                    "pos": {
+                        "x": 110.2,
+                        "y": 115.81
+                    },
+                    "uuid": "bd938c2f-0011-45be-be11-7ba49a5e5bd2"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [+3V3] on In2.Cu, length 0.5000 mm",
+                    "pos": {
+                        "x": 115.6,
+                        "y": 117.45
+                    },
+                    "uuid": "04fc0d32-989b-4a27-af31-2b0b6eefdb15"
+                },
+                {
+                    "description": "Track [+3V3] on B.Cu, length 8.2500 mm",
+                    "pos": {
+                        "x": 109.8,
+                        "y": 114.6
+                    },
+                    "uuid": "4afdb749-4646-4b2f-851c-bc47266ae71b"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 7 [VBAT_SENSE] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 111.8
+                    },
+                    "uuid": "0c4a5490-8d01-4b4d-a1d4-ee4434ea7ee0"
+                },
+                {
+                    "description": "Track [VBAT_SENSE] on F.Cu, length 0.0125 mm",
+                    "pos": {
+                        "x": 122.8625,
+                        "y": 117.25
+                    },
+                    "uuid": "5ad9b01c-8106-4a93-ad1d-467ead64ffa1"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 4 [MCU_EN] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 110.6
+                    },
+                    "uuid": "4029807e-0a52-4068-b228-c0aa5ee36de6"
+                },
+                {
+                    "description": "Track [MCU_EN] on In2.Cu, length 11.1406 mm",
+                    "pos": {
+                        "x": 115.5986,
+                        "y": 102.8852
+                    },
+                    "uuid": "a8497ce8-b4dd-49a9-9c74-668f3bf7c0c2"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 5 [BOOT_BTN] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 111.0
+                    },
+                    "uuid": "c944ca48-eafb-4653-a156-44e8ecff7c29"
+                },
+                {
+                    "description": "Track [BOOT_BTN] on In2.Cu, length 9.8967 mm",
+                    "pos": {
+                        "x": 115.3469,
+                        "y": 105.8889
+                    },
+                    "uuid": "c202291c-a7d2-4f53-bb11-578393cbc7eb"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 6 [BUZZER_CTRL] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 111.4
+                    },
+                    "uuid": "54ec243a-1e8a-4ac3-a01c-f179f03f5104"
+                },
+                {
+                    "description": "Pad 1 [BUZZER_CTRL] of R12 on F.Cu",
+                    "pos": {
+                        "x": 131.19,
+                        "y": 115.0
+                    },
+                    "uuid": "f9f2bad1-4fa1-4cb5-bd5e-8989e92cae59"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0598 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.0500 mm",
+                    "pos": {
+                        "x": 112.35,
+                        "y": 116.0
+                    },
+                    "uuid": "8b61603c-8951-47be-ad21-88b626dfb005"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.1399 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.1000 mm",
+                    "pos": {
+                        "x": 112.5,
+                        "y": 115.8
+                    },
+                    "uuid": "86cb2e51-0fcd-4ff3-af30-f336625f212c"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.1399 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.0707 mm",
+                    "pos": {
+                        "x": 112.6,
+                        "y": 115.8
+                    },
+                    "uuid": "56446b7c-cade-4a6b-a642-5f29deca696d"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0956 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.2121 mm",
+                    "pos": {
+                        "x": 112.35,
+                        "y": 115.95
+                    },
+                    "uuid": "bb9e4b44-fd1d-46c4-bf65-3ff739ff6798"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0435 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.0500 mm",
+                    "pos": {
+                        "x": 112.3,
+                        "y": 116.1
+                    },
+                    "uuid": "68ae76e7-b682-4485-95b6-9175b062ffd7"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0865 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_NSS] on In2.Cu, length 1.1830 mm",
+                    "pos": {
+                        "x": 112.7025,
+                        "y": 116.9183
+                    },
+                    "uuid": "6e8aebf9-6a8c-400f-804a-59289af1146e"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0435 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.2121 mm",
+                    "pos": {
+                        "x": 112.15,
+                        "y": 116.25
+                    },
+                    "uuid": "515ee807-8f06-4b9a-babd-a93c35b7e6fd"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0.1500 mm; actual 0.0598 mm)",
+            "items": [
+                {
+                    "description": "Track [LORA_SCK_DEV] on B.Cu, length 0.0707 mm",
+                    "pos": {
+                        "x": 112.3,
+                        "y": 116.05
+                    },
+                    "uuid": "4069e168-12b5-4ee8-a575-d3f4a002d0b2"
+                },
+                {
+                    "description": "Via [LORA_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 112.63,
+                        "y": 116.2639
+                    },
+                    "uuid": "f9ffc9ca-02ef-41ce-a149-9c71f37c2aca"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [+3V3] on F.Cu, length 0.5368 mm",
+                    "pos": {
+                        "x": 114.4,
+                        "y": 116.72
+                    },
+                    "uuid": "1245b67a-c6ad-4e19-bd4e-0b72b94310d1"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 110.2,
+                        "y": 117.15
+                    },
+                    "uuid": "4f03c05e-cdcb-450b-8b02-1417be63488b"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        }
+    ]
+}
