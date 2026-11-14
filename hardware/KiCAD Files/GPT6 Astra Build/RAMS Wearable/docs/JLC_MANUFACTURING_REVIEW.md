@@ -22,7 +22,7 @@ The following supplier limits were checked against [JLCPCB rigid PCB capabilitie
 | Routed copper-to-edge | At least 0.20 | Project rule 0.25; final DRC required |
 | SMD pad / pad gap | 0.25 × 0.25 / 0.15 | U1 corrected to 0.80 × 0.25; all 56 perimeter lands checked; other numbered SMD lands meet minimum dimensions |
 | Green-mask bridge | At least 0.10 | U1 native geometry has 0.15 web; final Gerber inspection still required |
-| Legend stroke / height / pad gap | 0.15 / 1.0 / 0.15 | Strict native rules configured; final DRC required |
+| Legend stroke / height / pad gap | 0.15 / 1.0 / 0.15 | 2026-11-13 owner-approved references use 0.10 stroke / 0.55 height (C13: 0.45); pad gap remains 0.15. BELOW published text minima: supplier print acceptance open. See READABILITY_AND_LESSONS.md. |
 
 Hole gaps above use KiCad effective hole/copper shapes, including rotated slots, with collision-distance binary search resolution 0.0001 mm. Same-net copper attached to plated ground holes is excluded from foreign-copper comparisons. These measurements do not model drill registration or finished-hole tolerances. The actual purchased USB and switch locating pegs still need mechanical fit checks.
 

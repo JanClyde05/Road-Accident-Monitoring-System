@@ -1,11 +1,11 @@
 # J2 final CAD validation — engineering candidate
 
-Reviewed 2026-11-12, Asia/Manila. Native KiCad **10.0.6**. Scope: the bare
+Reviewed 2026-11-13, Asia/Manila. Native KiCad **10.0.6**. Scope: the bare
 ESP32-S3FH4R2, AP2112, Ra-02, active buzzer and 1S LiPo JLCPCB design.
 **CAD validation passed; fabrication release and physical operation remain open.**
 
 The authoritative PCB SHA256 is
-`5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5`.
+`d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8`.
 Circuit specification SHA256 is
 `bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c`.
 Full native/project/library and report hashes are in
@@ -27,8 +27,9 @@ PCB, schematic and order ZIP hashes still match the starting baseline.
 | Firmware | Actual-source battery/RGB host tests and both full Arduino-ESP32 3.3.5 builds pass; 19 current source hashes match |
 
 DRC uses 0.15 mm copper/track minima, 0.25 mm copper-to-edge and hole clearance,
-0.45/0.20 mm minimum via diameter/drill, 1.0 mm legend text, 0.15 mm legend
-stroke/clearance. The mask check is independently geometric; the project does
+0.45/0.20 mm minimum via diameter/drill, owner-approved 0.55 mm reference text (C13: 0.45 mm)
+and 0.10 mm stroke, with 0.15 mm legend-to-pad clearance. These text dimensions
+are below JLCPCB’s published minima; supplier print acceptance remains open. The mask check is independently geometric; the project does
 not imply an unconfigured minimum-mask-web rule was checked by DRC.
 Project rules retain warnings rather than hiding them. Read raw
 [DRC](final_drc.json), [ERC](final_erc.json),
@@ -57,12 +58,18 @@ that path. These are neither worst-case guarantees nor thermal/current ratings.
 The AP2112 and actual assembled rail still need simultaneous-load measurements.
 
 Visual inspection covers all four copper layers, both masks/legends, top paste,
-top/bottom assembly and top/bottom 3D views in `previews/final/`. The review
-corrected missing ANT1/Y1 and overlapping test-point/D3 assembly labels. 3D
-models are incomplete and illustrative (notably the antenna, crystal, switch,
-LED, buzzer and Ra-02); use native lands and measured parts for fit. Four
-schematic pages were reviewed during capture, with the final IO/C35 page
-rechecked; the source-bound schematic reports record the unchanged page hashes.
+top/bottom assembly and 3D views in `previews/final/`. All 90 component references
+are visible. All 82 physical component positions have resolvable model assets;
+eight test pads intentionally have none. First-power views omit LED1/R30 while
+normal-population views show them in a derived preview only. Exact, family,
+generic and illustrative model limits are listed in docs/3D_MODEL_SOURCES.md.
+
+All four schematic pages now contain boxed sections, brief function/equation
+notes and a root power-flow map. Canonical netlists remain identical: 90 physical
+positions and 96 nets. Native board comparison confirms unchanged pads, tracks,
+vias, placements, courtyards, keepouts, filled copper, outline and stack/setup.
+See readability_validation.json and docs/READABILITY_AND_LESSONS.md. Original
+schematic UUIDs and hierarchical paths are retained; no live circuit was copied.
 
 Corrections retained in `verification/`: final CC1 reference reroute and dangling
 via cleanup; QFN land-width/paste adaptation; assembly-only label correction.
@@ -77,7 +84,7 @@ two validation host tests. Refill zones after copper changes before DRC;
 never run concurrent CAD writers. `export_review.py` requires the matching
 manifest and exports from a frozen copy. Export QA is recorded separately.
 
-**Still open:** supplier/field-solver RF and USB impedance confirmation for the
+**Still open:** compact-legend print acceptance; supplier/field-solver RF and USB impedance confirmation for the
 actual stackup; actual-stock package/polarity checks; QFN thermal-via soldering
 and paste/heatbed process qualification. After assembly, verify charging and
 protection, battery/USB sequencing, rail droop and temperature, ADC transients,

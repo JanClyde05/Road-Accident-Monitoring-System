@@ -1,37 +1,23 @@
-"""Finalize readable drawings, verify exported files and reseal the review ZIP.
+"""Verify exported files and reseal the review ZIP without regenerating artwork.
 
 Uses installed pypdf with ordinary Python. Only derived package files are edited.
 """
 from pathlib import Path
 from datetime import datetime
-import hashlib,json,re,shutil,subprocess,zipfile
+import hashlib,json,shutil,zipfile
 from pypdf import PdfReader
 from pypdf.generic import ContentStream
-r=Path(__file__).resolve().parents[1];out=r/'manufacturing/ENGINEERING_REVIEW_20261112'
+r=Path(__file__).resolve().parents[1];out=r/'manufacturing/ENGINEERING_REVIEW_20261113'
 sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
 manifest=json.loads((r/'reports/final_validation_manifest.json').read_text())
 for section in ['source_sha256','report_sha256']:
  for name,digest in manifest[section].items():assert sha(r/name)==digest,name
-backup=r/'verification'/('export_drawing_review_'+datetime.now().strftime('%Y%m%d_%H%M%S'));backup.mkdir()
+assert sha(out/'reports/final_validation_manifest.json')==sha(r/'reports/final_validation_manifest.json')
+for name,digest in manifest['report_sha256'].items():assert sha(out/name)==digest,name
+backup=r/'verification'/('export_qa_'+datetime.now().strftime('%Y%m%d_%H%M%S'));backup.mkdir()
 shutil.copy2(out.with_suffix('.zip'),backup/out.with_suffix('.zip').name)
-shutil.copytree(out/'drawings',backup/'drawings')
-cli=r'C:/Program Files/KiCad/10.0/bin/kicad-cli.exe';board=out/'source/RAMS_JLC_S3.kicad_pcb'
-commands=json.loads((out/'export_commands.json').read_text())
-for side in ['top','bottom']:
- for scale in [1,4]:
-  old=out/'drawings'/f'assembly_{side}_{scale}x.pdf'
-  shutil.copy2(old,out/'drawings'/f'pad_map_{side}_{scale}x.pdf')
-  args=[cli,'pcb','export','pdf','--layers',('F.Fab' if side=='top' else 'B.Fab')+',Edge.Cuts','--black-and-white','--mode-single','--scale',str(scale),'--output',str(old)]
-  if side=='bottom':args.append('--mirror')
-  args.append(str(board));result=subprocess.run(args,capture_output=True,text=True)
-  assert result.returncode==0,result.stderr
-  commands.append({'purpose':'Separate readable assembly from numbered pad map','args':args,'exit_code':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
-  print(old.name,flush=True)
-(out/'export_commands.json').write_text(json.dumps(commands,indent=2)+'\n')
-readme=out/'READ_ME_FIRST.md';s=readme.read_text();s=s.replace('- drawings/: four-page schematic, top/bottom assembly at 1:1 and 4:1.','- drawings/: four-page schematic, readable assembly and separate numbered pad maps,\n  top/bottom at 1:1 and 4:1.');readme.write_text(s)
-shutil.copy2(r/'scripts/export_review.py',out/'scripts/export_review.py')
-shutil.copy2(Path(__file__),out/'scripts/finalize_exports.py')
-qa={'date':'2026-11-12','status':'export structure/geometry checks passed; supplier and physical gates remain open','board_sha256':sha(board)}
+board=out/'source/RAMS_JLC_S3.kicad_pcb'
+qa={'date':'2026-11-13','status':'export structure/geometry checks passed; supplier and physical gates remain open','board_sha256':sha(board)}
 expected={'.gtl':'Copper,L1,Top','.g1':'Copper,L2,Inr','.g2':'Copper,L3,Inr','.gbl':'Copper,L4,Bot','.gts':'Soldermask,Top','.gbs':'Soldermask,Bot','.gto':'Legend,Top','.gbo':'Legend,Bot','.gm1':'Profile,NP'}
 for ext,function in expected.items():
  files=list((out/'bare_board').glob('*'+ext));assert len(files)==1
@@ -47,6 +33,11 @@ for ref in ['BZ1','U2']:assert f'%TO.C,{ref}*%' not in normal and f'%TO.C,{ref}*
 assert normal.count('D03*')==285 and initial.count('D03*')==279
 qa['top_stencil_flashes']={'normal':285,'first_power':279,'omitted':'2 R30 + 4 LED1 pads; BZ1/Ra02 absent in both'}
 pdf_checks={}
+expected_pdfs={'schematic.pdf'}|{f'{kind}_{side}_{scale}x.pdf' for kind in ['assembly','pad_map'] for side in ['top','bottom'] for scale in [1,4]}
+assert {f.name for f in (out/'drawings').glob('*.pdf')}==expected_pdfs
+for side in ['top','bottom']:
+ for scale in [1,4]:
+  assert sha(out/'drawings'/f'assembly_{side}_{scale}x.pdf')!=sha(out/'drawings'/f'pad_map_{side}_{scale}x.pdf'), 'Assembly and pad map must be distinct exports'
 for file in (out/'drawings').glob('*.pdf'):
  reader=PdfReader(file);assert len(reader.pages)==(4 if file.name=='schematic.pdf' else 1)
  if file.name=='schematic.pdf':pdf_checks[file.name]={'pages':4};continue
@@ -65,6 +56,15 @@ for file in (out/'drawings').glob('*.pdf'):
   text=p.extract_text();assert all(name in text for name in ['ANT1','Y1','U1','C35','TP6','TP7','D3'])
  pdf_checks[file.name]={'pages':1,'scale':scale,'outline_print_size_mm':[42*scale,32*scale]}
 qa['pdf_checks']=pdf_checks
+for name in ['SCHEMATIC_LEARNING_NOTES.md','schematic_learning_cards.json','3D_MODEL_SOURCES.md']:
+ assert sha(out/'docs'/name)==sha(r/'docs'/name),name
+schematic_previews=list((r/'previews/schematic').glob('*'))
+assert any(f.suffix=='.png' for f in schematic_previews)
+for file in schematic_previews:
+ if file.is_file():assert sha(out/'previews/schematic'/file.name)==sha(file),file.name
+if (r/'reports/readability_validation.json').is_file():
+ assert sha(out/'reports/readability_validation.json')==sha(r/'reports/readability_validation.json')
+ qa['readability_report_sha256']=sha(out/'reports/readability_validation.json')
 for name,digest in manifest['source_sha256'].items():assert sha(out/'source'/name)==digest,name
 for section in ['source_sha256','report_sha256']:
  for name,digest in manifest[section].items():assert sha(r/name)==digest,name
@@ -76,6 +76,10 @@ archive=out.with_suffix('.zip')
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
  for f in out.rglob('*'):
   if f.is_file():z.write(f,str(f.relative_to(out)))
-with zipfile.ZipFile(archive) as z:assert z.testzip() is None
+with zipfile.ZipFile(archive) as z:
+ assert z.testzip() is None
+ assert set(z.namelist())==set(files)|{'SHA256_MANIFEST.json'}
+ for name,digest in files.items():assert hashlib.sha256(z.read(name)).hexdigest()==digest,name
+ assert z.read('SHA256_MANIFEST.json')==(out/'SHA256_MANIFEST.json').read_bytes()
 (r/'reports/review_package_identity.json').write_text(json.dumps({'zip':str(archive.relative_to(r)).replace('\\','/'),'sha256':sha(archive),'files':len(files),'source_board_sha256':sha(board)},indent=2)+'\n')
 print('Export QA and ZIP integrity passed',sha(archive),flush=True)

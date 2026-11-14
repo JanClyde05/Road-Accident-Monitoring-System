@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-12",
+  "kicad": "10.0.6",
+  "status": "CAD passed; manufacturing and physical gates open",
+  "source_sha256": {
+    "circuit_spec.json": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+    "fp-lib-table": "fba4e809073992e45b4717d3c4ade3bda694a145992c265e7ffc15879f1faf73",
+    "lib/RAMS_JLC.kicad_sym": "8bcd9548d36207e85076f6e2aec3ce29b009391ce600953f87af42c106730f46",
+    "lib/RAMS_JLC.pretty/Buzzer_9650_SMD_Stock_HandSolder.kicad_mod": "fef313a4a998878d35bdb004df5e07c360f781305af731b47ff6ba7f52f0c52f",
+    "lib/RAMS_JLC.pretty/Buzzer_PUI_SMI-1027-TW-3V-R.kicad_mod": "28d9fe3acad9925c291faff5930e529aba0adb5554782214efdc428eebb1fbb6",
+    "lib/RAMS_JLC.pretty/Crystal_Abracon_ABM8_3225.kicad_mod": "7767f690dfee6463f7ac30a60f0f65f3e4f0bbf731cba2e43239b51441f4ecd5",
+    "lib/RAMS_JLC.pretty/ESP32-S3FH4R2_QFN56_EP5p7.kicad_mod": "969f865a894baee6ac61f2aa1d45c6207cdc879fe7c0f9f86fa31fb95156a94a",
+    "lib/RAMS_JLC.pretty/Johanson_B100_3216.kicad_mod": "ed0370c75712ee7818770850f7e1516bd693246001fe5b32d8025ce0a99d9e85",
+    "lib/RAMS_JLC.pretty/SW_SPDT_Shouhan_MSK12C02.kicad_mod": "2ed9d359e48ab026551c140019a247cbf29f3063885c060c19b7c7ad5b606ae5",
+    "lib/RAMS_JLC.pretty/SW_SPST_TS-1088-xR020.kicad_mod": "add8704300b5fc07181e6a0feeb535dc7516376cbe0e66301f6db49741982496",
+    "lib/RAMS_JLC.pretty/TPS63020_DSJ14.kicad_mod": "01ae86aa0c83a16c9ce2961f491bcc650993c82e5a5a8ebce62c3bf49afc0a44",
+    "lib/RAMS_JLC.pretty/USB4105_GND_NPTH_Clearance.kicad_mod": "44c29246053c93c8bc9f3162f1f47563086daa892de37a6268f90ccf02e46215",
+    "lib/RAMS_JLC.pretty/USB_C_Receptacle_GCT4105_NPTH.kicad_mod": "8faac80e0c59fd61e87198a7836e0308c41d2bda6cab12e70d2d256780572708",
+    "RAMS_JLC_S3.kicad_dru": "b155d2f5f3b67178106565cd3292cc8038c4136cf71d94bccadc1a99843c2210",
+    "RAMS_JLC_S3.kicad_pcb": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
+    "RAMS_JLC_S3.kicad_pro": "dbaba9c283ca1f7dedfbd692aab3e517494c6b45820dfa415c320a75203505e7",
+    "RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
+    "RAMS_JLC_S3_io.kicad_sch": "d4185ab24f93aa62eaf955612395db1ca800bc078907832ca8cba8098e5cd507",
+    "RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
+    "RAMS_JLC_S3_power.kicad_sch": "b1a052a552f4ff7a6112b94e4dda088f12df9138c8c9a9b0949b9449eac89be4",
+    "schematic_manifest.json": "7bcf6a9f67a1615e1c98806d7ce2fab0ed89b48a0633c0e95e3deb4909a66d75",
+    "sym-lib-table": "d8cc53c807eac9de5a0ba9dbc6af31956a4df3f64c7837bdb60ce2a66f5a7b31"
+  },
+  "report_sha256": {
+    "reports/final_drc.json": "e6f8d547ea008fa210693011604debf080cdf93a822dd4fafbc2c095f6d5d4b1",
+    "reports/final_erc.json": "6136a5c05ac9c3243c184ab931ec67ceb3cf77710b1d43be39879830317630e6",
+    "reports/FINAL_VALIDATION.md": "01601dadabf537503393726cfdf81a216c53a3c8218084f93e2208f80e1d3145",
+    "reports/power_paths_final.json": "17ffd571def3ba968e9106ab7d1e393d199743e42520ae3c184772b2eb9af544",
+    "reports/final_geometry/geometry_audit.json": "52d5ff563b5145e46e9982a82dd6c0fe74ac7ff9b033f688ce077bab99d02a14",
+    "reports/firmware_j2/build_summary.json": "d62d4943c3240c85cb065d55e075406a80ee16e93e29376db3fdbef3be61c8b2"
+  },
+  "original_reference_unchanged": [
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_pcb",
+      "sha256": "cccc6209cfafdab1f8c6d15217eb72f07c533188559bad071022571ead0909b4"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/RAMS - PCB.kicad_sch",
+      "sha256": "3ddf52db5ac92523645c3d15b23b8716f3e7580660e0a7f1cd5ffea082acef26"
+    },
+    {
+      "path": "hardware/KiCAD Files/Antigravity Build/RAMS - PCB/JLCPCB_ORDER_PACKAGE/1_GERBERS_RAMS_PCB.zip",
+      "sha256": "0c74cf696dfba11d9b9548588514f9f0b6437286112295032579ac4183284c24"
+    }
+  ],
+  "board_checks": {
+    "connected_pad_occurrences": 253,
+    "outline_mm": [
+      42.0,
+      32.0
+    ],
+    "QFN_perimeter_pads": 56,
+    "initial_fitted": 80,
+    "normal_fitted": 82
+  },
+  "firmware_source_sha256": {
+    "firmware\\wearable_withApp\\battery.cpp": "45db64eb190ccd01de7bc4f21f24e900df82dd16c97ed5cd00489169e7a8e222",
+    "firmware\\wearable_withApp\\battery.h": "c48552d03dc269882605699ff30debfc7d122aca112881f2bedef5a1a6df6339",
+    "firmware\\wearable_withApp\\bt_service.cpp": "b54d1542b31a726893a6853b6fa1eecf0de8c5c1e33d5c14ce4066367e3ea99e",
+    "firmware\\wearable_withApp\\bt_service.h": "d5be865c13398d495ace30b3090fc08262be3541998d883f6ea59b958bb21aeb",
+    "firmware\\wearable_withApp\\button.cpp": "4b948feb2affcc0ed0065f469fef8a4acc5d924a0b05247264246bef465e735a",
+    "firmware\\wearable_withApp\\button.h": "168a6711b8918583f1ea29396df6c799a9820fd510ca8ebff2eadb89f7a506e6",
+    "firmware\\wearable_withApp\\buzzer.cpp": "cedc5a9537288d163f219e183ec377bc4aa443f2f6c40b281302730b2a765b7f",
+    "firmware\\wearable_withApp\\buzzer.h": "3fc899307697fa2bda3c9356681e4d1fd17cc02670b19ba34e5e8690e6c4254a",
+    "firmware\\wearable_withApp\\config.h": "bda046bf29b8215c50c57c50bbd978f051ce070169a66496bbbe0d14e78fc384",
+    "firmware\\wearable_withApp\\detection.cpp": "2438021480d305d6189f91d59ca84cb793530194d80f9c4650fff0d63f2fdd49",
+    "firmware\\wearable_withApp\\detection.h": "d78685c593d7b9e79943388c931f718331ac3a79219f75b9e8b859845ffa0914",
+    "firmware\\wearable_withApp\\gps.cpp": "cf03ff6c01c78cc5d0990d5f4f9ab4445785f1ce0232030747049ae605711d20",
+    "firmware\\wearable_withApp\\gps.h": "50d5e472dae393866d6aea1a952221c2d852d03045884f75260f95bf3698ac32",
+    "firmware\\wearable_withApp\\lora_tx.cpp": "0df6243a1db410076b6bd7f10d8f9cd1f21acefde18f82b64d8cae6a34b5c17f",
+    "firmware\\wearable_withApp\\lora_tx.h": "4feaf29ea7d1df9f3506d764ca9c7734a1d8560f8835a2404a7e54d9f080a642",
+    "firmware\\wearable_withApp\\neopixel.cpp": "c44a6e7d833cb6df28135b8cbc2803919f7b029d0cd3c5cc4019407ecc07a318",
+    "firmware\\wearable_withApp\\neopixel.h": "2d7b9d51d2114bd9889ec59f2a90b42c263d7353d45f5ef2caf5a1dfa63efd12",
+    "firmware\\wearable_withApp\\wearable_withApp.ino": "ee0ead176d81b3699d314030de56e32762a7d62e1f04699648606393518d5eda",
+    "firmware\\shared\\protocol.h": "1698e3ff5acd3209841d6b8cf69e8eef85ec7bed40c1c698464210f02863aaaa"
+  }
+}

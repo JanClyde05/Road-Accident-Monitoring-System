@@ -1,0 +1,33 @@
+[
+  {
+    "name": "diodes_ap2112.pdf",
+    "url": "https://www.diodes.com/assets/Datasheets/AP2112.pdf",
+    "status": "unavailable",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "diodes_ap2112_lcsc_mirror.pdf",
+    "url": "https://datasheet.lcsc.com/lcsc/1809192242_Diodes-Incorporated-AP2112K-3-3TRG1_C51118.pdf",
+    "status": "unavailable",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "semtech_sx1276_7_8_9_v7.pdf",
+    "url": "https://www.semtech.com/uploads/documents/DS_SX1276-7-8-9_W_APP_V7.pdf",
+    "status": "unavailable",
+    "error": "Not PDF"
+  },
+  {
+    "name": "diodes_ap2112_sparkfun_mirror.pdf",
+    "url": "https://cdn.sparkfun.com/assets/1/7/c/5/f/AP2112_Datasheet.pdf",
+    "bytes": 755270,
+    "sha256": "ef8d376f2ec356e29172eb9e053819a0ebdcc576dba7fc9ab0505c568427920f",
+    "status": "saved"
+  },
+  {
+    "name": "ai_thinker_ra02_v1_1.pdf",
+    "url": "https://docs.ai-thinker.com/_media/lora/docs/c048ps01a1_ra-02_product_specification_v1.1.pdf",
+    "status": "unavailable",
+    "error": "Not PDF"
+  }
+]

@@ -1,0 +1,794 @@
+{
+  "J1": {
+    "uuid": "9a6a80fb-a75a-5004-a2a1-d445823e75cb",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/9a6a80fb-a75a-5004-a2a1-d445823e75cb",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/9a6a80fb-a75a-5004-a2a1-d445823e75cb",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Connector:USB_C_Receptacle_USB2.0_16P"
+  },
+  "R1": {
+    "uuid": "6a89dab9-0ff9-5696-80ec-a4c78fbb96b0",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/6a89dab9-0ff9-5696-80ec-a4c78fbb96b0",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/6a89dab9-0ff9-5696-80ec-a4c78fbb96b0",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "R2": {
+    "uuid": "ffb72bb9-6b72-528b-af9e-70288ecab22c",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/ffb72bb9-6b72-528b-af9e-70288ecab22c",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/ffb72bb9-6b72-528b-af9e-70288ecab22c",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "D1": {
+    "uuid": "20990d1e-5381-5c11-9f78-adffc774dcf0",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/20990d1e-5381-5c11-9f78-adffc774dcf0",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/20990d1e-5381-5c11-9f78-adffc774dcf0",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Power_Protection:USBLC6-2SC6"
+  },
+  "C1": {
+    "uuid": "538e9560-10d3-5334-bd13-9cca97dc9b05",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/538e9560-10d3-5334-bd13-9cca97dc9b05",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/538e9560-10d3-5334-bd13-9cca97dc9b05",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "C2": {
+    "uuid": "0349a211-705a-5259-b4f3-dc3a52e542c2",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/0349a211-705a-5259-b4f3-dc3a52e542c2",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/0349a211-705a-5259-b4f3-dc3a52e542c2",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "U3": {
+    "uuid": "0dfd9ee4-f0b0-5039-8440-b89118ecde1d",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/0dfd9ee4-f0b0-5039-8440-b89118ecde1d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/0dfd9ee4-f0b0-5039-8440-b89118ecde1d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Battery_Management:LTC4054ES5-4.2"
+  },
+  "R3": {
+    "uuid": "34d1399a-7c58-5368-bcc5-ba1aa54f0442",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/34d1399a-7c58-5368-bcc5-ba1aa54f0442",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/34d1399a-7c58-5368-bcc5-ba1aa54f0442",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "R30": {
+    "uuid": "ba5862a3-b0c7-5ac2-b97d-0533e7afda52",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/ba5862a3-b0c7-5ac2-b97d-0533e7afda52",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/ba5862a3-b0c7-5ac2-b97d-0533e7afda52",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "C3": {
+    "uuid": "3b49aa56-7fa2-5dcc-8224-ee0a8af277ba",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/3b49aa56-7fa2-5dcc-8224-ee0a8af277ba",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/3b49aa56-7fa2-5dcc-8224-ee0a8af277ba",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "C4": {
+    "uuid": "e226c56e-38bc-5812-a03c-a958b75c14d3",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/e226c56e-38bc-5812-a03c-a958b75c14d3",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/e226c56e-38bc-5812-a03c-a958b75c14d3",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "J2": {
+    "uuid": "f2de7eac-625d-5f32-a680-27283047e12c",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/f2de7eac-625d-5f32-a680-27283047e12c",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/f2de7eac-625d-5f32-a680-27283047e12c",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "RAMS_JLC:Battery_JST_SH"
+  },
+  "U4": {
+    "uuid": "d1ded9bc-cf44-535f-ab10-39df355426d3",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/d1ded9bc-cf44-535f-ab10-39df355426d3",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/d1ded9bc-cf44-535f-ab10-39df355426d3",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "RAMS_JLC:DW01A_Slkor"
+  },
+  "Q3": {
+    "uuid": "7936e4c1-e53b-5d01-8fa3-ea687527976d",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/7936e4c1-e53b-5d01-8fa3-ea687527976d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/7936e4c1-e53b-5d01-8fa3-ea687527976d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "RAMS_JLC:FS8205A_Fuxin"
+  },
+  "R4": {
+    "uuid": "8526c525-023d-50fc-8a2c-f1206c8367f6",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/8526c525-023d-50fc-8a2c-f1206c8367f6",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/8526c525-023d-50fc-8a2c-f1206c8367f6",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "R5": {
+    "uuid": "01af6b6d-f5f3-579e-8456-37c904d9afa8",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/01af6b6d-f5f3-579e-8456-37c904d9afa8",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/01af6b6d-f5f3-579e-8456-37c904d9afa8",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "C5": {
+    "uuid": "c89d295e-f438-53db-8bcb-9b2a350093e0",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/c89d295e-f438-53db-8bcb-9b2a350093e0",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/c89d295e-f438-53db-8bcb-9b2a350093e0",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "D2": {
+    "uuid": "239d8e01-1c56-561d-a777-147227d2c045",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/239d8e01-1c56-561d-a777-147227d2c045",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/239d8e01-1c56-561d-a777-147227d2c045",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Diode:SS14"
+  },
+  "Q1": {
+    "uuid": "800df24f-2c4c-5c96-9fb3-7859dbd84d39",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/800df24f-2c4c-5c96-9fb3-7859dbd84d39",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/800df24f-2c4c-5c96-9fb3-7859dbd84d39",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Transistor_FET:AO3401A"
+  },
+  "R6": {
+    "uuid": "d7bef8ae-a292-52ca-8af4-068852205fca",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/d7bef8ae-a292-52ca-8af4-068852205fca",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/d7bef8ae-a292-52ca-8af4-068852205fca",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "SW1": {
+    "uuid": "d6427471-0576-566e-b364-0d1335721312",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/d6427471-0576-566e-b364-0d1335721312",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/d6427471-0576-566e-b364-0d1335721312",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "RAMS_JLC:MSK12C02"
+  },
+  "R7": {
+    "uuid": "1658582a-8f0b-5e5b-bf51-2e87a3b8cb69",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/1658582a-8f0b-5e5b-bf51-2e87a3b8cb69",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/1658582a-8f0b-5e5b-bf51-2e87a3b8cb69",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "U5": {
+    "uuid": "e38355e7-6628-5f03-b09c-55f141d1f553",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/e38355e7-6628-5f03-b09c-55f141d1f553",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/e38355e7-6628-5f03-b09c-55f141d1f553",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Regulator_Linear:AP2112K-3.3"
+  },
+  "C7": {
+    "uuid": "f98813bc-325d-5b36-a589-68fdd0d9bcfc",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/f98813bc-325d-5b36-a589-68fdd0d9bcfc",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/f98813bc-325d-5b36-a589-68fdd0d9bcfc",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "C10": {
+    "uuid": "bac98535-41d8-5598-aad3-dc4bd933320d",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/bac98535-41d8-5598-aad3-dc4bd933320d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/bac98535-41d8-5598-aad3-dc4bd933320d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "Q4": {
+    "uuid": "bce324ce-55f6-5910-a8cf-e73d840613c3",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/bce324ce-55f6-5910-a8cf-e73d840613c3",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/bce324ce-55f6-5910-a8cf-e73d840613c3",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Transistor_FET:Q_NMOS_GSD"
+  },
+  "R15": {
+    "uuid": "13487d33-eae8-55a5-bc41-000060d9b8cb",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/13487d33-eae8-55a5-bc41-000060d9b8cb",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/13487d33-eae8-55a5-bc41-000060d9b8cb",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "R16": {
+    "uuid": "5e09998c-d9a7-517d-b0e0-714777da7bba",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/5e09998c-d9a7-517d-b0e0-714777da7bba",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/5e09998c-d9a7-517d-b0e0-714777da7bba",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:R"
+  },
+  "C29": {
+    "uuid": "19fc59a6-7e26-52f5-91ff-d34f16c7083e",
+    "path": "/7b4071a8-ec71-5051-8292-5115d714e254/19fc59a6-7e26-52f5-91ff-d34f16c7083e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254/19fc59a6-7e26-52f5-91ff-d34f16c7083e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/7b4071a8-ec71-5051-8292-5115d714e254",
+    "sheet": "power",
+    "lib_id": "Device:C"
+  },
+  "U1": {
+    "uuid": "b42191dc-c9ee-5f4d-9047-1cd2c6663062",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/b42191dc-c9ee-5f4d-9047-1cd2c6663062",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/b42191dc-c9ee-5f4d-9047-1cd2c6663062",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "RAMS_JLC:ESP32-S3FH4R2"
+  },
+  "L1": {
+    "uuid": "78302650-2cae-5f96-8965-98365bb5078d",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/78302650-2cae-5f96-8965-98365bb5078d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/78302650-2cae-5f96-8965-98365bb5078d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:L"
+  },
+  "C11": {
+    "uuid": "29eeb84a-1b48-5d07-b78a-245fa8fc3e7c",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/29eeb84a-1b48-5d07-b78a-245fa8fc3e7c",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/29eeb84a-1b48-5d07-b78a-245fa8fc3e7c",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C12": {
+    "uuid": "579aa684-78c2-536c-8da0-95394991239e",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/579aa684-78c2-536c-8da0-95394991239e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/579aa684-78c2-536c-8da0-95394991239e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C13": {
+    "uuid": "c1a71121-fd24-5f7e-9e97-fe02b7907a0f",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/c1a71121-fd24-5f7e-9e97-fe02b7907a0f",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/c1a71121-fd24-5f7e-9e97-fe02b7907a0f",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C14": {
+    "uuid": "ba53bd28-2ce1-591a-ad8b-758822f738d3",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/ba53bd28-2ce1-591a-ad8b-758822f738d3",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/ba53bd28-2ce1-591a-ad8b-758822f738d3",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C15": {
+    "uuid": "622c39c2-ab7b-56f1-b5be-71318ca20daa",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/622c39c2-ab7b-56f1-b5be-71318ca20daa",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/622c39c2-ab7b-56f1-b5be-71318ca20daa",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C16": {
+    "uuid": "caf2eaca-5606-5ea1-9a90-64cfbfe954f4",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/caf2eaca-5606-5ea1-9a90-64cfbfe954f4",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/caf2eaca-5606-5ea1-9a90-64cfbfe954f4",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C17": {
+    "uuid": "cfe54735-5b1b-5bf9-bcce-d5803f38745c",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/cfe54735-5b1b-5bf9-bcce-d5803f38745c",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/cfe54735-5b1b-5bf9-bcce-d5803f38745c",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C20": {
+    "uuid": "3a989cc7-6c9d-5a8d-93b0-4891d3579eb2",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/3a989cc7-6c9d-5a8d-93b0-4891d3579eb2",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/3a989cc7-6c9d-5a8d-93b0-4891d3579eb2",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C21": {
+    "uuid": "4f092755-d5d6-59e5-9654-c889cee7b7ae",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/4f092755-d5d6-59e5-9654-c889cee7b7ae",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/4f092755-d5d6-59e5-9654-c889cee7b7ae",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C22": {
+    "uuid": "19cb804d-3c55-54c8-b959-033829eb96c6",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/19cb804d-3c55-54c8-b959-033829eb96c6",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/19cb804d-3c55-54c8-b959-033829eb96c6",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "R8": {
+    "uuid": "95983a9b-a4e4-526a-9b71-696ca89d0ff3",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/95983a9b-a4e4-526a-9b71-696ca89d0ff3",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/95983a9b-a4e4-526a-9b71-696ca89d0ff3",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:R"
+  },
+  "R34": {
+    "uuid": "9e3760f3-6ff8-58b7-b14d-31e5a985668b",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/9e3760f3-6ff8-58b7-b14d-31e5a985668b",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/9e3760f3-6ff8-58b7-b14d-31e5a985668b",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:R"
+  },
+  "R35": {
+    "uuid": "06959f32-7fb0-5d47-b53a-6365455d5e7d",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/06959f32-7fb0-5d47-b53a-6365455d5e7d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/06959f32-7fb0-5d47-b53a-6365455d5e7d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:R"
+  },
+  "R36": {
+    "uuid": "b551a97b-d025-582b-8abe-9835ae7c1db7",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/b551a97b-d025-582b-8abe-9835ae7c1db7",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/b551a97b-d025-582b-8abe-9835ae7c1db7",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:R"
+  },
+  "R9": {
+    "uuid": "85345a0a-c37d-5278-8dea-81eb56adfed6",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/85345a0a-c37d-5278-8dea-81eb56adfed6",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/85345a0a-c37d-5278-8dea-81eb56adfed6",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:R"
+  },
+  "Y1": {
+    "uuid": "64e359e5-5d08-5194-9016-0e8439b0328a",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/64e359e5-5d08-5194-9016-0e8439b0328a",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/64e359e5-5d08-5194-9016-0e8439b0328a",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:Crystal_GND24_Small"
+  },
+  "C24": {
+    "uuid": "5fe356ea-45ea-585f-8a21-cdab00a258dc",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/5fe356ea-45ea-585f-8a21-cdab00a258dc",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/5fe356ea-45ea-585f-8a21-cdab00a258dc",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C25": {
+    "uuid": "d4c0780d-1f6b-5d5f-a10c-2b7d7b73f7a9",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/d4c0780d-1f6b-5d5f-a10c-2b7d7b73f7a9",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/d4c0780d-1f6b-5d5f-a10c-2b7d7b73f7a9",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C18": {
+    "uuid": "a230fbe7-9e28-5c6d-916b-e1f173bcaa36",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/a230fbe7-9e28-5c6d-916b-e1f173bcaa36",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/a230fbe7-9e28-5c6d-916b-e1f173bcaa36",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "L2": {
+    "uuid": "31daeea6-c157-56ee-9bc3-e21d0a198661",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/31daeea6-c157-56ee-9bc3-e21d0a198661",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/31daeea6-c157-56ee-9bc3-e21d0a198661",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:L"
+  },
+  "C19": {
+    "uuid": "8a69314f-9ae1-5f5f-a401-736183697232",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/8a69314f-9ae1-5f5f-a401-736183697232",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/8a69314f-9ae1-5f5f-a401-736183697232",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "C32": {
+    "uuid": "c10e9d09-0a48-5a62-9610-4db920e83382",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/c10e9d09-0a48-5a62-9610-4db920e83382",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/c10e9d09-0a48-5a62-9610-4db920e83382",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "L4": {
+    "uuid": "9c898e85-88eb-5935-8613-c805ab9428ec",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/9c898e85-88eb-5935-8613-c805ab9428ec",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/9c898e85-88eb-5935-8613-c805ab9428ec",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:L"
+  },
+  "L5": {
+    "uuid": "56df4f66-8a88-50e8-837f-744af12f8749",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/56df4f66-8a88-50e8-837f-744af12f8749",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/56df4f66-8a88-50e8-837f-744af12f8749",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:L"
+  },
+  "ANT1": {
+    "uuid": "6021f985-686a-51e9-9bc6-5c4402fa4abe",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/6021f985-686a-51e9-9bc6-5c4402fa4abe",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/6021f985-686a-51e9-9bc6-5c4402fa4abe",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:Antenna_Chip"
+  },
+  "C33": {
+    "uuid": "ca8d382d-f8e0-50b1-aeee-da8636e972c6",
+    "path": "/00a6382b-a79c-5b20-a91a-ca816ddf5b62/ca8d382d-f8e0-50b1-aeee-da8636e972c6",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62/ca8d382d-f8e0-50b1-aeee-da8636e972c6",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/00a6382b-a79c-5b20-a91a-ca816ddf5b62",
+    "sheet": "mcu",
+    "lib_id": "Device:C"
+  },
+  "U2": {
+    "uuid": "42f1b792-e9d0-5441-a471-1c202af4f342",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/42f1b792-e9d0-5441-a471-1c202af4f342",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/42f1b792-e9d0-5441-a471-1c202af4f342",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "RF_Module:Ai-Thinker-Ra-02"
+  },
+  "FB1": {
+    "uuid": "fada64c0-ca43-5532-adbe-6ab33aad5a5e",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/fada64c0-ca43-5532-adbe-6ab33aad5a5e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/fada64c0-ca43-5532-adbe-6ab33aad5a5e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:FerriteBead"
+  },
+  "C26": {
+    "uuid": "233d145e-d049-53a3-9d5d-1b0727b246cb",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/233d145e-d049-53a3-9d5d-1b0727b246cb",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/233d145e-d049-53a3-9d5d-1b0727b246cb",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:C"
+  },
+  "C27": {
+    "uuid": "e95ec7a2-e436-5172-87fe-fc5f6dbc65a8",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/e95ec7a2-e436-5172-87fe-fc5f6dbc65a8",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/e95ec7a2-e436-5172-87fe-fc5f6dbc65a8",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:C"
+  },
+  "R11": {
+    "uuid": "8a1a69df-cb14-5919-81d9-79aac6fd6d5e",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/8a1a69df-cb14-5919-81d9-79aac6fd6d5e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/8a1a69df-cb14-5919-81d9-79aac6fd6d5e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "R37": {
+    "uuid": "9263459a-cbe1-5ff5-9e15-3a4c580abe90",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/9263459a-cbe1-5ff5-9e15-3a4c580abe90",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/9263459a-cbe1-5ff5-9e15-3a4c580abe90",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "LED1": {
+    "uuid": "e86e82df-97e1-5a25-bdb1-6737fc864939",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/e86e82df-97e1-5a25-bdb1-6737fc864939",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/e86e82df-97e1-5a25-bdb1-6737fc864939",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "LED:WS2812B-2020"
+  },
+  "R13": {
+    "uuid": "6f2eb4b0-43ec-5fbf-8c97-593c127c8498",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/6f2eb4b0-43ec-5fbf-8c97-593c127c8498",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/6f2eb4b0-43ec-5fbf-8c97-593c127c8498",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "C28": {
+    "uuid": "663240aa-50ac-5625-bd3d-ec2753e4d525",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/663240aa-50ac-5625-bd3d-ec2753e4d525",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/663240aa-50ac-5625-bd3d-ec2753e4d525",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:C"
+  },
+  "Q5": {
+    "uuid": "4d4b47df-f0aa-55d7-a644-c0cc2dba8ce5",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/4d4b47df-f0aa-55d7-a644-c0cc2dba8ce5",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/4d4b47df-f0aa-55d7-a644-c0cc2dba8ce5",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Transistor_FET:AO3401A"
+  },
+  "R41": {
+    "uuid": "73f001e8-c5d3-575b-a191-aab0a2200b6d",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/73f001e8-c5d3-575b-a191-aab0a2200b6d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/73f001e8-c5d3-575b-a191-aab0a2200b6d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "U6": {
+    "uuid": "07cbcc0f-2137-5c3a-9653-0460d95f7501",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/07cbcc0f-2137-5c3a-9653-0460d95f7501",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/07cbcc0f-2137-5c3a-9653-0460d95f7501",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Logic_LevelTranslator:SN74LVC1T45DBV"
+  },
+  "C34": {
+    "uuid": "10480ade-5956-560d-9458-a0d2d502fc0d",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/10480ade-5956-560d-9458-a0d2d502fc0d",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/10480ade-5956-560d-9458-a0d2d502fc0d",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:C"
+  },
+  "C35": {
+    "uuid": "e9dc1ed9-9c67-560c-a1e3-e64118e0d2ed",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/e9dc1ed9-9c67-560c-a1e3-e64118e0d2ed",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/e9dc1ed9-9c67-560c-a1e3-e64118e0d2ed",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:C"
+  },
+  "R42": {
+    "uuid": "34edb19f-d293-5f82-9757-eccc0b201a62",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/34edb19f-d293-5f82-9757-eccc0b201a62",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/34edb19f-d293-5f82-9757-eccc0b201a62",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "R43": {
+    "uuid": "03fb55e6-9093-5714-82ca-f1b39f5733b4",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/03fb55e6-9093-5714-82ca-f1b39f5733b4",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/03fb55e6-9093-5714-82ca-f1b39f5733b4",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "BZ1": {
+    "uuid": "36066696-3cd4-5311-9bac-2c54432b2dfe",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/36066696-3cd4-5311-9bac-2c54432b2dfe",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/36066696-3cd4-5311-9bac-2c54432b2dfe",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:Buzzer"
+  },
+  "Q2": {
+    "uuid": "7a59789f-2501-58e5-b6e1-982ca638c643",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/7a59789f-2501-58e5-b6e1-982ca638c643",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/7a59789f-2501-58e5-b6e1-982ca638c643",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Transistor_BJT:BC817"
+  },
+  "R12": {
+    "uuid": "b969bd55-684b-57f6-a106-6459cf1cc159",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/b969bd55-684b-57f6-a106-6459cf1cc159",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/b969bd55-684b-57f6-a106-6459cf1cc159",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "R14": {
+    "uuid": "7cf580fb-14ac-5564-bb1d-21ca270308f4",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/7cf580fb-14ac-5564-bb1d-21ca270308f4",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/7cf580fb-14ac-5564-bb1d-21ca270308f4",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "D3": {
+    "uuid": "c51d3db6-12e7-5866-9a3a-d26f1814f88e",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/c51d3db6-12e7-5866-9a3a-d26f1814f88e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/c51d3db6-12e7-5866-9a3a-d26f1814f88e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Diode:1N4148W"
+  },
+  "SW2": {
+    "uuid": "8c4e7bb7-ea47-555d-a6fc-47cdd6490ed1",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/8c4e7bb7-ea47-555d-a6fc-47cdd6490ed1",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/8c4e7bb7-ea47-555d-a6fc-47cdd6490ed1",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Switch:SW_Push"
+  },
+  "SW3": {
+    "uuid": "4c57727e-e931-58a7-a450-1fe382dceba6",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/4c57727e-e931-58a7-a450-1fe382dceba6",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/4c57727e-e931-58a7-a450-1fe382dceba6",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Switch:SW_Push"
+  },
+  "R38": {
+    "uuid": "daa0e482-7714-55c6-b276-d18a0fa0508f",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/daa0e482-7714-55c6-b276-d18a0fa0508f",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/daa0e482-7714-55c6-b276-d18a0fa0508f",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "R39": {
+    "uuid": "ccb0302d-80c4-5f01-a507-bd89859d85e7",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/ccb0302d-80c4-5f01-a507-bd89859d85e7",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/ccb0302d-80c4-5f01-a507-bd89859d85e7",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Device:R"
+  },
+  "TP1": {
+    "uuid": "315d9108-b0d2-584e-94b0-8d53d63b07ed",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/315d9108-b0d2-584e-94b0-8d53d63b07ed",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/315d9108-b0d2-584e-94b0-8d53d63b07ed",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP2": {
+    "uuid": "5be312c0-0033-522f-970d-78fd3e64f196",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/5be312c0-0033-522f-970d-78fd3e64f196",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/5be312c0-0033-522f-970d-78fd3e64f196",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP3": {
+    "uuid": "e281985c-6fa2-54d8-8eb3-fb2e1484a588",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/e281985c-6fa2-54d8-8eb3-fb2e1484a588",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/e281985c-6fa2-54d8-8eb3-fb2e1484a588",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP4": {
+    "uuid": "583672a8-95b3-5471-a630-57d7a8dfc061",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/583672a8-95b3-5471-a630-57d7a8dfc061",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/583672a8-95b3-5471-a630-57d7a8dfc061",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP5": {
+    "uuid": "d8e45e98-c3cf-5206-b553-11f88b81c006",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/d8e45e98-c3cf-5206-b553-11f88b81c006",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/d8e45e98-c3cf-5206-b553-11f88b81c006",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP6": {
+    "uuid": "218e72f2-901b-5ee9-bec2-ce7c9b8d472e",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/218e72f2-901b-5ee9-bec2-ce7c9b8d472e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/218e72f2-901b-5ee9-bec2-ce7c9b8d472e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP7": {
+    "uuid": "f5343ce6-775a-5a04-8492-d9524af0e20a",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/f5343ce6-775a-5a04-8492-d9524af0e20a",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/f5343ce6-775a-5a04-8492-d9524af0e20a",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "TP8": {
+    "uuid": "edf79caa-532b-5205-ae8a-6996b170c7f7",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/edf79caa-532b-5205-ae8a-6996b170c7f7",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/edf79caa-532b-5205-ae8a-6996b170c7f7",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "Connector:TestPoint"
+  },
+  "#FLG001": {
+    "uuid": "c16a7e40-607e-5c21-9d99-14e2fba896fc",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/c16a7e40-607e-5c21-9d99-14e2fba896fc",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/c16a7e40-607e-5c21-9d99-14e2fba896fc",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG002": {
+    "uuid": "4a6f6508-01c2-510d-8669-d1867f6885fd",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/4a6f6508-01c2-510d-8669-d1867f6885fd",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/4a6f6508-01c2-510d-8669-d1867f6885fd",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG003": {
+    "uuid": "29edb256-bb3d-538c-8746-3d2b05b90842",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/29edb256-bb3d-538c-8746-3d2b05b90842",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/29edb256-bb3d-538c-8746-3d2b05b90842",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG004": {
+    "uuid": "21c8c65c-24c6-5bd6-810c-f04a3a74f183",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/21c8c65c-24c6-5bd6-810c-f04a3a74f183",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/21c8c65c-24c6-5bd6-810c-f04a3a74f183",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG005": {
+    "uuid": "0210deeb-1bb9-554a-a7b1-3252833eafec",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/0210deeb-1bb9-554a-a7b1-3252833eafec",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/0210deeb-1bb9-554a-a7b1-3252833eafec",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG006": {
+    "uuid": "4c7c512a-f488-57df-9a49-113ab3e0382e",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/4c7c512a-f488-57df-9a49-113ab3e0382e",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/4c7c512a-f488-57df-9a49-113ab3e0382e",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG007": {
+    "uuid": "ccb3c621-82c8-5ae4-a721-a23d81f508a1",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/ccb3c621-82c8-5ae4-a721-a23d81f508a1",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/ccb3c621-82c8-5ae4-a721-a23d81f508a1",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG008": {
+    "uuid": "e1422ba3-8d2e-5887-9e76-cd4d7532b654",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/e1422ba3-8d2e-5887-9e76-cd4d7532b654",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/e1422ba3-8d2e-5887-9e76-cd4d7532b654",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  },
+  "#FLG009": {
+    "uuid": "b765af5f-c8ef-52c8-bc2e-732319a24f48",
+    "path": "/33930185-a46c-52d6-be30-704203710a55/b765af5f-c8ef-52c8-bc2e-732319a24f48",
+    "instance_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55/b765af5f-c8ef-52c8-bc2e-732319a24f48",
+    "sheet_path": "/6f54e38a-e423-5044-975c-2ade2371476f/33930185-a46c-52d6-be30-704203710a55",
+    "sheet": "io",
+    "lib_id": "power:PWR_FLAG"
+  }
+}

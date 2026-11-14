@@ -11,7 +11,9 @@ for key,val in settings.get('rule_severities',{}).items():
 settings['rules'].update(min_clearance=.15,min_track_width=.15,min_via_diameter=.45,
     min_via_drill=.2,min_through_hole_diameter=.2,min_copper_edge_clearance=.25,
     min_hole_clearance=.25,min_hole_to_hole=.25,min_via_annular_width=.1,
-    min_silk_clearance=.15,min_text_height=1.0,min_text_thickness=.15)
+    # Owner accepted smaller references to retain 42x32mm. This is a local
+    # readability target, below generic fabrication legend guidance; qualify print.
+    min_silk_clearance=.15,min_text_height=.45,min_text_thickness=.10)
 settings['track_widths']=[.15,.18,.2,.25,.35,.5,.7]
 settings['via_dimensions']=[{'diameter':.45,'drill':.2},{'diameter':.6,'drill':.3}]
 settings['diff_pair_dimensions']=[{'width':.15,'gap':.15,'via_gap':.25}]

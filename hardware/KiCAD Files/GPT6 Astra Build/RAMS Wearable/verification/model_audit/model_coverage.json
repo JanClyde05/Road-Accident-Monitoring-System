@@ -1,0 +1,878 @@
+{
+  "inspected_board_sha256": "e2b1bb5c176bf81e6e564c315d04e30e329a471473ce931eef8b8d85e5bdf1f1",
+  "footprints": 90,
+  "physical_components": 82,
+  "missing_physical_models": [],
+  "intentional_testpads_without_models": [
+    "TP6",
+    "TP1",
+    "TP4",
+    "TP2",
+    "TP5",
+    "TP3",
+    "TP8",
+    "TP7"
+  ],
+  "items": [
+    {
+      "ref": "R5",
+      "value": "1k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C2",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R43",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R35",
+      "value": "10k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "U6",
+      "value": "SN74LVC1T45DBVR",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "U3",
+      "value": "LTC4054ES5-4.2",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/TSOT-23-5.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C34",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R15",
+      "value": "30k 1%",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R7",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C22",
+      "value": "1uF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C29",
+      "value": "1nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "D1",
+      "value": "USBLC6-2SC6",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP6",
+      "value": "MCU_EN",
+      "models": []
+    },
+    {
+      "ref": "C26",
+      "value": "10uF 10V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "D2",
+      "value": "SS14 SMA",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SMA.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C11",
+      "value": "10uF 10V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP1",
+      "value": "GND",
+      "models": []
+    },
+    {
+      "ref": "L2",
+      "value": "2.4nH RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R3",
+      "value": "10k 1%",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R42",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "BZ1",
+      "value": "9650 Active 3V STOCK",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\Buzzer_9650_envelope.wrl",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C20",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C3",
+      "value": "1uF 10V X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "SW3",
+      "value": "3x4mm BOOT/CANCEL",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_SPST_TS-1088-xR020.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Q5",
+      "value": "AO3401A",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C21",
+      "value": "10nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C1",
+      "value": "1uF 10V X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "L5",
+      "value": "3.3nH RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C12",
+      "value": "1uF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP4",
+      "value": "UART_TX",
+      "models": []
+    },
+    {
+      "ref": "TP2",
+      "value": "+3V3",
+      "models": []
+    },
+    {
+      "ref": "R16",
+      "value": "10k 1%",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C24",
+      "value": "12pF C0G",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "ANT1",
+      "value": "2450AT18B100E",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\Johanson_2450AT18x100.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C15",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Y1",
+      "value": "ABM8-40.000MHZ-10-1-U-T",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\Crystal_ABM8G_package.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C28",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R1",
+      "value": "5.1k 1%",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R13",
+      "value": "33R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R41",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "L1",
+      "value": "2.0nH >=500mA",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Q3",
+      "value": "FS8205A Fuxin",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Q2",
+      "value": "BC817-25",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R14",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Q1",
+      "value": "AO3401A",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R4",
+      "value": "100R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R9",
+      "value": "22R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R11",
+      "value": "33R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C19",
+      "value": "1.5pF C0G RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "SW2",
+      "value": "3x4mm RESET",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_SPST_TS-1088-xR020.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R37",
+      "value": "10k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R8",
+      "value": "10k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "J1",
+      "value": "USB4105-GF-A",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "L4",
+      "value": "2.7nH RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R34",
+      "value": "10k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C18",
+      "value": "1.5pF C0G RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "U1",
+      "value": "ESP32-S3FH4R2",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\ESP32S3_QFN56_package.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R36",
+      "value": "10k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R12",
+      "value": "330R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C14",
+      "value": "10uF 10V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R30",
+      "value": "0R CHG_LINK",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C10",
+      "value": "10uF 16V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "Q4",
+      "value": "DMN2056U-7",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C32",
+      "value": "1.2pF C0G RF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C13",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "D3",
+      "value": "1N4148W",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SOD-123.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C5",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C33",
+      "value": "1uF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C16",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R39",
+      "value": "22R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C17",
+      "value": "1uF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "U4",
+      "value": "DW01A SLKOR",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C25",
+      "value": "12pF C0G",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "SW1",
+      "value": "MSK12C02",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\MSK12C02_ProtoFlow.wrl",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R6",
+      "value": "100k",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP5",
+      "value": "UART_RX",
+      "models": []
+    },
+    {
+      "ref": "R38",
+      "value": "22R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C4",
+      "value": "4.7uF 10V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP3",
+      "value": "B_PLUS",
+      "models": []
+    },
+    {
+      "ref": "U5",
+      "value": "AP2112K-3.3TRG1",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "LED1",
+      "value": "WS2812B-2020 STOCK VERIFY",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\WS2812B-2020_ProtoFlow.wrl",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C27",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "C35",
+      "value": "100nF X7R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP8",
+      "value": "SYS_IN",
+      "models": []
+    },
+    {
+      "ref": "J2",
+      "value": "SM02B-SRSS-TB",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "TP7",
+      "value": "BOOT_BTN",
+      "models": []
+    },
+    {
+      "ref": "C7",
+      "value": "10uF 16V X5R",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "FB1",
+      "value": "MGGB1005M800HT-LF",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "R2",
+      "value": "5.1k 1%",
+      "models": [
+        {
+          "path": "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "ref": "U2",
+      "value": "Ai-Thinker-Ra-02",
+      "models": [
+        {
+          "path": "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\lib\\3d\\Ra-02_local.step",
+          "exists": true
+        }
+      ]
+    }
+  ]
+}

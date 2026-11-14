@@ -1,0 +1,19 @@
+{
+  "source_board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "private_board_sha256": "bf1850565542af319336e5ece838e0ce04ab7fc4c8b5acecc28190a86d99002a",
+  "note": "Illustrative normal-population preview only; active PCB/BOM/DNP flags unchanged.",
+  "dnp_cleared_only": [
+    {
+      "reference": "LED1",
+      "before_attributes": 66
+    },
+    {
+      "reference": "R30",
+      "before_attributes": 66
+    }
+  ],
+  "files": {
+    "top_3d_normal.png": "33b49e05f24f9a683a15b5d5f16378cbbd3a89be9efaa0c7bdef34c9f829675b",
+    "top_3d_normal_isometric.png": "13c956eb24432e89a20f939d0c1b74f4ed375fb8133051aec29a88d8009346f8"
+  }
+}

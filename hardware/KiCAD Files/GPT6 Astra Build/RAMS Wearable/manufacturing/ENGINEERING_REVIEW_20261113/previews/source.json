@@ -1,0 +1,32 @@
+{
+  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "note": "Native layer plots; SVG canvas padded 2mm. 82 physical footprint models resolved; generic/illustrative limits in docs/3D_MODEL_SOURCES.md. First-power and derived normal views are not physical fit evidence.",
+  "files": {
+    "assembly_bottom.png": "b829b40d409b4259f4c0d37dd8185a2480e69b60d621b7352c735110c84b4f88",
+    "assembly_bottom.svg": "f6a8e915958e3353b7af41aae9cef7caa533f7de67b1d191673378a953da25f1",
+    "assembly_top.png": "6b34bffa8650d35d7a0f317f436bca053356e658fa0356e6a8bbfa65e0032dd4",
+    "assembly_top.svg": "08e9a4bf8d8f7ee165173897ff8a4726462851ceaab2586b7cfea9c0512a1d24",
+    "bottom_3d.png": "ab457a63b8c904e7a4a2010e609d20ad2a167bd902c2846e9e760662f10f4f41",
+    "bottom_copper.png": "d331373e781dff49276e8b52bbe1c910c2239e28a5157d787f2b5b5b2b81257f",
+    "bottom_copper.svg": "3dd4ac89c0234849dd1e60b3583ba6d0b4edc409487d6cf1aef08f34aaa0279d",
+    "bottom_mask.png": "75415af934f33aa30c40273557c6e5a9f32778c1b0bc5ec29bc435df47202362",
+    "bottom_mask.svg": "efc79ed596b63a4193e2ccc8671568becf09b01acabd984b58576a6d096c9829",
+    "bottom_silk.png": "e7f4889ae2d7b98cebf85a10bcbd36151c04135bbd58a17c4b57bb43d502214a",
+    "bottom_silk.svg": "5301f136d06c55be7ec64a0b43fdaa5351bbec7aff3b5393179b5279eed4f6a8",
+    "ground_L2.png": "4e2904f34a34d2f83b43f156ebacf213a4ac2cf7310c8ebbd721506a1c582126",
+    "ground_L2.svg": "a8e5d1bbf507872169c8d330a0dc4bef3563f4aa1ee4e591f53f17896b86caf1",
+    "signal_L3.png": "90af54cb7b2ed14ebf4466671146edea741898a847a67f9e6d25f791f78ede33",
+    "signal_L3.svg": "9ac52d66103a7841fbaec4f738328d454228fa62e5f9542187e5a780688bfd90",
+    "top_3d.png": "c94802cd24595e0a4962a3813b80c78b45c1e9a8382c2c5f9a9b730ffe6ce2b5",
+    "top_3d_normal.png": "33b49e05f24f9a683a15b5d5f16378cbbd3a89be9efaa0c7bdef34c9f829675b",
+    "top_3d_normal_isometric.png": "13c956eb24432e89a20f939d0c1b74f4ed375fb8133051aec29a88d8009346f8",
+    "top_copper.png": "44f2406e90ef99ac576cf111ea5acca28f2036a09388a453528185cec6212632",
+    "top_copper.svg": "ac267d23d2995b10802307e597bbdd6568964facd5433d09224bce3bc8766665",
+    "top_mask.png": "daf2df334e516d4ab91431832366e291fdd7c2d25092548179e0137c3106c367",
+    "top_mask.svg": "e54a9d73f338d1e0d358a10ca2d22b4ea6db932ed0a179ffacb2e0ceb6940036",
+    "top_paste.png": "08d1966fed7d9ef10e6f5e9998e52041c17b49249508b819d705d88db6a490a7",
+    "top_paste.svg": "219334f9a9a85a89a9bbbe9514f6aaef1df86d4ac96e16f195d7c07a7c031835",
+    "top_silk.png": "470fa245408ba35d2d660494c2334b3aec08755a77c2245c5fc2042fefe93fbf",
+    "top_silk.svg": "07b230f1cdfbd6b3eb81faed940c9a4124fa7f450e14c2a3ad0da85662e85ce0"
+  }
+}

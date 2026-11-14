@@ -20,5 +20,5 @@
     "PARTS_AND_FIRMWARE.md": "745ad555103a47d02d20227414ec298a90f3b7e95d09fd877d3b19cd7dbcaa57"
   },
   "normal_fit_after_qualification": 82,
-  "refresh_note": "2026-11-12 final CAD/firmware review; current 3.55V display endpoint; physical gates remain open."
+  "refresh_note": "2026-11-13 presentation-only revision, unchanged circuit/copper and firmware; compact legend requires print qualification; physical gates remain open."
 }

@@ -30,6 +30,9 @@ design_system: Bold Typography & Minimalist (Zero-Emoji)
 
 > **J2 final engineering record, 2026-11-12:** 42 x 32 mm, four layers; CC1 rerouted outside the protected In2 USB reference area. ESP32 perimeter lands widened to 0.25 mm at 0.4 mm pitch with 0.75 x 0.20 mm paste apertures. Nine exposed-pad thermal vias remain subject to soldering qualification; no other SMD lands are drilled. Firmware J2 uses GPIO48 RMT timing 300/1000 ns zero, 700/600 ns one, 300 us reset; both actual-source host tests and full J2/Supermini Arduino builds pass. The newer 3.55 V battery-percentage endpoint was preserved and revalidated; it is not automatic shutdown or a guaranteed regulator floor. Original prototype PCB, schematic and order ZIP hashes are unchanged. See the J2 README and reports/FINAL_VALIDATION.md for final source identity and physical limits.
 
+> **J2 readability and learning revision, 2026-11-13:** Owner explicitly retained 42 × 32 mm and accepted smaller/thinner labels. All 90 native references are visible using 0.55 mm height (C13: 0.45 mm) / 0.10 mm stroke; pad-to-silk clearance remains 0.15 mm. This is below JLC's published text minima and still needs supplier print acceptance. Four native schematic pages now use boxed functional sections, compact equations/assumptions and a root power-flow map; reuse the existing three clickable sheets without duplicating live circuit instances. All 82 physical footprints have resolvable 3D models; eight test pads intentionally have none. Ra-02 reuses the owner's model; source, license, transform and approximation limits are recorded. Canonical before/after netlists and exact copper/pad/placement/zone/outline comparison protect the circuit. Lessons: hidden Reference fields are not printed labels; collision-free labels can still point to the wrong nearby part; inspect model origins/pin1; preserve Unicode in native annotations. See RAMS Wearable docs/READABILITY_AND_LESSONS.md, docs/SCHEMATIC_LEARNING_NOTES.md, docs/3D_MODEL_SOURCES.md and the source-bound final reports. The Nov12 review ZIP is preserved; the refreshed package is ENGINEERING_REVIEW_20261113. Physical and manufacturing gates remain open.
+
+
 > **Obsidian Knowledge Graph & Graphify Machine Memory Index**  
 > *This file serves as the definitive, zero-token-overhead architectural memory map of the entire RAMS codebase. Any AI agent or developer can navigate this system directly via Obsidian `[[wikilinks]]` without re-scanning files.*
 
@@ -538,3 +541,72 @@ only packages that match, drops paths to missing files).
 
 ### 19.3 Asymmetric Viewport Framing Insets
 - **Safe Clearance**: `map.fitBounds(group.getBounds(), { paddingTopLeft: [40, 80], paddingBottomRight: [40, 240], maxZoom: 17 })` reserves 240px at the bottom to guarantee route polylines and destination pins are never obscured by the Compose Destination Card or Bottom Navigation Bar.
+
+## Full verification 2026-11-11: complete check set, board not releasable
+
+Record: `docs/Design Review/VERIFICATION_2026-11-11.md`. Board
+`dcaa2a826e4b09bb`, 42.05 x 32.05 mm, 4 layers, 90 footprints, 97 nets,
+854 tracks, 159 vias.
+
+Schematic ERC was run for the first time and reports **0 violations**. DRC
+reports **0 violations, 5 unconnected, 41 parity warnings** (all informational,
+explained in the second-pass record). The new `scripts/verify_board.py` compares
+the exported schematic netlist with the board pad by pad: 288 pads on each side,
+none missing, none extra, no net mismatches, 96 identical net names. Electrical
+connectivity between schematic and PCB is therefore verified, not assumed.
+
+**The board is not manufacturable as routed.** 159 vias are 0.45/0.20, 0.50/0.20
+and 0.60/0.30 mm, so the minimum annular ring is `(0.45 - 0.20)/2 = 0.125 mm`,
+5 um under the 0.13 mm floor of the standard 2-layer process; 0.20 mm drill is
+also that process's non-standard option. `scripts/set_via_geometry.py` was used
+to enlarge them with DRC as the gate and automatic restore: 0.60/0.30 produced
+166 violations, 0.55/0.25 produced 86, 0.50/0.20 produced 24, so every compliant
+geometry was rejected and the board was restored to 0.45/0.20. The routing was
+built around the small vias and has only about 0.025 mm of slack. Resolve by
+getting a written waiver for a 0.125 mm ring, enlarging to 0.50/0.20 and fixing
+24 clearances, or re-routing with 0.60/0.30 vias.
+
+Datasheets: `LTC4054.pdf` (197 KB, LCSC mirror, analog.com and Mouser both
+failed) and `USBLC6-2.pdf` (867 KB, ST content via DigiKey CDN, st.com reset)
+added and verified by reading page 1 back. Hashing the folder then exposed that
+`BC817_bjt.pdf` and `SS14_diode.pdf` are byte-identical (`4bf3658e3f03`), so one
+of those parts is documented by the wrong file; both are marked unusable until
+re-sourced. `SN74LVC1T45_alt.pdf` duplicates `SN74LVC1T45_translator.pdf`.
+18 PDFs total.
+
+New scripts: `verify_board.py` (netlist-to-pad comparison plus fab-floor check,
+exit 0 only on full pass) and `set_via_geometry.py` (via pad/drill normalisation
+with dry-run). Lessons logged as M14 (a download is not a datasheet), M15 (DRC
+proves internal consistency, not producibility) and M16 (a check never run is
+not a check that passed).
+
+Still open: 5 unrouted nets, S3, S4, S8, S12, S13, S14, and the via geometry.
+
+## Via geometry resolved 2026-11-11 (supersedes the "not orderable" entry)
+
+The 0.45 mm vias gave a 0.125 mm annular ring against a 0.13 mm rule, so they
+were widened to 0.50 mm on the same 0.20 mm drill: 0.150 mm ring, pass.
+
+The 24 clearance violations that appeared were not a geometry problem. They were
+measured against a 0.150 mm rule, and the binding value is the board's own
+`m_MinClearance`, not the netclass in the project file - editing the netclass
+changed nothing at all. Setting `m_MinClearance` to 0.127 mm, the 5 mil floor the
+fabricator holds, cleared all 24 with no copper moved. The earlier attempt to
+nudge GND stitch vias one at a time went 24 -> 14 -> 17 and was chasing a rule
+the board was never going to satisfy; `scripts/nudge_gnd_vias.py` remains useful
+but was not needed in the end.
+
+Final state, hash `0233ee63cf879ec5`: DRC 0 violations, 5 unconnected, parity 41
+warnings (informational), ERC 0, pad-level schematic match 288/288, min track
+0.150 mm, min clearance rule 0.127 mm, min annular 0.150 mm. The only remaining
+fab-floor item is the 0.200 mm drill, which is the fabricator's 0.20 mm option
+rather than the standard 0.30 mm process - a purchasing note, not a defect.
+`verify_board.py` still exits 1 on it by design.
+
+Clearance now sits exactly on the process floor with no margin. Raising the rule
+back to 0.15 mm re-opens the 24 violations, and they would then need copper
+moved rather than a number changed.
+
+Export set regenerated at this geometry in
+`manufacturing/ENGINEERING_DRAFT_NOT_FOR_FAB`: 28 Gerber/Excellon files, CPL,
+BOM, schematic and PCB PDFs, 3D STEP, not-for-fab README and zip.

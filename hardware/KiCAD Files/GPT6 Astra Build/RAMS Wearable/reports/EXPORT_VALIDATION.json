@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-12",
+  "date": "2026-11-13",
   "status": "export structure/geometry checks passed; supplier and physical gates remain open",
-  "board_sha256": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
+  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
   "gerber_file_functions": {
     ".gtl": "Copper,L1,Top",
     ".g1": "Copper,L2,Inr",
@@ -92,5 +92,6 @@
     "schematic.pdf": {
       "pages": 4
     }
-  }
+  },
+  "readability_report_sha256": "83de2a0cc29415ac3c35fd26fd95ca95e5415bad5a4cdb03c9fa2abc39266d55"
 }

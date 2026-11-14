@@ -31,4 +31,4 @@ for side in ['top','bottom']:
  assert result.returncode==0,result.stderr
  print(side+' 3D',flush=True)
 assert hashlib.sha256(board.read_bytes()).hexdigest()==before
-(out/'source.json').write_text(json.dumps({'board_sha256':before,'note':'Native layer plots; SVG canvas padded 2mm. 3D models incomplete/illustrative, not physical fit evidence.','files':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.suffix in ['.svg','.png']}},indent=2)+'\n')
+(out/'source.json').write_text(json.dumps({'board_sha256':before,'note':'Native layer plots; SVG canvas padded 2mm. 82 physical footprint models resolved; generic/illustrative limits in docs/3D_MODEL_SOURCES.md. First-power and derived normal views are not physical fit evidence.','files':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.suffix in ['.svg','.png']}},indent=2)+'\n')

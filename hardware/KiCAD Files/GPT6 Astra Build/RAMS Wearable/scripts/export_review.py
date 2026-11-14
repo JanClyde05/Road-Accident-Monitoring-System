@@ -5,7 +5,7 @@ import pcbnew as p
 
 R = Path(__file__).resolve().parents[1]
 CLI = Path(sys.executable).with_name('kicad-cli.exe')
-OUT = R / 'manufacturing/ENGINEERING_REVIEW_20261112'
+OUT = R / 'manufacturing/ENGINEERING_REVIEW_20261113'
 manifest = json.loads((R / 'reports/final_validation_manifest.json').read_text())
 sha = lambda f: hashlib.sha256(f.read_bytes()).hexdigest()
 for section in ['source_sha256', 'report_sha256']:
@@ -25,12 +25,15 @@ shutil.copy2(R / 'README.md', OUT / 'PROJECT_README.md')
 shutil.copytree(R / 'docs', OUT / 'docs')
 shutil.copytree(R / 'scripts', OUT / 'scripts', ignore=shutil.ignore_patterns('__pycache__'))
 shutil.copytree(R / 'previews/final', OUT / 'previews')
+shutil.copytree(R / 'previews/schematic', OUT / 'previews/schematic')
 shutil.copytree(R / 'evidence/sources', OUT / 'evidence/sources')
-for name in ['final_validation_manifest.json','FINAL_VALIDATION.md','final_drc.json','final_erc.json','power_paths_final.json']:
+for name in ['final_validation_manifest.json','FINAL_VALIDATION.md','final_drc.json','final_erc.json','power_paths_final.json','model_inventory.json','silkscreen_final_plan.json']:
     dest = OUT / 'reports' / name; dest.parent.mkdir(exist_ok=True)
     shutil.copy2(R / 'reports' / name, dest)
 shutil.copytree(R / 'reports/final_geometry', OUT / 'reports/final_geometry')
 shutil.copytree(R / 'reports/firmware_j2', OUT / 'reports/firmware_j2')
+if (R / 'reports/readability_validation.json').is_file():
+    shutil.copy2(R / 'reports/readability_validation.json', OUT / 'reports/readability_validation.json')
 board = source / 'RAMS_JLC_S3.kicad_pcb'
 commands = []
 def run(*args):
@@ -89,9 +92,19 @@ docs/ASSEMBLY_AND_BRINGUP.md before using these files.
   Both omit hand-soldered BZ1 and Ra-02. PASTE_ONLY boards are derived artwork
   sources, not replacement fabrication PCBs. Use only the selected .gtp file.
 - docs/BOM_PROCUREMENT.csv: owned/procure/qualification notes and staged assembly.
+- docs/SCHEMATIC_LEARNING_NOTES.md and schematic_learning_cards.json: circuit
+  explanations alongside the current schematic previews in previews/schematic/.
 - reports/: zero native CAD findings and their exact sources; physical tests open.
-- previews/: copper, mask, paste, legend and assembly plots; incomplete illustrative
-  3D models. The absent 3D bodies do not mean those components are omitted.
+- previews/: copper, mask, paste, legend, assembly and current 3D views. Seven
+  custom model attachments now have assets; exact matches, package approximations
+  and the illustrative buzzer are identified in docs/3D_MODEL_SOURCES.md.
+  Test pads intentionally have no component bodies. Models do not qualify fit.
+
+All 90 component/test-pad references are shown with the owner's accepted compact
+0.55 mm text (C13: 0.45 mm) / 0.10 mm stroke. These sizes are below JLCPCB's published legend
+guidance and need printed-legend qualification; use the enlarged assembly and
+pad-map drawings as the reading aid. See reports/readability_validation.json
+when supplied. Text acceptance does not waive copper or electrical checks.
 
 Proposed fabrication: JLC04161H-3313, 1.6 mm, four layers, outer 1 oz / inner
 0.5 oz, green mask, white legend, ENIG. Proposed stencil: 0.10 mm, reproduce

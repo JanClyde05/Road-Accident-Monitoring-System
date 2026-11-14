@@ -1,0 +1,4102 @@
+{
+  "labels": {
+    "C34": {
+      "side": "F",
+      "xy": [
+        132.25,
+        100.95
+      ],
+      "angle": 0,
+      "distance_mm": 2.055,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "SW2": {
+      "side": "F",
+      "xy": [
+        121.3,
+        105.15
+      ],
+      "angle": 0,
+      "distance_mm": 3.43,
+      "box_cells": [
+        40,
+        22
+      ]
+    },
+    "C21": {
+      "side": "F",
+      "xy": [
+        114.05,
+        106.85
+      ],
+      "angle": 90,
+      "distance_mm": 2.65,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C11": {
+      "side": "F",
+      "xy": [
+        106.65,
+        117.65
+      ],
+      "angle": 0,
+      "distance_mm": 4.871,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C25": {
+      "side": "F",
+      "xy": [
+        119.75,
+        108.45
+      ],
+      "angle": 90,
+      "distance_mm": 5.034,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "SW3": {
+      "side": "F",
+      "xy": [
+        128.05,
+        105.6
+      ],
+      "angle": 90,
+      "distance_mm": 3.997,
+      "box_cells": [
+        22,
+        40
+      ]
+    },
+    "C18": {
+      "side": "F",
+      "xy": [
+        106.95,
+        103.75
+      ],
+      "angle": 0,
+      "distance_mm": 5.193,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C13": {
+      "side": "F",
+      "xy": [
+        106.55,
+        116.55
+      ],
+      "angle": 0,
+      "distance_mm": 4.986,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "D3": {
+      "side": "F",
+      "xy": [
+        140.8,
+        116.95
+      ],
+      "angle": 0,
+      "distance_mm": 2.001,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "D2": {
+      "side": "F",
+      "xy": [
+        102.2,
+        123.55
+      ],
+      "angle": 0,
+      "distance_mm": 4.25,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C22": {
+      "side": "F",
+      "xy": [
+        107.35,
+        102.25
+      ],
+      "angle": 90,
+      "distance_mm": 3.198,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C15": {
+      "side": "F",
+      "xy": [
+        119.75,
+        110.35
+      ],
+      "angle": 90,
+      "distance_mm": 4.693,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C33": {
+      "side": "F",
+      "xy": [
+        108.85,
+        118.65
+      ],
+      "angle": 0,
+      "distance_mm": 4.07,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C2": {
+      "side": "F",
+      "xy": [
+        106.0,
+        118.75
+      ],
+      "angle": 0,
+      "distance_mm": 1.301,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "TP3": {
+      "side": "F",
+      "xy": [
+        140.65,
+        115.4
+      ],
+      "angle": 90,
+      "distance_mm": 2.173,
+      "box_cells": [
+        22,
+        36
+      ]
+    },
+    "SW1": {
+      "side": "F",
+      "xy": [
+        102.5,
+        105.95
+      ],
+      "angle": 0,
+      "distance_mm": 5.05,
+      "box_cells": [
+        40,
+        22
+      ]
+    },
+    "C24": {
+      "side": "F",
+      "xy": [
+        110.15,
+        101.85
+      ],
+      "angle": 90,
+      "distance_mm": 1.956,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "D1": {
+      "side": "F",
+      "xy": [
+        103.8,
+        123.55
+      ],
+      "angle": 0,
+      "distance_mm": 3.164,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "ANT1": {
+      "side": "F",
+      "xy": [
+        102.55,
+        101.55
+      ],
+      "angle": 0,
+      "distance_mm": 1.651,
+      "box_cells": [
+        46,
+        22
+      ]
+    },
+    "LED1": {
+      "side": "F",
+      "xy": [
+        136.975,
+        102.15
+      ],
+      "angle": 0,
+      "distance_mm": 1.91,
+      "box_cells": [
+        47,
+        22
+      ]
+    },
+    "R7": {
+      "side": "F",
+      "xy": [
+        106.05,
+        109.6
+      ],
+      "angle": 90,
+      "distance_mm": 3.2,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "C14": {
+      "side": "F",
+      "xy": [
+        106.25,
+        102.25
+      ],
+      "angle": 90,
+      "distance_mm": 2.475,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C32": {
+      "side": "F",
+      "xy": [
+        105.55,
+        105.95
+      ],
+      "angle": 0,
+      "distance_mm": 2.197,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R9": {
+      "side": "F",
+      "xy": [
+        115.3,
+        107.25
+      ],
+      "angle": 0,
+      "distance_mm": 2.437,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "R43": {
+      "side": "F",
+      "xy": [
+        140.25,
+        105.55
+      ],
+      "angle": 0,
+      "distance_mm": 1.614,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R35": {
+      "side": "F",
+      "xy": [
+        120.85,
+        106.65
+      ],
+      "angle": 90,
+      "distance_mm": 2.363,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C35": {
+      "side": "F",
+      "xy": [
+        134.15,
+        103.25
+      ],
+      "angle": 90,
+      "distance_mm": 1.692,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "TP2": {
+      "side": "F",
+      "xy": [
+        138.15,
+        113.2
+      ],
+      "angle": 90,
+      "distance_mm": 2.593,
+      "box_cells": [
+        22,
+        36
+      ]
+    },
+    "R13": {
+      "side": "F",
+      "xy": [
+        135.95,
+        106.45
+      ],
+      "angle": 90,
+      "distance_mm": 1.151,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C12": {
+      "side": "F",
+      "xy": [
+        110.25,
+        115.35
+      ],
+      "angle": 90,
+      "distance_mm": 4.585,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "U6": {
+      "side": "F",
+      "xy": [
+        132.6,
+        105.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.686,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C19": {
+      "side": "F",
+      "xy": [
+        106.05,
+        107.75
+      ],
+      "angle": 90,
+      "distance_mm": 2.132,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "R34": {
+      "side": "F",
+      "xy": [
+        110.75,
+        118.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.094,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "TP5": {
+      "side": "F",
+      "xy": [
+        122.9,
+        110.65
+      ],
+      "angle": 0,
+      "distance_mm": 3.85,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "R8": {
+      "side": "F",
+      "xy": [
+        104.85,
+        116.3
+      ],
+      "angle": 90,
+      "distance_mm": 3.363,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "Q3": {
+      "side": "F",
+      "xy": [
+        128.0,
+        129.35
+      ],
+      "angle": 0,
+      "distance_mm": 2.5,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C28": {
+      "side": "F",
+      "xy": [
+        139.25,
+        102.25
+      ],
+      "angle": 0,
+      "distance_mm": 1.589,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "TP1": {
+      "side": "F",
+      "xy": [
+        140.2,
+        107.35
+      ],
+      "angle": 0,
+      "distance_mm": 1.698,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "R6": {
+      "side": "F",
+      "xy": [
+        107.35,
+        118.9
+      ],
+      "angle": 90,
+      "distance_mm": 3.158,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "L5": {
+      "side": "F",
+      "xy": [
+        104.05,
+        105.35
+      ],
+      "angle": 90,
+      "distance_mm": 3.05,
+      "box_cells": [
+        22,
+        26
+      ]
+    },
+    "Y1": {
+      "side": "F",
+      "xy": [
+        112.35,
+        101.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.295,
+      "box_cells": [
+        26,
+        22
+      ]
+    },
+    "FB1": {
+      "side": "F",
+      "xy": [
+        124.725,
+        110.65
+      ],
+      "angle": 0,
+      "distance_mm": 3.712,
+      "box_cells": [
+        37,
+        22
+      ]
+    },
+    "R41": {
+      "side": "F",
+      "xy": [
+        135.45,
+        112.25
+      ],
+      "angle": 90,
+      "distance_mm": 1.151,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "R36": {
+      "side": "F",
+      "xy": [
+        120.85,
+        111.05
+      ],
+      "angle": 90,
+      "distance_mm": 4.79,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "U4": {
+      "side": "F",
+      "xy": [
+        122.5,
+        129.45
+      ],
+      "angle": 0,
+      "distance_mm": 2.58,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C16": {
+      "side": "F",
+      "xy": [
+        115.25,
+        119.95
+      ],
+      "angle": 0,
+      "distance_mm": 2.878,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R1": {
+      "side": "F",
+      "xy": [
+        112.4,
+        123.35
+      ],
+      "angle": 0,
+      "distance_mm": 1.309,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "Q5": {
+      "side": "F",
+      "xy": [
+        137.9,
+        111.75
+      ],
+      "angle": 0,
+      "distance_mm": 2.686,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "R11": {
+      "side": "F",
+      "xy": [
+        114.35,
+        118.85
+      ],
+      "angle": 0,
+      "distance_mm": 3.398,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "L2": {
+      "side": "F",
+      "xy": [
+        110.05,
+        105.45
+      ],
+      "angle": 0,
+      "distance_mm": 4.114,
+      "box_cells": [
+        26,
+        22
+      ]
+    },
+    "L4": {
+      "side": "F",
+      "xy": [
+        105.85,
+        104.85
+      ],
+      "angle": 0,
+      "distance_mm": 3.344,
+      "box_cells": [
+        26,
+        22
+      ]
+    },
+    "L1": {
+      "side": "F",
+      "xy": [
+        108.65,
+        108.25
+      ],
+      "angle": 0,
+      "distance_mm": 3.35,
+      "box_cells": [
+        26,
+        22
+      ]
+    },
+    "J2": {
+      "side": "F",
+      "xy": [
+        116.225,
+        124.15
+      ],
+      "angle": 0,
+      "distance_mm": 4.081,
+      "box_cells": [
+        25,
+        22
+      ]
+    },
+    "TP7": {
+      "side": "F",
+      "xy": [
+        124.8,
+        111.75
+      ],
+      "angle": 0,
+      "distance_mm": 3.022,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "R2": {
+      "side": "F",
+      "xy": [
+        112.7,
+        118.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.739,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "Q1": {
+      "side": "F",
+      "xy": [
+        111.0,
+        123.35
+      ],
+      "angle": 0,
+      "distance_mm": 2.35,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C10": {
+      "side": "F",
+      "xy": [
+        125.25,
+        124.35
+      ],
+      "angle": 0,
+      "distance_mm": 2.21,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "U3": {
+      "side": "F",
+      "xy": [
+        131.3,
+        112.85
+      ],
+      "angle": 0,
+      "distance_mm": 2.639,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C26": {
+      "side": "F",
+      "xy": [
+        129.55,
+        106.05
+      ],
+      "angle": 0,
+      "distance_mm": 2.055,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R30": {
+      "side": "F",
+      "xy": [
+        116.45,
+        123.05
+      ],
+      "angle": 0,
+      "distance_mm": 1.681,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R14": {
+      "side": "F",
+      "xy": [
+        131.65,
+        117.65
+      ],
+      "angle": 0,
+      "distance_mm": 1.151,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C4": {
+      "side": "F",
+      "xy": [
+        129.5,
+        112.35
+      ],
+      "angle": 0,
+      "distance_mm": 2.15,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "R5": {
+      "side": "F",
+      "xy": [
+        122.3,
+        126.25
+      ],
+      "angle": 0,
+      "distance_mm": 1.301,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "TP4": {
+      "side": "F",
+      "xy": [
+        122.3,
+        111.75
+      ],
+      "angle": 0,
+      "distance_mm": 2.894,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "C27": {
+      "side": "F",
+      "xy": [
+        132.85,
+        106.75
+      ],
+      "angle": 0,
+      "distance_mm": 1.589,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "TP8": {
+      "side": "F",
+      "xy": [
+        128.2,
+        127.75
+      ],
+      "angle": 0,
+      "distance_mm": 1.662,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "R42": {
+      "side": "F",
+      "xy": [
+        128.15,
+        111.45
+      ],
+      "angle": 90,
+      "distance_mm": 4.316,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C20": {
+      "side": "F",
+      "xy": [
+        120.45,
+        116.35
+      ],
+      "angle": 0,
+      "distance_mm": 1.151,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R4": {
+      "side": "F",
+      "xy": [
+        118.3,
+        124.15
+      ],
+      "angle": 0,
+      "distance_mm": 2.516,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "R39": {
+      "side": "F",
+      "xy": [
+        117.15,
+        118.95
+      ],
+      "angle": 0,
+      "distance_mm": 1.812,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R38": {
+      "side": "F",
+      "xy": [
+        119.35,
+        117.45
+      ],
+      "angle": 0,
+      "distance_mm": 1.557,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "Q2": {
+      "side": "F",
+      "xy": [
+        135.0,
+        114.25
+      ],
+      "angle": 0,
+      "distance_mm": 2.55,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "J1": {
+      "side": "F",
+      "xy": [
+        109.025,
+        123.55
+      ],
+      "angle": 0,
+      "distance_mm": 6.007,
+      "box_cells": [
+        25,
+        22
+      ]
+    },
+    "TP6": {
+      "side": "F",
+      "xy": [
+        126.6,
+        111.05
+      ],
+      "angle": 0,
+      "distance_mm": 3.007,
+      "box_cells": [
+        36,
+        22
+      ]
+    },
+    "C1": {
+      "side": "F",
+      "xy": [
+        116.1,
+        121.55
+      ],
+      "angle": 0,
+      "distance_mm": 1.301,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C17": {
+      "side": "F",
+      "xy": [
+        120.45,
+        112.85
+      ],
+      "angle": 0,
+      "distance_mm": 1.151,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C3": {
+      "side": "F",
+      "xy": [
+        137.05,
+        106.5
+      ],
+      "angle": 90,
+      "distance_mm": 4.791,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "R3": {
+      "side": "F",
+      "xy": [
+        133.5,
+        114.15
+      ],
+      "angle": 0,
+      "distance_mm": 1.254,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "BZ1": {
+      "side": "F",
+      "xy": [
+        135.45,
+        130.85
+      ],
+      "angle": 0,
+      "distance_mm": 5.852,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R37": {
+      "side": "F",
+      "xy": [
+        120.95,
+        118.95
+      ],
+      "angle": 0,
+      "distance_mm": 1.551,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R12": {
+      "side": "F",
+      "xy": [
+        130.15,
+        114.95
+      ],
+      "angle": 90,
+      "distance_mm": 1.551,
+      "box_cells": [
+        22,
+        38
+      ]
+    },
+    "C7": {
+      "side": "F",
+      "xy": [
+        119.65,
+        123.0
+      ],
+      "angle": 90,
+      "distance_mm": 1.35,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "U5": {
+      "side": "F",
+      "xy": [
+        124.0,
+        119.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.35,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "C5": {
+      "side": "F",
+      "xy": [
+        118.4,
+        123.05
+      ],
+      "angle": 0,
+      "distance_mm": 2.205,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "R15": {
+      "side": "F",
+      "xy": [
+        124.55,
+        113.45
+      ],
+      "angle": 0,
+      "distance_mm": 1.551,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "R16": {
+      "side": "F",
+      "xy": [
+        126.85,
+        114.05
+      ],
+      "angle": 0,
+      "distance_mm": 1.614,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "C29": {
+      "side": "F",
+      "xy": [
+        127.95,
+        117.65
+      ],
+      "angle": 0,
+      "distance_mm": 1.551,
+      "box_cells": [
+        38,
+        22
+      ]
+    },
+    "Q4": {
+      "side": "F",
+      "xy": [
+        122.6,
+        118.65
+      ],
+      "angle": 0,
+      "distance_mm": 2.639,
+      "box_cells": [
+        28,
+        22
+      ]
+    },
+    "U1": {
+      "side": "F",
+      "xy": [
+        113.25,
+        116.9
+      ],
+      "angle": 90,
+      "distance_mm": 5.203,
+      "box_cells": [
+        22,
+        28
+      ]
+    },
+    "U2": {
+      "side": "B",
+      "xy": [
+        129.5,
+        121.05
+      ],
+      "angle": 0,
+      "distance_mm": 9.65,
+      "box_cells": [
+        28,
+        22
+      ]
+    }
+  },
+  "unplaced": [],
+  "height_mm": 0.55,
+  "stroke_mm": 0.1,
+  "courtyard_avoidance": true,
+  "refinement": {
+    "source": "reports\\silkscreen_plan_0.55.json",
+    "board_sha256": "751cb5cb7c74174b05fa64014407bc8223496735e552585a06a462756db1601b",
+    "method": "Exact-size Hungarian assignment and collision-safe local moves; courtyard-edge/foreign-association cost",
+    "history": [
+      {
+        "iteration": 0,
+        "reassigned": 26,
+        "local_moves": 30,
+        "cost": 1015.6755
+      },
+      {
+        "iteration": 1,
+        "reassigned": 4,
+        "local_moves": 9,
+        "cost": 853.928
+      },
+      {
+        "iteration": 2,
+        "reassigned": 7,
+        "local_moves": 5,
+        "cost": 742.1918
+      },
+      {
+        "iteration": 3,
+        "reassigned": 0,
+        "local_moves": 2,
+        "cost": 740.4199
+      },
+      {
+        "iteration": 4,
+        "reassigned": 0,
+        "local_moves": 0,
+        "cost": 740.4199
+      }
+    ],
+    "before_ambiguous": 27,
+    "after_ambiguous": 28,
+    "before": [
+      {
+        "reference": "C12",
+        "label_xy": [
+          111.05,
+          118.15
+        ],
+        "component_xy": [
+          108.8,
+          111.0
+        ],
+        "edge_distance_mm": 6.105,
+        "nearest_other": "R11",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 6.02,
+        "ambiguous": true
+      },
+      {
+        "reference": "L1",
+        "label_xy": [
+          100.95,
+          105.85
+        ],
+        "component_xy": [
+          106.6,
+          110.9
+        ],
+        "edge_distance_mm": 5.666,
+        "nearest_other": "SW1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 5.661,
+        "ambiguous": true
+      },
+      {
+        "reference": "C19",
+        "label_xy": [
+          106.25,
+          102.25
+        ],
+        "component_xy": [
+          107.4,
+          109.4
+        ],
+        "edge_distance_mm": 5.246,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 0.705,
+        "ambiguity_gap_mm": 4.541,
+        "ambiguous": true
+      },
+      {
+        "reference": "R8",
+        "label_xy": [
+          108.7,
+          108.25
+        ],
+        "component_xy": [
+          107.1,
+          113.8
+        ],
+        "edge_distance_mm": 4.043,
+        "nearest_other": "L2",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 3.958,
+        "ambiguous": true
+      },
+      {
+        "reference": "C13",
+        "label_xy": [
+          106.65,
+          116.55
+        ],
+        "component_xy": [
+          108.8,
+          112.1
+        ],
+        "edge_distance_mm": 3.404,
+        "nearest_other": "R6",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 3.379,
+        "ambiguous": true
+      },
+      {
+        "reference": "C25",
+        "label_xy": [
+          119.75,
+          108.45
+        ],
+        "component_xy": [
+          115.6,
+          105.6
+        ],
+        "edge_distance_mm": 3.236,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.052,
+        "ambiguity_gap_mm": 3.184,
+        "ambiguous": true
+      },
+      {
+        "reference": "R42",
+        "label_xy": [
+          127.75,
+          112.15
+        ],
+        "component_xy": [
+          130.1,
+          107.6
+        ],
+        "edge_distance_mm": 3.152,
+        "nearest_other": "C4",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 3.127,
+        "ambiguous": true
+      },
+      {
+        "reference": "L4",
+        "label_xy": [
+          104.05,
+          105.85
+        ],
+        "component_xy": [
+          108.7,
+          106.6
+        ],
+        "edge_distance_mm": 3.125,
+        "nearest_other": "SW1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 3.12,
+        "ambiguous": true
+      },
+      {
+        "reference": "C3",
+        "label_xy": [
+          137.2,
+          105.95
+        ],
+        "component_xy": [
+          132.5,
+          108.0
+        ],
+        "edge_distance_mm": 3.203,
+        "nearest_other": "LED1",
+        "nearest_other_edge_mm": 0.105,
+        "ambiguity_gap_mm": 3.098,
+        "ambiguous": true
+      },
+      {
+        "reference": "C18",
+        "label_xy": [
+          106.05,
+          107.75
+        ],
+        "component_xy": [
+          110.2,
+          107.8
+        ],
+        "edge_distance_mm": 3.095,
+        "nearest_other": "C32",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 3.0,
+        "ambiguous": true
+      },
+      {
+        "reference": "FB1",
+        "label_xy": [
+          125.425,
+          111.05
+        ],
+        "component_xy": [
+          125.4,
+          107.0
+        ],
+        "edge_distance_mm": 2.985,
+        "nearest_other": "TP7",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 2.931,
+        "ambiguous": true
+      },
+      {
+        "reference": "C15",
+        "label_xy": [
+          120.85,
+          106.65
+        ],
+        "component_xy": [
+          116.8,
+          106.7
+        ],
+        "edge_distance_mm": 2.995,
+        "nearest_other": "R36",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 2.91,
+        "ambiguous": true
+      },
+      {
+        "reference": "L2",
+        "label_xy": [
+          110.05,
+          105.45
+        ],
+        "component_xy": [
+          108.9,
+          109.4
+        ],
+        "edge_distance_mm": 2.885,
+        "nearest_other": "Y1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 2.88,
+        "ambiguous": true
+      },
+      {
+        "reference": "R36",
+        "label_xy": [
+          120.85,
+          111.05
+        ],
+        "component_xy": [
+          119.7,
+          106.4
+        ],
+        "edge_distance_mm": 2.726,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 2.673,
+        "ambiguous": true
+      },
+      {
+        "reference": "R6",
+        "label_xy": [
+          112.7,
+          118.15
+        ],
+        "component_xy": [
+          108.6,
+          116.0
+        ],
+        "edge_distance_mm": 2.657,
+        "nearest_other": "R11",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 2.572,
+        "ambiguous": true
+      },
+      {
+        "reference": "R11",
+        "label_xy": [
+          115.25,
+          119.95
+        ],
+        "component_xy": [
+          111.5,
+          117.0
+        ],
+        "edge_distance_mm": 2.624,
+        "nearest_other": "R2",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 2.539,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP5",
+        "label_xy": [
+          122.9,
+          110.65
+        ],
+        "component_xy": [
+          122.9,
+          106.8
+        ],
+        "edge_distance_mm": 2.254,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 2.2,
+        "ambiguous": true
+      },
+      {
+        "reference": "R35",
+        "label_xy": [
+          119.75,
+          110.35
+        ],
+        "component_xy": [
+          118.5,
+          106.4
+        ],
+        "edge_distance_mm": 2.033,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.052,
+        "ambiguity_gap_mm": 1.981,
+        "ambiguous": true
+      },
+      {
+        "reference": "C21",
+        "label_xy": [
+          114.05,
+          106.85
+        ],
+        "component_xy": [
+          111.4,
+          106.8
+        ],
+        "edge_distance_mm": 1.595,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 1.54,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP2",
+        "label_xy": [
+          136.7,
+          113.95
+        ],
+        "component_xy": [
+          139.8,
+          111.2
+        ],
+        "edge_distance_mm": 1.631,
+        "nearest_other": "D3",
+        "nearest_other_edge_mm": 0.105,
+        "ambiguity_gap_mm": 1.526,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP6",
+        "label_xy": [
+          124.5,
+          112.15
+        ],
+        "component_xy": [
+          124.4,
+          109.0
+        ],
+        "edge_distance_mm": 1.554,
+        "nearest_other": "R15",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.469,
+        "ambiguous": true
+      },
+      {
+        "reference": "R7",
+        "label_xy": [
+          106.05,
+          109.6
+        ],
+        "component_xy": [
+          106.0,
+          112.8
+        ],
+        "edge_distance_mm": 1.525,
+        "nearest_other": "L1",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.44,
+        "ambiguous": true
+      },
+      {
+        "reference": "R4",
+        "label_xy": [
+          118.3,
+          124.15
+        ],
+        "component_xy": [
+          119.2,
+          126.5
+        ],
+        "edge_distance_mm": 1.285,
+        "nearest_other": "J2",
+        "nearest_other_edge_mm": 0.075,
+        "ambiguity_gap_mm": 1.21,
+        "ambiguous": true
+      },
+      {
+        "reference": "R9",
+        "label_xy": [
+          115.3,
+          107.25
+        ],
+        "component_xy": [
+          112.9,
+          106.825
+        ],
+        "edge_distance_mm": 1.185,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 1.13,
+        "ambiguous": true
+      },
+      {
+        "reference": "R2",
+        "label_xy": [
+          115.95,
+          121.2
+        ],
+        "component_xy": [
+          113.7,
+          121.2
+        ],
+        "edge_distance_mm": 1.185,
+        "nearest_other": "C1",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 1.09,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP4",
+        "label_xy": [
+          122.3,
+          111.75
+        ],
+        "component_xy": [
+          121.4,
+          109.0
+        ],
+        "edge_distance_mm": 1.154,
+        "nearest_other": "R15",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 1.029,
+        "ambiguous": true
+      },
+      {
+        "reference": "C33",
+        "label_xy": [
+          106.45,
+          117.65
+        ],
+        "component_xy": [
+          106.4,
+          115.4
+        ],
+        "edge_distance_mm": 1.195,
+        "nearest_other": "C2",
+        "nearest_other_edge_mm": 0.295,
+        "ambiguity_gap_mm": 0.9,
+        "ambiguous": true
+      },
+      {
+        "reference": "C22",
+        "label_xy": [
+          106.95,
+          103.75
+        ],
+        "component_xy": [
+          108.8,
+          105.1
+        ],
+        "edge_distance_mm": 0.395,
+        "nearest_other": "C14",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.37,
+        "ambiguous": false
+      },
+      {
+        "reference": "C32",
+        "label_xy": [
+          105.55,
+          105.95
+        ],
+        "component_xy": [
+          107.2,
+          107.4
+        ],
+        "edge_distance_mm": 0.195,
+        "nearest_other": "SW1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.19,
+        "ambiguous": false
+      },
+      {
+        "reference": "C34",
+        "label_xy": [
+          132.25,
+          100.95
+        ],
+        "component_xy": [
+          130.199999,
+          100.8
+        ],
+        "edge_distance_mm": 0.145,
+        "nearest_other": "U6",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.09,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW3",
+        "label_xy": [
+          128.05,
+          105.6
+        ],
+        "component_xy": [
+          125.3,
+          102.7
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "C26",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.08,
+        "ambiguous": false
+      },
+      {
+        "reference": "C11",
+        "label_xy": [
+          110.25,
+          115.35
+        ],
+        "component_xy": [
+          109.2,
+          113.5
+        ],
+        "edge_distance_mm": 0.125,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.07,
+        "ambiguous": false
+      },
+      {
+        "reference": "D2",
+        "label_xy": [
+          104.65,
+          117.0
+        ],
+        "component_xy": [
+          102.2,
+          119.3
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "C2",
+        "nearest_other_edge_mm": 0.045,
+        "ambiguity_gap_mm": 0.06,
+        "ambiguous": false
+      },
+      {
+        "reference": "R38",
+        "label_xy": [
+          119.35,
+          117.45
+        ],
+        "component_xy": [
+          117.8,
+          117.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "R37",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.06,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW2",
+        "label_xy": [
+          121.3,
+          105.15
+        ],
+        "component_xy": [
+          118.9,
+          102.7
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "TP5",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 0.051,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP8",
+        "label_xy": [
+          128.2,
+          127.75
+        ],
+        "component_xy": [
+          128.0,
+          126.1
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "BZ1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.049,
+        "ambiguous": false
+      },
+      {
+        "reference": "C24",
+        "label_xy": [
+          110.15,
+          101.85
+        ],
+        "component_xy": [
+          110.0,
+          103.8
+        ],
+        "edge_distance_mm": 0.045,
+        "nearest_other": "Y1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.04,
+        "ambiguous": false
+      },
+      {
+        "reference": "C1",
+        "label_xy": [
+          117.05,
+          121.6
+        ],
+        "component_xy": [
+          114.8,
+          121.6
+        ],
+        "edge_distance_mm": 1.195,
+        "nearest_other": "R30",
+        "nearest_other_edge_mm": 1.165,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "R34",
+        "label_xy": [
+          109.05,
+          118.65
+        ],
+        "component_xy": [
+          109.0,
+          117.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "R1",
+        "label_xy": [
+          112.4,
+          123.35
+        ],
+        "component_xy": [
+          113.7,
+          123.2
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "U3",
+        "label_xy": [
+          131.3,
+          112.85
+        ],
+        "component_xy": [
+          132.5,
+          110.5
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "R3",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "C10",
+        "label_xy": [
+          128.45,
+          123.75
+        ],
+        "component_xy": [
+          127.0,
+          123.0
+        ],
+        "edge_distance_mm": 0.125,
+        "nearest_other": "BZ1",
+        "nearest_other_edge_mm": 0.105,
+        "ambiguity_gap_mm": 0.02,
+        "ambiguous": false
+      },
+      {
+        "reference": "C5",
+        "label_xy": [
+          118.4,
+          123.05
+        ],
+        "component_xy": [
+          119.6,
+          124.9
+        ],
+        "edge_distance_mm": 0.345,
+        "nearest_other": "C7",
+        "nearest_other_edge_mm": 1.125,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C35",
+        "label_xy": [
+          134.15,
+          103.25
+        ],
+        "component_xy": [
+          134.7,
+          101.65
+        ],
+        "edge_distance_mm": 0.145,
+        "nearest_other": "U6",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C16",
+        "label_xy": [
+          114.45,
+          118.85
+        ],
+        "component_xy": [
+          114.4,
+          117.2
+        ],
+        "edge_distance_mm": 0.145,
+        "nearest_other": "R39",
+        "nearest_other_edge_mm": 0.486,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U4",
+        "label_xy": [
+          122.5,
+          130.55
+        ],
+        "component_xy": [
+          119.92,
+          129.4
+        ],
+        "edge_distance_mm": 0.135,
+        "nearest_other": "Q3",
+        "nearest_other_edge_mm": 0.555,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R39",
+        "label_xy": [
+          117.15,
+          118.95
+        ],
+        "component_xy": [
+          116.4,
+          117.3
+        ],
+        "edge_distance_mm": 0.125,
+        "nearest_other": "R38",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "D3",
+        "label_xy": [
+          140.65,
+          117.0
+        ],
+        "component_xy": [
+          138.8,
+          117.0
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "TP3",
+        "nearest_other_edge_mm": 1.854,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C2",
+        "label_xy": [
+          106.0,
+          118.75
+        ],
+        "component_xy": [
+          104.7,
+          118.7
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "D1",
+        "nearest_other_edge_mm": 0.505,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C28",
+        "label_xy": [
+          140.05,
+          103.75
+        ],
+        "component_xy": [
+          138.9,
+          103.8
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "R43",
+        "nearest_other_edge_mm": 0.432,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C27",
+        "label_xy": [
+          132.85,
+          106.75
+        ],
+        "component_xy": [
+          131.3,
+          106.4
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "C3",
+        "nearest_other_edge_mm": 0.195,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C20",
+        "label_xy": [
+          120.45,
+          116.35
+        ],
+        "component_xy": [
+          120.5,
+          115.2
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.355,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "J1",
+        "label_xy": [
+          109.025,
+          123.55
+        ],
+        "component_xy": [
+          106.5,
+          129.0
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "D1",
+        "nearest_other_edge_mm": 0.155,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C17",
+        "label_xy": [
+          120.45,
+          112.85
+        ],
+        "component_xy": [
+          120.5,
+          114.0
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.355,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C29",
+        "label_xy": [
+          127.55,
+          117.65
+        ],
+        "component_xy": [
+          126.4,
+          117.7
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "R16",
+        "nearest_other_edge_mm": 0.151,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R43",
+        "label_xy": [
+          139.85,
+          105.95
+        ],
+        "component_xy": [
+          138.7,
+          106.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "C28",
+        "nearest_other_edge_mm": 0.245,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R13",
+        "label_xy": [
+          135.95,
+          106.45
+        ],
+        "component_xy": [
+          134.8,
+          106.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "LED1",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "L5",
+        "label_xy": [
+          105.85,
+          104.85
+        ],
+        "component_xy": [
+          107.1,
+          105.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R41",
+        "label_xy": [
+          135.45,
+          112.25
+        ],
+        "component_xy": [
+          136.6,
+          112.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q5",
+        "nearest_other_edge_mm": 0.155,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R30",
+        "label_xy": [
+          116.45,
+          123.05
+        ],
+        "component_xy": [
+          114.9,
+          123.7
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "C1",
+        "nearest_other_edge_mm": 0.195,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R14",
+        "label_xy": [
+          131.65,
+          117.65
+        ],
+        "component_xy": [
+          131.7,
+          116.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q2",
+        "nearest_other_edge_mm": 0.655,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R5",
+        "label_xy": [
+          122.15,
+          126.3
+        ],
+        "component_xy": [
+          121.0,
+          126.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "U4",
+        "nearest_other_edge_mm": 0.305,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R3",
+        "label_xy": [
+          133.5,
+          114.15
+        ],
+        "component_xy": [
+          133.0,
+          113.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q2",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R37",
+        "label_xy": [
+          120.55,
+          118.95
+        ],
+        "component_xy": [
+          119.4,
+          119.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 0.725,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R15",
+        "label_xy": [
+          124.55,
+          113.45
+        ],
+        "component_xy": [
+          123.0,
+          113.4
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 0.555,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R16",
+        "label_xy": [
+          127.55,
+          115.55
+        ],
+        "component_xy": [
+          126.4,
+          115.6
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "C29",
+        "nearest_other_edge_mm": 0.263,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "J2",
+        "label_xy": [
+          116.225,
+          124.15
+        ],
+        "component_xy": [
+          115.2,
+          128.1
+        ],
+        "edge_distance_mm": 0.075,
+        "nearest_other": "R30",
+        "nearest_other_edge_mm": 0.185,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C4",
+        "label_xy": [
+          129.5,
+          112.35
+        ],
+        "component_xy": [
+          129.5,
+          110.2
+        ],
+        "edge_distance_mm": 0.075,
+        "nearest_other": "U3",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U6",
+        "label_xy": [
+          132.6,
+          105.65
+        ],
+        "component_xy": [
+          131.3,
+          103.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "C27",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q3",
+        "label_xy": [
+          123.15,
+          129.3
+        ],
+        "component_xy": [
+          125.5,
+          129.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "U4",
+        "nearest_other_edge_mm": 0.935,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q5",
+        "label_xy": [
+          137.2,
+          107.05
+        ],
+        "component_xy": [
+          136.6,
+          109.4
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "R43",
+        "nearest_other_edge_mm": 0.285,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q1",
+        "label_xy": [
+          111.0,
+          123.35
+        ],
+        "component_xy": [
+          111.0,
+          121.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "J1",
+        "nearest_other_edge_mm": 0.295,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "BZ1",
+        "label_xy": [
+          135.45,
+          130.85
+        ],
+        "component_xy": [
+          135.3,
+          125.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "TP8",
+        "nearest_other_edge_mm": 6.301,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U5",
+        "label_xy": [
+          124.0,
+          119.65
+        ],
+        "component_xy": [
+          124.0,
+          122.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 1.055,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q4",
+        "label_xy": [
+          122.6,
+          118.65
+        ],
+        "component_xy": [
+          123.8,
+          116.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "U5",
+        "nearest_other_edge_mm": 1.055,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U1",
+        "label_xy": [
+          113.25,
+          116.9
+        ],
+        "component_xy": [
+          115.0,
+          112.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "C16",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U2",
+        "label_xy": [
+          129.5,
+          121.05
+        ],
+        "component_xy": [
+          129.5,
+          111.4
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": null,
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP1",
+        "label_xy": [
+          140.95,
+          107.0
+        ],
+        "component_xy": [
+          139.8,
+          109.0
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "R43",
+        "nearest_other_edge_mm": 1.185,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP7",
+        "label_xy": [
+          127.2,
+          111.05
+        ],
+        "component_xy": [
+          126.7,
+          109.4
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "C4",
+        "nearest_other_edge_mm": 0.625,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP3",
+        "label_xy": [
+          138.15,
+          113.4
+        ],
+        "component_xy": [
+          139.8,
+          113.4
+        ],
+        "edge_distance_mm": 0.052,
+        "nearest_other": "TP2",
+        "nearest_other_edge_mm": 0.259,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C14",
+        "label_xy": [
+          107.35,
+          102.25
+        ],
+        "component_xy": [
+          108.7,
+          102.6
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "C22",
+        "nearest_other_edge_mm": 1.024,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C26",
+        "label_xy": [
+          129.55,
+          106.05
+        ],
+        "component_xy": [
+          128.0,
+          107.4
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R42",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q2",
+        "label_xy": [
+          135.0,
+          114.25
+        ],
+        "component_xy": [
+          135.0,
+          116.8
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R3",
+        "nearest_other_edge_mm": 0.374,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R12",
+        "label_xy": [
+          130.15,
+          114.95
+        ],
+        "component_xy": [
+          131.7,
+          115.0
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R14",
+        "nearest_other_edge_mm": 0.089,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C7",
+        "label_xy": [
+          119.65,
+          123.0
+        ],
+        "component_xy": [
+          121.0,
+          123.0
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "C5",
+        "nearest_other_edge_mm": 0.245,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW1",
+        "label_xy": [
+          102.5,
+          105.95
+        ],
+        "component_xy": [
+          102.5,
+          111.0
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 1.105,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "D1",
+        "label_xy": [
+          107.4,
+          119.25
+        ],
+        "component_xy": [
+          106.5,
+          121.9
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "R34",
+        "nearest_other_edge_mm": 0.685,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "ANT1",
+        "label_xy": [
+          102.55,
+          101.55
+        ],
+        "component_xy": [
+          102.6,
+          103.2
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "L5",
+        "nearest_other_edge_mm": 3.643,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "LED1",
+        "label_xy": [
+          136.975,
+          102.15
+        ],
+        "component_xy": [
+          136.5,
+          104.0
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "C35",
+        "nearest_other_edge_mm": 0.145,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Y1",
+        "label_xy": [
+          112.35,
+          101.65
+        ],
+        "component_xy": [
+          112.8,
+          103.9
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "C24",
+        "nearest_other_edge_mm": 1.358,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      }
+    ],
+    "after": [
+      {
+        "reference": "C13",
+        "label_xy": [
+          106.55,
+          116.55
+        ],
+        "component_xy": [
+          108.8,
+          112.1
+        ],
+        "edge_distance_mm": 3.412,
+        "nearest_other": "C33",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 3.317,
+        "ambiguous": true
+      },
+      {
+        "reference": "C25",
+        "label_xy": [
+          119.75,
+          108.45
+        ],
+        "component_xy": [
+          115.6,
+          105.6
+        ],
+        "edge_distance_mm": 3.236,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.052,
+        "ambiguity_gap_mm": 3.184,
+        "ambiguous": true
+      },
+      {
+        "reference": "C18",
+        "label_xy": [
+          106.95,
+          103.75
+        ],
+        "component_xy": [
+          110.2,
+          107.8
+        ],
+        "edge_distance_mm": 3.114,
+        "nearest_other": "C14",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 3.089,
+        "ambiguous": true
+      },
+      {
+        "reference": "L2",
+        "label_xy": [
+          110.05,
+          105.45
+        ],
+        "component_xy": [
+          108.9,
+          109.4
+        ],
+        "edge_distance_mm": 2.885,
+        "nearest_other": "Y1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 2.88,
+        "ambiguous": true
+      },
+      {
+        "reference": "C12",
+        "label_xy": [
+          110.25,
+          115.35
+        ],
+        "component_xy": [
+          108.8,
+          111.0
+        ],
+        "edge_distance_mm": 2.895,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 2.84,
+        "ambiguous": true
+      },
+      {
+        "reference": "R36",
+        "label_xy": [
+          120.85,
+          111.05
+        ],
+        "component_xy": [
+          119.7,
+          106.4
+        ],
+        "edge_distance_mm": 2.726,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 2.673,
+        "ambiguous": true
+      },
+      {
+        "reference": "C3",
+        "label_xy": [
+          137.05,
+          106.5
+        ],
+        "component_xy": [
+          132.5,
+          108.0
+        ],
+        "edge_distance_mm": 3.059,
+        "nearest_other": "Q5",
+        "nearest_other_edge_mm": 0.455,
+        "ambiguity_gap_mm": 2.604,
+        "ambiguous": true
+      },
+      {
+        "reference": "FB1",
+        "label_xy": [
+          124.725,
+          110.65
+        ],
+        "component_xy": [
+          125.4,
+          107.0
+        ],
+        "edge_distance_mm": 2.585,
+        "nearest_other": "TP7",
+        "nearest_other_edge_mm": 0.002,
+        "ambiguity_gap_mm": 2.583,
+        "ambiguous": true
+      },
+      {
+        "reference": "C15",
+        "label_xy": [
+          119.75,
+          110.35
+        ],
+        "component_xy": [
+          116.8,
+          106.7
+        ],
+        "edge_distance_mm": 2.576,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.052,
+        "ambiguity_gap_mm": 2.524,
+        "ambiguous": true
+      },
+      {
+        "reference": "C11",
+        "label_xy": [
+          106.65,
+          117.65
+        ],
+        "component_xy": [
+          109.2,
+          113.5
+        ],
+        "edge_distance_mm": 2.826,
+        "nearest_other": "R34",
+        "nearest_other_edge_mm": 0.425,
+        "ambiguity_gap_mm": 2.401,
+        "ambiguous": true
+      },
+      {
+        "reference": "C33",
+        "label_xy": [
+          108.85,
+          118.65
+        ],
+        "component_xy": [
+          106.4,
+          115.4
+        ],
+        "edge_distance_mm": 2.262,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 2.207,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP5",
+        "label_xy": [
+          122.9,
+          110.65
+        ],
+        "component_xy": [
+          122.9,
+          106.8
+        ],
+        "edge_distance_mm": 2.254,
+        "nearest_other": "TP4",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 2.2,
+        "ambiguous": true
+      },
+      {
+        "reference": "R42",
+        "label_xy": [
+          128.15,
+          111.45
+        ],
+        "component_xy": [
+          130.1,
+          107.6
+        ],
+        "edge_distance_mm": 2.119,
+        "nearest_other": "C4",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 2.094,
+        "ambiguous": true
+      },
+      {
+        "reference": "L5",
+        "label_xy": [
+          104.05,
+          105.35
+        ],
+        "component_xy": [
+          107.1,
+          105.3
+        ],
+        "edge_distance_mm": 1.985,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 0.405,
+        "ambiguity_gap_mm": 1.58,
+        "ambiguous": true
+      },
+      {
+        "reference": "L1",
+        "label_xy": [
+          108.65,
+          108.25
+        ],
+        "component_xy": [
+          106.6,
+          110.9
+        ],
+        "edge_distance_mm": 1.641,
+        "nearest_other": "L2",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.556,
+        "ambiguous": true
+      },
+      {
+        "reference": "C21",
+        "label_xy": [
+          114.05,
+          106.85
+        ],
+        "component_xy": [
+          111.4,
+          106.8
+        ],
+        "edge_distance_mm": 1.595,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 1.54,
+        "ambiguous": true
+      },
+      {
+        "reference": "R6",
+        "label_xy": [
+          107.35,
+          118.9
+        ],
+        "component_xy": [
+          108.6,
+          116.0
+        ],
+        "edge_distance_mm": 1.685,
+        "nearest_other": "D1",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 1.48,
+        "ambiguous": true
+      },
+      {
+        "reference": "R7",
+        "label_xy": [
+          106.05,
+          109.6
+        ],
+        "component_xy": [
+          106.0,
+          112.8
+        ],
+        "edge_distance_mm": 1.525,
+        "nearest_other": "L1",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.44,
+        "ambiguous": true
+      },
+      {
+        "reference": "R8",
+        "label_xy": [
+          104.85,
+          116.3
+        ],
+        "component_xy": [
+          107.1,
+          113.8
+        ],
+        "edge_distance_mm": 1.444,
+        "nearest_other": "C33",
+        "nearest_other_edge_mm": 0.045,
+        "ambiguity_gap_mm": 1.399,
+        "ambiguous": true
+      },
+      {
+        "reference": "L4",
+        "label_xy": [
+          105.85,
+          104.85
+        ],
+        "component_xy": [
+          108.7,
+          106.6
+        ],
+        "edge_distance_mm": 1.404,
+        "nearest_other": "L5",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.319,
+        "ambiguous": true
+      },
+      {
+        "reference": "R4",
+        "label_xy": [
+          118.3,
+          124.15
+        ],
+        "component_xy": [
+          119.2,
+          126.5
+        ],
+        "edge_distance_mm": 1.285,
+        "nearest_other": "J2",
+        "nearest_other_edge_mm": 0.075,
+        "ambiguity_gap_mm": 1.21,
+        "ambiguous": true
+      },
+      {
+        "reference": "R35",
+        "label_xy": [
+          120.85,
+          106.65
+        ],
+        "component_xy": [
+          118.5,
+          106.4
+        ],
+        "edge_distance_mm": 1.285,
+        "nearest_other": "R36",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.2,
+        "ambiguous": true
+      },
+      {
+        "reference": "C16",
+        "label_xy": [
+          115.25,
+          119.95
+        ],
+        "component_xy": [
+          114.4,
+          117.2
+        ],
+        "edge_distance_mm": 1.245,
+        "nearest_other": "R2",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 1.16,
+        "ambiguous": true
+      },
+      {
+        "reference": "R9",
+        "label_xy": [
+          115.3,
+          107.25
+        ],
+        "component_xy": [
+          112.9,
+          106.825
+        ],
+        "edge_distance_mm": 1.185,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 1.13,
+        "ambiguous": true
+      },
+      {
+        "reference": "R11",
+        "label_xy": [
+          114.35,
+          118.85
+        ],
+        "component_xy": [
+          111.5,
+          117.0
+        ],
+        "edge_distance_mm": 1.213,
+        "nearest_other": "C16",
+        "nearest_other_edge_mm": 0.145,
+        "ambiguity_gap_mm": 1.068,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP4",
+        "label_xy": [
+          122.3,
+          111.75
+        ],
+        "component_xy": [
+          121.4,
+          109.0
+        ],
+        "edge_distance_mm": 1.154,
+        "nearest_other": "R15",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 1.029,
+        "ambiguous": true
+      },
+      {
+        "reference": "C22",
+        "label_xy": [
+          107.35,
+          102.25
+        ],
+        "component_xy": [
+          108.8,
+          105.1
+        ],
+        "edge_distance_mm": 1.024,
+        "nearest_other": "C14",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.999,
+        "ambiguous": true
+      },
+      {
+        "reference": "R2",
+        "label_xy": [
+          112.7,
+          118.65
+        ],
+        "component_xy": [
+          113.7,
+          121.2
+        ],
+        "edge_distance_mm": 1.025,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.97,
+        "ambiguous": true
+      },
+      {
+        "reference": "TP6",
+        "label_xy": [
+          126.6,
+          111.05
+        ],
+        "component_xy": [
+          124.4,
+          109.0
+        ],
+        "edge_distance_mm": 0.52,
+        "nearest_other": "TP7",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 0.467,
+        "ambiguous": false
+      },
+      {
+        "reference": "C14",
+        "label_xy": [
+          106.25,
+          102.25
+        ],
+        "component_xy": [
+          108.7,
+          102.6
+        ],
+        "edge_distance_mm": 1.125,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 0.705,
+        "ambiguity_gap_mm": 0.42,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP7",
+        "label_xy": [
+          124.8,
+          111.75
+        ],
+        "component_xy": [
+          126.7,
+          109.4
+        ],
+        "edge_distance_mm": 0.754,
+        "nearest_other": "R15",
+        "nearest_other_edge_mm": 0.405,
+        "ambiguity_gap_mm": 0.349,
+        "ambiguous": false
+      },
+      {
+        "reference": "C19",
+        "label_xy": [
+          106.05,
+          107.75
+        ],
+        "component_xy": [
+          107.4,
+          109.4
+        ],
+        "edge_distance_mm": 0.295,
+        "nearest_other": "C32",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0.2,
+        "ambiguous": false
+      },
+      {
+        "reference": "C32",
+        "label_xy": [
+          105.55,
+          105.95
+        ],
+        "component_xy": [
+          107.2,
+          107.4
+        ],
+        "edge_distance_mm": 0.195,
+        "nearest_other": "SW1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.19,
+        "ambiguous": false
+      },
+      {
+        "reference": "D1",
+        "label_xy": [
+          103.8,
+          123.55
+        ],
+        "component_xy": [
+          106.5,
+          121.9
+        ],
+        "edge_distance_mm": 0.255,
+        "nearest_other": "J1",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0.16,
+        "ambiguous": false
+      },
+      {
+        "reference": "C34",
+        "label_xy": [
+          132.25,
+          100.95
+        ],
+        "component_xy": [
+          130.199999,
+          100.8
+        ],
+        "edge_distance_mm": 0.145,
+        "nearest_other": "U6",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.09,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW3",
+        "label_xy": [
+          128.05,
+          105.6
+        ],
+        "component_xy": [
+          125.3,
+          102.7
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "C26",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.08,
+        "ambiguous": false
+      },
+      {
+        "reference": "D2",
+        "label_xy": [
+          102.2,
+          123.55
+        ],
+        "component_xy": [
+          102.2,
+          119.3
+        ],
+        "edge_distance_mm": 0.155,
+        "nearest_other": "J1",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0.06,
+        "ambiguous": false
+      },
+      {
+        "reference": "R38",
+        "label_xy": [
+          119.35,
+          117.45
+        ],
+        "component_xy": [
+          117.8,
+          117.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "R37",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.06,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW2",
+        "label_xy": [
+          121.3,
+          105.15
+        ],
+        "component_xy": [
+          118.9,
+          102.7
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "TP5",
+        "nearest_other_edge_mm": 0.054,
+        "ambiguity_gap_mm": 0.051,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP8",
+        "label_xy": [
+          128.2,
+          127.75
+        ],
+        "component_xy": [
+          128.0,
+          126.1
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "BZ1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.049,
+        "ambiguous": false
+      },
+      {
+        "reference": "C24",
+        "label_xy": [
+          110.15,
+          101.85
+        ],
+        "component_xy": [
+          110.0,
+          103.8
+        ],
+        "edge_distance_mm": 0.045,
+        "nearest_other": "Y1",
+        "nearest_other_edge_mm": 0.005,
+        "ambiguity_gap_mm": 0.04,
+        "ambiguous": false
+      },
+      {
+        "reference": "R34",
+        "label_xy": [
+          110.75,
+          118.65
+        ],
+        "component_xy": [
+          109.0,
+          117.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "R1",
+        "label_xy": [
+          112.4,
+          123.35
+        ],
+        "component_xy": [
+          113.7,
+          123.2
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q1",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "U3",
+        "label_xy": [
+          131.3,
+          112.85
+        ],
+        "component_xy": [
+          132.5,
+          110.5
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "R3",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.03,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP2",
+        "label_xy": [
+          138.15,
+          113.2
+        ],
+        "component_xy": [
+          139.8,
+          111.2
+        ],
+        "edge_distance_mm": 0.075,
+        "nearest_other": "TP3",
+        "nearest_other_edge_mm": 0.052,
+        "ambiguity_gap_mm": 0.023,
+        "ambiguous": false
+      },
+      {
+        "reference": "C5",
+        "label_xy": [
+          118.4,
+          123.05
+        ],
+        "component_xy": [
+          119.6,
+          124.9
+        ],
+        "edge_distance_mm": 0.345,
+        "nearest_other": "C7",
+        "nearest_other_edge_mm": 1.125,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C35",
+        "label_xy": [
+          134.15,
+          103.25
+        ],
+        "component_xy": [
+          134.7,
+          101.65
+        ],
+        "edge_distance_mm": 0.145,
+        "nearest_other": "U6",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U4",
+        "label_xy": [
+          122.5,
+          129.45
+        ],
+        "component_xy": [
+          119.92,
+          129.4
+        ],
+        "edge_distance_mm": 0.135,
+        "nearest_other": "Q3",
+        "nearest_other_edge_mm": 0.555,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R39",
+        "label_xy": [
+          117.15,
+          118.95
+        ],
+        "component_xy": [
+          116.4,
+          117.3
+        ],
+        "edge_distance_mm": 0.125,
+        "nearest_other": "R38",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "D3",
+        "label_xy": [
+          140.8,
+          116.95
+        ],
+        "component_xy": [
+          138.8,
+          117.0
+        ],
+        "edge_distance_mm": 0.105,
+        "nearest_other": "TP3",
+        "nearest_other_edge_mm": 1.954,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C2",
+        "label_xy": [
+          106.0,
+          118.75
+        ],
+        "component_xy": [
+          104.7,
+          118.7
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "D1",
+        "nearest_other_edge_mm": 0.505,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C27",
+        "label_xy": [
+          132.85,
+          106.75
+        ],
+        "component_xy": [
+          131.3,
+          106.4
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "C3",
+        "nearest_other_edge_mm": 0.195,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C20",
+        "label_xy": [
+          120.45,
+          116.35
+        ],
+        "component_xy": [
+          120.5,
+          115.2
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.355,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "J1",
+        "label_xy": [
+          109.025,
+          123.55
+        ],
+        "component_xy": [
+          106.5,
+          129.0
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "D1",
+        "nearest_other_edge_mm": 0.155,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C1",
+        "label_xy": [
+          116.1,
+          121.55
+        ],
+        "component_xy": [
+          114.8,
+          121.6
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "R30",
+        "nearest_other_edge_mm": 0.625,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C17",
+        "label_xy": [
+          120.45,
+          112.85
+        ],
+        "component_xy": [
+          120.5,
+          114.0
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "U1",
+        "nearest_other_edge_mm": 0.355,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C29",
+        "label_xy": [
+          127.95,
+          117.65
+        ],
+        "component_xy": [
+          126.4,
+          117.7
+        ],
+        "edge_distance_mm": 0.095,
+        "nearest_other": "R16",
+        "nearest_other_edge_mm": 0.532,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R43",
+        "label_xy": [
+          140.25,
+          105.55
+        ],
+        "component_xy": [
+          138.7,
+          106.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "C28",
+        "nearest_other_edge_mm": 0.245,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R13",
+        "label_xy": [
+          135.95,
+          106.45
+        ],
+        "component_xy": [
+          134.8,
+          106.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "LED1",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R41",
+        "label_xy": [
+          135.45,
+          112.25
+        ],
+        "component_xy": [
+          136.6,
+          112.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q5",
+        "nearest_other_edge_mm": 0.155,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R30",
+        "label_xy": [
+          116.45,
+          123.05
+        ],
+        "component_xy": [
+          114.9,
+          123.7
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "C1",
+        "nearest_other_edge_mm": 0.195,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R14",
+        "label_xy": [
+          131.65,
+          117.65
+        ],
+        "component_xy": [
+          131.7,
+          116.5
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q2",
+        "nearest_other_edge_mm": 0.655,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R5",
+        "label_xy": [
+          122.3,
+          126.25
+        ],
+        "component_xy": [
+          121.0,
+          126.3
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "U4",
+        "nearest_other_edge_mm": 0.505,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R3",
+        "label_xy": [
+          133.5,
+          114.15
+        ],
+        "component_xy": [
+          133.0,
+          113.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q2",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R37",
+        "label_xy": [
+          120.95,
+          118.95
+        ],
+        "component_xy": [
+          119.4,
+          119.0
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 0.355,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R15",
+        "label_xy": [
+          124.55,
+          113.45
+        ],
+        "component_xy": [
+          123.0,
+          113.4
+        ],
+        "edge_distance_mm": 0.085,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 0.555,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "J2",
+        "label_xy": [
+          116.225,
+          124.15
+        ],
+        "component_xy": [
+          115.2,
+          128.1
+        ],
+        "edge_distance_mm": 0.075,
+        "nearest_other": "R30",
+        "nearest_other_edge_mm": 0.185,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C4",
+        "label_xy": [
+          129.5,
+          112.35
+        ],
+        "component_xy": [
+          129.5,
+          110.2
+        ],
+        "edge_distance_mm": 0.075,
+        "nearest_other": "U3",
+        "nearest_other_edge_mm": 0.205,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U6",
+        "label_xy": [
+          132.6,
+          105.65
+        ],
+        "component_xy": [
+          131.3,
+          103.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "C27",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q3",
+        "label_xy": [
+          128.0,
+          129.35
+        ],
+        "component_xy": [
+          125.5,
+          129.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "BZ1",
+        "nearest_other_edge_mm": 0.405,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q5",
+        "label_xy": [
+          137.9,
+          111.75
+        ],
+        "component_xy": [
+          136.6,
+          109.4
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "R41",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q1",
+        "label_xy": [
+          111.0,
+          123.35
+        ],
+        "component_xy": [
+          111.0,
+          121.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "J1",
+        "nearest_other_edge_mm": 0.295,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "BZ1",
+        "label_xy": [
+          135.45,
+          130.85
+        ],
+        "component_xy": [
+          135.3,
+          125.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "TP8",
+        "nearest_other_edge_mm": 6.301,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U5",
+        "label_xy": [
+          124.0,
+          119.65
+        ],
+        "component_xy": [
+          124.0,
+          122.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 1.055,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q4",
+        "label_xy": [
+          122.6,
+          118.65
+        ],
+        "component_xy": [
+          123.8,
+          116.3
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "U5",
+        "nearest_other_edge_mm": 1.055,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U1",
+        "label_xy": [
+          113.25,
+          116.9
+        ],
+        "component_xy": [
+          115.0,
+          112.0
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": "C16",
+        "nearest_other_edge_mm": 0.095,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "U2",
+        "label_xy": [
+          129.5,
+          121.05
+        ],
+        "component_xy": [
+          129.5,
+          111.4
+        ],
+        "edge_distance_mm": 0.055,
+        "nearest_other": null,
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP3",
+        "label_xy": [
+          140.65,
+          115.4
+        ],
+        "component_xy": [
+          139.8,
+          113.4
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "D3",
+        "nearest_other_edge_mm": 0.105,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "TP1",
+        "label_xy": [
+          140.2,
+          107.35
+        ],
+        "component_xy": [
+          139.8,
+          109.0
+        ],
+        "edge_distance_mm": 0.054,
+        "nearest_other": "R43",
+        "nearest_other_edge_mm": 0.085,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C28",
+        "label_xy": [
+          139.25,
+          102.25
+        ],
+        "component_xy": [
+          138.9,
+          103.8
+        ],
+        "edge_distance_mm": 0.045,
+        "nearest_other": "LED1",
+        "nearest_other_edge_mm": 0.235,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C10",
+        "label_xy": [
+          125.25,
+          124.35
+        ],
+        "component_xy": [
+          127.0,
+          123.0
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "U5",
+        "nearest_other_edge_mm": 0.055,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C26",
+        "label_xy": [
+          129.55,
+          106.05
+        ],
+        "component_xy": [
+          128.0,
+          107.4
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R42",
+        "nearest_other_edge_mm": 0.025,
+        "ambiguity_gap_mm": 0.0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Q2",
+        "label_xy": [
+          135.0,
+          114.25
+        ],
+        "component_xy": [
+          135.0,
+          116.8
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R3",
+        "nearest_other_edge_mm": 0.374,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R12",
+        "label_xy": [
+          130.15,
+          114.95
+        ],
+        "component_xy": [
+          131.7,
+          115.0
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "R14",
+        "nearest_other_edge_mm": 0.089,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "C7",
+        "label_xy": [
+          119.65,
+          123.0
+        ],
+        "component_xy": [
+          121.0,
+          123.0
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "C5",
+        "nearest_other_edge_mm": 0.245,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "R16",
+        "label_xy": [
+          126.85,
+          114.05
+        ],
+        "component_xy": [
+          126.4,
+          115.6
+        ],
+        "edge_distance_mm": 0.025,
+        "nearest_other": "Q4",
+        "nearest_other_edge_mm": 0.125,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "SW1",
+        "label_xy": [
+          102.5,
+          105.95
+        ],
+        "component_xy": [
+          102.5,
+          111.0
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "ANT1",
+        "nearest_other_edge_mm": 1.105,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "ANT1",
+        "label_xy": [
+          102.55,
+          101.55
+        ],
+        "component_xy": [
+          102.6,
+          103.2
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "L5",
+        "nearest_other_edge_mm": 3.643,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "LED1",
+        "label_xy": [
+          136.975,
+          102.15
+        ],
+        "component_xy": [
+          136.5,
+          104.0
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "C35",
+        "nearest_other_edge_mm": 0.145,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      },
+      {
+        "reference": "Y1",
+        "label_xy": [
+          112.35,
+          101.65
+        ],
+        "component_xy": [
+          112.8,
+          103.9
+        ],
+        "edge_distance_mm": 0.005,
+        "nearest_other": "C24",
+        "nearest_other_edge_mm": 1.358,
+        "ambiguity_gap_mm": 0,
+        "ambiguous": false
+      }
+    ],
+    "warning": "Rectangular clearance and proximity scores do not prove visual association; inspect outliers and route leaders where needed."
+  }
+}

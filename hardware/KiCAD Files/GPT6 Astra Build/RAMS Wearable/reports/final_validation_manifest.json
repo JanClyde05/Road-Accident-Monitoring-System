@@ -1,10 +1,22 @@
 {
-  "date": "2026-11-12",
+  "date": "2026-11-13",
   "kicad": "10.0.6",
-  "status": "CAD passed; manufacturing and physical gates open",
+  "status": "CAD passed with owner-approved small legend; manufacturing and physical gates open",
   "source_sha256": {
     "circuit_spec.json": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
     "fp-lib-table": "fba4e809073992e45b4717d3c4ade3bda694a145992c265e7ffc15879f1faf73",
+    "learning_layout.json": "74217adef81625cb7726739f0a321de993ab64e1506dc42d28cfef5b0abc5a90",
+    "lib/3d/Buzzer_9650_envelope.wrl": "12b1f22400c0e45913e839bc8dac38a9b118481f425f4813a4875d55e22e4939",
+    "lib/3d/Crystal_ABM8G_package.step": "9123b0bc558d87e226d70ed8c9033afb2418f41148436a7d0e9655867ab11148",
+    "lib/3d/ESP32S3_QFN56_package.step": "a7e1b68d7c240016a0c468e633f7967f445758a90dea110c3eff24882158aaa8",
+    "lib/3d/Johanson_2450AT18x100.step": "7d3afc869543ea1b697aee6824adc8f8b73ba56896d97c82088a686380379d63",
+    "lib/3d/LICENSE_KiCad.md": "45d2bce75e5a4208f5afb01b8fb2c406e700371c4fe2b5f5cd5c443d46db4d8f",
+    "lib/3d/model_manifest.json": "6a6083e48c863ffd23fc7b00c951b93a60643ab1b0d5c2b8db1bb765a9180b63",
+    "lib/3d/MSK12C02_ProtoFlow.wrl": "e9b364d65bf0415cb62642f5162949b692f494e7c8acc1dcca5c2fa704c24c79",
+    "lib/3d/MSK12C02_source_footprint.txt": "4663161749313655611a004ec46e52c45a0827f05dcb5b921789ac709baa022e",
+    "lib/3d/Ra-02_local.step": "45a000c0e44f865fc00c51cd678e6c2d512a411f51f957acce7340f9d2777588",
+    "lib/3d/WS2812B-2020_ProtoFlow.wrl": "954dda1856b52ee07069d668df6a9c9ebbb47ff00e8862bf00cb24b828808a07",
+    "lib/3d/WS2812B-2020_source_footprint.txt": "c1ffa1dd250501a9fd554e509b88597237d213b8c3686aaf72f5189d3ce10759",
     "lib/RAMS_JLC.kicad_sym": "8bcd9548d36207e85076f6e2aec3ce29b009391ce600953f87af42c106730f46",
     "lib/RAMS_JLC.pretty/Buzzer_9650_SMD_Stock_HandSolder.kicad_mod": "fef313a4a998878d35bdb004df5e07c360f781305af731b47ff6ba7f52f0c52f",
     "lib/RAMS_JLC.pretty/Buzzer_PUI_SMI-1027-TW-3V-R.kicad_mod": "28d9fe3acad9925c291faff5930e529aba0adb5554782214efdc428eebb1fbb6",
@@ -17,22 +29,25 @@
     "lib/RAMS_JLC.pretty/USB4105_GND_NPTH_Clearance.kicad_mod": "44c29246053c93c8bc9f3162f1f47563086daa892de37a6268f90ccf02e46215",
     "lib/RAMS_JLC.pretty/USB_C_Receptacle_GCT4105_NPTH.kicad_mod": "8faac80e0c59fd61e87198a7836e0308c41d2bda6cab12e70d2d256780572708",
     "RAMS_JLC_S3.kicad_dru": "b155d2f5f3b67178106565cd3292cc8038c4136cf71d94bccadc1a99843c2210",
-    "RAMS_JLC_S3.kicad_pcb": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
-    "RAMS_JLC_S3.kicad_pro": "dbaba9c283ca1f7dedfbd692aab3e517494c6b45820dfa415c320a75203505e7",
-    "RAMS_JLC_S3.kicad_sch": "b6018218cdf231945b0cb6ce147f1b8fb4e1d4bc509e2ee9312967d4426a0837",
-    "RAMS_JLC_S3_io.kicad_sch": "d4185ab24f93aa62eaf955612395db1ca800bc078907832ca8cba8098e5cd507",
-    "RAMS_JLC_S3_mcu.kicad_sch": "35645b78e607e14c5c975a4644cff5d0947be90294483c1a02ac29fb2b6d35d1",
-    "RAMS_JLC_S3_power.kicad_sch": "b1a052a552f4ff7a6112b94e4dda088f12df9138c8c9a9b0949b9449eac89be4",
+    "RAMS_JLC_S3.kicad_pcb": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+    "RAMS_JLC_S3.kicad_pro": "1917487990b0f15e4b5fbdf2083fefb4a80e4815809b95906df402ee04948463",
+    "RAMS_JLC_S3.kicad_sch": "ed30c824135b1972ddfa3bea19e725966aef67a154318457bd1cc5a3dbd405e6",
+    "RAMS_JLC_S3_io.kicad_sch": "11ccfba8d61f218d611ed60808768e7ba577f6d450acbbc99a9f0524c69cd1f6",
+    "RAMS_JLC_S3_mcu.kicad_sch": "f64982ff617b2677cb2115aab49f95d9f8db9c5d22e2c757d368029506f33a35",
+    "RAMS_JLC_S3_power.kicad_sch": "fe24f4785832dec6be607bc23adcee6016e82b10e765f0de1c082a0ff10c29c1",
     "schematic_manifest.json": "7bcf6a9f67a1615e1c98806d7ce2fab0ed89b48a0633c0e95e3deb4909a66d75",
     "sym-lib-table": "d8cc53c807eac9de5a0ba9dbc6af31956a4df3f64c7837bdb60ce2a66f5a7b31"
   },
   "report_sha256": {
-    "reports/final_drc.json": "e6f8d547ea008fa210693011604debf080cdf93a822dd4fafbc2c095f6d5d4b1",
-    "reports/final_erc.json": "6136a5c05ac9c3243c184ab931ec67ceb3cf77710b1d43be39879830317630e6",
-    "reports/FINAL_VALIDATION.md": "01601dadabf537503393726cfdf81a216c53a3c8218084f93e2208f80e1d3145",
-    "reports/power_paths_final.json": "17ffd571def3ba968e9106ab7d1e393d199743e42520ae3c184772b2eb9af544",
-    "reports/final_geometry/geometry_audit.json": "52d5ff563b5145e46e9982a82dd6c0fe74ac7ff9b033f688ce077bab99d02a14",
-    "reports/firmware_j2/build_summary.json": "d62d4943c3240c85cb065d55e075406a80ee16e93e29376db3fdbef3be61c8b2"
+    "reports/final_drc.json": "d951184d19e16c2de795524df074107210aeb8c6064eb79a71ad1722b258f61a",
+    "reports/final_erc.json": "dd394fc223c5abe9e3d07dd5962c34fe4a3929b84dec6226d95bd2f963369d1f",
+    "reports/FINAL_VALIDATION.md": "9ce21178b0fa4a4ddf74378c4f3eadd289e915df410ef428f152d4965eec55cb",
+    "reports/power_paths_final.json": "c16e0ebf15872b38f26efbf3b2f2aecd18f49867f3d2714d5da4a821eb9008b5",
+    "reports/final_geometry/geometry_audit.json": "f662f3f74be78aff468b5f383bcf7def841e7f4dde68f7c1c229eb8995d11681",
+    "reports/firmware_j2/build_summary.json": "d62d4943c3240c85cb065d55e075406a80ee16e93e29376db3fdbef3be61c8b2",
+    "reports/readability_validation.json": "83de2a0cc29415ac3c35fd26fd95ca95e5415bad5a4cdb03c9fa2abc39266d55",
+    "reports/model_inventory.json": "e8cbf0f5496debf9770440ee576e94fb9b9bccc7766848c01ae165a8e752b373",
+    "reports/silkscreen_final_plan.json": "c939bed14c0b0dba1ca08be1dd1ad7803cda07eedda794a12f54d80347e2f627"
   },
   "original_reference_unchanged": [
     {
@@ -56,7 +71,14 @@
     ],
     "QFN_perimeter_pads": 56,
     "initial_fitted": 80,
-    "normal_fitted": 82
+    "normal_fitted": 82,
+    "visible_references": 90,
+    "legend_height_stroke_mm": [
+      0.55,
+      0.1
+    ],
+    "C13_height_mm": 0.45,
+    "physical_positions_with_models": 82
   },
   "firmware_source_sha256": {
     "firmware\\wearable_withApp\\battery.cpp": "45db64eb190ccd01de7bc4f21f24e900df82dd16c97ed5cd00489169e7a8e222",
