@@ -1,0 +1,70 @@
+{
+  "mcp": {
+    "servers": {
+      "context7": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@upstash/context7-mcp@4.7.0"
+        ],
+        "environment": {
+          "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+        },
+        "enabled": true
+      },
+      "chrome-devtools": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "chrome-devtools-mcp@1.13.0"
+        ],
+        "enabled": true
+      },
+      "playwright": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@playwright/mcp@0.0.85"
+        ],
+        "enabled": true
+      },
+      "firecrawl": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "firecrawl-mcp@3.40.0"
+        ],
+        "environment": {
+          "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+        },
+        "enabled": true
+      },
+      "perplexity": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@perplexity-ai/mcp-server@1.3.0"
+        ],
+        "environment": {
+          "PERPLEXITY_API_KEY": "{env:PERPLEXITY_API_KEY}"
+        },
+        "enabled": true
+      },
+      "figma": {
+        "type": "remote",
+        "url": "https://mcp.figma.com/mcp",
+        "enabled": true
+      },
+      "hyperframes": {
+        "type": "remote",
+        "url": "https://mcp.heygen.com/mcp/hyperframes/",
+        "enabled": true
+      }
+    }
+  }
+}

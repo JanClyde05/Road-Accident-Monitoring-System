@@ -35,3 +35,12 @@ All significant architectural additions, model specifications, training datasets
 2. **Acoustic & Sensor Datasets**: Log training corpus details, phonetic homophone matrices, sample counts, and threshold calibrations.
 3. **Hardware, Bug Fixes & Timings**: Log critical bug fixes (e.g., binder crashes, watchdog timers, touch interception, PCB footprints) in `MEMORY_MAP.md` and relevant subsystem markdown contracts before completing tasks.
 
+## 6. Verification Gate (Mandatory Before Claiming a Fix)
+The agent engineering system lives in `docs/agent/` (plans, incident ledger, lessons) and `scripts/verify/` (executable gates). Claims of a fix must be backed by a run, not by inspection alone.
+
+1. **Static invariants**: `python scripts/verify/check_invariants.py` must report zero FAIL for the touched area. Every check maps to an `INC-` entry in `docs/agent/INCIDENT_LEDGER.md`.
+2. **Builds**: `powershell scripts/verify/verify_all.ps1 -Build all` must pass, or the skipped target must be named with a reason.
+3. **Records**: append the outcome via the harness (it writes `docs/agent/verification-log.jsonl`), and add a lesson to `docs/agent/LESSONS.md` for any new defect class.
+4. **Rules**: `.agents/rules/00-rams-invariants.md` carries the machine-checked constraints. Do not weaken a check to make a run green; fix the code or record an accepted risk in the ledger.
+
+
