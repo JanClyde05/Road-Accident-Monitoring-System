@@ -197,3 +197,10 @@ historical sections in older reviews are not the current netlist authority.
 Equations were independently evaluated for the listed nominal values. They do
 not replace measured rail/thermal/ADC/LED/clock/RF results. No circuit, footprint,
 firmware, part quantity or manufacturing release status changes with these notes.
+
+
+## Fabrication follow-through, November 15
+
+The schematic circuit and all section explanations remain electrically unchanged. The PCB's RF traces now use 0.15 mm after the official JLC calculation; see FAB_IMPEDANCE_20261114.md for the equation inputs/model limits. U1's copper EP remains continuous, while mask windows divide the solderable surface and protect nine ground holes. Paste area/copper area gives 61.42%; detailed geometry is in FAB_MASK_REVIEW_20261114.md. Mask tenting reduces solder loss but does not prove hidden-joint quality.
+
+The owner chose printable labels where they fit plus complete assembly drawings. Twelve printed references are omitted from the dense board; their components and schematic references remain present. This is a presentation decision, not deletion of circuitry. Keep R30 and LED1 absent for initial checks, as explained in the assembly guide.

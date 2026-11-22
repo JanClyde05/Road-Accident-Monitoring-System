@@ -11,7 +11,7 @@ Width/clearance are the project's 0.15/0.15 mm (JLCPCB capable). Zones are not
 obstacles: refill clears them around new copper. Empty-net zones are rule areas
 and are honoured as keepouts.
 """
-import heapq, json, shutil, subprocess, sys
+import heapq, json, os, shutil, subprocess, sys
 from datetime import datetime
 from pathlib import Path
 import numpy as np
@@ -24,15 +24,26 @@ STEP = 0.05
 X0 = Y0 = 100.0
 NX, NY = 841, 641
 LAYERS = [p.F_Cu, p.In2_Cu, p.B_Cu]
-W = 0.15          # routed track width
-CLR = 0.15        # required copper clearance
+W = float(os.environ.get('ROUTE_W', 0.15))       # routed track width
+CLR = float(os.environ.get('ROUTE_CLR', 0.15))  # board rule is 0.127
 VIA_D = 0.5
 VIA_DRILL = 0.2
+# U1's left pad row is a shared escape strip: VDD_RF walls F.Cu at x 110.0-110.3,
+# +3V3 crosses B.Cu diagonally and any route that runs along In2 here seals every
+# pad behind it. Cross the strip cheaply, travel along it expensively.
+FUNNEL = (110.15, 110.15, 111.15, 112.25)
+FUNNEL_COST = 8
 
-RUN = ROOT / 'verification' / ('route_deepseek_' + datetime.now().strftime('%Y%m%d_%H%M%S'))
-RUN.mkdir(parents=True, exist_ok=True)
-BASELINE = RUN / 'baseline.kicad_pcb'
-shutil.copy2(BOARD, BASELINE)
+RUN = None
+BASELINE = None
+
+
+def setup_run():
+    global RUN, BASELINE
+    RUN = ROOT / 'verification' / ('route_deepseek_' + datetime.now().strftime('%Y%m%d_%H%M%S'))
+    RUN.mkdir(parents=True, exist_ok=True)
+    BASELINE = RUN / 'baseline.kicad_pcb'
+    shutil.copy2(BOARD, BASELINE)
 
 
 def mm(v):
@@ -53,6 +64,12 @@ def rx(i):
 
 def ry(j):
     return Y0 + j * STEP
+
+
+def funnel_penalty(i, j):
+    x, y = rx(i), ry(j)
+    x1, y1, x2, y2 = FUNNEL
+    return FUNNEL_COST if x1 <= x <= x2 and y1 <= y <= y2 else 0
 
 
 def block_rect(arr, x1, y1, x2, y2, radius):
@@ -105,6 +122,10 @@ def masks(board, net):
     for z in board.Zones():
         if z.GetNetname():
             continue
+        # QFN_ESC is the named rule area that scopes the 0.10 mm escape rules; it
+        # allows tracks and vias, so it limits nothing and must not mask them.
+        if z.GetZoneName() == 'QFN_ESC':
+            continue
         zb = z.GetBoundingBox()
         x1, y1 = mm(zb.GetX()), mm(zb.GetY())
         x2, y2 = mm(zb.GetRight()), mm(zb.GetBottom())
@@ -156,25 +177,53 @@ def masks(board, net):
     return copper, vias
 
 
-def endpoints(item):
+def terminals(item):
+    """Return [((layer, i, j), (x, y))] - grid cell plus the exact copper point."""
     if isinstance(item, p.PCB_VIA):
-        i, j = gx(mm(item.GetPosition().x)), gy(mm(item.GetPosition().y))
-        return [(k, i, j) for k in range(3)]
+        x, y = mm(item.GetPosition().x), mm(item.GetPosition().y)
+        return [((k, gx(x), gy(y)), (x, y)) for k in range(3)]
     if isinstance(item, p.PCB_TRACK):
-        k = LAYERS.index(item.GetLayer()) if item.GetLayer() in LAYERS else None
-        if k is None:
+        if item.GetLayer() not in LAYERS:
             return []
-        return [(k, gx(mm(v.x)), gy(mm(v.y))) for v in (item.GetStart(), item.GetEnd())]
-    out = []
-    for k, layer in enumerate(LAYERS):
-        if item.IsOnLayer(layer):
-            out.append((k, gx(mm(item.GetPosition().x)), gy(mm(item.GetPosition().y))))
-    return out
+        k = LAYERS.index(item.GetLayer())
+        return [((k, gx(mm(v.x)), gy(mm(v.y))), (mm(v.x), mm(v.y)))
+                for v in (item.GetStart(), item.GetEnd())]
+    x, y = mm(item.GetPosition().x), mm(item.GetPosition().y)
+    return [((k, gx(x), gy(y)), (x, y))
+            for k, layer in enumerate(LAYERS) if item.IsOnLayer(layer)]
 
 
-def search(copper, vias, starts, goals):
-    starts = [q for q in starts if not copper[q]]
-    goals = [q for q in goals if not copper[q]]
+def anchor_of(tlist, node):
+    """Exact copper point of a terminal nearest the given grid node."""
+    x, y = rx(node[1]), ry(node[2])
+    return min((a for _, a in tlist), key=lambda q: (q[0] - x) ** 2 + (q[1] - y) ** 2)
+
+
+def free_near(copper, cells, span=12):
+    """Nearest free cell when pad inflation blocks the terminal cell itself.
+
+    Terminal cells sit inside their own pad, which is not an obstacle, but a
+    0.4 mm QFN row can still be covered by the inflated boxes of the
+    neighbouring pads. Without this the goal is dropped and the route stops one
+    grid step short, leaving a dangling track instead of a joined net.
+    """
+    best = None
+    for k0, i0, j0 in cells:
+        for k in range(3):
+            for di in range(-span, span + 1):
+                for dj in range(-span, span + 1):
+                    i, j = i0 + di, j0 + dj
+                    if not (0 <= i < NX and 0 <= j < NY) or copper[k, i, j]:
+                        continue
+                    d = di * di + dj * dj + (0 if k == k0 else 900)
+                    if best is None or d < best[0]:
+                        best = (d, (k, i, j))
+    return [best[1]] if best else []
+
+
+def search(copper, vias, start_cells, goal_cells):
+    starts = [q for q in start_cells if not copper[q]] or free_near(copper, start_cells)
+    goals = [q for q in goal_cells if not copper[q]] or free_near(copper, goal_cells)
     if not starts or not goals:
         return None, 'blocked endpoint'
     target = set(goals)
@@ -215,7 +264,7 @@ def search(copper, vias, starts, goals):
                 if z != k and not copper[z, i, j]:
                     neighbours.append(((z, i, j), 30))
         for n, w in neighbours:
-            v = cost + w
+            v = cost + w + funnel_penalty(n[1], n[2])
             if v >= best.get(n, 1e30):
                 continue
             best[n] = v
@@ -234,37 +283,38 @@ def simplify(path):
     return keep
 
 
-def apply_path(board, net, code, path, width=W):
+def apply_path(board, net, code, pts, width=W):
+    """Draw [(layer, x, y)] as tracks, with vias wherever the layer changes."""
     added = {'segments': [], 'vias': []}
-    via_cells = set()
-    for a, b in zip(simplify(path), simplify(path)[1:]):
+    via_pts = set()
+    for a, b in zip(pts, pts[1:]):
         if a[0] != b[0]:
-            key = (a[1], a[2])
-            if key in via_cells:
+            key = (round(a[1], 3), round(a[2], 3))
+            if key in via_pts:
                 continue
             v = p.PCB_VIA(board)
-            v.SetPosition(p.VECTOR2I(p.FromMM(rx(a[1])), p.FromMM(ry(a[2]))))
+            v.SetPosition(p.VECTOR2I(p.FromMM(a[1]), p.FromMM(a[2])))
             v.SetWidth(p.FromMM(VIA_D))
             v.SetDrill(p.FromMM(VIA_DRILL))
             v.SetViaType(p.VIATYPE_THROUGH)
             v.SetLayerPair(p.F_Cu, p.B_Cu)
             v.SetNetCode(code)
             board.Add(v)
-            via_cells.add(key)
-            added['vias'].append([round(rx(a[1]), 3), round(ry(a[2]), 3)])
-        else:
-            if a[1] == b[1] and a[2] == b[2]:
-                continue
-            t = p.PCB_TRACK(board)
-            t.SetStart(p.VECTOR2I(p.FromMM(rx(a[1])), p.FromMM(ry(a[2]))))
-            t.SetEnd(p.VECTOR2I(p.FromMM(rx(b[1])), p.FromMM(ry(b[2]))))
-            t.SetWidth(p.FromMM(width))
-            t.SetLayer(LAYERS[a[0]])
-            t.SetNetCode(code)
-            board.Add(t)
-            added['segments'].append([board.GetLayerName(LAYERS[a[0]]),
-                                      [round(rx(a[1]), 3), round(ry(a[2]), 3)],
-                                      [round(rx(b[1]), 3), round(ry(b[2]), 3)], width])
+            via_pts.add(key)
+            added['vias'].append([round(a[1], 3), round(a[2], 3)])
+            continue
+        if (round(a[1], 4), round(a[2], 4)) == (round(b[1], 4), round(b[2], 4)):
+            continue
+        t = p.PCB_TRACK(board)
+        t.SetStart(p.VECTOR2I(p.FromMM(a[1]), p.FromMM(a[2])))
+        t.SetEnd(p.VECTOR2I(p.FromMM(b[1]), p.FromMM(b[2])))
+        t.SetWidth(p.FromMM(width))
+        t.SetLayer(LAYERS[a[0]])
+        t.SetNetCode(code)
+        board.Add(t)
+        added['segments'].append([board.GetLayerName(LAYERS[a[0]]),
+                                  [round(a[1], 3), round(a[2], 3)],
+                                  [round(b[1], 3), round(b[2], 3)], width])
     return added
 
 
@@ -277,7 +327,13 @@ def drc(path):
     return data
 
 
+def sig(v):
+    """Stable violation signature: type plus the items involved, order-free."""
+    return (v['type'], tuple(sorted(it['uuid'] for it in v['items'])))
+
+
 def main():
+    setup_run()
     board = p.LoadBoard(str(BOARD))
     items = {}
     for fp in board.GetFootprints():
@@ -288,6 +344,20 @@ def main():
 
     base = drc(BASELINE)
     issues = base['unconnected_items']
+    # ROUTE_ORDER lets a run try a different net order without editing the file;
+    # the QFN escape corridor is shared, so order decides who gets through.
+    order = [n.strip() for n in os.environ.get('ROUTE_ORDER', '').split(',') if n.strip()]
+    if order:
+        def rank(issue):
+            left = items.get(issue['items'][0]['uuid'])
+            net = left.GetNetname() if left is not None else ''
+            return order.index(net) if net in order else len(order)
+        issues = sorted(issues, key=rank)
+    # The baseline already carries accepted warnings (two dead VDD_RF stubs). Only
+    # violations the route itself introduces may reject it.
+    known = {}
+    for v in base['violations']:
+        known[sig(v)] = known.get(sig(v), 0) + 1
     print('baseline unconnected', len(issues), 'violations', len(base['violations']), flush=True)
 
     accepted = BASELINE
@@ -310,20 +380,37 @@ def main():
             continue
         print('routing', net, flush=True)
         copper, vias = masks(board, net)
-        starts, goals = endpoints(left), endpoints(right)
-        path, status = search(copper, vias, starts, goals)
+        t_left, t_right = terminals(left), terminals(right)
+        path, status = search(copper, vias, [t[0] for t in t_left], [t[0] for t in t_right])
         if path is None:
             print('  FAILED', net, status, flush=True)
             results.append({'net': net, 'result': status})
             continue
-        added = apply_path(board, net, left.GetNetCode(), path)
+        # Snap the open ends onto the real copper point so the track lands on
+        # the pad instead of stopping at the last free grid cell.
+        pts = [(k, rx(i), ry(j)) for (k, i, j) in simplify(path)]
+        s_xy = anchor_of(t_left, path[0])
+        e_xy = anchor_of(t_right, path[-1])
+        pts[0] = (pts[0][0], s_xy[0], s_xy[1])
+        pts[-1] = (pts[-1][0], e_xy[0], e_xy[1])
+        added = apply_path(board, net, left.GetNetCode(), pts)
         tag = net.replace('/', '_')
         cand = RUN / ('cand_' + tag + '.kicad_pcb')
         p.SaveBoard(str(cand), board)
         # DRC in place so the project's own rules/netclasses are applied.
         shutil.copy2(str(cand), str(BOARD))
         report = drc(BOARD)
-        bad = list(report['violations'])
+        seen = dict(known)
+        bad = []
+        for v in report['violations']:
+            k = sig(v)
+            if seen.get(k, 0):
+                seen[k] -= 1
+                continue
+            bad.append(v)
+        if len(report['unconnected_items']) >= len(issues):
+            bad.append({'type': 'unconnected_not_reduced',
+                        'description': 'route did not join the net'})
         if bad:
             print('  REJECTED', net, len(bad), 'violations', flush=True)
             for v in bad[:5]:

@@ -131,7 +131,8 @@ private fun filterActiveAccidentsJson(events: List<IncidentEvent>, showNearby: B
 @Composable
 fun RamsMapView(
   gps: GpsData,
-  imu: ImuData = ImuData(),
+  headingDeg: Float = 0f,
+  beamAperture: Float = 28f,
   events: List<IncidentEvent>,
   selectedEvent: IncidentEvent?,
   onSelectEvent: (IncidentEvent) -> Unit,
@@ -147,39 +148,26 @@ fun RamsMapView(
   var isBeamFacingTop by remember { mutableStateOf(false) }
 
   // Prioritize real-time IMU compass orientation, fallback to GPS heading
-  val heading = if (imu.yawDegrees != 0f) imu.yawDegrees else gps.headingDegrees
+  val heading = if (headingDeg != 0f) headingDeg else gps.headingDegrees
 
-  // Radar pulse animation for offline vector fallback
-  val infiniteTransition = rememberInfiniteTransition(label = "RadarPulse")
-  val pulseRadius by infiniteTransition.animateFloat(
-    initialValue = 6f,
-    targetValue = 28f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1400, easing = FastOutSlowInEasing),
-      repeatMode = RepeatMode.Restart
-    ),
-    label = "PulseRadius"
-  )
-  val pulseAlpha by infiniteTransition.animateFloat(
-    initialValue = 0.75f,
-    targetValue = 0.0f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1400, easing = FastOutSlowInEasing),
-      repeatMode = RepeatMode.Restart
-    ),
-    label = "PulseAlpha"
-  )
+  val nearbyJson = remember(events, showNearby) {
+    filterActiveAccidentsJson(events, showNearby)
+  }
 
-  // Update Leaflet WebView when GPS coordinates, showNearby, or events change
-  LaunchedEffect(gps.latitude, gps.longitude, showNearby, events, isOfflineMode) {
+  // Update Leaflet WebView when GPS coordinates, heading, or showNearby change
+  LaunchedEffect(gps.latitude, gps.longitude, heading, showNearby, isOfflineMode) {
     if (!isOfflineMode && webViewRef != null) {
       val lat = if (gps.hasFix) gps.latitude else 17.6132
       val lon = if (gps.hasFix) gps.longitude else 121.7270
       val jsPos = "if(window.updateUserPos){ window.updateUserPos($lat, $lon, $heading, $showNearby); }"
       webViewRef?.evaluateJavascript(jsPos, null)
+    }
+  }
 
-      val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
-      val jsIncidents = "if(window.setNearbyIncidents){ window.setNearbyIncidents($nearbyJsonArray); }"
+  // Update nearby incidents only when the serialized JSON changes
+  LaunchedEffect(nearbyJson, isOfflineMode) {
+    if (!isOfflineMode && webViewRef != null) {
+      val jsIncidents = "if(window.setNearbyIncidents){ window.setNearbyIncidents($nearbyJson); }"
       webViewRef?.evaluateJavascript(jsIncidents, null)
     }
   }
@@ -193,9 +181,9 @@ fun RamsMapView(
   }
 
   // Update direction beam in real-time when phone rotates or accuracy aperture updates
-  LaunchedEffect(heading, imu.beamAperture, isOfflineMode) {
+  LaunchedEffect(heading, beamAperture, isOfflineMode) {
     if (!isOfflineMode && webViewRef != null) {
-      val jsHdg = "if(window.updateUserHeading){ window.updateUserHeading($heading, ${imu.beamAperture}); }"
+      val jsHdg = "if(window.updateUserHeading){ window.updateUserHeading($heading, $beamAperture); }"
       webViewRef?.evaluateJavascript(jsHdg, null)
     }
   }
@@ -281,7 +269,7 @@ fun RamsMapView(
                     val initialHdg = heading
                     val nearbyJsonArray = filterActiveAccidentsJson(events, showNearby)
                     val modeStr = if (isBeamFacingTop) "forward" else "compass"
-                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); if(window.setBeamMode){ window.setBeamMode('$modeStr'); } if(window.setBeamAperture){ window.setBeamAperture(${imu.beamAperture}); } }", null)
+                    view?.evaluateJavascript("if(window.initMap){ window.initMap($initialLat, $initialLon, $initialHdg, $showNearby, $nearbyJsonArray); if(window.setBeamMode){ window.setBeamMode('$modeStr'); } if(window.setBeamAperture){ window.setBeamAperture($beamAperture); } }", null)
                     if (destinationRoute != null) {
                       val cleanLabel = destinationRoute.destinationName.replace("'", "\\'")
                       view?.evaluateJavascript("if(window.setDestinationPinAndRoute){ window.setDestinationPinAndRoute(${destinationRoute.destLat}, ${destinationRoute.destLon}, '$cleanLabel', ${destinationRoute.waypointsJson}); }", null)
@@ -295,6 +283,26 @@ fun RamsMapView(
           )
         } else {
           // 2. High-Contrast Tactical Offline Vector Map (Corridor Network)
+          val infiniteTransition = rememberInfiniteTransition(label = "RadarPulse")
+          val pulseRadius by infiniteTransition.animateFloat(
+            initialValue = 6f,
+            targetValue = 28f,
+            animationSpec = infiniteRepeatable(
+              animation = tween(1400, easing = FastOutSlowInEasing),
+              repeatMode = RepeatMode.Restart
+            ),
+            label = "PulseRadius"
+          )
+          val pulseAlpha by infiniteTransition.animateFloat(
+            initialValue = 0.75f,
+            targetValue = 0.0f,
+            animationSpec = infiniteRepeatable(
+              animation = tween(1400, easing = FastOutSlowInEasing),
+              repeatMode = RepeatMode.Restart
+            ),
+            label = "PulseAlpha"
+          )
+
           Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height

@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-15",
+  "board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+  "baseline_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "components": 90,
+  "nets": 96,
+  "approved_changes": {
+    "RF_width_segments": 34,
+    "U1_EP_via_tenting": 9,
+    "U1_mask_windows_added": 16,
+    "U1_paste_windows_chamfered": 16,
+    "U1_EP_full_mask_removed": true,
+    "reference_and_board_silkscreen": "presentation only",
+    "zone_refill": "fill polygons may respond to RF width; boundaries/settings unchanged"
+  },
+  "unchanged": [
+    "canonical circuit/netlist",
+    "all schematic files",
+    "component placement/rotation/side/value/footprint",
+    "all numbered copper lands",
+    "all track endpoints/layers/nets, non-RF widths",
+    "all drill sizes/positions and via copper",
+    "zone boundaries/keepouts/settings",
+    "outline/stackup/setup",
+    "model attachments"
+  ],
+  "schematic_sha256": {
+    "RAMS_JLC_S3.kicad_sch": "ed30c824135b1972ddfa3bea19e725966aef67a154318457bd1cc5a3dbd405e6",
+    "RAMS_JLC_S3_io.kicad_sch": "11ccfba8d61f218d611ed60808768e7ba577f6d450acbbc99a9f0524c69cd1f6",
+    "RAMS_JLC_S3_mcu.kicad_sch": "f64982ff617b2677cb2115aab49f95d9f8db9c5d22e2c757d368029506f33a35",
+    "RAMS_JLC_S3_power.kicad_sch": "fe24f4785832dec6be607bc23adcee6016e82b10e765f0de1c082a0ff10c29c1"
+  },
+  "netlist_sha256": "540c85d35aedbc6b12310a43407cb739fd244b1afecc1fae4ac1e49379a352ab",
+  "status": "Scoped fabrication edits match whitelist; final DRC/geometry/visual checks separate"
+}

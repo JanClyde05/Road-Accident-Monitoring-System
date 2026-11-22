@@ -22,7 +22,6 @@
 static BLEServer* _pServer = nullptr;
 static BLECharacteristic* _pTxCharacteristic = nullptr;
 static bool _deviceConnected = false;
-static bool _oldDeviceConnected = false;
 static char _deviceToken[9] = DEFAULT_DEVICE_TOKEN;
 static String _rxBuffer = "";
 
@@ -40,6 +39,10 @@ class RamsServerCallbacks : public BLEServerCallbacks {
     _deviceConnected = false;
     Serial.println(F("\n[BT] Phone disconnected from BLE"));
     neopixelSetState(NEO_CONNECTING);
+    // advertiseOnDisconnect is NimBLE-only; restart manually here instead.
+    delay(100);
+    pServer->startAdvertising();
+    Serial.println(F("[BT] Advertising restarted from disconnect callback"));
   }
 };
 
@@ -81,6 +84,7 @@ class RamsRxCallbacks : public BLECharacteristicCallbacks {
 
       // Safety: clear buffer if it grows too large without valid delimiter
       if (_rxBuffer.length() > 2048) {
+        Serial.printf("[BT] RX buffer overflow (%d bytes), dropping frame\n", _rxBuffer.length());
         _rxBuffer = "";
       }
     }
@@ -125,7 +129,9 @@ static void _processIncomingMessage(const String& msg) {
 
       Serial.printf("[BT-PING] Received ping request: seq=%lu lat=%.6f lon=%.6f\n", pSeq, pLat, pLon);
       loraSendPing(pToken, pLat, pLon, pSeq, pEpoch);
-      btServiceSendText(F("{\"type\":\"PING_ACK\",\"status\":\"SENT\"}\n"));
+      char ackBuf[64];
+      snprintf(ackBuf, sizeof(ackBuf), "{\"type\":\"PING_ACK\",\"status\":\"SENT\",\"seq\":%lu}\n", (unsigned long)pSeq);
+      btServiceSendText(ackBuf);
     }
     return;
   }
@@ -276,7 +282,7 @@ void btServiceInit() {
 
   // Initialize BLE Stack
   BLEDevice::init(RAMS_BT_DEVICE_NAME);
-  BLEDevice::setMTU(512);
+  BLEDevice::setMTU(247);
 
   // Create GATT Server
   _pServer = BLEDevice::createServer();
@@ -308,22 +314,15 @@ void btServiceInit() {
   pAdvertising->setScanResponse(true);
   pAdvertising->setMinPreferred(0x06);
   pAdvertising->setMaxPreferred(0x12);
+  // advertiseOnDisconnect(true) is NimBLE-only, not available in ESP32 BLE
+  // core 3.3.5.  Advertising restart is handled in the onDisconnect callback.
   BLEDevice::startAdvertising();
 
   Serial.printf("[BT] Advertising BLE as '%s'\n", RAMS_BT_DEVICE_NAME);
 }
 
 void btServiceUpdate() {
-  // Restart advertising if disconnected
-  if (!_deviceConnected && _oldDeviceConnected) {
-    delay(200);
-    _pServer->startAdvertising();
-    Serial.println(F("[BT] Re-started BLE advertising"));
-    _oldDeviceConnected = _deviceConnected;
-  }
-  if (_deviceConnected && !_oldDeviceConnected) {
-    _oldDeviceConnected = _deviceConnected;
-  }
+  // Advertising restart handled in onDisconnect callback (see RamsServerCallbacks).
 }
 
 bool btServiceIsConnected() {

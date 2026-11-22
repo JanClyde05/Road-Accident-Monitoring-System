@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-13",
+  "status": "export structure/geometry checks passed; supplier and physical gates remain open",
+  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "gerber_file_functions": {
+    ".gtl": "Copper,L1,Top",
+    ".g1": "Copper,L2,Inr",
+    ".g2": "Copper,L3,Inr",
+    ".gbl": "Copper,L4,Bot",
+    ".gts": "Soldermask,Top",
+    ".gbs": "Soldermask,Bot",
+    ".gto": "Legend,Top",
+    ".gbo": "Legend,Bot",
+    ".gm1": "Profile,NP"
+  },
+  "drills": {
+    "plated": 185,
+    "nonplated": 4,
+    "units": "mm",
+    "plated_slots": 4
+  },
+  "top_stencil_flashes": {
+    "normal": 285,
+    "first_power": 279,
+    "omitted": "2 R30 + 4 LED1 pads; BZ1/Ra02 absent in both"
+  },
+  "pdf_checks": {
+    "assembly_bottom_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "assembly_bottom_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "assembly_top_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "assembly_top_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "pad_map_bottom_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "pad_map_bottom_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "pad_map_top_1x.pdf": {
+      "pages": 1,
+      "scale": 1,
+      "outline_print_size_mm": [
+        42,
+        32
+      ]
+    },
+    "pad_map_top_4x.pdf": {
+      "pages": 1,
+      "scale": 4,
+      "outline_print_size_mm": [
+        168,
+        128
+      ]
+    },
+    "schematic.pdf": {
+      "pages": 4
+    }
+  },
+  "readability_report_sha256": "83de2a0cc29415ac3c35fd26fd95ca95e5415bad5a4cdb03c9fa2abc39266d55"
+}

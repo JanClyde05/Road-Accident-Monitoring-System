@@ -1,6 +1,6 @@
 import os
 
-path = r"d:\Antigravity\Projects\Danger Monitoring System V2\apps\android_app\app\src\main\java\com\example\ui\screens\AiSuiteScreen.kt"
+path = r"d:\Antigravity\Projects\Road Accident Monitoring System\apps\android_app\app\src\main\java\com\example\ui\screens\AiSuiteScreen.kt"
 with open(path, "r", encoding="utf-8") as f:
     content = f.read()
 

@@ -20,12 +20,17 @@
  */
 
 #include "http_upload.h"
+#include "backend_resolver.h"
 #include "config.h"
 
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+
+void httpUploadNoteResult(bool ok) {
+  backendNoteUpload(ok);
+}
 
 void httpUploadInit() {
   Serial.println(F("[HTTP] Upload client initialized"));
@@ -36,14 +41,17 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
                      uint8_t battPct, float aMag,
                      const char* name, const char* photoUrl) {
 
-  String url = String(BACKEND_URL) + String(UPLOAD_ENDPOINT);
+  String url = backendBaseUrl() + String(UPLOAD_ENDPOINT);
+  if (url.length() <= 8) {
+    httpUploadNoteResult(false);
+    return false;
+  }
   Serial.printf("[HTTP] Uploading %s event to %s\n", packetType, url.c_str());
 
   // Build JSON body
   JsonDocument doc;
   doc["deviceToken"] = deviceToken;
   doc["packetType"] = packetType;
-  doc["timestamp"] = millis();
 
   // Include fields based on packet type
   String pType = String(packetType);
@@ -121,6 +129,7 @@ bool httpUploadEvent(const char* deviceToken, const char* packetType,
     }
   }
 
+  httpUploadNoteResult(success);
   return success;
 }
 
@@ -133,14 +142,17 @@ bool httpUploadRiderProfile(const char* deviceToken,
                             const char* allergies,
                             const char* photoUrl) {
 
-  String url = String(BACKEND_URL) + String(UPLOAD_ENDPOINT);
+  String url = backendBaseUrl() + String(UPLOAD_ENDPOINT);
+  if (url.length() <= 8) {
+    httpUploadNoteResult(false);
+    return false;
+  }
   Serial.printf("[HTTP] Uploading rider_profile to %s\n", url.c_str());
 
   // Build JSON body with field names matching desktop Program.cs BuildEventFromJsonOrForm()
   JsonDocument doc;
   doc["deviceToken"]            = deviceToken;
   doc["packetType"]             = "rider_profile";
-  doc["timestamp"]              = millis();
   if (riderName)              doc["riderName"]             = riderName;
   if (plate)                  doc["plateNumber"]            = plate;
   if (contact)                doc["contactNumber"]          = contact;
@@ -197,5 +209,6 @@ bool httpUploadRiderProfile(const char* deviceToken,
     }
   }
 
+  httpUploadNoteResult(success);
   return success;
 }

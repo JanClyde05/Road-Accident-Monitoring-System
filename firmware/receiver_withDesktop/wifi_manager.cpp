@@ -17,6 +17,7 @@
 #include "wifi_manager.h"
 #include "config.h"
 #include "nvs_store.h"
+#include "backend_resolver.h"
 #include "local_queue.h"
 #include "../shared/logo_data.h"
 #include <WiFi.h>
@@ -253,6 +254,7 @@ static void _setupRoutes() {
                       "<div id='nets' style='margin:12px 0;'>Scanning networks...</div>"
                       "<input type='text' id='ssid' placeholder='WiFi Network (SSID)' required>"
                       "<input type='password' id='pass' placeholder='WiFi Password'>"
+                      "<input type='text' id='server' placeholder='Server Host:Port (optional)'>"
                       "<button onclick='doConnect()'>Connect</button>"
                       "<p id='msg' style='font-family:monospace;font-size:11px;margin-top:8px;'></p></div>"
                       "<script>"
@@ -262,10 +264,10 @@ static void _setupRoutes() {
                       "+n.ssid+' ('+n.rssi+'dBm)'+(n.enc?' [SEC]':'')+'</div>';});"
                       "document.getElementById('nets').innerHTML=h||'No networks found';});"
                       "function doConnect(){"
-                      "var s=document.getElementById('ssid').value,p=document.getElementById('pass').value;"
+                      "var s=document.getElementById('ssid').value,p=document.getElementById('pass').value,srv=document.getElementById('server').value;"
                       "document.getElementById('msg').textContent='Connecting to '+s+'...';"
                       "fetch('/connect',{method:'POST',headers:{'Content-Type':'application/json'},"
-                      "body:JSON.stringify({ssid:s,pass:p})}).then(r=>r.json()).then(d=>{"
+                      "body:JSON.stringify({ssid:s,pass:p,server:srv})}).then(r=>r.json()).then(d=>{"
                       "document.getElementById('msg').textContent='Connecting... Please wait 15s.';});}"
                       "</script></body></html>");
       request->send(200, "text/html", html);
@@ -310,7 +312,22 @@ static void _setupRoutes() {
 
   // Connect
   _server.on("/connect", HTTP_POST, [](AsyncWebServerRequest *request) {
+    if (request->hasParam("server", true)) {
+      String server = request->getParam("server", true)->value();
+      server.trim();
+      if (server.length() > 0 && server.length() <= 63 && server.indexOf(' ') < 0) {
+        backendSetManual(server);
+      }
+    }
   }, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    if (request->hasParam("server")) {
+      String srv = request->getParam("server")->value();
+      srv.trim();
+      if (srv.length() > 0 && srv.length() <= 63 && srv.indexOf(' ') < 0) {
+        backendSetManual(srv);
+      }
+    }
+
     JsonDocument doc;
     DeserializationError err = deserializeJson(doc, data, len);
     if (err) {
@@ -320,6 +337,10 @@ static void _setupRoutes() {
 
     String ssid = doc["ssid"] | "";
     String pass = doc["pass"] | "";
+    String server = doc["server"] | "";
+    if (server.length() > 0 && server.length() <= 63 && server.indexOf(' ') < 0) {
+      backendSetManual(server);
+    }
 
     if (ssid.length() == 0) {
       request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"SSID required\"}");

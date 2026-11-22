@@ -1,0 +1,59 @@
+{
+  "review_date": "2026-11-08",
+  "sources": [
+    {
+      "file": "esp32_s3_v2_2.pdf",
+      "url": "https://documentation.espressif.com/esp32-s3_datasheet_en.pdf",
+      "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
+      "bytes": 1098115,
+      "status": "saved"
+    },
+    {
+      "file": "tps63020_slvs916i.pdf",
+      "url": "https://www.ti.com/lit/ds/symlink/tps63021.pdf",
+      "sha256": "d117773bb7370fd79377bc70ce987eec3469ea5979547a09df52fca5f95b2e69",
+      "bytes": 1855244,
+      "status": "saved"
+    },
+    {
+      "file": "johanson_b100_rev5.pdf",
+      "url": "https://www.johansontechnology.com/docs/3829/Antenna-2450AT18B0100001E-Rev5.0_uMmswfC.pdf",
+      "sha256": "732b9d2a047e19bd9625fd5dbe794b4946bc26cb06b3b3b449550a6d14dc163a",
+      "bytes": 481043,
+      "status": "saved"
+    },
+    {
+      "file": "fuxin_fs8205a_v2_1.pdf",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/5d5d336ed528176185784e3faf8fb551.pdf?productCode=C908265",
+      "sha256": "7896e3ce79a3accfd6cd8b7aecd420c72c173cef8ff2e552fa03e6c9bd67e796",
+      "bytes": 4470704,
+      "status": "saved"
+    },
+    {
+      "file": "slkor_dw01a_rev2.pdf",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/7c412cac0dea0278008492f4ad08dd26.pdf?productCode=C42380662",
+      "sha256": "b0d78970ec138017341dd1d91563f8fab8c2cc2b703cef7a7d4dd0ed6ed46b6a",
+      "bytes": 1245507,
+      "status": "saved"
+    },
+    {
+      "file": "worldsemi_ws2812b_v6_v1_1.pdf",
+      "url": "https://www.tme.eu/Document/7678192c635b059e68dd9fc5429c91b1/WS2812B-V6%2BV1.1_EN_.pdf",
+      "status": "download_failed",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "file": "aos_ao3401a_rev3_1.pdf",
+      "url": "https://www.aosmd.com/sites/default/files/res/data_sheets/AO3401A.pdf",
+      "sha256": "0d8e3261ae280e007b5837fff60c55142f2d92af71edc4d02aee6f7a760a785c",
+      "bytes": 326568,
+      "status": "saved"
+    },
+    {
+      "file": "adi_ltc4054_405442xf.pdf",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/405442xf.pdf",
+      "status": "download_failed",
+      "error": "The read operation timed out"
+    }
+  ]
+}

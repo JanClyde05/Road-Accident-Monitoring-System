@@ -37,11 +37,13 @@ import com.example.model.GpsData
 import com.example.model.ImuData
 import com.example.model.IncidentEvent
 import com.example.model.IncidentType
+import com.example.model.PingEvent
 import com.example.model.RiderProfile
 import com.example.sensor.PhoneSensorEngine
 import com.example.sync.Esp32SyncEngine
 import com.example.sync.Esp32SyncStatus
 import com.example.sync.SyncTransport
+import com.example.RamsApplication
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
@@ -51,8 +53,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -61,8 +67,8 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   // Phone Physical Hardware Sensors
   val phoneSensorEngine = PhoneSensorEngine(application.applicationContext, viewModelScope)
 
-  // Wearable Sync & Emergency Uplink Engine (WebSocket / TCP / Bluetooth Classic & BLE)
-  val esp32SyncEngine = Esp32SyncEngine(viewModelScope, application.applicationContext)
+  // Wearable Sync & Emergency Uplink Engine (Scoped to Application lifetime for GATT persistence)
+  val esp32SyncEngine: Esp32SyncEngine = (application as RamsApplication).esp32SyncEngine
 
   // Internal Fallback manager
   private val simulatedConnectionManager = Esp32ConnectionManager(viewModelScope)
@@ -171,7 +177,26 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     simulatedConnectionManager.imuState
   ) { usePhone, phoneImu, simImu ->
     if (usePhone) phoneImu else simImu
-  }.stateIn(viewModelScope, SharingStarted.Eagerly, phoneSensorEngine.phoneImuState.value)
+  }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), phoneSensorEngine.phoneImuState.value)
+
+  private fun angularDelta(a: Float, b: Float): Float {
+    var d = (a - b) % 360f
+    if (d > 180f) d -= 360f
+    if (d < -180f) d += 360f
+    return kotlin.math.abs(d)
+  }
+
+  @OptIn(FlowPreview::class)
+  val mapHeading: StateFlow<Float> = imuState
+    .map { it.yawDegrees }
+    .distinctUntilChanged { a, b -> angularDelta(a, b) < 2.0f }
+    .sample(100L)
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0f)
+
+  val mapBeamAperture: StateFlow<Float> = imuState
+    .map { it.beamAperture }
+    .distinctUntilChanged()
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 28f)
 
   val linkStatus: StateFlow<DeviceLinkStatus> = combine(
     _usePhoneSensors,
@@ -221,6 +246,11 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   val isPingModeActive: StateFlow<Boolean> = _isPingModeActive.asStateFlow()
   private val _pingSequenceCount = MutableStateFlow(0L)
   val pingSequenceCount: StateFlow<Long> = _pingSequenceCount.asStateFlow()
+  private val _pingLog = MutableStateFlow<List<PingEvent>>(emptyList())
+  val pingLog: StateFlow<List<PingEvent>> = _pingLog.asStateFlow()
+  private val _showPingDialog = MutableStateFlow(false)
+  val showPingDialog: StateFlow<Boolean> = _showPingDialog.asStateFlow()
+  fun setPingDialogVisible(visible: Boolean) { _showPingDialog.value = visible }
   private var pingBenchmarkJob: Job? = null
 
   // Incident Events Stream
@@ -868,6 +898,19 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       cancelFalseAlarm()
     }
 
+    esp32SyncEngine.onPingAckReceived = { ackSeq ->
+      val now = System.currentTimeMillis()
+      _pingLog.update { list ->
+        list.map { ping ->
+          if ((ackSeq >= 0 && ping.seq == ackSeq) || (ackSeq < 0 && ping.ackAt == null)) {
+            if (ping.ackAt == null) ping.copy(ackAt = now) else ping
+          } else {
+            ping
+          }
+        }
+      }
+    }
+
     // Register Bluetooth broadcast receiver
     try {
       val filter = IntentFilter().apply {
@@ -1057,9 +1100,8 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       if (bluetoothAdapter?.isDiscovering == true) {
         bluetoothAdapter.cancelDiscovery()
       }
-      val startedDiscovery = bluetoothAdapter?.startDiscovery() ?: false
 
-      // Also start BLE scanner for ESP32-S3 and other BLE peripherals
+      // BLE-only scanner for ESP32-S3 and NUS peripherals (prevents Classic inquiry radio contention)
       val leScanner = bluetoothAdapter?.bluetoothLeScanner
       var startedBle = false
       if (leScanner != null) {
@@ -1111,7 +1153,7 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
         } catch (_: Exception) {}
       }
 
-      _isScanningBluetooth.value = startedDiscovery || startedBle
+      _isScanningBluetooth.value = startedBle
     } catch (e: Exception) {
       _isScanningBluetooth.value = false
     }
@@ -1398,8 +1440,17 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     pingBenchmarkJob = null
 
     if (enabled) {
+      _showPingDialog.value = true
       pingBenchmarkJob = viewModelScope.launch(Dispatchers.IO) {
+        val intervalMs = 3000L
+        var lastStarted = android.os.SystemClock.elapsedRealtime()
+        var next = lastStarted
+
         while (isActive && _isPingModeActive.value) {
+          val started = android.os.SystemClock.elapsedRealtime()
+          val actualInterval = if (_pingLog.value.isEmpty()) 0L else (started - lastStarted)
+          lastStarted = started
+
           _pingSequenceCount.value += 1
           val seq = _pingSequenceCount.value
           val gps = gpsState.value
@@ -1413,7 +1464,21 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
             seq = seq,
             epoch = epoch
           )
-          delay(3000L) // Ping interval: 3 seconds for continuous propagation benchmarking
+
+          val newEvent = PingEvent(
+            seq = seq,
+            t0 = epoch,
+            lat = gps.latitude,
+            lon = gps.longitude,
+            hasFix = gps.hasFix,
+            intervalMs = actualInterval,
+            ackAt = null
+          )
+          _pingLog.update { (listOf(newEvent) + it).take(50) }
+
+          next += intervalMs
+          val wait = next - android.os.SystemClock.elapsedRealtime()
+          if (wait > 0) delay(wait) else next = android.os.SystemClock.elapsedRealtime()
         }
       }
     }

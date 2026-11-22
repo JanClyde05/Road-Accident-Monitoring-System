@@ -1,95 +1,34 @@
-# J2 final CAD validation — engineering candidate
+# J2 prototype fabrication validation — November 15, 2026
 
-Reviewed 2026-11-13, Asia/Manila. Native KiCad **10.0.6**. Scope: the bare
-ESP32-S3FH4R2, AP2112, Ra-02, active buzzer and 1S LiPo JLCPCB design.
-**CAD validation passed; fabrication release and physical operation remain open.**
+Native KiCad **10.0.6**. PCB SHA256: `cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a`.
+Circuit specification SHA256: `bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c`.
 
-The authoritative PCB SHA256 is
-`d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8`.
-Circuit specification SHA256 is
-`bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c`.
-Full native/project/library and report hashes are in
-[final_validation_manifest.json](final_validation_manifest.json). Reports are
-invalid for later edits unless rerun and rebound. Original Antigravity prototype
-PCB, schematic and order ZIP hashes still match the starting baseline.
+The first-prototype fabrication CAD gate passed. This is the 42 × 32 mm, four-layer AP2112 linear-regulator version. Supplier production-file confirmation and physical operation remain separate. Nothing has been uploaded or ordered.
 
-| Gate | Recorded result |
+| Gate | Result |
 |---|---|
-| Native schematic ERC | 0 violations across four pages; no ignored checks |
-| Native PCB DRC | 0 violations, 0 unconnected items, 0 schematic parity issues; no ignored checks/exclusions |
-| Circuit / BOM / board | 90 footprint positions: 82 components and 8 test pads; 80 initially fitted; R30/LED1 staged |
-| Outline / stack | 42 × 32 mm; four copper layers; JLC04161H-3313 target |
-| Routing | 1,440 track segments, 181 vias; no tracks on dedicated In1 ground layer |
-| USB reference | CC1 moved away; native In2 keepout preserves reference under bottom fanout; no foreign crossing tracks |
-| Antenna exclusion | No foreign pads/tracks/vias or copper fill inside the exclusion; 1 µm numerical interior tolerance distinguishes legal boundary contact |
-| Drill versus lands/paste | Nine intended U1 exposed-pad thermal drills; no other SMD-land drill intersections; no drill intersects the 16 dedicated paste windows |
-| ESP32 lands | All 56 perimeter lands 0.80 × 0.25 mm at 0.40 pitch, paste 0.75 × 0.20; local library/board agree; nominal mask web 0.15 mm |
-| Firmware | Actual-source battery/RGB host tests and both full Arduino-ESP32 3.3.5 builds pass; 19 current source hashes match |
+| Native ERC | Zero findings across four schematic pages; no ignored checks |
+| Native DRC / parity | Zero violations, zero unconnected items, zero schematic mismatches; no exclusions or ignored categories |
+| Circuit invariants | All four schematic files and canonical 90-component / 96-net circuit unchanged; 253 connected PCB pad occurrences |
+| Layout invariants | Component positions/rotations/sides, numbered copper pads, track endpoints/layers/nets, drill geometry, zone boundaries, keepouts and 42 × 32 mm outline unchanged |
+| Deliberate changes | 34 RF widths 0.18→0.15 mm; U1 mask/paste/9-via tenting; printable legend; ground refill |
+| Routing / return paths | 1,440 segments / 181 vias; dedicated In1 has no tracks and one ground outline; no unexplained sampled reference gaps or antenna-keepout copper intrusions |
+| QFN construction | 56 lands 0.80 × 0.25 mm; perimeter paste 0.75 × 0.20 mm; native/library parity; sixteen chamfered EP openings; nine intended 0.20 mm ground drills, top covered / bottom open |
+| Mask / paste math | 0.20 mm crosshatch web, 0.15 mm outer mask overlap, 0.1121 mm nominal coverage beyond hole edges, 61.42% EP paste area |
+| Printable legend | 78 visible references, minimum 0.8 mm height / 0.10 mm stroke; inter-character white space ≥0.16 mm; no measured glyph/body or glyph/pad collisions; RST/BOOT and all eight test pads labeled |
+| Owner's dense-label choice | C12/C13/C15/C19/C21/C26/C27/L1/L4/R7/SW2/SW3 appear in complete assembly drawings; no circuit part removed |
+| BOM / assembly | 90 positions = 82 physical components + 8 test pads; 80 first power, 82 after LED/battery qualification; exact documented replacements integrated |
+| Models | All 82 physical positions resolve; eight test pads intentionally have no model. Package approximations are documented |
+| Firmware | Prior host tests and full J2/SuperMini Arduino-ESP32 3.3.5 builds retained, with all 19 source hashes checked unchanged by the freezer |
 
-DRC uses 0.15 mm copper/track minima, 0.25 mm copper-to-edge and hole clearance,
-0.45/0.20 mm minimum via diameter/drill, owner-approved 0.55 mm reference text (C13: 0.45 mm)
-and 0.10 mm stroke, with 0.15 mm legend-to-pad clearance. These text dimensions
-are below JLCPCB’s published minima; supplier print acceptance remains open. The mask check is independently geometric; the project does
-not imply an unconfigured minimum-mask-web rule was checked by DRC.
-Project rules retain warnings rather than hiding them. Read raw
-[DRC](final_drc.json), [ERC](final_erc.json),
-[geometry](final_geometry/geometry_audit.json) and
-[firmware](firmware_j2/BUILD_REPORT.md) results for exact scope.
+DRC rules retain 0.15 mm copper/track and silk clearance, 0.25 mm copper-edge/hole clearance, 0.45/0.20 mm via minima and the selected 0.8/0.10 mm high-precision legend. No rule was hidden to make the report pass. Mask webs and actual inter-character spacing are independent checks in addition to DRC.
 
-Electrical review independently matched 247 connected schematic pins, 41 NCs
-and 253 connected PCB pad occurrences. See
-[J2 electrical review](../docs/J2_ELECTRICAL_REVIEW.md), including its current
-2026-11-12 section rather than the preserved older snapshots.
+RF/USB nominal cross-section calculations are supported by the official JLC calculator: 48.521 Ω RF and 86.289 Ω differential USB with close side ground; 51.072/87.771 Ω without coplanar ground. The published-guide mask/trapezoid sensitivity gives 48.502/86.223 Ω. Antenna matching geometry inside the no-ground corner, pads and transitions are not uniform lines. Use JLC04161H-3313 and controlled-impedance production confirmation; first-article antenna/enclosure tuning remains necessary.
 
-USB's total drawn copper sums include both USB-C orientation branches. Excluding
-the unused symmetric connector branch and two redundant 0.5 µm pad-centre
-segments gives approximately **19.1741 mm per polarity**. This is geometric
-track length, not a propagation-delay or impedance measurement. Two through
-vias per signal remain. Sampled ground-reference gaps are confined to each
-signal's own via antipads and the intentional antenna exclusion; they are not
-misrepresented as continuous plane beneath every transition. RF matching and
-crystal routes have no sampled plane gaps. In1 ground is one filled outline.
+The raw evidence is source-bound: fab_native_validation.json records check commands, sources and report hashes; fab_invariants.json limits permitted edits; fab_label_validation.json checks actual visible strokes; final_geometry/geometry_audit.json checks planes/clearances; fab_impedance_20261114 contains primary calculator results and final mask/geometry audits. final_validation_manifest.json freezes sources, reports, documentation and scripts. EXPORT_VALIDATION.json checks exported mask/paste polygons, full assembly references, drill counts, layer functions and byte-identical upload ZIP contents.
 
-[Power-path estimates](power_paths_final.json) use nominal copper resistivity
-at 20 C and an assumed 18 µm via plating. Charging an entire segment when entered
-partway overestimates that nominal path; parallel pours are not credited. The
-largest illustrated 3V3 endpoint drop is about 90 mV at an assumed 600 mA through
-that path. These are neither worst-case guarantees nor thermal/current ratings.
-The AP2112 and actual assembled rail still need simultaneous-load measurements.
+The nine EP drills are intentional; no other SMD copper-land drill intersections or drill/paste-window intersections were found. Ordinary top tenting is a selected low-cost measure, not a filled/capped via or guaranteed void-free joint. Inspect received mask and the fine-pitch print; use the actual solder paste profile and measured heatbed board temperature.
 
-Visual inspection covers all four copper layers, both masks/legends, top paste,
-top/bottom assembly and 3D views in `previews/final/`. All 90 component references
-are visible. All 82 physical component positions have resolvable model assets;
-eight test pads intentionally have none. First-power views omit LED1/R30 while
-normal-population views show them in a derived preview only. Exact, family,
-generic and illustrative model limits are listed in docs/3D_MODEL_SOURCES.md.
+Power-path estimates use nominal resistivity and assumed via plating; they are not rail measurements. Assembled charging/protection, regulator droop/temperature, USB in both orientations, LED range/timing, ADC calibration, oscillator startup and RF/LoRa performance still require the staged bring-up guide. The unknown-revision bought LED and charge-enable link remain DNP for first power. Original Antigravity prototype PCB/schematic/order ZIP identities are checked against the preserved baseline.
 
-All four schematic pages now contain boxed sections, brief function/equation
-notes and a root power-flow map. Canonical netlists remain identical: 90 physical
-positions and 96 nets. Native board comparison confirms unchanged pads, tracks,
-vias, placements, courtyards, keepouts, filled copper, outline and stack/setup.
-See readability_validation.json and docs/READABILITY_AND_LESSONS.md. Original
-schematic UUIDs and hierarchical paths are retained; no live circuit was copied.
-
-Corrections retained in `verification/`: final CC1 reference reroute and dangling
-via cleanup; QFN land-width/paste adaptation; assembly-only label correction.
-Earlier failed routing/clearance reports and the rejected buck-boost candidate
-remain archived. Initial construction scripts are guarded because historical
-placement/routing inputs cannot reproduce the final native PCB.
-
-Reproduction uses `kicad-cli sch erc --format json`,
-`kicad-cli pcb drc --schematic-parity --format json`, the project's read-only
-`audit_layout.py` / `audit_power_paths.py`, and `verify_firmware.py` plus the
-two validation host tests. Refill zones after copper changes before DRC;
-never run concurrent CAD writers. `export_review.py` requires the matching
-manifest and exports from a frozen copy. Export QA is recorded separately.
-
-**Still open:** compact-legend print acceptance; supplier/field-solver RF and USB impedance confirmation for the
-actual stackup; actual-stock package/polarity checks; QFN thermal-via soldering
-and paste/heatbed process qualification. After assembly, verify charging and
-protection, battery/USB sequencing, rail droop and temperature, ADC transients,
-both USB orientations, LED voltage/timing, oscillator startup and RF operation.
-The generic WS2812B-2020 revision remains unknown. Its nominal 3.7 V battery
-supply does not guarantee operation across discharge. Firmware's preserved
-3.55 V percentage endpoint is not shutdown or a measured regulator floor.
-No board has been fabricated, powered, flashed or physically tested in this task.
+Failed packing/DRC candidates and one-shot input backups are retained. No physical hardware result or supplier manufacturing acceptance is claimed by this report.

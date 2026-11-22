@@ -1,0 +1,5 @@
+(version 1)
+# 4layer JLC04161H-3313; no blanket copper/connection exclusions.
+(rule "Copper edge" (constraint edge_clearance (min 0.25mm)))
+(rule "Dedicated L2 ground" (condition "A.Type == 'Track' && A.Layer == 'In1.Cu'") (constraint disallow track))
+(rule "RF antenna corner" (condition "A.Type == 'Track' && A.insideArea('ANTENNA_NO_METAL') && A.NetName != 'ANT_FEED'") (constraint disallow track))

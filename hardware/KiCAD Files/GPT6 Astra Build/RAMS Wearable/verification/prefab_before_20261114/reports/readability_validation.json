@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-13",
+  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "before_board_sha256": "5f86824a9d50f288361d3f8ee4852bda18af880dab9b3da43074a571a8f48ad5",
+  "unchanged": [
+    "all tracks/vias",
+    "all pads and nets",
+    "component placement/rotation/side",
+    "courtyards and footprint geometry",
+    "zones/keepouts/filled copper",
+    "board outline/stack/setup",
+    "component values/footprints/UUIDs",
+    "canonical schematic component/pin/net assignments"
+  ],
+  "components": 90,
+  "nets": 96,
+  "schematic_sha256": {
+    "RAMS_JLC_S3.kicad_sch": "ed30c824135b1972ddfa3bea19e725966aef67a154318457bd1cc5a3dbd405e6",
+    "RAMS_JLC_S3_io.kicad_sch": "11ccfba8d61f218d611ed60808768e7ba577f6d450acbbc99a9f0524c69cd1f6",
+    "RAMS_JLC_S3_mcu.kicad_sch": "f64982ff617b2677cb2115aab49f95d9f8db9c5d22e2c757d368029506f33a35",
+    "RAMS_JLC_S3_power.kicad_sch": "fe24f4785832dec6be607bc23adcee6016e82b10e765f0de1c082a0ff10c29c1"
+  },
+  "netlist_sha256": "10c4a51de47227916422346d5b5e893ee45ec8000b869148ae788475e5a72d70",
+  "status": "Presentation-only invariants passed; native ERC/DRC and visual QA required separately"
+}

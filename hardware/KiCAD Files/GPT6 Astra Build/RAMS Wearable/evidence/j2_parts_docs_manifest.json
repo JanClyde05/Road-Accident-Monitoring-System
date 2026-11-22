@@ -10,9 +10,9 @@
     "LED1"
   ],
   "files": {
-    "BOM_PROCUREMENT.csv": "22563a159078a9ae9e84b6c6c281f38774bc16cbdc51a02b9f43cafb32df8a13",
+    "BOM_PROCUREMENT.csv": "b22fc03700dec8fae69de096a3264c441dd34a4df7d2da939f4cc57a6da3122b",
     "PARTS_AND_FIRMWARE.md": "6841e4b5b68606238c5e95eefb9052788b346cf738e7887ab56851fcf95ca82a",
-    "ASSEMBLY_AND_BRINGUP.md": "26cf89e96a367188bae64234f2b7e88550decc76b6bcd26854c6e93d54441dd4"
+    "ASSEMBLY_AND_BRINGUP.md": "17effb1f638e8a36b12302efd6ccf77a2bf531ad95acbb5aab381c7c40697d83"
   },
   "preserved_files": {
     "BOM_PROCUREMENT.csv": "62060fc9f43282692177af3b02bb43602b2376f35af055bd2936404376cf9b20",
@@ -20,5 +20,5 @@
     "PARTS_AND_FIRMWARE.md": "745ad555103a47d02d20227414ec298a90f3b7e95d09fd877d3b19cd7dbcaa57"
   },
   "normal_fit_after_qualification": 82,
-  "refresh_note": "2026-11-13 presentation-only revision, unchanged circuit/copper and firmware; compact legend requires print qualification; physical gates remain open."
+  "refresh_note": "2026-11-15 prototype fabrication preparation: source-bound RF-width, mask/paste and printable legend changes; circuit and firmware unchanged. Production-file confirmation and physical gates separate."
 }

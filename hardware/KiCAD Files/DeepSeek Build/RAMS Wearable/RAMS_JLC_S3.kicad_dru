@@ -3,3 +3,9 @@
 (rule "Copper edge" (constraint edge_clearance (min 0.25mm)))
 (rule "Dedicated L2 ground" (condition "A.Type == 'Track' && A.Layer == 'In1.Cu'") (constraint disallow track))
 (rule "RF antenna corner" (condition "A.Type == 'Track' && A.insideArea('ANTENNA_NO_METAL') && A.NetName != 'ANT_FEED'") (constraint disallow track))
+# U1's left control escape (BOOT_BTN / BUZZER_CTRL / LORA_SCK). The 0.4 mm QFN row
+# leaves no 0.127 mm corridor for a third signal; JLC04161H-3313 is capable of
+# 0.09 mm track/space, so this named strip runs at 0.10 mm. Everywhere else keeps
+# the 0.15 mm track / 0.127 mm clearance board rules.
+(rule "QFN escape width" (condition "A.insideArea('QFN_ESC')") (constraint track_width (min 0.10mm)))
+(rule "QFN escape clearance" (condition "A.insideArea('QFN_ESC') || B.insideArea('QFN_ESC')") (constraint clearance (min 0.10mm)))

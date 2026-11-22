@@ -1,7 +1,13 @@
 {
-  "date": "2026-11-13",
-  "status": "export structure/geometry checks passed; supplier and physical gates remain open",
-  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "date": "2026-11-15",
+  "status": "export structure/geometry checks passed; production-file confirmation and physical tests separate",
+  "board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+  "drawing_source": {
+    "source_board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+    "derived_board_sha256": "2d8009544c5f8883ec7a004161f70d665e15c88445ad5186345532bff582c672",
+    "only_change": "SW1 F.Fab ${REFERENCE} position/font/angle; no fabrication geometry or printed silkscreen changed",
+    "purpose": "PDF assembly/pad maps only; never use this board for fabrication"
+  },
   "gerber_file_functions": {
     ".gtl": "Copper,L1,Top",
     ".g1": "Copper,L2,Inr",
@@ -23,6 +29,69 @@
     "normal": 285,
     "first_power": 279,
     "omitted": "2 R30 + 4 LED1 pads; BZ1/Ra02 absent in both"
+  },
+  "EP_exported_geometry": {
+    "normal_after_qualification": {
+      "mask_windows": 16,
+      "paste_windows": 16,
+      "bottom_via_openings": 9,
+      "minimum_top_mask_overlap_beyond_hole_mm": 0.1121320343559522,
+      "paste_coverage_percent": 61.41951369652202,
+      "mask_window_side_chamfer_mm": [
+        1.2,
+        0.1
+      ],
+      "paste_window_side_chamfer_mm": [
+        1.12,
+        0.06
+      ]
+    },
+    "first_power": {
+      "mask_windows": 16,
+      "paste_windows": 16,
+      "bottom_via_openings": 9,
+      "minimum_top_mask_overlap_beyond_hole_mm": 0.1121320343559522,
+      "paste_coverage_percent": 61.41951369652202,
+      "mask_window_side_chamfer_mm": [
+        1.2,
+        0.1
+      ],
+      "paste_window_side_chamfer_mm": [
+        1.12,
+        0.06
+      ]
+    }
+  },
+  "upload_zips": {
+    "RAMS_J2_JLC_BARE_BOARD.zip": {
+      "sha256": "d9a164df86a591eecbc0acb443f3bfef913be183e0a6b456519feb62052b227b",
+      "files": [
+        "RAMS_JLC_S3-B_Cu.gbl",
+        "RAMS_JLC_S3-B_Mask.gbs",
+        "RAMS_JLC_S3-B_Silkscreen.gbo",
+        "RAMS_JLC_S3-Edge_Cuts.gm1",
+        "RAMS_JLC_S3-F_Cu.gtl",
+        "RAMS_JLC_S3-F_Mask.gts",
+        "RAMS_JLC_S3-F_Silkscreen.gto",
+        "RAMS_JLC_S3-In1_Cu.g1",
+        "RAMS_JLC_S3-In2_Cu.g2",
+        "RAMS_JLC_S3-job.gbrjob",
+        "RAMS_JLC_S3-NPTH.drl",
+        "RAMS_JLC_S3-PTH.drl"
+      ]
+    },
+    "RAMS_J2_TOP_STENCIL_NORMAL_AFTER_QUALIFICATION.zip": {
+      "sha256": "5b359ea5fd96aca92e6edb1b57889fdf3af25f933647bc4fb6291d0dc5ee5dee",
+      "files": [
+        "normal_after_qualification_PASTE_ONLY-F_Paste.gtp"
+      ]
+    },
+    "RAMS_J2_TOP_STENCIL_FIRST_POWER.zip": {
+      "sha256": "200db6f80abb8a7a1a03fa07848ccc0e78e403b20d9e74c133739ca284c8afed",
+      "files": [
+        "first_power_PASTE_ONLY-F_Paste.gtp"
+      ]
+    }
   },
   "pdf_checks": {
     "assembly_bottom_1x.pdf": {
@@ -92,6 +161,5 @@
     "schematic.pdf": {
       "pages": 4
     }
-  },
-  "readability_report_sha256": "83de2a0cc29415ac3c35fd26fd95ca95e5415bad5a4cdb03c9fa2abc39266d55"
+  }
 }

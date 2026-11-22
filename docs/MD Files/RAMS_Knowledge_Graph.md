@@ -58,77 +58,77 @@ mindmap
 ### shared/ (1 file)
 | File | Purpose | Dependencies |
 |------|---------|-------------|
-| [protocol.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/shared/protocol.h) | LoRa packet structs, enums, radio constants | None — consumed by wearable + receiver |
+| [protocol.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/shared/protocol.h) | LoRa packet structs, enums, radio constants | None — consumed by wearable + receiver |
 
 ### wearable/ (23 files)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
-| [config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/config.h) | Pin map, detection thresholds, timing constants | — |
-| [sensors.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/sensors.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/sensors.cpp) | MPU-6050 driver + calibration | Wire.h, config.h |
-| [gps.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/gps.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/gps.cpp) | ATGM336H via TinyGPS++ | TinyGPSPlus, config.h |
-| [detection.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/detection.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/detection.cpp) | ★ Core FSM: Fall/Skid/Impact/Environmental | sensors, gps, config.h |
-| [lora_tx.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/lora_tx.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/lora_tx.cpp) | LoRa packet transmission | LoRa.h, shared/protocol.h |
-| [button.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/button.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/button.cpp) | Debounced button, short/long press | config.h |
-| [buzzer.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/buzzer.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/buzzer.cpp) | Non-blocking alert tone patterns | config.h |
-| [neopixel.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/neopixel.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/neopixel.cpp) | Status LED colors + SOS flash | Adafruit_NeoPixel, config.h |
-| [local_ap.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/local_ap.cpp) | SoftAP + WebSocket (setup mode: `/` Registration, `/map` Offline Map, `/telemetry` Live Charts) | WiFi.h, WebSocketsServer, ESPAsyncWebServer |
-| [registration.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/registration.cpp) | Name + Drive link → token, NVS storage | ArduinoJson, Preferences |
-| [offline_map.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/offline_map.cpp) | GPS-to-pixel static map viewer | map_image.h |
-| [preview_registration.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/preview_registration.html) | Standalone local browser preview (WebSocket + category selector) | data/style.css |
-| [wearable.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/wearable.ino) | Main orchestrator (armed/setup modes) | All above modules |
-| [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/index.html) | LittleFS single-page application (4 views, category selector) | style.css, app.js |
-| [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/style.css) | LittleFS styling (circular logo, custom teardrop pin, dark slate) | — |
-| [data/app.js](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/app.js) | LittleFS WebSocket client (hash token, category sync, Tuguegarao map) | — |
-| [data/map.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/map.html) | Standalone Tuguegarao City vector map route | style.css, app.js |
-| [data/telemetry.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/telemetry.html) | Standalone live IMU/GPS telemetry route | style.css, app.js |
-| [data/logo.png](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable/data/logo.png) | Secondary raster emblem asset | — |
+| [config.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/config.h) | Pin map, detection thresholds, timing constants | — |
+| [sensors.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/sensors.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/sensors.cpp) | MPU-6050 driver + calibration | Wire.h, config.h |
+| [gps.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/gps.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/gps.cpp) | ATGM336H via TinyGPS++ | TinyGPSPlus, config.h |
+| [detection.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/detection.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/detection.cpp) | ★ Core FSM: Fall/Skid/Impact/Environmental | sensors, gps, config.h |
+| [lora_tx.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/lora_tx.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/lora_tx.cpp) | LoRa packet transmission | LoRa.h, shared/protocol.h |
+| [button.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/button.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/button.cpp) | Debounced button, short/long press | config.h |
+| [buzzer.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/buzzer.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/buzzer.cpp) | Non-blocking alert tone patterns | config.h |
+| [neopixel.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/neopixel.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/neopixel.cpp) | Status LED colors + SOS flash | Adafruit_NeoPixel, config.h |
+| [local_ap.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/local_ap.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/local_ap.cpp) | SoftAP + WebSocket (setup mode: `/` Registration, `/map` Offline Map, `/telemetry` Live Charts) | WiFi.h, WebSocketsServer, ESPAsyncWebServer |
+| [registration.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/registration.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/registration.cpp) | Name + Drive link → token, NVS storage | ArduinoJson, Preferences |
+| [offline_map.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/offline_map.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/offline_map.cpp) | GPS-to-pixel static map viewer | map_image.h |
+| [preview_registration.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/preview_registration.html) | Standalone local browser preview (WebSocket + category selector) | data/style.css |
+| [wearable.ino](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/wearable.ino) | Main orchestrator (armed/setup modes) | All above modules |
+| [data/index.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/index.html) | LittleFS single-page application (4 views, category selector) | style.css, app.js |
+| [data/style.css](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/style.css) | LittleFS styling (circular logo, custom teardrop pin, dark slate) | — |
+| [data/app.js](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/app.js) | LittleFS WebSocket client (hash token, category sync, Tuguegarao map) | — |
+| [data/map.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/map.html) | Standalone Tuguegarao City vector map route | style.css, app.js |
+| [data/telemetry.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/telemetry.html) | Standalone live IMU/GPS telemetry route | style.css, app.js |
+| [data/logo.png](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable/data/logo.png) | Secondary raster emblem asset | — |
 
 ### receiver/ (16 files)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
-| [config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/config.h) | Backend URL, retry settings, pin map | — |
-| [nvs_store.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/nvs_store.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/nvs_store.cpp) | WiFi credential persistence | Preferences |
-| [wifi_manager.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/wifi_manager.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/wifi_manager.cpp) | Captive portal WiFi provisioning | ESPAsyncWebServer, LittleFS, DNSServer |
-| [lora_rx.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/lora_rx.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/lora_rx.cpp) | LoRa packet receive + deserialize | LoRa.h, shared/protocol.h |
-| [http_upload.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/http_upload.cpp) | HTTPS POST JSON to Netlify | HTTPClient, WiFiClientSecure |
-| [local_queue.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/local_queue.cpp) | LittleFS store-and-retry buffer | LittleFS |
-| [receiver.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/receiver.ino) | Main orchestrator | All above modules |
-| [preview_receiver.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/preview_receiver.html) | Standalone local browser preview (circular logo + mock AP) | data/style.css |
-| [data/index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/index.html) | Captive portal page (LittleFS, circular logo) | style.css, app.js |
-| [data/style.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/style.css) | Portal styling (circular logo wrap, clip-path, dark mode) | — |
-| [data/app.js](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/app.js) | Scan, connect, status poll logic | — |
-| [data/logo.png](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/data/logo.png) | Secondary raster emblem asset | — |
+| [config.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/config.h) | Backend URL, retry settings, pin map | — |
+| [nvs_store.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/nvs_store.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/nvs_store.cpp) | WiFi credential persistence | Preferences |
+| [wifi_manager.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/wifi_manager.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/wifi_manager.cpp) | Captive portal WiFi provisioning | ESPAsyncWebServer, LittleFS, DNSServer |
+| [lora_rx.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/lora_rx.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/lora_rx.cpp) | LoRa packet receive + deserialize | LoRa.h, shared/protocol.h |
+| [http_upload.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/http_upload.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/http_upload.cpp) | HTTPS POST JSON to Netlify | HTTPClient, WiFiClientSecure |
+| [local_queue.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/local_queue.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/local_queue.cpp) | LittleFS store-and-retry buffer | LittleFS |
+| [receiver.ino](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/receiver.ino) | Main orchestrator | All above modules |
+| [preview_receiver.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/preview_receiver.html) | Standalone local browser preview (circular logo + mock AP) | data/style.css |
+| [data/index.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/data/index.html) | Captive portal page (LittleFS, circular logo) | style.css, app.js |
+| [data/style.css](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/data/style.css) | Portal styling (circular logo wrap, clip-path, dark mode) | — |
+| [data/app.js](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/data/app.js) | Scan, connect, status poll logic | — |
+| [data/logo.png](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/data/logo.png) | Secondary raster emblem asset | — |
 
 ### backend/ (10 source files)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
-| [package.json](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/package.json) | Project deps | react, leaflet, supercluster, @netlify/blobs |
-| [netlify.toml](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify.toml) | Deploy config (SPA redirect, CORS) | — |
-| [vite.config.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/vite.config.ts) | Vite + React plugin | @vitejs/plugin-react |
-| [index.html](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/index.html) | HTML entry (Inter font, Leaflet CSS) | — |
-| [src/main.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/main.tsx) | React root render | react-dom |
-| [src/App.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/App.tsx) | 2.5s poll loop + layout | Header, MapView, EventSidebar |
-| [src/types.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/types.ts) | EventData, severity helpers | — |
-| [src/index.css](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/index.css) | Dark glassmorphism design system | — |
-| [src/components/Header.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/Header.tsx) | System title + connection status | types.ts |
-| [src/components/MapView.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/MapView.tsx) | Leaflet + Supercluster clustering | react-leaflet, supercluster, types.ts |
-| [src/components/EventPopup.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/EventPopup.tsx) | Profile card popup (photo, details) | types.ts |
-| [src/components/EventSidebar.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/src/components/EventSidebar.tsx) | Scrollable event feed | types.ts |
-| [netlify/functions/store.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/store.ts) | Netlify Blob store helpers | @netlify/blobs |
-| [netlify/functions/upload.mts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/upload.mts) | POST /api/upload handler | store.ts |
-| [netlify/functions/events.mts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/backend/netlify/functions/events.mts) | GET /api/events handler | store.ts |
+| [package.json](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/package.json) | Project deps | react, leaflet, supercluster, @netlify/blobs |
+| [netlify.toml](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/netlify.toml) | Deploy config (SPA redirect, CORS) | — |
+| [vite.config.ts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/vite.config.ts) | Vite + React plugin | @vitejs/plugin-react |
+| [index.html](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/index.html) | HTML entry (Inter font, Leaflet CSS) | — |
+| [src/main.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/main.tsx) | React root render | react-dom |
+| [src/App.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/App.tsx) | 2.5s poll loop + layout | Header, MapView, EventSidebar |
+| [src/types.ts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/types.ts) | EventData, severity helpers | — |
+| [src/index.css](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/index.css) | Dark glassmorphism design system | — |
+| [src/components/Header.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/components/Header.tsx) | System title + connection status | types.ts |
+| [src/components/MapView.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/components/MapView.tsx) | Leaflet + Supercluster clustering | react-leaflet, supercluster, types.ts |
+| [src/components/EventPopup.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/components/EventPopup.tsx) | Profile card popup (photo, details) | types.ts |
+| [src/components/EventSidebar.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/src/components/EventSidebar.tsx) | Scrollable event feed | types.ts |
+| [netlify/functions/store.ts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/netlify/functions/store.ts) | Netlify Blob store helpers | @netlify/blobs |
+| [netlify/functions/upload.mts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/netlify/functions/upload.mts) | POST /api/upload handler | store.ts |
+| [netlify/functions/events.mts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/backend/netlify/functions/events.mts) | GET /api/events handler | store.ts |
 
 ### data_logger/ (5 files)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
-| [imu_read.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/imu_read.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/imu_read.cpp) | MPU-6050 (identical math to wearable) | Wire.h |
-| [ws_stream.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/ws_stream.h) / [.cpp](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/ws_stream.cpp) | 100Hz WebSocket streaming | WebSocketsServer |
-| [data_logger.ino](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/data_logger/data_logger.ino) | AP + companion page (inline PROGMEM) + CSV | WebServer, imu_read, ws_stream |
+| [imu_read.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/data_logger/imu_read.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/data_logger/imu_read.cpp) | MPU-6050 (identical math to wearable) | Wire.h |
+| [ws_stream.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/data_logger/ws_stream.h) / [.cpp](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/data_logger/ws_stream.cpp) | 100Hz WebSocket streaming | WebSocketsServer |
+| [data_logger.ino](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/data_logger/data_logger.ino) | AP + companion page (inline PROGMEM) + CSV | WebServer, imu_read, ws_stream |
 
 ### validation/ (1 file)
 | File | Purpose | Key Dependencies |
 |------|---------|-----------------|
-| [validate_fsm.py](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/validation/validate_fsm.py) | FSM replay, ROC, threshold sweep | numpy, pandas, scikit-learn |
+| [validate_fsm.py](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/validation/validate_fsm.py) | FSM replay, ROC, threshold sweep | numpy, pandas, scikit-learn |
 
 ---
 
@@ -345,7 +345,7 @@ graph LR
 > 4. Paste into `map_image.h`
 
 > [!IMPORTANT]
-> **Backend URL**: Update `BACKEND_HOST` in [receiver/config.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver/config.h) once the Netlify site is live. Currently set to `road-accident-monitoring-system.netlify.app`.
+> **Backend URL**: Update `BACKEND_HOST` in [receiver/config.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver/config.h) once the Netlify site is live. Currently set to `road-accident-monitoring-system.netlify.app`.
 
 > [!NOTE]
 > **Arduino Libraries Required**: Install via Arduino Library Manager before compiling:
@@ -385,19 +385,19 @@ sequenceDiagram
 ```
 
 ### Key Components Modified:
-1. **[desktop_app/Program.cs](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/Program.cs)**:
+1. **[desktop_app/Program.cs](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/desktop_app/Program.cs)**:
    - In `ProcessIncomingPayload()`, false alarm packet handler now updates both `"status":"FALSE ALARM"` and `"type":"false_alarm"` in `_eventsJsonList`.
    - Adds insert fallback `RAMS-FA-...` if no prior alert event exists for the device token.
-2. **[UI Redesign/src/types.ts](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/types.ts)**:
+2. **[UI Redesign/src/types.ts](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/types.ts)**:
    - Added robust `isEventFalseAlarm(event)` checking both `type === 'false_alarm'` and `status === 'FALSE ALARM'`.
    - `getMarkerColor()` returns `'green'` and `getStatusLabel()` returns `'FALSE ALARM'`.
-3. **[UI Redesign/src/components/RAMSMapView.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSMapView.tsx)**:
+3. **[UI Redesign/src/components/RAMSMapView.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSMapView.tsx)**:
    - Teardrop map pin renders in emerald green (`#10b981`), `ShieldCheck` glyph, `✓` icon label, and removes red pulsing radar ring.
-4. **[UI Redesign/src/components/RAMSEventSidebar.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSEventSidebar.tsx)**:
+4. **[UI Redesign/src/components/RAMSEventSidebar.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSEventSidebar.tsx)**:
    - Sidebar cards display emerald pill (`bg-emerald-950/60 text-emerald-400`), `ShieldCheck` icon, green left stripe, and are excluded from active critical alert counter.
-5. **[UI Redesign/src/components/RAMSEventPopup.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSEventPopup.tsx)** & **[RAMSWearableProfileOverlay.tsx](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx)**:
+5. **[UI Redesign/src/components/RAMSEventPopup.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSEventPopup.tsx)** & **[RAMSWearableProfileOverlay.tsx](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx)**:
    - Popup badges and avatar indicators switch to green when marked false alarm.
-6. **[desktop_app/www/](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/www/)** & **[RAMS_Rescuer_Desktop.exe](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/RAMS_Rescuer_Desktop.exe)**:
+6. **[desktop_app/www/](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/desktop_app/www/)** & **[RAMS_Rescuer_Desktop.exe](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/desktop_app/RAMS_Rescuer_Desktop.exe)**:
    - Bundled Vite production build copied into `desktop_app/www/assets/` and C# standalone binary recompiled.
 
 ---

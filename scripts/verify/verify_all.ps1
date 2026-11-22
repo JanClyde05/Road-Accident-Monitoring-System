@@ -173,9 +173,9 @@ foreach ($target in $buildSet) {
             } else {
                 # Keep this FQBN identical to firmware/receiver_withDesktop/flash_receiver.bat.
                 # A build that does not match the flasher is not a flashable build.
-                & $cli compile --fqbn esp32:esp32:esp32s3 firmware\receiver_withDesktop 2>&1 |
+                & $cli compile --fqbn esp32:esp32:esp32s3:PartitionScheme=huge_app firmware\receiver_withDesktop 2>&1 |
                     Select-Object -Last 6 | Out-Host
-                Add-Result "receiver" ($LASTEXITCODE -eq 0) $targetSw.Elapsed.TotalSeconds "esp32:esp32:esp32s3; watch 99 percent flash"
+                Add-Result "receiver" ($LASTEXITCODE -eq 0) $targetSw.Elapsed.TotalSeconds "esp32:esp32:esp32s3:PartitionScheme=huge_app"
             }
         }
 

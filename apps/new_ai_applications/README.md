@@ -10,7 +10,7 @@
 ## 1. Directory Structure
 
 ```
-d:\Antigravity\Projects\Danger Monitoring System V2\apps\new_ai_applications\
+d:\Antigravity\Projects\Road Accident Monitoring System\apps\new_ai_applications\
 ├── Build_All_Apps.bat                  # 1-Click Master Builder for Both Desktop & Mobile
 ├── Launch_Desktop_App.bat              # 1-Click Launcher for Desktop AI Command Center
 ├── Build_Mobile_APK.bat                # 1-Click Compiler for Android AI APK
@@ -68,8 +68,8 @@ d:\Antigravity\Projects\Danger Monitoring System V2\apps\new_ai_applications\
 ## 2. Quick-Start Guide
 
 ### How to Run the Desktop AI App
-1. Navigate to [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/).
-2. Double-click [`Launch_Desktop_App.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/Launch_Desktop_App.bat).
+1. Navigate to [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/).
+2. Double-click [`Launch_Desktop_App.bat`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/Launch_Desktop_App.bat).
 3. The application will launch in Microsoft Edge App Mode at `http://127.0.0.1:8080`.
 4. AI REST Endpoints are immediately live:
    - `GET http://127.0.0.1:8080/api/ai/hotspots`
@@ -77,12 +77,12 @@ d:\Antigravity\Projects\Danger Monitoring System V2\apps\new_ai_applications\
 
 ### How to Install the Mobile AI App
 1. **Direct Install (Ready APK)**:  
-   Copy [`apps/new_ai_applications/mobile_ai_app/prebuilt_apk/RAMS_Mobile_AI_v2.5.apk`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/mobile_ai_app/prebuilt_apk/RAMS_Mobile_AI_v2.5.apk) to your phone and install.
+   Copy [`apps/new_ai_applications/mobile_ai_app/prebuilt_apk/RAMS_Mobile_AI_v2.5.apk`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/mobile_ai_app/prebuilt_apk/RAMS_Mobile_AI_v2.5.apk) to your phone and install.
 2. **1-Click USB ADB Deploy**:  
-   Plug your Android phone into the PC via USB with USB Debugging enabled, then double-click [`apps/new_ai_applications/mobile_ai_app/Build_And_Install_To_Phone.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/mobile_ai_app/Build_And_Install_To_Phone.bat).
+   Plug your Android phone into the PC via USB with USB Debugging enabled, then double-click [`apps/new_ai_applications/mobile_ai_app/Build_And_Install_To_Phone.bat`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/mobile_ai_app/Build_And_Install_To_Phone.bat).
 
 ### How to Rebuild Both Applications
-1. Double-click [`apps/new_ai_applications/Build_All_Apps.bat`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/Build_All_Apps.bat).
+1. Double-click [`apps/new_ai_applications/Build_All_Apps.bat`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/Build_All_Apps.bat).
 2. The script compiles both the C# executable and the Android APK automatically.
 
 ---

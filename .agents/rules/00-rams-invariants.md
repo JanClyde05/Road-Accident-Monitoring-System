@@ -53,3 +53,7 @@ stated reason. "It compiles" is not verification.
 - Run `powershell scripts/verify/verify_all.ps1 -Build all` before a release.
 - Every new incident gets an `INC-xxx` entry, a lesson, and either a new check or
   a written justification for why the check cannot be automated.
+
+## Project Name Authority
+
+The project is RAMS - Road Accident Monitoring System. Retired names (Danger Monitoring System, Danger Monitoring System V2, DMS V2) must not appear in new files or UI strings. Historical logs and evidence files are immutable and keep whatever name they were generated with.

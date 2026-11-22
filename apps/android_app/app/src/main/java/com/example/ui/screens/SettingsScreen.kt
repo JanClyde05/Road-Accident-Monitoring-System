@@ -1172,7 +1172,7 @@ fun SettingsScreen(
                   val sampleText = when (selectedVoiceStyle) {
                     "JAPANESE" -> "RAMS システム準備完了。安全運転をサポートします。"
                     "PHILIPPINE" -> "Kumusta, Jan Clyde. Handa na ang RAMS safety guard para sa biyahe."
-                    "CRISP_MALE" -> "RAMS Danger Monitoring System ready. 50 Hertz safety telemetry active."
+                    "CRISP_MALE" -> "RAMS Road Accident Monitoring System ready. 50 Hertz safety telemetry active."
                     else -> "RAMS Emergency and Hazard Monitoring System ready. Safety guard active."
                   }
                   voiceCanceler?.speak(sampleText)
@@ -1605,7 +1605,7 @@ fun SettingsScreen(
               border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF27272A))
             ) {
               Text(
-                text = "Packets: 3000ms interval | Uplink: BLE GATT -> LoRa 433MHz SX1278 (SF9, BW125)\nDesktop Command Center logs delay (ms), distance (m), RSSI, & SNR.",
+                text = "Packets: burst mode, 20 pings per point | Uplink: BLE GATT -> LoRa 433 MHz SX1278 (SF9, BW125, ~247 ms airtime).\nStation panel logs latency, distance, RSSI and SNR.",
                 modifier = Modifier.padding(10.dp),
                 fontFamily = FontFamily.Monospace,
                 fontSize = 9.sp,
@@ -1903,7 +1903,7 @@ private fun CreditsOverlay(onDismiss: () -> Unit) {
         ) {
           Text("RAMS", fontSize = 28.sp, fontWeight = FontWeight.Black, fontFamily = FontFamily.Monospace, color = RamsSyncBlue, letterSpacing = 4.sp)
           Text("Road Accident Monitoring System", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFFA1A1AA))
-          Text("Danger Monitoring System V2", fontSize = 9.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF71717A))
+          Text("Road Accident Monitoring System", fontSize = 9.sp, fontFamily = FontFamily.Monospace, color = Color(0xFF71717A))
         }
       }
 

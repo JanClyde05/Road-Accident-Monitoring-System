@@ -1,0 +1,20 @@
+[
+  {
+    "file": "Crystal_ABM8G_package.step",
+    "before": "d80bc6cfa9d115e0fde9d25b507e1637cdf90442b4fa5dc0491d859e30231cca",
+    "after": "9123b0bc558d87e226d70ed8c9033afb2418f41148436a7d0e9655867ab11148",
+    "difference": "CRLF/LF only; restored archived bytes, geometry identical"
+  },
+  {
+    "file": "MSK12C02_ProtoFlow.wrl",
+    "before": "3bfd033479ccda1badb89619ff67ed022fd1345c8cc46813cdc89e7da9b23a53",
+    "after": "e9b364d65bf0415cb62642f5162949b692f494e7c8acc1dcca5c2fa704c24c79",
+    "difference": "CRLF/LF only; restored archived bytes, geometry identical"
+  },
+  {
+    "file": "WS2812B-2020_ProtoFlow.wrl",
+    "before": "e1ae3086909da2dd0d883d6c8a9f72e7f8436c4ec8a31662cff4f86ba2647229",
+    "after": "954dda1856b52ee07069d668df6a9c9ebbb47ff00e8862bf00cb24b828808a07",
+    "difference": "CRLF/LF only; restored archived bytes, geometry identical"
+  }
+]

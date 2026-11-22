@@ -10,6 +10,7 @@
 #include <Arduino.h>
 
 void httpUploadInit();
+void httpUploadNoteResult(bool ok);
 
 // Upload an event to the backend. Returns true on HTTP 200/201.
 // name and photoUrl are only used for PKT_REGISTER packets (nullptr otherwise).

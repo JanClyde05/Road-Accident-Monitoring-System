@@ -1,0 +1,92 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-15T16:54:15",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+            "items": [
+                {
+                    "description": "Footprint BZ1",
+                    "pos": {
+                        "x": 135.3,
+                        "y": 125.0
+                    },
+                    "uuid": "36066696-3cd4-5311-9bac-2c54432b2dfe"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+            "items": [
+                {
+                    "description": "Footprint ANT1",
+                    "pos": {
+                        "x": 102.6,
+                        "y": 103.2
+                    },
+                    "uuid": "6021f985-686a-51e9-9bc6-5c4402fa4abe"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+            "items": [
+                {
+                    "description": "Footprint Y1",
+                    "pos": {
+                        "x": 112.8,
+                        "y": 103.9
+                    },
+                    "uuid": "64e359e5-5d08-5194-9016-0e8439b0328a"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+            "items": [
+                {
+                    "description": "Footprint J1",
+                    "pos": {
+                        "x": 106.5,
+                        "y": 129.0
+                    },
+                    "uuid": "9a6a80fb-a75a-5004-a2a1-d445823e75cb"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "The current configuration does not include the footprint library 'RAMS_JLC'",
+            "items": [
+                {
+                    "description": "Footprint U1",
+                    "pos": {
+                        "x": 115.0,
+                        "y": 112.0
+                    },
+                    "uuid": "b42191dc-c9ee-5f4d-9047-1cd2c6663062"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

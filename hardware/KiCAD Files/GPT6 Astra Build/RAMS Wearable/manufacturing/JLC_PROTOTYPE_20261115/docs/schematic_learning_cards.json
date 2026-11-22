@@ -1,0 +1,218 @@
+{
+  "metadata": {
+    "date": "2026-11-12",
+    "spec_sha256": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+    "purpose": "Non-electrical annotation cards; keep one live circuit instance.",
+    "detail_file": "SCHEMATIC_LEARNING_NOTES.md",
+    "limits": "All equations nominal; examples are not measured guarantees."
+  },
+  "cards": {
+    "USB": {
+      "title": "USB-C input and ESD",
+      "refs": ["J1", "R1", "R2", "D1", "C1", "C2"],
+      "lines": [
+        "J1: 5 V input + USB data, either plug orientation.",
+        "R1/R2 = 5.1k: sink detection, not USB-PD negotiation.",
+        "D1: ESD transient diversion; keep its return short.",
+        "C1 1uF + C2 100nF: local VBUS bypass.",
+        "VBUS -> D2 -> SYS_IN; VBUS -> R30 -> charger.",
+        "R38/R39 (I/O sheet): 22R data-edge damping."
+      ],
+      "sources": ["S1", "S2"]
+    },
+    "charger": {
+      "title": "Single-cell 4.2 V charging",
+      "refs": ["U3", "R3", "R30", "C3", "C4"],
+      "lines": [
+        "U3: constant-current then constant-voltage charging.",
+        "I_CHG(mA) ~= 1000/R3(kohm) = 100mA for 10k.",
+        "C3 1uF: input bypass; C4 4.7uF: battery-node support.",
+        "R30 CHG_LINK: DNP first; fit after cell/harness checks.",
+        "100mA = 0.2C/500mAh or 0.1C/1000mAh; verify rating.",
+        "P ~= (VUSB - VBAT) x I_CHG; charge taper adds time."
+      ],
+      "sources": ["S3"]
+    },
+    "protection": {
+      "title": "Cell connector and protection",
+      "refs": ["J2", "U4", "Q3", "R4", "R5", "C5"],
+      "lines": [
+        "J2: pin1 B_PLUS, pin2 B_MINUS; meter cable polarity.",
+        "U4 monitors faults; Q3 interrupts the cell return.",
+        "R4/C5 supply filter: 100R x 100nF = 10us.",
+        "Ideal fc = 1/(2*pi*R4*C5) = 15.9kHz.",
+        "R5 1k is sense-input series resistance, not that RC.",
+        "Never bridge B_MINUS to GND; thresholds are IC-set."
+      ],
+      "sources": ["S4"]
+    },
+    "sharing": {
+      "title": "Source sharing and ON/OFF control",
+      "refs": ["D2", "Q1", "R6", "SW1", "R7"],
+      "lines": [
+        "USB: VBUS -> D2 -> SYS_IN; battery: B_PLUS -> Q1.",
+        "R6 100k pulls Q1 gate low when USB is absent.",
+        "USB raises Q1 gate; its orientation blocks backfeed.",
+        "SW1 ON grounds LED_GATE; R7 100k enables U5.",
+        "SW1 OFF grounds SYS_EN; R41 turns Q5 off.",
+        "Control current only: 4.2V/100k = 42uA per pull-up."
+      ],
+      "sources": ["S5"]
+    },
+    "LDO": {
+      "title": "3.3 V LDO and transient charge",
+      "refs": ["U5", "C7", "C10"],
+      "lines": [
+        "U5 AP2112: owned linear regulator; no converter.",
+        "C7/C10 10uF: local input/output charge and bypass.",
+        "P_LDO ~= (VSYS - 3.3V) x Iavg; check USB heating.",
+        "Example: (4.7V - 3.3V) x 0.25A = 0.35W.",
+        "dV ~= dI*dt/Ceff: 0.1A*10us/10uF = 0.10V.",
+        "Short transient support only; bias/ESR reduce margin."
+      ],
+      "sources": ["S6"]
+    },
+    "ADC": {
+      "title": "Battery divider and safe off-state",
+      "refs": ["Q4", "R15", "R16", "C29"],
+      "lines": [
+        "VADC = VBAT*10k/(30k+10k) = VBAT/4.",
+        "4.2V -> 1.05V; divider current = 105uA.",
+        "Q4 follows +3V3; blocks battery feed when rail is off.",
+        "ON: Rth ~= 30k||10k = 7.5k; C29 = 1nF.",
+        "tau = 7.5us; fc = 1/(2*pi*Rth*C) = 21.2kHz.",
+        "OFF: R16*C29 = 10us; fast discharge, not 5s smoothing."
+      ],
+      "sources": ["S7"]
+    },
+    "MCU": {
+      "title": "Processor, memory and GPIO roles",
+      "refs": ["U1"],
+      "lines": [
+        "U1 FH4R2: 4MB flash + 2MB quad PSRAM in package.",
+        "Initial firmware: 4MB flash; PSRAM disabled.",
+        "GPIO0 BOOT/cancel; 1 buzzer; 2 battery ADC.",
+        "LoRa: 8 DIO0, 9 RST, 10 CS, 11 MOSI, 12 CLK, 13 MISO.",
+        "GPIO19/20 USB D-/D+; GPIO48 RGB data.",
+        "Phone provides GPS/IMU over BLE; exposed pad is GND."
+      ],
+      "sources": ["S8"]
+    },
+    "decoupling": {
+      "title": "MCU rail bypass and RF supply filter",
+      "refs": ["L1", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C20", "C21", "C22"],
+      "lines": [
+        "L1 2nH + C11/C12/C13: RF supply filtering/bypass.",
+        "C14 10uF: bulk; C15/C16 100nF: CPU/RTC bypass.",
+        "C21 10nF + C22 1uF: analog supply bypass.",
+        "C17/C20 1uF/100nF: separate VDD_SPI bypass.",
+        "Ideal |Xc|=1/(2*pi*f*C); real ESR/ESL also matter.",
+        "Place close to pins; VDD_SPI is not tied to +3V3."
+      ],
+      "sources": ["S1", "S8"]
+    },
+    "reset": {
+      "title": "Enable timing and boot straps",
+      "refs": ["R8", "C33", "R34", "R35", "R36"],
+      "lines": [
+        "R8/C33 on MCU_EN: 10k x 1uF = 10ms nominal tau.",
+        "Ideal VEN(t)=VDD*(1-exp(-t/tau)); 63% at one tau.",
+        "Actual release depends on threshold and rail ramp.",
+        "R34 10k pulls GPIO0 up; R35/R36 pull GPIO45/46 down.",
+        "Straps are sampled near reset; do not fight these nets.",
+        "SW2 resets EN; SW3 grounds BOOT (I/O sheet)."
+      ],
+      "sources": ["S1", "S8"]
+    },
+    "crystal": {
+      "title": "40 MHz clock and load estimate",
+      "refs": ["Y1", "R9", "C24", "C25"],
+      "lines": [
+        "Y1 target CL = 10pF; C24/C25 start at 12pF each.",
+        "CL ~= C24*C25/(C24+C25) + Cstray.",
+        "12pF pair -> 6pF; assumed 4pF stray -> 10pF.",
+        "R9 22R is a drive/damping starting choice.",
+        "Differs from Espressif's 24nH series starting guidance.",
+        "Measure startup, frequency and harmonics before acceptance."
+      ],
+      "sources": ["S1", "S9"]
+    },
+    "RF": {
+      "title": "2.4 GHz matching and antenna",
+      "refs": ["C18", "L2", "C19", "C32", "L4", "L5", "ANT1"],
+      "lines": [
+        "C18/L2/C19: chip-side CLC starting match.",
+        "C32/L4/L5: antenna-side starting match; not yet tuned.",
+        "At 2.4GHz: XL(2.4nH)=36.2R; |XC|(1.5pF)=44.2R.",
+        "These reactances do not prove a 50R system match.",
+        "ANT1 serves S3 2.4GHz; preserve its no-metal corner.",
+        "Tune with PCB/enclosure/body; LoRa uses its own antenna."
+      ],
+      "sources": ["S8", "S10"]
+    },
+    "LoRa": {
+      "title": "433 MHz radio and SPI interface",
+      "refs": ["U2", "FB1", "C26", "C27", "R11", "R37"],
+      "lines": [
+        "FB1 feeds LORA_VDD; C26 10uF + C27 100nF bypass it.",
+        "Ferrite impedance varies with frequency/current; no RC fc.",
+        "R11 33R damps SCK; R37 10k holds NSS high at startup.",
+        "Radio: 433MHz, SF9, BW125kHz, CR4/5, 17dBm, sync0x34.",
+        "GPIO9 resets U2; GPIO8 receives DIO0 interrupt.",
+        "Hand-solder bottom U2; attach 433MHz antenna before TX."
+      ],
+      "sources": ["S11"]
+    },
+    "RGB": {
+      "title": "Raw-supply RGB and data translation",
+      "refs": ["LED1", "R13", "C28", "Q5", "R41", "U6", "C34", "C35", "R42", "R43"],
+      "lines": [
+        "Q5 switches SYS_IN -> LED_PWR; R41 100k holds it off.",
+        "U6 translates GPIO48 to LED voltage; no power conversion.",
+        "C34/C35 bypass U6 rails; C28 bypasses LED1 (100nF each).",
+        "R13 33R damps edges; R42/R43 100k define low states.",
+        "Bits H/L: 0=300/1000ns, 1=700/600ns; reset>=300us LOW.",
+        "LED1 DNP first; actual minimum voltage/current unqualified."
+      ],
+      "sources": ["S5", "S12"]
+    },
+    "buzzer": {
+      "title": "Active buzzer low-side driver",
+      "refs": ["BZ1", "Q2", "R12", "R14", "D3"],
+      "lines": [
+        "Current: +3V3 -> active BZ1 -> Q2 -> GND.",
+        "GPIO1 supplies base drive through R12=330R.",
+        "Example IB=(3.3-0.8)/330=7.58mA; VBE is assumed.",
+        "Conservative example: (2.4-1.2)/330=3.64mA.",
+        "R14 100k holds OFF; D3 returns magnetic kick current.",
+        "Verify actual buzzer current/tone; hand-solder after reflow."
+      ],
+      "sources": ["S13"]
+    },
+    "controls": {
+      "title": "Manual controls and USB damping",
+      "refs": ["SW2", "SW3", "R38", "R39"],
+      "lines": [
+        "SW2 grounds MCU_EN; SW3 grounds BOOT/cancel.",
+        "Download: hold BOOT, tap RESET, then release BOOT.",
+        "R38/R39=22R series: D+/D- edge damping near U1.",
+        "These are not a DC divider or a power-current limiter.",
+        "Keep matched routing and a nearby ground return."
+      ],
+      "sources": ["S1", "S8"]
+    },
+    "testpoints": {
+      "title": "Bring-up access and measurement reference",
+      "refs": ["TP1", "TP2", "TP3", "TP4", "TP5", "TP6", "TP7", "TP8"],
+      "lines": [
+        "TP1 GND; TP2 +3V3; TP3 B_PLUS; TP8 SYS_IN.",
+        "TP4 UART_TX; TP5 UART_RX; TP6 EN; TP7 BOOT.",
+        "UART is 3.3V logic; do not drive an unpowered MCU.",
+        "Scope reference is protected GND, not a B_MINUS bridge.",
+        "These are copper pads, not eight purchased components.",
+        "Power flags are ERC declarations, not physical supplies."
+      ],
+      "sources": []
+    }
+  }
+}

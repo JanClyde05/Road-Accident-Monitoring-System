@@ -1,5 +1,19 @@
 # Readability and learning revision — 2026-11-13
 
+## Current printable-legend decision — November 15, 2026
+
+The owner explicitly selected printable local labels plus complete assembly drawings after reviewing the dense-board tradeoff. The 42 × 32 mm outline is retained. The current board prints 78 references at minimum 0.8 mm height / 0.10 mm stroke for JLC's high-precision process; native inter-character gaps are at least 0.16 mm. C12/C13/C15/C19/C21/C26/C27/L1/L4/R7/SW2/SW3 are drawing-only. RST/BOOT identify the buttons; all test pads are printed. This supersedes the compact-text exception below. Complete 1:1 and 4:1 assembly/pad maps retain every reference.
+
+The larger-text all-reference candidate packed names but displaced fourteen beyond clear association. Attempted leader routing did not provide clear paths. That candidate and failed DRC are preserved; geometry fit alone was not accepted as useful labeling. Native glyph/pad/silk checks and visual review passed after applying the owner's choice.
+
+Final PDF visual review caught SW1's Fab reference overlapping two nearby passive references. The drawing-only copy now puts SW1 inside its own body; all eight assembly/pad-map PDFs were regenerated. Native source and fabrication artwork were unchanged. Export verification compares the drawing copy against the frozen PCB and permits only that SW1 Fab-text difference, then checks all 89 top references and U2 on the bottom. Text extraction alone had found all references but did not reveal the visual collision; retain both checks.
+
+Two implementation lessons: KiCad's GetTextAngle returns a borrowed mutable object, so save its numeric degrees before temporary rotation in an audit. The first audit's in-memory angle mutation produced a false body overlap; no PCB was saved, and the corrected read-only check passed. Also, preserve battery polarity graphics when removing an obsolete leader: a candidate-only broad removal was caught and all three polarity strokes were restored before promotion.
+
+Three downloaded model hashes differed only because CRLF/LF conversion occurred. Exact archived bytes were restored after bytewise normalized comparison; geometry did not change. A local .gitattributes now protects model byte identities. Keep the hashes and original-file backup rather than silently accepting an unexplained mismatch.
+
+## Historical presentation revision
+
 Owner requirements: retain the 42 × 32 mm outline; use smaller, thinner reference labels instead of enlarging the board; place each label with its component; organize explanatory schematic sections; reuse/download suitable free 3D assets. No new electronic components were needed.
 
 ## Schematic navigation and teaching notes

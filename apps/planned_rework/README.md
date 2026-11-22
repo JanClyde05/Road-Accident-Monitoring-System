@@ -92,7 +92,7 @@ In accordance with the **IECEP Nationals AI Integration** guidelines, this rewor
 All planned reworked components are isolated in this dedicated directory structure:
 
 ```
-d:\Antigravity\Projects\Danger Monitoring System V2\apps\planned_rework\
+d:\Antigravity\Projects\Road Accident Monitoring System\apps\planned_rework\
 ├── README.md                           # Master Architecture & Roadmap (This file)
 ├── MISTAKES_AND_FIXES_LOG.md           # Engineering Guardrails & Learned Mistakes Registry
 │

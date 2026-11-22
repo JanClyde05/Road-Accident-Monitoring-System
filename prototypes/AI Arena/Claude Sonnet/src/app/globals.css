@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+html,
+body {
+  background: #070a12;
+  overflow: hidden;
+}
+
+.glass {
+  background: rgba(10, 16, 30, 0.62);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+@keyframes deck-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.deck-in {
+  animation: deck-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.55s;
+}

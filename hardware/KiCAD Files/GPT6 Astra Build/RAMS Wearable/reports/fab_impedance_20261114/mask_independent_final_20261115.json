@@ -1,0 +1,750 @@
+{
+  "kicad": "10.0.6",
+  "source_sha256": {
+    "RAMS_JLC_S3.kicad_pcb": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+    "lib\\RAMS_JLC.pretty\\ESP32-S3FH4R2_QFN56_EP5p7.kicad_mod": "bae611e0ec03f6c4d26bcf195408a4b664a36c3cd55459e4d555341710ac60f0"
+  },
+  "board_library_pad_geometry_equal": true,
+  "mask_windows": [
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        -0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        -2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        -0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        -2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        -0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        -2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        -0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        -2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        0.7
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        2.1
+      ],
+      "size": [
+        1.2,
+        1.2
+      ],
+      "layers": [
+        1
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.08333333333,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    }
+  ],
+  "paste_windows": [
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        -0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        -2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -0.7,
+        2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        -0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        -2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        -2.1,
+        2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        -0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        -2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        0.7,
+        2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        -0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        -2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        0.7
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    },
+    {
+      "number": "",
+      "at": [
+        2.1,
+        2.1
+      ],
+      "size": [
+        1.12,
+        1.12
+      ],
+      "layers": [
+        13
+      ],
+      "shape": 5,
+      "chamfer_ratio": 0.05357142857,
+      "corners": 15,
+      "paste_margin_mm": 0.0,
+      "paste_ratio": 0
+    }
+  ],
+  "perimeter_count": 56,
+  "ep": {
+    "number": "57",
+    "at": [
+      0.0,
+      0.0
+    ],
+    "size": [
+      5.7,
+      5.7
+    ],
+    "layers": [
+      0
+    ],
+    "shape": 1,
+    "chamfer_ratio": 0.2,
+    "corners": 0,
+    "paste_margin_mm": 0.0,
+    "paste_ratio": 0
+  },
+  "holes": [
+    {
+      "at_relative_mm": [
+        0.0,
+        -1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313585,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313585,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        1.4,
+        -1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313593,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313593,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        -1.4,
+        0.0
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313585,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313585,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        1.4,
+        1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313593,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313593,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        1.4,
+        0.0
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313585,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313585,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        -1.4,
+        -1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313593,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313593,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        0.0,
+        1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313585,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313585,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        0.0,
+        0.0
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.2121320343531358,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313579,
+      "front_tenting": 1,
+      "back_tenting": 2
+    },
+    {
+      "at_relative_mm": [
+        -1.4,
+        1.4
+      ],
+      "drill_mm": 0.2,
+      "nearest_mask_opening_mm": 0.21213203435313593,
+      "mask_overlap_beyond_hole_edge_mm": 0.11213203435313593,
+      "front_tenting": 1,
+      "back_tenting": 2
+    }
+  ],
+  "minimum_mask_web_mm": 0.19999999999999996,
+  "minimum_paste_inset_mm": 0.028284271249158725,
+  "outer_mask_border_mm": 0.1499999999999999,
+  "paste_area_mm2": 19.95520000000615,
+  "ep_copper_area_mm2": 32.49,
+  "paste_coverage_percent": 61.41951369654093,
+  "paste_window_area_ratio_0p10_stencil": 2.8741226095383308,
+  "perimeter_paste_area_ratio_0p10_stencil": 0.7894736842105264,
+  "note": "Nominal native polygons only. Tenting is not filled/capped via fabrication or an assembly-yield guarantee."
+}

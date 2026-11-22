@@ -1,8 +1,5 @@
 package com.example.connectivity
 
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
 import android.content.Context
 import com.example.model.ConnectionType
 import com.example.model.DeviceLinkStatus
@@ -34,10 +31,6 @@ import kotlin.random.Random
 class Esp32ConnectionManager(
   private val scope: CoroutineScope
 ) {
-  companion object {
-    private val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-  }
-
   private val _gpsState = MutableStateFlow(GpsData())
   val gpsState: StateFlow<GpsData> = _gpsState.asStateFlow()
 
@@ -52,7 +45,6 @@ class Esp32ConnectionManager(
 
   private var activeConnectionJob: Job? = null
   private var rawSocket: Socket? = null
-  private var btSocket: BluetoothSocket? = null
 
   // Tuguegarao City road coordinates simulation path
   private val routeWaypoints = listOf(
@@ -119,40 +111,6 @@ class Esp32ConnectionManager(
       } finally {
         _linkStatus.value = _linkStatus.value.copy(isConnected = false)
         try { rawSocket?.close() } catch (_: Exception) {}
-      }
-    }
-  }
-
-  fun connectBluetooth(deviceAddress: String, deviceName: String = "ESP32_RAMS_SENSOR") {
-    disconnect()
-    _linkStatus.value = _linkStatus.value.copy(
-      connectionType = ConnectionType.BLUETOOTH_SPP,
-      bluetoothName = deviceName,
-      bluetoothMac = deviceAddress,
-      isConnected = false
-    )
-
-    activeConnectionJob = scope.launch(Dispatchers.IO) {
-      try {
-        val adapter = BluetoothAdapter.getDefaultAdapter()
-        val device: BluetoothDevice? = adapter?.getRemoteDevice(deviceAddress)
-        if (device != null) {
-          val socket = device.createRfcommSocketToServiceRecord(SPP_UUID)
-          socket.connect()
-          btSocket = socket
-          _linkStatus.value = _linkStatus.value.copy(isConnected = true)
-
-          val reader = BufferedReader(InputStreamReader(socket.inputStream))
-          while (isActive && socket.isConnected) {
-            val line = reader.readLine() ?: break
-            parseIncomingPacket(line)
-          }
-        }
-      } catch (e: Exception) {
-        e.printStackTrace()
-      } finally {
-        _linkStatus.value = _linkStatus.value.copy(isConnected = false)
-        try { btSocket?.close() } catch (_: Exception) {}
       }
     }
   }
@@ -268,9 +226,7 @@ class Esp32ConnectionManager(
     activeConnectionJob?.cancel()
     activeConnectionJob = null
     try { rawSocket?.close() } catch (_: Exception) {}
-    try { btSocket?.close() } catch (_: Exception) {}
     rawSocket = null
-    btSocket = null
     _linkStatus.value = _linkStatus.value.copy(isConnected = false)
   }
 

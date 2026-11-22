@@ -1,0 +1,6 @@
+{
+  "source_board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+  "derived_board_sha256": "2d8009544c5f8883ec7a004161f70d665e15c88445ad5186345532bff582c672",
+  "only_change": "SW1 F.Fab ${REFERENCE} position/font/angle; no fabrication geometry or printed silkscreen changed",
+  "purpose": "PDF assembly/pad maps only; never use this board for fabrication"
+}

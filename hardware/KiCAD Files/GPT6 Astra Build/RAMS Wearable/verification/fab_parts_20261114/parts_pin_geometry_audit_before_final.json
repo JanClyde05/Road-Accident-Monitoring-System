@@ -1,0 +1,2935 @@
+{
+  "board_sha256": "6324d7e8b265b8847b3e7732ee832006ab7d42e5baa9c1719f38440d98ba0ff4",
+  "kicad": "10.0.6",
+  "status": "Selected pin contracts match; nine EP ground vias retained",
+  "scope": "Native CAD only. No actual component measurements, soldering or powered testing.",
+  "components": [
+    {
+      "reference": "J1",
+      "value": "USB4105-GF-A",
+      "footprint": "USB_C_Receptacle_GCT4105_NPTH",
+      "pads": [
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.89,
+            -2.605
+          ],
+          "size_mm": [
+            0.65,
+            0.65
+          ],
+          "drill_mm": [
+            0.65,
+            0.65
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.89,
+            -2.605
+          ],
+          "size_mm": [
+            0.65,
+            0.65
+          ],
+          "drill_mm": [
+            0.65,
+            0.65
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "A1",
+          "net": "GND",
+          "local_xy_mm": [
+            -3.2,
+            -3.755
+          ],
+          "size_mm": [
+            0.6,
+            1.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A4",
+          "net": "VBUS",
+          "local_xy_mm": [
+            -2.4,
+            -3.68
+          ],
+          "size_mm": [
+            0.6,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A5",
+          "net": "CC1",
+          "local_xy_mm": [
+            -1.25,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A6",
+          "net": "USB_DP_CONN",
+          "local_xy_mm": [
+            -0.25,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A7",
+          "net": "USB_DN_CONN",
+          "local_xy_mm": [
+            0.25,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A8",
+          "net": "unconnected-(J1-SBU1-PadA8)",
+          "local_xy_mm": [
+            1.25,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A9",
+          "net": "VBUS",
+          "local_xy_mm": [
+            2.4,
+            -3.68
+          ],
+          "size_mm": [
+            0.6,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "A12",
+          "net": "GND",
+          "local_xy_mm": [
+            3.2,
+            -3.755
+          ],
+          "size_mm": [
+            0.6,
+            1.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B1",
+          "net": "GND",
+          "local_xy_mm": [
+            3.2,
+            -3.755
+          ],
+          "size_mm": [
+            0.6,
+            1.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B4",
+          "net": "VBUS",
+          "local_xy_mm": [
+            2.4,
+            -3.68
+          ],
+          "size_mm": [
+            0.6,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B5",
+          "net": "CC2",
+          "local_xy_mm": [
+            1.75,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B6",
+          "net": "USB_DP_CONN",
+          "local_xy_mm": [
+            0.75,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B7",
+          "net": "USB_DN_CONN",
+          "local_xy_mm": [
+            -0.75,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B8",
+          "net": "unconnected-(J1-SBU2-PadB8)",
+          "local_xy_mm": [
+            -1.75,
+            -3.68
+          ],
+          "size_mm": [
+            0.3,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B9",
+          "net": "VBUS",
+          "local_xy_mm": [
+            -2.4,
+            -3.68
+          ],
+          "size_mm": [
+            0.6,
+            1.15
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "B12",
+          "net": "GND",
+          "local_xy_mm": [
+            -3.2,
+            -3.755
+          ],
+          "size_mm": [
+            0.6,
+            1.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            -4.32,
+            -3.105
+          ],
+          "size_mm": [
+            1.0,
+            2.1
+          ],
+          "drill_mm": [
+            0.6,
+            1.7
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            -4.32,
+            1.075
+          ],
+          "size_mm": [
+            1.0,
+            1.8
+          ],
+          "drill_mm": [
+            0.6,
+            1.4
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            4.32,
+            -3.105
+          ],
+          "size_mm": [
+            1.0,
+            2.1
+          ],
+          "drill_mm": [
+            0.6,
+            1.7
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            4.32,
+            1.075
+          ],
+          "size_mm": [
+            1.0,
+            1.8
+          ],
+          "drill_mm": [
+            0.6,
+            1.4
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "J2",
+      "value": "SM02B-SRSS-TB",
+      "footprint": "JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+      "pads": [
+        {
+          "number": "1",
+          "net": "B_PLUS",
+          "local_xy_mm": [
+            -0.5,
+            -2.0
+          ],
+          "size_mm": [
+            0.6,
+            1.55
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "B_MINUS",
+          "local_xy_mm": [
+            0.5,
+            -2.0
+          ],
+          "size_mm": [
+            0.6,
+            1.55
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "MP",
+          "net": "",
+          "local_xy_mm": [
+            -1.8,
+            1.875
+          ],
+          "size_mm": [
+            1.2,
+            1.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "MP",
+          "net": "",
+          "local_xy_mm": [
+            1.8,
+            1.875
+          ],
+          "size_mm": [
+            1.2,
+            1.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "SW1",
+      "value": "MSK12C02",
+      "footprint": "SW_SPDT_Shouhan_MSK12C02",
+      "pads": [
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -1.5,
+            0.0
+          ],
+          "size_mm": [
+            0.85,
+            0.85
+          ],
+          "drill_mm": [
+            0.85,
+            0.85
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            1.5,
+            0.0
+          ],
+          "size_mm": [
+            0.85,
+            0.85
+          ],
+          "drill_mm": [
+            0.85,
+            0.85
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "1",
+          "net": "LED_GATE",
+          "local_xy_mm": [
+            -2.25,
+            -1.95
+          ],
+          "size_mm": [
+            0.6,
+            1.3
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "GND",
+          "local_xy_mm": [
+            0.75,
+            -1.95
+          ],
+          "size_mm": [
+            0.6,
+            1.3
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "3",
+          "net": "SYS_EN",
+          "local_xy_mm": [
+            2.25,
+            -1.95
+          ],
+          "size_mm": [
+            0.6,
+            1.3
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            -3.675,
+            -1.1
+          ],
+          "size_mm": [
+            1.05,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            -3.675,
+            1.1
+          ],
+          "size_mm": [
+            1.05,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            3.675,
+            -1.1
+          ],
+          "size_mm": [
+            1.05,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "SH",
+          "net": "GND",
+          "local_xy_mm": [
+            3.675,
+            1.1
+          ],
+          "size_mm": [
+            1.05,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "SW2",
+      "value": "3x4mm RESET",
+      "footprint": "SW_SPST_TS-1088-xR020",
+      "pads": [
+        {
+          "number": "1",
+          "net": "MCU_EN",
+          "local_xy_mm": [
+            -2.225,
+            0.0
+          ],
+          "size_mm": [
+            1.05,
+            2.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "GND",
+          "local_xy_mm": [
+            2.225,
+            0.0
+          ],
+          "size_mm": [
+            1.05,
+            2.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "SW3",
+      "value": "3x4mm BOOT/CANCEL",
+      "footprint": "SW_SPST_TS-1088-xR020",
+      "pads": [
+        {
+          "number": "1",
+          "net": "BOOT_BTN",
+          "local_xy_mm": [
+            -2.225,
+            0.0
+          ],
+          "size_mm": [
+            1.05,
+            2.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "GND",
+          "local_xy_mm": [
+            2.225,
+            0.0
+          ],
+          "size_mm": [
+            1.05,
+            2.0
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "Q3",
+      "value": "FS8205A Fuxin",
+      "footprint": "SOT-23-6",
+      "pads": [
+        {
+          "number": "1",
+          "net": "B_MINUS",
+          "local_xy_mm": [
+            -1.1375,
+            -0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "FET_DRAIN",
+          "local_xy_mm": [
+            -1.1375,
+            0.0
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "3",
+          "net": "GND",
+          "local_xy_mm": [
+            -1.1375,
+            0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "4",
+          "net": "DW_OC",
+          "local_xy_mm": [
+            1.1375,
+            0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "5",
+          "net": "FET_DRAIN",
+          "local_xy_mm": [
+            1.1375,
+            0.0
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "6",
+          "net": "DW_OD",
+          "local_xy_mm": [
+            1.1375,
+            -0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "U4",
+      "value": "DW01A SLKOR",
+      "footprint": "SOT-23-6",
+      "pads": [
+        {
+          "number": "1",
+          "net": "DW_OD",
+          "local_xy_mm": [
+            -1.1375,
+            -0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "DW_CS",
+          "local_xy_mm": [
+            -1.1375,
+            0.0
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "3",
+          "net": "DW_OC",
+          "local_xy_mm": [
+            -1.1375,
+            0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "4",
+          "net": "unconnected-(U4-NC-Pad4)",
+          "local_xy_mm": [
+            1.1375,
+            0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "5",
+          "net": "DW_VCC",
+          "local_xy_mm": [
+            1.1375,
+            0.0
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "6",
+          "net": "B_MINUS",
+          "local_xy_mm": [
+            1.1375,
+            -0.95
+          ],
+          "size_mm": [
+            1.325,
+            0.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "BZ1",
+      "value": "9650 Active 3V STOCK",
+      "footprint": "Buzzer_9650_SMD_Stock_HandSolder",
+      "pads": [
+        {
+          "number": "1",
+          "net": "+3V3",
+          "local_xy_mm": [
+            -3.8,
+            0.0
+          ],
+          "size_mm": [
+            4.2,
+            2.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "2",
+          "net": "BUZZER_NEG",
+          "local_xy_mm": [
+            3.8,
+            0.0
+          ],
+          "size_mm": [
+            4.2,
+            2.6
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": false
+        }
+      ]
+    },
+    {
+      "reference": "LED1",
+      "value": "WS2812B-2020 STOCK VERIFY",
+      "footprint": "LED_WS2812B-2020_PLCC4_2.0x2.0mm",
+      "pads": [
+        {
+          "number": "1",
+          "net": "unconnected-(LED1-DOUT-Pad1)",
+          "local_xy_mm": [
+            -0.915,
+            -0.55
+          ],
+          "size_mm": [
+            0.7,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "GND",
+          "local_xy_mm": [
+            -0.915,
+            0.55
+          ],
+          "size_mm": [
+            0.7,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "3",
+          "net": "NEO_DIN",
+          "local_xy_mm": [
+            0.915,
+            0.55
+          ],
+          "size_mm": [
+            0.7,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "4",
+          "net": "LED_PWR",
+          "local_xy_mm": [
+            0.915,
+            -0.55
+          ],
+          "size_mm": [
+            0.7,
+            0.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        }
+      ]
+    },
+    {
+      "reference": "U1",
+      "value": "ESP32-S3FH4R2",
+      "footprint": "ESP32-S3FH4R2_QFN56_EP5p7",
+      "pads": [
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            -2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            -2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            -0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            -0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -2.1,
+            2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            -2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            -2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            -0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            -0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            -0.7,
+            2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            -2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            -2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            -0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            -0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            0.7,
+            2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            -2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            -2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            -0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            -0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            0.7
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            0.7
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            2.1
+          ],
+          "size_mm": [
+            1.12,
+            1.12
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": false,
+          "front_paste": true
+        },
+        {
+          "number": "",
+          "net": "",
+          "local_xy_mm": [
+            2.1,
+            2.1
+          ],
+          "size_mm": [
+            1.2,
+            1.2
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": false,
+          "front_mask": true,
+          "front_paste": false
+        },
+        {
+          "number": "1",
+          "net": "RF_LNA",
+          "local_xy_mm": [
+            -3.45,
+            -2.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "2",
+          "net": "VDD_RF",
+          "local_xy_mm": [
+            -3.45,
+            -2.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "3",
+          "net": "VDD_RF",
+          "local_xy_mm": [
+            -3.45,
+            -1.8
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "4",
+          "net": "MCU_EN",
+          "local_xy_mm": [
+            -3.45,
+            -1.4
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "5",
+          "net": "BOOT_BTN",
+          "local_xy_mm": [
+            -3.45,
+            -1.0
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "6",
+          "net": "BUZZER_CTRL",
+          "local_xy_mm": [
+            -3.45,
+            -0.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "7",
+          "net": "VBAT_SENSE",
+          "local_xy_mm": [
+            -3.45,
+            -0.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "8",
+          "net": "unconnected-(U1-GPIO3-Pad8)",
+          "local_xy_mm": [
+            -3.45,
+            0.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "9",
+          "net": "unconnected-(U1-GPIO4-Pad9)",
+          "local_xy_mm": [
+            -3.45,
+            0.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "10",
+          "net": "unconnected-(U1-GPIO5-Pad10)",
+          "local_xy_mm": [
+            -3.45,
+            1.0
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "11",
+          "net": "unconnected-(U1-GPIO6-Pad11)",
+          "local_xy_mm": [
+            -3.45,
+            1.4
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "12",
+          "net": "unconnected-(U1-GPIO7-Pad12)",
+          "local_xy_mm": [
+            -3.45,
+            1.8
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "13",
+          "net": "LORA_DIO0",
+          "local_xy_mm": [
+            -3.45,
+            2.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "14",
+          "net": "LORA_RST",
+          "local_xy_mm": [
+            -3.45,
+            2.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "15",
+          "net": "LORA_NSS",
+          "local_xy_mm": [
+            -2.6,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "16",
+          "net": "LORA_MOSI",
+          "local_xy_mm": [
+            -2.2,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "17",
+          "net": "LORA_SCK",
+          "local_xy_mm": [
+            -1.8,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "18",
+          "net": "LORA_MISO",
+          "local_xy_mm": [
+            -1.4,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "19",
+          "net": "unconnected-(U1-GPIO14-Pad19)",
+          "local_xy_mm": [
+            -1.0,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "20",
+          "net": "+3V3",
+          "local_xy_mm": [
+            -0.6,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "21",
+          "net": "unconnected-(U1-XTAL_32K_P-Pad21)",
+          "local_xy_mm": [
+            -0.2,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "22",
+          "net": "unconnected-(U1-XTAL_32K_N-Pad22)",
+          "local_xy_mm": [
+            0.2,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "23",
+          "net": "unconnected-(U1-GPIO17-Pad23)",
+          "local_xy_mm": [
+            0.6,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "24",
+          "net": "unconnected-(U1-GPIO18-Pad24)",
+          "local_xy_mm": [
+            1.0,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "25",
+          "net": "USB_DN",
+          "local_xy_mm": [
+            1.4,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "26",
+          "net": "USB_DP",
+          "local_xy_mm": [
+            1.8,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "27",
+          "net": "unconnected-(U1-GPIO21-Pad27)",
+          "local_xy_mm": [
+            2.2,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "28",
+          "net": "unconnected-(U1-SPICS1-Pad28)",
+          "local_xy_mm": [
+            2.6,
+            3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "29",
+          "net": "VDD_SPI",
+          "local_xy_mm": [
+            3.45,
+            2.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "30",
+          "net": "unconnected-(U1-SPIHD-Pad30)",
+          "local_xy_mm": [
+            3.45,
+            2.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "31",
+          "net": "unconnected-(U1-SPIWP-Pad31)",
+          "local_xy_mm": [
+            3.45,
+            1.8
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "32",
+          "net": "unconnected-(U1-SPICS0-Pad32)",
+          "local_xy_mm": [
+            3.45,
+            1.4
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "33",
+          "net": "unconnected-(U1-SPICLK-Pad33)",
+          "local_xy_mm": [
+            3.45,
+            1.0
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "34",
+          "net": "unconnected-(U1-SPIQ-Pad34)",
+          "local_xy_mm": [
+            3.45,
+            0.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "35",
+          "net": "unconnected-(U1-SPID-Pad35)",
+          "local_xy_mm": [
+            3.45,
+            0.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "36",
+          "net": "NEO_DATA",
+          "local_xy_mm": [
+            3.45,
+            -0.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "37",
+          "net": "unconnected-(U1-SPICLK_P-Pad37)",
+          "local_xy_mm": [
+            3.45,
+            -0.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "38",
+          "net": "unconnected-(U1-GPIO33-Pad38)",
+          "local_xy_mm": [
+            3.45,
+            -1.0
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "39",
+          "net": "unconnected-(U1-GPIO34-Pad39)",
+          "local_xy_mm": [
+            3.45,
+            -1.4
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "40",
+          "net": "unconnected-(U1-GPIO35-Pad40)",
+          "local_xy_mm": [
+            3.45,
+            -1.8
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "41",
+          "net": "unconnected-(U1-GPIO36-Pad41)",
+          "local_xy_mm": [
+            3.45,
+            -2.2
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "42",
+          "net": "unconnected-(U1-GPIO37-Pad42)",
+          "local_xy_mm": [
+            3.45,
+            -2.6
+          ],
+          "size_mm": [
+            0.8,
+            0.25
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "43",
+          "net": "unconnected-(U1-GPIO38-Pad43)",
+          "local_xy_mm": [
+            2.6,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "44",
+          "net": "unconnected-(U1-MTCK-Pad44)",
+          "local_xy_mm": [
+            2.2,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "45",
+          "net": "unconnected-(U1-MTDO-Pad45)",
+          "local_xy_mm": [
+            1.8,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "46",
+          "net": "+3V3",
+          "local_xy_mm": [
+            1.4,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "47",
+          "net": "unconnected-(U1-MTDI-Pad47)",
+          "local_xy_mm": [
+            1.0,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "48",
+          "net": "unconnected-(U1-MTMS-Pad48)",
+          "local_xy_mm": [
+            0.6,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "49",
+          "net": "UART_TX",
+          "local_xy_mm": [
+            0.2,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "50",
+          "net": "UART_RX",
+          "local_xy_mm": [
+            -0.2,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "51",
+          "net": "STRAP45",
+          "local_xy_mm": [
+            -0.6,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "52",
+          "net": "STRAP46",
+          "local_xy_mm": [
+            -1.0,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "53",
+          "net": "XTAL_N",
+          "local_xy_mm": [
+            -1.4,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "54",
+          "net": "XTAL_P_DRV",
+          "local_xy_mm": [
+            -1.8,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "55",
+          "net": "+3V3",
+          "local_xy_mm": [
+            -2.2,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "56",
+          "net": "+3V3",
+          "local_xy_mm": [
+            -2.6,
+            -3.45
+          ],
+          "size_mm": [
+            0.25,
+            0.8
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": true,
+          "front_paste": true
+        },
+        {
+          "number": "57",
+          "net": "GND",
+          "local_xy_mm": [
+            0.0,
+            0.0
+          ],
+          "size_mm": [
+            5.7,
+            5.7
+          ],
+          "drill_mm": [
+            0.0,
+            0.0
+          ],
+          "front_copper": true,
+          "front_mask": false,
+          "front_paste": false
+        }
+      ]
+    }
+  ],
+  "u1_ep_vias": [
+    {
+      "u1_local_xy_mm": [
+        0.0,
+        -1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        1.4000000000000057,
+        -1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        -1.4000000000000057,
+        0.0
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        1.4000000000000057,
+        1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        1.4000000000000057,
+        0.0
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        -1.4000000000000057,
+        -1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        0.0,
+        1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    },
+    {
+      "u1_local_xy_mm": [
+        -1.4000000000000057,
+        1.4000000000000057
+      ],
+      "net": "GND",
+      "drill_mm": 0.2,
+      "diameter_mm": 0.45
+    }
+  ]
+}

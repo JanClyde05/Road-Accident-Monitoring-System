@@ -3,7 +3,7 @@
 **Road Accident Monitoring System (RAMS)**  
 *Document Version: 2.6.0 (Comprehensive Academic & Engineering Dossier)*  
 *Standard: Zero-Emoji Technical Architecture Contract (IECEP Nationals)*  
-*System Repository Root: `d:\Antigravity\Projects\Danger Monitoring System V2\`*
+*System Repository Root: `d:\Antigravity\Projects\Road Accident Monitoring System\`*
 
 ---
 
@@ -31,7 +31,7 @@ This register details every defect identified during development, physical on-de
   - Implemented persistent instance reuse: Keep the existing `SpeechRecognizer` active and call `recognizer?.startListening(intent)` instead of tearing down IPC.
   - Only perform full recreation on fatal errors (`ERROR_CLIENT`, `ERROR_RECOGNIZER_BUSY`, error code 11).
   - Added an exponential retry backoff (350ms delay) to give the Android system service time to settle.
-* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)
+* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)
 
 ---
 
@@ -46,7 +46,7 @@ This register details every defect identified during development, physical on-de
 * **Learned Fix**:
   - Replaced the backing collection with thread-safe `CopyOnWriteArrayList<MotionCategory>()`.
   - Added thread-safe synchronization to all history snapshot operations.
-* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt#L148)
+* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt#L148)
 
 ---
 
@@ -65,7 +65,7 @@ This register details every defect identified during development, physical on-de
         </intent>
     </queries>
     ```
-* **File Modified**: [`apps/android_app/app/src/main/AndroidManifest.xml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/AndroidManifest.xml#L27-L31)
+* **File Modified**: [`apps/android_app/app/src/main/AndroidManifest.xml`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/AndroidManifest.xml#L27-L31)
 
 ---
 
@@ -88,8 +88,8 @@ This register details every defect identified during development, physical on-de
        - *Cyclist*: Brake pad moisture warnings, high-visibility jacket reminder.
     3. **Domain Knowledge Base**: App features, emergency cancellation, wearable pairing, CSV data exports, false-alarm suppression logic, Philippine Republic Act 10054 (Motorcycle Helmet Act), and first aid procedures.
 * **Files Modified**:
-  - [`apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt)
-  - [`apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt#L79-L90)
+  - [`apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt)
+  - [`apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt#L79-L90)
 
 ---
 
@@ -107,9 +107,9 @@ This register details every defect identified during development, physical on-de
     When wake-word triggers from background, fires an Intent with `FLAG_ACTIVITY_NEW_TASK` and `FLAG_ACTIVITY_REORDER_TO_FRONT` carrying `EXTRA_OPEN_VOICE_BUBBLE = true`.
   - Added auto-dismiss handling via `moveTaskToBack(true)` when the bubble is closed if summoned from the background.
 * **Files Modified**:
-  - [`apps/android_app/app/src/main/AndroidManifest.xml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/AndroidManifest.xml#L17)
-  - [`apps/android_app/app/src/main/java/com/example/MainActivity.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/MainActivity.kt#L45-L65)
-  - [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt#L470-L500)
+  - [`apps/android_app/app/src/main/AndroidManifest.xml`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/AndroidManifest.xml#L17)
+  - [`apps/android_app/app/src/main/java/com/example/MainActivity.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/MainActivity.kt#L45-L65)
+  - [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt#L470-L500)
 
 ---
 
@@ -121,7 +121,7 @@ This register details every defect identified during development, physical on-de
   - An automated file replacement left duplicated trailing lines of `handleConversationalQuery` outside the class scope.
 * **Learned Fix**:
   - Removed redundant lines, consolidated method closures, verified clean compilation via `gradlew.bat assembleDebug`.
-* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)
+* **File Modified**: [`apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)
 
 ---
 
@@ -148,16 +148,16 @@ This register details every defect identified during development, physical on-de
   - *Zero Fake Data Enforcement*: Purged all simulated test entries and mock identities (`Jane Doe`, `Officer Ramirez`) from `registrations.json`, `incidents.json`, and backend filter gates. Corrected UTF-8 character encoding for genuine riders.
   - *Twin Synchronization*: Rebuilt both `apps/desktop_app` and `apps/new_ai_applications/desktop_ai_app` with native Windows `csc.exe` and verified 100% test pass via live HTTP API requests (`/api/status`, `/api/ai/hotspots`, `/api/ai/report`, `/api/events`, `/api/rescue`).
 * **Files Modified**:
-  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/Program.cs)
-  - [`apps/desktop_app/DesktopAiReportGenerator.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/DesktopAiReportGenerator.cs)
-  - [`apps/desktop_app/HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/HotspotPredictor.cs)
-  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html)
-  - [`apps/backend/src/types.ts`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/types.ts)
-  - [`apps/backend/src/components/RAMSEventPopup.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSEventPopup.tsx)
-  - [`apps/backend/src/components/EventPopup.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/EventPopup.tsx)
-  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
-  - [`apps/backend/src/components/RAMSHeader.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSHeader.tsx)
-  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/desktop_ai_app/)
+  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)
+  - [`apps/desktop_app/DesktopAiReportGenerator.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/DesktopAiReportGenerator.cs)
+  - [`apps/desktop_app/HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/HotspotPredictor.cs)
+  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html)
+  - [`apps/backend/src/types.ts`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/types.ts)
+  - [`apps/backend/src/components/RAMSEventPopup.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSEventPopup.tsx)
+  - [`apps/backend/src/components/EventPopup.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/EventPopup.tsx)
+  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
+  - [`apps/backend/src/components/RAMSHeader.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSHeader.tsx)
+  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/)
 
 ---
 
@@ -198,15 +198,15 @@ This register details every defect identified during development, physical on-de
   - *Header Button Deconfliction*: Repositioned `#rams-ai-dock` to `top: 68px; left: 70px; z-index: 999;` floating harmlessly over the top-left map canvas beside the Leaflet zoom controls.
   - *Zero Fake Data Invariant*: Hardened C# backend ingestion in `Program.cs` and cleaned data stores to permanently reject any mock names (`Jane Doe`, `Officer Ramirez`) and simulation prefixes (`RAMS-SIM-`).
 * **Files Modified**:
-  - [`apps/backend/src/components/RAMSEventSidebar.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSEventSidebar.tsx)
-  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
-  - [`apps/backend/src/components/RAMSMapView.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSMapView.tsx)
-  - [`apps/backend/src/App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/App.tsx)
-  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html)
-  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/Program.cs)
-  - [`apps/desktop_app/registrations.json`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/registrations.json)
-  - [`apps/desktop_app/incidents.json`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/incidents.json)
-  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/desktop_ai_app/)
+  - [`apps/backend/src/components/RAMSEventSidebar.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSEventSidebar.tsx)
+  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
+  - [`apps/backend/src/components/RAMSMapView.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSMapView.tsx)
+  - [`apps/backend/src/App.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/App.tsx)
+  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html)
+  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)
+  - [`apps/desktop_app/registrations.json`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/registrations.json)
+  - [`apps/desktop_app/incidents.json`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/incidents.json)
+  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/)
 
 ---
 
@@ -224,7 +224,7 @@ This register details every defect identified during development, physical on-de
 * **Learned Fix**:
   - *Guarded Numeric Parsing & Safe Coordinates*: Implemented `hasValidGps` checks and pre-computed safe string representations (`latStr`, `lonStr`, `impactStr`, `coordStr`) with resilient fallbacks before any `.toFixed()` execution in both `RAMSWearableProfileOverlay.tsx` and `RAMSEventPopup.tsx`.
   - *Scoped Null Guards*: Relocated all derived variable computations strictly below the `if (!isOpen || !event) return null;` guard.
-  - *React ErrorBoundary Architecture*: Created [`ErrorBoundary.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/ErrorBoundary.tsx) to catch any component lifecycle exceptions, render a recovery banner, and prevent total UI unmounting. Wrapped both the root application and the profile overlay independently in `App.tsx`.
+  - *React ErrorBoundary Architecture*: Created [`ErrorBoundary.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/ErrorBoundary.tsx) to catch any component lifecycle exceptions, render a recovery banner, and prevent total UI unmounting. Wrapped both the root application and the profile overlay independently in `App.tsx`.
   - *Decoupled Pin Click from Overlay Auto-Open*: Adjusted `handleEventSelect` so clicking a map pin focuses the map view onto the unit without forcing immediate overlay expansion, allowing dispatchers to view the map popup first.
   - *Zero-Simulation Enforcement*: Completely purged all synthetic scenario generators, Morse audio synthesis, and mock vibration pills from `apps/desktop_app/www/index.html`.
   - *Rescuer AI Copilot Integration*: Replaced Tab 3 of the AI Suite with the **Rescuer AI Copilot Chatbot**, featuring:
@@ -234,13 +234,13 @@ This register details every defect identified during development, physical on-de
     - Quick-prompt dispatch chips ("Status of All Units", "Any Active Alerts?", "Locate Jan Clyde", "Hotspots Summary", "How to Mark Rescued").
   - *Atomic Socket Binding*: Replaced two-step port check in `Program.cs` with an atomic bind loop attempting `HttpListener.Prefixes.Add($"http://127.0.0.1:{port}/")` across ports 8080–8095.
 * **Files Modified**:
-  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
-  - [`apps/backend/src/components/RAMSEventPopup.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSEventPopup.tsx)
-  - [`apps/backend/src/components/ErrorBoundary.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/ErrorBoundary.tsx)
-  - [`apps/backend/src/App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/App.tsx)
-  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html)
-  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/Program.cs)
-  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/desktop_ai_app/)
+  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
+  - [`apps/backend/src/components/RAMSEventPopup.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSEventPopup.tsx)
+  - [`apps/backend/src/components/ErrorBoundary.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/ErrorBoundary.tsx)
+  - [`apps/backend/src/App.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/App.tsx)
+  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html)
+  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)
+  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/)
 
 ---
 
@@ -263,11 +263,11 @@ This register details every defect identified during development, physical on-de
   - *Defensive Non-Admin Loopback Binding*: Updated `Program.cs` to bind loopback `127.0.0.1` and `localhost` first, and wrapped `Main` in a top-level defensive `try-catch` with file-based crash logging.
   - *Full Pipeline Synchronization*: Rebuilt React bundle (`npm run build` -> `index-CC4_zyki.js`, `index-DM4QpEw3.css`), updated HTML assets, recompiled C# binaries with zero errors, and verified 100% of HTTP endpoints.
 * **Files Modified**:
-  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
-  - [`apps/backend/src/components/RAMSMapView.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/components/RAMSMapView.tsx)
-  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html)
-  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/Program.cs)
-  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/desktop_ai_app/)
+  - [`apps/backend/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSWearableProfileOverlay.tsx)
+  - [`apps/backend/src/components/RAMSMapView.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/components/RAMSMapView.tsx)
+  - [`apps/desktop_app/www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html)
+  - [`apps/desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)
+  - [`apps/new_ai_applications/desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/)
 
 ---
 
@@ -301,16 +301,16 @@ This table provides the exact directory locations, primary entry points, and tec
 
 | Subsystem Domain | Primary Focus Folder | Key Entry Points & Files | Role & Architectural Scope |
 |---|---|---|---|
-| **Android Companion App** | [`apps/android_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/) | [`MainActivity.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/MainActivity.kt)<br>[`RamsViewModel.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt)<br>[`AndroidManifest.xml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/AndroidManifest.xml) | Production Kotlin Jetpack Compose app. Implements 50Hz sensor capture, BLE GATT sync with wearable, GPS tracking, and foreground service. |
-| **Edge AI Engine & Voice** | [`apps/android_app/.../ai/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/) | [`SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt)<br>[`VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)<br>[`RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt) | 14-parameter kinematic feature extractor, LiteRT 1D-CNN classifier, 100% offline speech recognizer, and role-adaptive assistant engine. |
-| **Standalone AI Suite & Twin** | [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/) | [`mobile_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/mobile_ai_app/)<br>[`ai_resources_and_models/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/ai_resources_and_models/)<br>[`desktop_ai_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/new_ai_applications/desktop_ai_app/) | Synchronized mobile twin app, prebuilt models, benchmark datasets, and 1-click batch build scripts. |
-| **Wearable Relay Firmware** | [`firmware/wearable_withApp/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/wearable_withApp/) | [`wearable_withApp.ino`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/wearable_withApp/wearable_withApp.ino) | ESP32-S3 firmware with MPU-6050 100Hz FSM crash logic, ATGM336H GPS parsing, 433MHz LoRa uplink, BLE GATT server, and WS2812B NeoPixel. |
-| **Base Station Receiver Firmware** | [`firmware/receiver_withDesktop/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/receiver_withDesktop/) | [`receiver_withDesktop.ino`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/receiver_withDesktop/receiver_withDesktop.ino) | ESP32-S3 base station on 433MHz LoRa. Forwards incoming emergency packets via USB Serial (`RAMS_PKT:...`) and Wi-Fi TCP/HTTP bridge. |
-| **Shared Protocol Definitions** | [`firmware/shared/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/shared/) | [`protocol.h`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/shared/protocol.h) | Canonical C header defining packed binary RF structs (`LoRaAlertPacket`, `TelemetryPacket`), channel masks, and packet types. |
-| **Command Center Desktop** | [`apps/desktop_app/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/) | [`RescuerForm.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/RescuerForm.cs)<br>[`HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/HotspotPredictor.cs)<br>[`www/index.html`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/desktop_app/www/index.html) | Windows Rescuer Operations app (C# .NET / WebView2 + React 19). Features serial auto-detect, audible alarms, and tactical radar map. |
-| **Cloud Web Mirror** | [`apps/backend/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/) | [`src/App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/src/App.tsx)<br>[`netlify.toml`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/apps/backend/netlify.toml) | React 19 / Leaflet live dispatch map hosted on Netlify Serverless for supervisor and field hospital visibility. |
-| **Hardware & PCB CAD** | [`hardware/KiCAD Files/.../Rev C/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/) | [`RAMS - PCB.kicad_sch`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_sch)<br>[`RAMS - PCB.kicad_pcb`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_pcb) | Production Rev C EPDC-compliant PCB CAD (DOST-ASTI EPDC manufacturing rules: 0.3mm trace, 0.4mm drill, 0.95mm via). |
-| **Research Documentation** | [`docs/`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/docs/) | [`FREE_MOTION_DATASETS_DIRECTORY.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/docs/FREE_MOTION_DATASETS_DIRECTORY.md)<br>[`00_SYSTEM_ARCHITECTURE.md`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/00_SYSTEM_ARCHITECTURE.md) | Architectural specifications, dataset benchmarks, validation results, and DOST manufacturing documents. |
+| **Android Companion App** | [`apps/android_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/) | [`MainActivity.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/MainActivity.kt)<br>[`RamsViewModel.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt)<br>[`AndroidManifest.xml`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/AndroidManifest.xml) | Production Kotlin Jetpack Compose app. Implements 50Hz sensor capture, BLE GATT sync with wearable, GPS tracking, and foreground service. |
+| **Edge AI Engine & Voice** | [`apps/android_app/.../ai/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/) | [`SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt)<br>[`VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)<br>[`RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt) | 14-parameter kinematic feature extractor, LiteRT 1D-CNN classifier, 100% offline speech recognizer, and role-adaptive assistant engine. |
+| **Standalone AI Suite & Twin** | [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/) | [`mobile_ai_app (archived)`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/archive/duplicates/mobile_ai_app_2026-11/)<br>[`ai_resources_and_models/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/ai_resources_and_models/)<br>[`desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/) | Synchronized mobile twin app, prebuilt models, benchmark datasets, and 1-click batch build scripts. |
+| **Wearable Relay Firmware** | [`firmware/wearable_withApp/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/) | [`wearable_withApp.ino`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/wearable_withApp.ino) | ESP32-S3 firmware with MPU-6050 100Hz FSM crash logic, ATGM336H GPS parsing, 433MHz LoRa uplink, BLE GATT server, and WS2812B NeoPixel. |
+| **Base Station Receiver Firmware** | [`firmware/receiver_withDesktop/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/receiver_withDesktop/) | [`receiver_withDesktop.ino`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/receiver_withDesktop/receiver_withDesktop.ino) | ESP32-S3 base station on 433MHz LoRa. Forwards incoming emergency packets via USB Serial (`RAMS_PKT:...`) and Wi-Fi TCP/HTTP bridge. |
+| **Shared Protocol Definitions** | [`firmware/shared/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/shared/) | [`protocol.h`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/shared/protocol.h) | Canonical C header defining packed binary RF structs (`LoRaAlertPacket`, `TelemetryPacket`), channel masks, and packet types. |
+| **Command Center Desktop** | [`apps/desktop_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/) | [`Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)<br>[`HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/HotspotPredictor.cs)<br>[`www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html) | Windows Rescuer Operations app (C# .NET / WebView2 + React 19). Features serial auto-detect, audible alarms, and tactical radar map. |
+| **Cloud Web Mirror** | [`apps/backend/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/) | [`src/App.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/src/App.tsx)<br>[`netlify.toml`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/backend/netlify.toml) | React 19 / Leaflet live dispatch map hosted on Netlify Serverless for supervisor and field hospital visibility. |
+| **Hardware & PCB CAD** | [`hardware/KiCAD Files/.../Rev C/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/) | [`RAMS - PCB.kicad_sch`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_sch)<br>[`RAMS - PCB.kicad_pcb`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/RAMS%20-%20PCB.kicad_pcb) | Production Rev C EPDC-compliant PCB CAD (DOST-ASTI EPDC manufacturing rules: 0.3mm trace, 0.4mm drill, 0.95mm via). |
+| **Research Documentation** | [`docs/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/docs/) | [`FREE_MOTION_DATASETS_DIRECTORY.md`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/docs/FREE_MOTION_DATASETS_DIRECTORY.md)<br>[`00_SYSTEM_ARCHITECTURE.md`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/00_SYSTEM_ARCHITECTURE.md) | Architectural specifications, dataset benchmarks, validation results, and DOST manufacturing documents. |
 
 ---
 

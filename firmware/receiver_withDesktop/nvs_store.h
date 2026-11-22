@@ -17,4 +17,9 @@ String nvsGetWifiPass();
 void   nvsSaveWifi(const String& ssid, const String& pass);
 void   nvsClearWifi();
 
+void     nvsSaveBackend(const String& host, uint16_t port);
+String   nvsGetBackendHost();
+uint16_t nvsGetBackendPort();
+void     nvsClearBackend();
+
 #endif // RAMS_NVS_STORE_H

@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import random
+import sys
 from pathlib import Path
 import numpy as np
 import pcbnew as p
@@ -51,6 +52,20 @@ def region(pos, wh):
     return slice(i, i + wh[0]), slice(j, j + wh[1])
 
 
+def character_gaps(text):
+    """White vertical bands between native stroke glyphs, including ink width."""
+    compound = text.GetEffectiveTextShape()
+    intervals = sorted((box(shape.BBox())[0], box(shape.BBox())[2]) for shape in compound.GetSubshapes())
+    merged = []
+    for left, right in intervals:
+        if merged and left <= merged[-1][1] + .000001:
+            merged[-1][1] = max(right, merged[-1][1])
+        else:
+            merged.append([left, right])
+    assert len(merged) == len(text.GetText()), (text.GetText(), merged)
+    return [round(merged[i + 1][0] - merged[i][1], 6) for i in range(len(merged) - 1)]
+
+
 def main():
     board_hash = hashlib.sha256(BOARD.read_bytes()).hexdigest()
     board = p.LoadBoard(str(BOARD))
@@ -88,13 +103,29 @@ def main():
         bases[side] = grid
     essential = sorted(r for r in footprints if not r.startswith(('C', 'R', 'L')) or r == 'LED1')
     result = dict(board_sha256=board_hash, outline_mm=[42, 32], total_references=len(footprints), front_references=sum(s == 'F' for s in sides.values()), essential_references=essential, free_area_mm2={s: round(np.count_nonzero(~g) * STEP * STEP, 2) for s, g in bases.items()}, module_courtyard_mm=courtyards['U2'], assumptions='Native ink boxes + 0.10 mm total padding; body + 0.03 mm; pads + 0.16 mm; fixed other legend reserved at 1 mm/0.15 mm; 0.4 mm board inset; local means edge gap <=1.5 mm; greedy searches are not optimality proofs.', experiments=[])
-    for height, stroke in [(1., .15), (.8, .15), (.8, .10)]:
-        initial, nearest = {}, {}
+    spacing = '--spacing' in sys.argv
+    profiles = [(1., .15), (.8, .15), (.8, .10)] if not spacing else [(.8, .1)]
+    for height, stroke in profiles:
+        initial, nearest, widths, gaps = {}, {}, {}, {}
         for ref, footprint in footprints.items():
             choices, best_gap = [], math.inf
+            text = footprint.Reference()
+            text.SetTextAngle(p.EDA_ANGLE(0, p.DEGREES_T))
+            text.SetKeepUpright(False)
+            text.SetTextThickness(p.FromMM(stroke))
+            width = height
+            if spacing:
+                for width in [n / 100 for n in range(55, 111)]:
+                    text.SetTextSize(p.VECTOR2I(p.FromMM(width), p.FromMM(height)))
+                    if min(character_gaps(text)) >= .16:
+                        break
+                else:
+                    raise AssertionError('No width satisfies glyph spacing for ' + ref)
+            text.SetTextSize(p.VECTOR2I(p.FromMM(width), p.FromMM(height)))
+            widths[ref], gaps[ref] = width, character_gaps(text)
             for angle in [0, 90]:
                 t = footprint.Reference()
-                t.SetTextSize(p.VECTOR2I(p.FromMM(height), p.FromMM(height)))
+                t.SetTextSize(p.VECTOR2I(p.FromMM(width), p.FromMM(height)))
                 t.SetTextThickness(p.FromMM(stroke))
                 t.SetTextAngle(p.EDA_ANGLE(angle, p.DEGREES_T))
                 t.SetKeepUpright(False)
@@ -113,7 +144,7 @@ def main():
                     choices.append((float(costs[i]), float(own[i]), angle, pts[i].tolist(), wh))
             initial[ref] = sorted(choices)
             nearest[ref] = round(best_gap, 3)
-        experiment = dict(height_mm=height, stroke_mm=stroke, no_individual_local_slot=sorted(r for r, d in nearest.items() if d > 1.5), nearest_possible_edge_gap_mm=nearest)
+        experiment = dict(height_mm=height, stroke_mm=stroke, widths_mm=widths, inter_character_gaps_mm=gaps, gap_checked=spacing, no_individual_local_slot=sorted(r for r, d in nearest.items() if d > 1.5), nearest_possible_edge_gap_mm=nearest)
         for mode in ['all_local', 'all_anywhere', 'essential_local']:
             refs = essential if mode == 'essential_local' else sorted(footprints)
             options = {r: [c for c in initial[r] if mode == 'all_anywhere' or c[1] <= 1.5] for r in refs}
@@ -136,7 +167,8 @@ def main():
             experiment[mode] = dict(placed_count=len(best[1]), unplaced=sorted(set(refs) - set(best[1])), labels=best[1])
             print(height, stroke, mode, len(best[1]), 'unplaced', experiment[mode]['unplaced'], flush=True)
         result['experiments'].append(experiment)
-    (ROOT / 'reports/fab_legend_feasibility_20261114.json').write_text(json.dumps(result, indent=2) + '\n')
+    suffix = '_spacing' if spacing else ''
+    (ROOT / f'reports/fab_legend_feasibility_20261114{suffix}.json').write_text(json.dumps(result, indent=2) + '\n')
     assert hashlib.sha256(BOARD.read_bytes()).hexdigest() == board_hash, 'Source changed during read-only audit'
     print('Free area', result['free_area_mm2'], 'board hash', board_hash)
 

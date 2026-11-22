@@ -1,6 +1,6 @@
 {
-  "source_board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
-  "private_board_sha256": "bf1850565542af319336e5ece838e0ce04ab7fc4c8b5acecc28190a86d99002a",
+  "source_board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
+  "private_board_sha256": "005f07311612e9d37825de83f387eba40baa8381d0854bfda04c90975e2c6d00",
   "note": "Illustrative normal-population preview only; active PCB/BOM/DNP flags unchanged.",
   "dnp_cleared_only": [
     {
@@ -13,7 +13,7 @@
     }
   ],
   "files": {
-    "top_3d_normal.png": "33b49e05f24f9a683a15b5d5f16378cbbd3a89be9efaa0c7bdef34c9f829675b",
-    "top_3d_normal_isometric.png": "13c956eb24432e89a20f939d0c1b74f4ed375fb8133051aec29a88d8009346f8"
+    "top_3d_normal.png": "85daf87e75536a199919f002180f9bf8668114269ff8ace49103b2a6f7f9442b",
+    "top_3d_normal_isometric.png": "b0880ca9a4e6227d5c900acb400bd5d3f233f9653b6b3b82e84bf97d4c8719b2"
   }
 }

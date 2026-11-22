@@ -23,6 +23,7 @@
 #include "neopixel.h"
 #include "nvs_store.h"
 #include "wifi_manager.h"
+#include "backend_resolver.h"
 #include "lora_rx.h"
 #include "http_upload.h"
 #include "local_queue.h"
@@ -105,6 +106,9 @@ void setup() {
   // 6. Initialize HTTP upload client
   httpUploadInit();
 
+  // 7. Initialize Backend Resolver
+  backendInit();
+
   Serial.println(F("\n[RECEIVER] Base station boot complete"));
   Serial.printf("[RECEIVER] WiFi: %s | LoRa: %s | Queue: %d pending\n",
                 wifiIsConnected() ? "Connected" : "Not connected",
@@ -112,9 +116,10 @@ void setup() {
                 localQueueCount());
 
   if (wifiIsConnected()) {
+    backendResolve();
     Serial.print(F("[RECEIVER] Station IP: "));
     Serial.println(wifiGetIP());
-    Serial.printf("[RECEIVER] Target Backend: %s\n", BACKEND_URL);
+    Serial.printf("[RECEIVER] Target Backend: %s\n", backendBaseUrl().c_str());
   } else if (wifiGetState() == WIFI_AP_MODE) {
     Serial.printf("[RECEIVER] Captive Portal AP active: Connect to '%s' (IP: 192.168.4.1)\n", WIFI_AP_SSID);
   }
@@ -127,6 +132,7 @@ void loop() {
 
   // 1. WiFi connection management (captive portal + auto-reconnect)
   wifiManagerUpdate();
+  backendTick();
 
   // 2. Check for incoming LoRa packets from wearable
   if (_loraOk) {

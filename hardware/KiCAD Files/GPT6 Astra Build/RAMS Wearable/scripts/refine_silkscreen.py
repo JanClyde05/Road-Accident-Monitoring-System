@@ -16,6 +16,8 @@ import pcbnew as p
 ROOT = Path(__file__).resolve().parents[1]
 BOARD = ROOT / 'RAMS_JLC_S3.kicad_pcb'
 SOURCE = ROOT / 'reports/silkscreen_ink_0.55.json'
+OUTPUT = ROOT / 'reports/silkscreen_refined.json'
+RESERVE_STANDARD_FUNCTIONAL_TEXT = False
 STEP = .05
 NX, NY = 841, 641
 
@@ -125,6 +127,9 @@ def main():
                     mark(grid, bounding(graphic.GetBoundingBox()), .05)
         for graphic in board.GetDrawings():
             if graphic.GetLayer() == silk:
+                if RESERVE_STANDARD_FUNCTIONAL_TEXT and isinstance(graphic, p.PCB_TEXT):
+                    graphic.SetTextSize(p.VECTOR2I(p.FromMM(1), p.FromMM(1)))
+                    graphic.SetTextThickness(p.FromMM(.15))
                 mark(grid, bounding(graphic.GetBoundingBox()), .05)
         bases[side] = grid
     assert set(bodies) == set(labels), 'Every reference requires a real courtyard'
@@ -217,7 +222,7 @@ def main():
 
     before, after = audit(original), audit(labels)
     result = dict(plan, labels=labels, unplaced=[], refinement=dict(source=str(SOURCE.relative_to(ROOT)), board_sha256=source_hash, method='Exact-size Hungarian assignment and collision-safe local moves; courtyard-edge/foreign-association cost', history=history, before_ambiguous=sum(r['ambiguous'] for r in before), after_ambiguous=sum(r['ambiguous'] for r in after), before=before, after=after, warning='Rectangular clearance and proximity scores do not prove visual association; inspect outliers and route leaders where needed.'))
-    target = ROOT / 'reports/silkscreen_refined.json'
+    target = OUTPUT
     target.write_text(json.dumps(result, indent=2) + '\n')
     print('Saved', target)
     print('Ambiguous', result['refinement']['before_ambiguous'], '->', result['refinement']['after_ambiguous'])

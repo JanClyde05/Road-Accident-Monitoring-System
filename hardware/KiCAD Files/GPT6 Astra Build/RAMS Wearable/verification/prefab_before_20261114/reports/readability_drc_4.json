@@ -1,0 +1,86 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-13T23:10:11",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.0793 mm)",
+            "items": [
+                {
+                    "description": "Reference field of R7",
+                    "pos": {
+                        "x": 107.15,
+                        "y": 112.575
+                    },
+                    "uuid": "36c12f98-2907-45a2-abd1-a38279a82d1b"
+                },
+                {
+                    "description": "Reference field of C13",
+                    "pos": {
+                        "x": 107.1,
+                        "y": 111.9
+                    },
+                    "uuid": "aa9a2dfd-d1ba-472b-bb82-023708a932fd"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.1488 mm)",
+            "items": [
+                {
+                    "description": "Reference field of C11",
+                    "pos": {
+                        "x": 109.975,
+                        "y": 115.0
+                    },
+                    "uuid": "b7eb081c-ab9b-4a20-94ee-ecff736c4058"
+                },
+                {
+                    "description": "Reference field of R6",
+                    "pos": {
+                        "x": 109.975,
+                        "y": 116.375
+                    },
+                    "uuid": "de610017-3747-499f-80a5-efef971cd7ed"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance (board setup constraints silk clearance 0.1500 mm; actual 0.1436 mm)",
+            "items": [
+                {
+                    "description": "Segment of SW3 on F.Silkscreen",
+                    "pos": {
+                        "x": 123.2,
+                        "y": 104.35
+                    },
+                    "uuid": "2cfb6e39-a06e-4ea6-b02b-6ae923337854"
+                },
+                {
+                    "description": "PCB text 'BOOT' on F.Silkscreen",
+                    "pos": {
+                        "x": 125.3,
+                        "y": 105.0
+                    },
+                    "uuid": "31a7ad21-ae60-4a02-8804-05e087ae2359"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        }
+    ]
+}

@@ -1,5 +1,11 @@
 # J2 assembly and first-article bring-up
 
+## November 15 fabrication handoff
+
+Use JLC_PROTOTYPE_20261115 and its FIRST_POWER top stencil. The final U1 pattern has sixteen chamfered mask/paste windows (61.42% nominal paste coverage) and nine top-covered/bottom-open ground vias; inspect top tent coverage before printing. Do not scrape away the mask webs or use the previous full EP opening. See [mask/process details](FAB_MASK_REVIEW_20261114.md).
+
+The [BOM](BOM_PROCUREMENT.csv) now names documented replacements for ambiguous stock. Check the owned part before placement; buy the named alternative if it does not match. Use the complete assembly drawings for the twelve omitted dense printed references. The PCB's RST/BOOT labels and eight labeled test pads remain available. No powered, thermal, RF, battery or heatbed test has been represented as completed.
+
 Revision: **J2 LDO engineering**, 2026-11-09. Source: `circuit_spec.json`.
 
 Source SHA256: `bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c`

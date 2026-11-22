@@ -34,7 +34,8 @@ import com.example.ui.components.RamsMapView
 @Composable
 fun MapScreen(
   gps: GpsData,
-  imu: ImuData = ImuData(),
+  headingDeg: Float = 0f,
+  beamAperture: Float = 28f,
   events: List<IncidentEvent>,
   selectedEvent: IncidentEvent?,
   onSelectEvent: (IncidentEvent) -> Unit,
@@ -49,7 +50,7 @@ fun MapScreen(
   onSearchChange: (String) -> Unit = {}
 ) {
   val showNearbyIncidents = riderProfile.showNearbyIncidents
-  val activeHeading = if (imu.yawDegrees != 0f) imu.yawDegrees else gps.headingDegrees
+  val activeHeading = if (headingDeg != 0f) headingDeg else gps.headingDegrees
 
   Column(
     modifier = Modifier
@@ -61,7 +62,8 @@ fun MapScreen(
     // Sits at top outside vertical scroll so finger dragging, pan, and zoom are 100% smooth!
     RamsMapView(
       gps = gps,
-      imu = imu,
+      headingDeg = headingDeg,
+      beamAperture = beamAperture,
       events = events,
       selectedEvent = selectedEvent,
       onSelectEvent = onSelectEvent,

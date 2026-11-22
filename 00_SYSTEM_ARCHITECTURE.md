@@ -10,7 +10,7 @@ Welcome to the **Road Accident Monitoring System (RAMS)** codebase. This documen
 > See the complete, detailed file and subsystem index in **[`DIRECTORY_MAP.md`](DIRECTORY_MAP.md)**.
 
 ```
-Danger Monitoring System V2/
+Road Accident Monitoring System/
 │
 ├── DIRECTORY_MAP.md                ◄── Master Navigation & Complete Directory Index
 ├── 00_SYSTEM_ARCHITECTURE.md       ◄── Master Architecture Guide (You are here)

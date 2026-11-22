@@ -1,5 +1,15 @@
 # J2 JLCPCB manufacturing review
 
+## Current revision — November 15, 2026
+
+The historical November 12/13 review below is superseded for ordering by [JLC_ORDER_INSTRUCTIONS.md](JLC_ORDER_INSTRUCTIONS.md) and the JLC_PROTOTYPE_20261115 package. Current nominal RF/USB calculations are closed by [the official-calculator review](FAB_IMPEDANCE_20261114.md); U1 top-mask coverage and stencil geometry by [the mask review](FAB_MASK_REVIEW_20261114.md); documented replacement parts by [the integrated procurement review](FAB_PARTS_ASSEMBLY_20261114.md).
+
+The owner chose printable on-board references where they fit plus a complete assembly drawing. There are 78 printed references at minimum 0.8/0.10 mm using JLC high-precision characters; twelve dense references are drawing-only. All eight test pads and the RST/BOOT functions remain labeled. This supersedes the former 0.45–0.55 mm legend. There is no change in board size or circuit.
+
+Final native ERC/DRC/parity are zero with no ignored checks/exclusions. reports/fab_native_validation.json binds the checks to sources; final mask, label and geometry reports bind to the same PCB. The order package preserves 16 chamfered EP mask/paste windows, nine top-covered/bottom-open vias, the selected stackup and exact stencil apertures. Supplier production-file confirmation is still required; physical tests and actual stock/paste acceptance occur before/during assembly. Fabrication readiness means a reviewed first-prototype package, not proven hardware or supplier acceptance already obtained.
+
+## Historical review (retained for traceability)
+
 Reviewed 2026-11-12 (Asia/Manila). Scope: **42 × 32 mm, four-layer J2 AP2112 board**, bare-board fabrication and owner's top heatbed assembly, followed by buzzer and bottom Ra-02 hand soldering. No files were submitted, quotation obtained, or order placed. DOST is outside scope.
 
 This review is a supplier-rule comparison, **not a manufacturing release**. Final connectivity, copper fills, geometry and export identity must come from the final source-bound validation report. The first read-only dimensional inspection used KiCad 10.0.6 and board snapshot SHA256 `be37fb41878c18c9e9a94378314ce31a3467091686915a6a40507fe779ffeef7`. The subsequent QFN correction was independently checked against board SHA256 `92a93a97135f37c880bc354b1857d5ebfd20f2f813561131891aba75d3b14915`, as recorded below. These snapshots establish the inspected dimensions, not the identity of later exports.

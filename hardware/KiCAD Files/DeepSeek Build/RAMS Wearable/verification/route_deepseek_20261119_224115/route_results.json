@@ -1,0 +1,14 @@
+[
+  {
+    "net": "BUZZER_CTRL",
+    "result": "exhausted"
+  },
+  {
+    "net": "BOOT_BTN",
+    "result": "exhausted"
+  },
+  {
+    "net": "LORA_SCK",
+    "result": "exhausted"
+  }
+]

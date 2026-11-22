@@ -1,0 +1,6 @@
+{
+  "name": "RAMS — Road Accident Monitoring System",
+  "description": "Interactive 3D architectural presentation of RAMS: smartphone IMU/GPS sensor fusion paired with ESP32-S3 SuperMini and 433 MHz LoRa Ra-02 emergency telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

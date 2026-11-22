@@ -610,3 +610,270 @@ moved rather than a number changed.
 Export set regenerated at this geometry in
 `manufacturing/ENGINEERING_DRAFT_NOT_FOR_FAB`: 28 Gerber/Excellon files, CPL,
 BOM, schematic and PCB PDFs, 3D STEP, not-for-fab README and zip.
+
+## Escape analysis 2026-11-15: routing alone cannot close the last five nets
+
+Ran `scripts/route_remaining.py` (A* with a native-DRC accept/reject gate) on the
+verified board: every net reported "exhausted", and the gate restored the board
+untouched (`0233ee63cf879ec5`, 0 violations, 5 unconnected). Nothing was
+damaged; the run proves the search finds no path.
+
+Measured the obstacle geometry rather than guessing. U1 left pads 3-8 are
+0.80 x 0.20 mm at 0.40 mm pitch and must escape horizontally west from x=111.15.
+C12 and C13 put `VDD_RF` pads at x 110.00-110.56 directly in front of pads 5, 6
+and 7, and the `VDD_RF` trunk wall runs at x=110.300 over y 111.0-112.1. That
+leaves 0.59-0.87 mm, less than the 0.45 mm corridor needed.
+
+The caps cannot simply move onto the x=108.70 trunk: L1 occupies x 107.60-108.40
+over y 110.40-112.36, C11 occupies x 108.25-110.15 over y 113.05-113.95, and the
+trunk is 0.25 mm wide. The only free strip is 0.65 mm tall at y 112.4-113.0 -
+one 0402, not two.
+
+Also disproved the assumption that the bottom row is easy. Five candidate paths
+from U1 pad 17 to R11 pad 1 were sampled at 0.02 mm against every other-net F.Cu
+pad, track and via: all blocked, worst -0.144 mm at (111.69, 116.55) and
+-0.146 mm at (111.99, 117.00). The R11/crystal cluster sits directly south of the
+pad.
+
+Conclusion: the last five nets need a placement change, not a router. Two
+options that actually free space are written up in
+`00_CONTINUATION_STATUS.md` section 6: move C12/C13 to B.Cu (which also needs the
+B.Cu `+3V3` diagonal relocated), or re-place the C11/C12/C13/L1 cluster westward
+to open a 1.5 mm band. Both are deliberate layout revisions with DRC as the gate.
+
+
+## RAMS J2 JLC first-prototype fabrication handoff — 2026-11-15
+
+Authoritative project: `hardware/KiCAD Files/GPT6 Astra Build/RAMS Wearable/`. Owner requested fabrication readiness while retaining 42 × 32 mm, the AP2112 linear-regulator circuit and heatbed-top / iron-soldered buzzer+bottom Ra-02 process; DOST stays deferred. The owner explicitly chose printable on-board labels where they fit plus complete assembly drawings.
+
+Completed: 78 printed references at ≥0.8 mm height /0.10 mm stroke for JLC high-precision legend, native glyph gaps ≥0.16 mm; twelve dense references drawing-only, RST/BOOT and all eight test pads retained. Four schematic teaching pages and canonical 90-component / 96-net circuit unchanged. Exactly 34 RF segments narrowed 0.18→0.15mm after official JLC calculation (48.521ohm RF/86.289ohm USB close-ground model); USB geometry retained. U1 keeps 5.7 mm EP copper + nine 0.20 mm ground vias;16 chamfered top mask/paste windows give 0.20 mm webs, 0.1121 mm nominal hole-edge coverage and 61.42% paste coverage, top covered / bottom open. Exact compatible procurement alternatives integrated without requiring replacement of matching owned stock.
+
+Final KiCad 10.0.6 ERC/DRC/parity: zero findings/unconnected/mismatches, no ignored checks/exclusions. Independent source, plane, mask/paste, label, 82 physical-model and 19 firmware-source checks passed. Export QA checks actual Gerber polygons, 185 PTH / 4 NPTH, 285 normal / 279 first-power paste flashes, nine PDFs, all 90 assembly references, and byte-identical inner upload ZIPs. Original Antigravity prototype PCB/schematic/order ZIP hashes unchanged. Sources and reports frozen in `reports/final_validation_manifest.json`; source PCB SHA256 `cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a`.
+
+Current handoff: `manufacturing/JLC_PROTOTYPE_20261115.zip`, SHA256 `85ea546936a5c78d010808dc34c4868c4a57fad68e343e2e3e0c63138e23c6f1`. Bare-board upload ZIP SHA256 `d9a164df86a591eecbc0acb443f3bfef913be183e0a6b456519feb62052b227b`. Use `docs/JLC_ORDER_INSTRUCTIONS.md`, exact JLC04161H-3313 stackup, green mask / ENIG / high-precision legend, and production-file confirmation. No upload, purchase or supplier approval occurred. This is a small first-prototype fabrication package; electrical/RF/thermal/charging/heatbed performance remains unmeasured. LED1/R30 stay DNP initially; unknown LED revision and actual stock/paste/battery checks remain assembly gates.
+
+Lessons retained in READABILITY_AND_LESSONS.md and FAB_MASK_REVIEW_20261114.md: a full EP mask opening defeats nominal via tenting; actual crosshatch is needed. Packing names without association is insufficient. KiCad GetTextAngle returns borrowed mutable data; copy degrees for an audit. Preserve polarity strokes when removing leaders. Three model hash differences were CRLF-only; exact archived bytes were restored and .gitattributes protects the models. PDF text presence did not detect SW1's Fab-label collision; fixed only a derived drawing copy, verified it against the frozen PCB and visually reviewed it. Previous review ZIPs, backups and failed candidates remain preserved.
+
+Placement search for the blocked decoupling caps (2026-11-15): 400 candidate
+centres tested against other-net F.Cu copper plus footprint courtyards. 81 are
+legal, all inside x 106.15-106.75, y 110.70-110.80 (best clearance 0.322 mm).
+No legal PAIR exists - the pocket gives about 0.6 x 0.2 mm of usable centre area,
+so C12 and C13 cannot both stay on F.Cu near the QFN. The cluster has to move to
+B.Cu, which also requires re-routing the B.Cu `+3V3` diagonal that crosses the
+same band. This is a layout decision, not a router task; the board remains at
+`0233ee63cf879ec5` with 0 violations and 5 unconnected.
+
+Bottom-side relocation of the VDD_RF pair (2026-11-18): C12/C13 moved to B.Cu at
+(106.600, 110.280) and (107.800, 110.280), pad 1 on a 0.15 mm rail at y = 109.800,
+fed by a 0.50/0.20 via at (108.650, 111.250) on the F.Cu trunk vertex. Worst clearance
+0.304 mm on all four layers. Measured: DRC 0 errors, 2 dangling-stub warnings, unconnected 5, parity 41,
+ERC 0, board hash 2d8b29678ba32331. Reason it was possible: F.Cu offers only 81
+legal 0402 centres in a 0.6 x 0.2 mm pocket (no legal pair), while B.Cu is empty
+apart from the +3V3 diagonal. Router status: route_remaining.py now reaches pads
+4-7 but every path fails on track_dangling because pad cells are excluded from the
+goal set, so routes stop one grid step short; needs a snap-to-pad step.
+
+Folder rename (2026-11-18): the workspace is `Road Accident Monitoring System`; the
+project is RAMS - Road Accident Monitoring System. The retired name
+`Danger Monitoring System V2` stays only inside immutable build logs, netlists and
+evidence files. Binding rule lives in `AGENTS.md` section 0,
+`GEMINI.md` section 0 and `.agents/rules/00-rams-invariants.md`.
+
+Execution plan and ping/range architecture (2026-11-18): the ordered instruction
+set for every open fix is `docs/agent/EXECUTION_PLAN.md` - status board, exact
+edits, acceptance tests, commit sequence, and the new `RNG-`/`PERF-` checks.
+Android lag root cause is `LaunchedEffect(heading, imu.beamAperture, isOfflineMode)`
+keyed on a 50 Hz `yawDegrees` stream (6 sensors at `SENSOR_DELAY_GAME`), pushing
+up to 50 `evaluateJavascript` calls per second into `beam.style.transform`;
+secondary costs are one effect that clears and rebuilds every nearby marker on
+each GPS fix and an animated `panTo` restarted every second. `beamAperture` is
+quantized to 22/28/50/85/110 and is not a churn source. Sensor rate stays
+unchanged because phone crash detection at 3.5 G depends on it; the fix is a
+10 Hz quantized `mapHeading` flow plus split effects.
+
+Range and latency: `PKT_PING` (33 bytes) already travels phone -> BLE -> wearable
+-> LoRa -> receiver, but the station had no consumer, so pings fell through to the
+alert branch and rewrote `incidents.json` every 3 s. Measurement model is
+t0 = phone UTC epoch carried in the packet, t2 = station UTC at ingest, so
+`latency = t2 - t0`; the receiver has no absolute clock and its `rxMillis` must
+never be subtracted from `phoneEpochMs`. Jitter is the difference of differences,
+so constant clock skew cancels. Airtime at SF9/BW125/CR4-5 for 33 bytes is
+246.8 ms (Tsym 4.096 ms, 12.25 preamble symbols, 48 payload symbols), making a
+3 s interval 8.2% duty cycle; field work therefore uses 20-ping bursts. Pings are
+stored in `ping-log.jsonl` under a dedicated `_pingLock`, never in the incident
+store. The receiver's HTTP upload is synchronous inside the LoRa RX path with a
+15 s timeout, so ping ingest runs over USB serial first and any Wi-Fi upload must
+be an async task that drops late packets rather than backfilling them. The
+desktop dashboard is a prebuilt bundle with no source in the repository, so the
+station panel is `www/ping.html`, opened by `RAMS_Rescuer_Desktop.exe --ping`.
+
+Wearable battery sense and Rev L1 hardware (2026-11-19): the FCS prototype at
+`D:\KiCad things\FCS\DMS - PCB` does not measure the cell. Its `BATT` net is the
+midpoint of `+3.3V -- R1 100k -- BATT -- R2 100k -- GND`, with `U1` pad 4
+(GPIO2) on the node and `U1` pad 18 (5V) unconnected; there is no battery
+connector. The firmware's default profile therefore reads 1.650 V at the node,
+multiplies by 2.0, prints 3.30 V and reports 0 percent at any state of charge.
+`battery.h:4-11` documents `VBAT` at the top of the divider, which the board does
+not implement. Corrected sensor: `VBAT -- R1 330k 1% -- BATT_SENSE -- R2 100k 1%
+-- GND`, with 100 nF from `BATT_SENSE` to `GND`; ratio 4.30, 4.20 V -> 0.977 V,
+3.55 V -> 0.826 V, 9.8 uA, source impedance 76.7 kOhm, 7.7 ms time constant. GPIO2
+is unchanged. 330k/100k are chosen because both 1 percent values already exist in
+the J2 BOM (`R14`; `R6`, `R7`, `R13`). The new board uses the profile macro
+`RAMS_FCS_LASER` with `analogReadMilliVolts` at `ADC_2_5db`; the four
+`RAMS_JLC_S3_J2` sites in `battery.cpp` (lines 35, 49, 75, 93) collapse to one
+`BATTERY_USE_CAL_MV` gate in `battery.h`, leaving J2 behaviour identical. The
+immediate prototype rework needs no new parts: lift only R1's `+3.3V` leg, wire
+it to the cell positive (`BAT+` pad or the cell lead), and add 100 nF from the
+node to GND; the default ratio-2.0 profile then reads the cell. Rev L1 is a
+52 x 32 mm provisional single-copper-face board: SuperMini body and all SMD parts
+on F, Ra-02 carrier body on B with its 16 pins soldered on F, 0805 passives,
+BC817-25 SOT-23 buzzer switch, SMD-9650-3327 buzzer, JST-PH 2.0 mm cell
+connector, standard `power:+3V3`. Rules: 1.0 mm traces, 0.5 mm clearance, no
+ground pour, 0.8 mm drill, `BOOST` jumper open with a 2 mm copper/paste keepout,
+5 mm clear air beyond each antenna, no copper under either antenna. Nets are
+`VBAT` for the cell and `BATT_SENSE` for the node; a net named `BATT` is
+forbidden on new boards. Laser workflow is the DAJA 6 process: sand, matte black
+spray, plot F.Cu plus drills, silk and Edge.Cuts, tune in FlatCAM, remove the
+yellow origin marks in Inkscape, mirror only for B.Cu, export 300 dpi PNG,
+engrave, etch in ferric chloride, strip paint from pads only, tin the pads. Every
+artwork run carries a 1.2/1.0/0.8/0.6 mm trace and 0.4/0.5/0.6/0.8 mm gap
+calibration comb because the laser over-burn narrows traces. The layout is
+blocked on four caliper measurements: Ra-02 carrier row spacing and outline,
+SuperMini BAT pad geometry and `BOOST` location, 0805 stock values, and cell
+capacity. The full executable instruction set is
+`docs/agent/HARDWARE_REVISION_PLAN.md`; the defect is INC-019 and the lesson is
+L-17.
+
+## RAMS_JLC_S3 routing state, 2026-11-19
+
+- Board `hardware/KiCAD Files/DeepSeek Build/RAMS Wearable/RAMS_JLC_S3.kicad_pcb`,
+  hash `c23244a60551c816`. DRC 0 violations / 0 warnings / 3 unconnected /
+  parity 41 / ERC 0.
+- `VBAT_SENSE` and `MCU_EN` are routed. `BOOT_BTN`, `BUZZER_CTRL` and `LORA_SCK`
+  remain; the left QFN row carries at most two escapes at 0.15 mm track and
+  0.15 mm clearance (measured, five orders, plus 0.127 clearance).
+- Power-path changes this pass: VDD_RF pad-3 leg moved to pad 3's own row
+  (`scripts/move_vdd_rf_pad3_leg.py`) and the dead x = 110.3 / x = 110.0 VDD_RF
+  spurs deleted (`scripts/drop_dead_vdd_rf_spurs.py`). Both are DRC-gated and
+  connectivity-preserving. The two dangling warnings that predated this pass are
+  gone.
+- Router (`scripts/route_remaining.py`): pad terminals are no longer filtered out
+  of the search, tracks snap to the true pad centre, and the accept gate is a
+  delta against the baseline plus a mandatory drop in unconnected count. Env
+  hooks: `ROUTE_ORDER`, `ROUTE_CLR`.
+- Unresolved design decision: reassign two of the three open signals to free GPIOs
+  on the other sides of U1, or permit 0.10 mm track and clearance in the 2 mm
+  escape area (4-layer JLCPCB floor is 0.09/0.09).
+
+## Stage C: LoRa Benchmark Ping, Latency & Range Architecture (2026-11-19)
+
+- **Measurement Model & Synchronization**: One-way uplink latency is defined as
+  $t_{\text{one-way}} = t_2 - t_0$, where $t_0$ is the phone absolute UTC epoch
+  milliseconds (`System.currentTimeMillis()`) packed into `PingPacket.phoneEpochMs`,
+  and $t_2$ is the station absolute UTC epoch at packet ingestion (`DateTime.UtcNow`).
+  Wearable uptime ($t_1$) is intentionally unused for latency deltas to eliminate
+  drift between unaligned hardware clocks.
+- **Clock Skew Invariants**: Any record with $t_{\text{one-way}} < 0$ or
+  $t_{\text{one-way}} < t_{\text{airtime}}$ sets `clockSkewSuspect = true` to isolate
+  phone/station time synchronization errors without dropping telemetry.
+- **Airtime Calculation & Duty Cycle**: At SF9, 125 kHz bandwidth, 4/5 coding rate,
+  and 33-byte packet size, airtime is exactly 246.79 ms ($T_{\text{sym}} = 4.096\text{ ms}$,
+  preamble + sync = 12.25 symbols = 50.18 ms, payload = 48 symbols = 196.61 ms). A 3 s
+  ping interval represents an 8.2% duty cycle; field sweeps mandate 20-ping bursts
+  per distance point.
+- **Scheduler & Android State Engine**: `RamsViewModel.kt` enforces drift-free scheduling
+  using `SystemClock.elapsedRealtime()` anchors. Pings carry `hasFix` flags; coordinates
+  (0.0, 0.0) trigger `noFix: true` and `distanceM: null` without fabricating telemetry.
+  Android UI surfaces live ping counts via `PingMonitorDialog.kt`.
+- **Append-Only Storage Isolation**: Ingestion in `apps/new_ai_applications/desktop_ai_app/Program.cs`
+  intercepts `eventField == "LORA_PING"` immediately at `ProcessIncomingPayload` entry.
+  Pings are recorded exclusively to `ping-log.jsonl` under an independent `_pingLock`,
+  strictly preventing any mutation or write access to `incidents.json` or `_eventsJsonList`.
+- **Station Coordinates & Web Panel**: Station coordinates are managed via
+  `station-config.json` and serviced through `/api/station` and `/api/ping/*` HTTP routes.
+  Real-time analysis, jitter calculations, link margins ($\text{SNR} + 12.5\text{ dB}$),
+  and CSV export are hosted on `www/ping.html` via `RAMS_Rescuer_Desktop.exe --ping`.
+
+## Stage D: Receiver Backend Discovery & Ingestion Architecture (2026-11-19)
+
+- **Runtime Backend Resolution**: Hardcoded LAN addresses in `config.h` are fully
+  deprecated (`#define BACKEND_URL ""`). The receiver dynamically resolves ingestion
+  backends via `backend_resolver.cpp` using a prioritized 4-tier strategy:
+  1. Non-Volatile Storage (NVS) cached `last_good_host` and `last_good_port`.
+  2. UDP LAN broadcast discovery on port 8889 querying `RAMS_DISCOVER_V1`.
+  3. Captive portal manual user configuration at initial Wi-Fi provisioning.
+  4. Empty compile-time fallback constant.
+- **Desktop Announcement Bridge**: The desktop command center listens on UDP 8889
+  and replies with `{"status":"OK","app":"RAMS","port":8888}` to auto-configure
+  unprovisioned receivers within 2 seconds of network join.
+- **Health Validation Gate**: Receiver verifies backend candidate reachability via an
+  HTTP GET probe to `/api/health` before adopting or persisting endpoints to NVS.
+- **Flash Budget Optimization**: Receiver build target upgraded to
+  `PartitionScheme=huge_app` (3 MB app space), expanding headroom from 6 KB (99% capacity)
+  to over 1.7 MB free flash space.
+
+## Stage E: BLE Stability & High-Throughput Protocol (2026-11-19)
+
+- **Negotiated MTU Ceiling**: Android requests MTU 247 (`requestMtu(247)`), and waits
+  for `onMtuChanged` completion via `CompletableDeferred<Int>` before initiating the
+  telemetry pipeline, avoiding ATT packet fragmentation.
+- **Flow-Controlled GATT Ingestion**: Replaced unacknowledged writes (`WRITE_TYPE_NO_RESPONSE`)
+  with acknowledged `WRITE_TYPE_DEFAULT`. Writes are synchronized through an
+  `onCharacteristicWrite` permit channel (`Channel<Unit>(CONFLATED)`) with a 300 ms
+  timeout gate to eliminate GATT queue saturation.
+- **Telemetry & Profile Decoupling**: Decomposed monolithic 694-byte frames into a
+  lightweight ~202-byte sensor-only frame (`buildTelemetryPacket`) streaming at 10 Hz
+  (100 ms interval) fitting entirely inside a single 247-byte ATT write. The 13-field rider
+  profile is dispatched only on initial GATT connection and on a 30 s keepalive cadence
+  (`buildProfilePacket`).
+- **Connection Serialization & Lifecycle**: Wrapped GATT connection setup in a coroutine
+  `Mutex` (`connectMutex.withLock`) ensuring strict single-flight connection attempts.
+  Migrated `Esp32SyncEngine` ownership to `RamsApplication`, ensuring BLE sessions outlive
+  Activity/ViewModel teardown.
+- **Radio Cleanliness**: Deprecated and excised legacy SPP RFCOMM sockets from
+  `Esp32ConnectionManager.kt`. Completely suppressed Bluetooth Classic device inquiries
+  during active BLE scanning to prevent 2.4 GHz radio controller thrashing.
+- **Firmware Re-Advertising**: Handled disconnect re-advertising explicitly in the
+  ESP32 classic BLE `onDisconnect` server callback with 100 ms backoff, bypassing
+  unsupported NimBLE-specific APIs.
+
+## Hardware routing state (2026-11-21)
+
+`hardware/KiCAD Files/DeepSeek Build/RAMS Wearable/RAMS_JLC_S3.kicad_pcb`,
+sha256 `cc208587e1a06865...`: DRC 0 errors, 0 warnings, 3 unconnected,
+schematic parity 41, ERC 0.
+
+- **Scoped fine-pitch rules.** `RAMS_JLC_S3.kicad_dru` carries two rules that
+  apply only inside a rule area named `QFN_ESC` (0.10 mm track, 0.10 mm
+  clearance); the rest of the board keeps 0.15 mm / 0.127 mm. The area covers
+  U1's left escape strip, x 108.2-111.2 / y 109.0-113.2, and is added by
+  `scripts/add_qfn_escape_rule_area.py`.
+- **+3V3 strip relief.** +3V3 used to cross that strip on B.Cu on the diagonal
+  (111.65, 109.50) -> (108.95, 112.20), splitting the only via-capable area in
+  two. `scripts/move_3v3_strip_crossing.py` reroutes it at y 109.50 / x 109.20 /
+  y 112.00 / x 108.95, 0.15 mm, DRC-clean.
+- **Measured limit.** The 0.10 mm relaxation does not close the board: at
+  0.10/0.10 the last three nets (BOOT_BTN U1.5, BUZZER_CTRL U1.6, LORA_SCK
+  R11.1-U1.17) still report `exhausted` because their pads sit in closed
+  0.85 x 0.30 mm pockets walled by MCU_EN's F.Cu jog at x 110.90 and, for
+  LORA_SCK, by LORA_SCK_DEV's via stub at (111.40, 116.25). Capacity of that
+  escape is set by via sites, not track width.
+- **Rejected and reverted.** `scripts/lift_mcu_en_escape.py` (MCU_EN via to
+  110.75, 110.68) shorts BOOT_BTN's In2 diagonal at 0.137 mm;
+  `scripts/move_lora_sck_dev_escape.py` (via to 112.10, 116.45) shorts
+  VBAT_SENSE's B.Cu at y 116.75. Both are DRC-gated and self-revert.
+- Next step is a netlist decision: reassign two of the three to free U1 pins
+  (pad 8 GPIO3, pad 9 GPIO4, pad 10 GPIO5, pad 19 GPIO14) with schematic and
+  firmware pin-map edits, or ship with three nets unrouted.
+
+## InnovateX motion replay and hardware exhibit (2026-11-22)
+
+The [RAMS presentation](docs/InnovateX%20Files/RAMS%20Presentation/index.html) uses the 121 motion fixtures packaged with Android. Eleven generated scenario families contain 33 accident-labeled and 88 benign traces, totaling 6,050 samples at a nominal 50 Hz. Public human-activity and fall datasets are cataloged as references. The bundled language resources include 1,655 generated Q&A records and written wake-word variants.
+
+The [per-fixture JVM replay](docs/InnovateX%20Files/RAMS%20Presentation/verification/replay-output.tsv) tested the compiled Android `runTier1Inference` function on stored features with an empty learned profile. The binary alert flag matched 33/33 accident and 88/88 benign labels. All 11 potholes received the benign wind-flutter subtype and all 11 falls received the severe-collision subtype. The record contains source, compiled class and corpus hashes. Field performance, raw-sensor feature extraction and radio delivery require separate tests.
+
+The [exhibit hardware record](docs/InnovateX%20Files/RAMS%20Presentation/public/hardware/sources.md) identifies the fabricated 50 × 43 mm SuperMini carrier and the separate 42 × 32 mm four-layer J2 design. The carrier model combines its board footprint data with reconstructed module bodies and manuscript component photographs. The custom J2 exhibit uses its normal-population CAD assembly.
+
+The extended exhibit groups 15 chapters into five suggested speaking parts for Ernest John Galace, Precious Nina Garcia, April Ann Palattao, Stephanie Ranjo and Jan Clyde Talosig, credited in manuscript order. A separate 11-chapter finals route fits the six-minute research slot. Pairing and road incidents are illustrative reconstructions. The [application exhibit record](docs/InnovateX%20Files/RAMS%20Presentation/public/apps/sources.md) identifies the exact Android and Windows views and fixture states shown.
+
+The RAMS AI exhibit traces Android speech transcription, written wake and cancellation patterns, deterministic actions, device-context answers, 1,655 template-generated Q&A keys and optional runtime Gemini caching. The packaged voice resource contains 32 base wake prefixes, 55 written name variants, 30 slurred forms and 78 cancel phrases. The project’s historical RAMS-1.8B-Edge specification is distinct from these executable paths. The checked Android assets establish neither a local 1.8B checkpoint nor a recorded acoustic training corpus.

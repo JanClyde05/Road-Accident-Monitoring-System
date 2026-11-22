@@ -6,10 +6,17 @@ Codex, and Antigravity.
 Start here when you are about to change firmware, the Android app, or the
 repository layout.
 
+**If you need the order of work, read
+[`EXECUTION_PLAN.md`](EXECUTION_PLAN.md) first.** It is the single ordered
+instruction set: status board, exact edits, acceptance tests, commit sequence.
+The other documents are reference detail for one stage each.
+
 ## Documents
 
 | Document | Use it when |
 | --- | --- |
+| [`EXECUTION_PLAN.md`](EXECUTION_PLAN.md) | You need the current order of work, or you are resuming after an agent switch |
+| [`HARDWARE_REVISION_PLAN.md`](HARDWARE_REVISION_PLAN.md) | The wearable battery gauge reads wrong, or the compact single-sided board is being drawn or etched |
 | [`CONNECTIVITY_FIX_PLAN.md`](CONNECTIVITY_FIX_PLAN.md) | The receiver cannot reach the desktop after an IP or port change |
 | [`BLE_STABILITY_PLAN.md`](BLE_STABILITY_PLAN.md) | The phone and wearable keep disconnecting, or telemetry stalls while "connected" |
 | [`ROOT_REORG_PLAN.md`](ROOT_REORG_PLAN.md) | Moving scripts, removing duplicates, repairing links |
@@ -98,7 +105,10 @@ runtime test entry in the plan over a brittle regex.
 
 - Physical verification is blocked until an ESP32-S3 receiver, a wearable, and an
   Android phone are on the bench.
-- The main checkout (`D:\Antigravity\Projects\Danger Monitoring System V2`) has
+- The wearable battery gauge and the single-sided Rev L1 board are in
+  `HARDWARE_REVISION_PLAN.md`. The layout is blocked on measurements M1 and M2;
+  the prototype rework in that file needs no new parts.
+- The main checkout (`D:\Antigravity\Projects\Road Accident Monitoring System`) has
   pre-existing uncommitted hardware changes. Port these artifacts additively; do
   not run a bulk move there without a fresh `git status`.
 - Tooling installs are dry-run by default. Nothing in this folder writes to the

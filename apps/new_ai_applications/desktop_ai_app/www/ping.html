@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RAMS Station - LoRa Range & Latency Monitor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    body { background-color: #09090b; color: #f4f4f5; padding: 20px; font-size: 13px; line-height: 1.5; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #27272a; padding-bottom: 14px; margin-bottom: 18px; }
+    h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; color: #ffffff; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .badge-blue { background-color: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-green { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    
+    .card { background-color: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #a1a1aa; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .stat-box { background-color: #121215; border: 1px solid #27272a; border-radius: 6px; padding: 12px; }
+    .stat-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 4px; }
+    .stat-val { font-size: 20px; font-weight: 700; color: #ffffff; }
+    .stat-sub { font-size: 11px; color: #a1a1aa; margin-top: 2px; }
+
+    .btn { background-color: #27272a; color: #f4f4f5; border: 1px solid #3f3f46; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; font-weight: 500; }
+    .btn:hover { background-color: #3f3f46; }
+    .btn-primary { background-color: #0284c7; border-color: #38bdf8; color: white; }
+    .btn-primary:hover { background-color: #0369a1; }
+    .btn-group { display: flex; gap: 8px; }
+
+    .banner-amber { background-color: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #fcd34d; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 12px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 8px 10px; background-color: #121215; color: #a1a1aa; border-bottom: 1px solid #27272a; font-weight: 600; text-transform: uppercase; font-size: 10px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #1f1f23; }
+    tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 100; }
+    .modal-box { background: #18181b; border: 1px solid #3f3f46; border-radius: 8px; width: 440px; padding: 20px; }
+    .modal-box h3 { margin-bottom: 14px; font-size: 15px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 11px; color: #a1a1aa; margin-bottom: 4px; text-transform: uppercase; }
+    .form-group input { width: 100%; background: #09090b; border: 1px solid #3f3f46; color: white; padding: 8px; border-radius: 4px; font-size: 12px; }
+
+    footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid #27272a; font-size: 11px; color: #71717a; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>RAMS MONITOR - LORA RANGE &amp; LATENCY BENCHMARK</h1>
+        <div style="font-size: 11px; color: #71717a; margin-top: 2px;">Station Telemetry &amp; Field Propagation Analysis</div>
+      </div>
+      <div class="btn-group">
+        <a href="/api/ping/export.csv" class="btn" download="rams_ping_export.csv">Export CSV</a>
+        <a href="/" class="btn">Incident Dashboard</a>
+      </div>
+    </header>
+
+    <div id="skewBanner" class="banner-amber" style="display: none;">
+      <strong>WARNING - CLOCK SKEW DETECTED:</strong> Measured latency is negative or below physical radio airtime (~247 ms). One or both host clocks (Desktop / Phone) are drifting. Jitter remains strictly accurate as skew cancels out.
+    </div>
+
+    <!-- Station Info Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Base Station Configuration</span>
+        <div class="btn-group">
+          <button class="btn" onclick="detectStationLocation()">Detect (Windows Location)</button>
+          <button class="btn btn-primary" onclick="openEditModal()">Edit Station Coordinates</button>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="stat-box">
+          <div class="stat-label">Station Coordinates</div>
+          <div class="stat-val mono" id="stationCoords">--</div>
+          <div class="stat-sub" id="stationSource">Source: --</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Station Label</div>
+          <div class="stat-val" style="font-size: 15px; font-weight: 600;" id="stationLabel">--</div>
+          <div class="stat-sub" id="stationAccuracy">Accuracy: --</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Radio Airtime Model</div>
+          <div class="stat-val mono" style="color: #38bdf8;">~246.8 ms</div>
+          <div class="stat-sub">SX1278 (SF9, BW125, CR4/5, 33-byte)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Map Verification Link</div>
+          <div style="margin-top: 6px;">
+            <a id="stationMapLink" href="#" target="_blank" class="btn" style="width: 100%; justify-content: center;">Open Location in Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Live Packet Reception</span>
+        <span class="badge badge-green" id="liveStatus">LISTENING</span>
+      </div>
+      <div class="grid-4">
+        <div class="stat-box">
+          <div class="stat-label">End-to-End Latency</div>
+          <div class="stat-val mono" id="liveLatency">-- ms</div>
+          <div class="stat-sub" id="liveStackOverhead">Stack overhead: --</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Straight-Line Distance</div>
+          <div class="stat-val mono" id="liveDistance">-- m</div>
+          <div class="stat-sub" id="liveGps">GPS: --</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">RF Signal Health</div>
+          <div class="stat-val mono" id="liveRssi">-- dBm</div>
+          <div class="stat-sub" id="liveSnr">SNR: -- dB | Margin: -- dB</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Sequence &amp; Transport</div>
+          <div class="stat-val mono" id="liveSeq">#--</div>
+          <div class="stat-sub" id="liveTransport">Via: -- | Token: --</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Summary Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Session Aggregates &amp; Propagation Analytics</span>
+        <span class="stat-sub" id="summaryRecords">0 Packets Processed</span>
+      </div>
+      <div class="grid-3">
+        <div class="stat-box">
+          <div class="stat-label">Reliability &amp; Channel Quality</div>
+          <div style="margin-top: 6px; font-size: 13px;">
+            <div>Packet Loss Rate: <span class="mono" id="sumLoss" style="font-weight: 700; color: #38bdf8;">0.0%</span></div>
+            <div>Inter-Packet Jitter (Mean): <span class="mono" id="sumJitter" style="font-weight: 700;">-- ms</span></div>
+            <div>Link Margin (vs -12.5 dBm floor): <span class="mono" id="sumMargin" style="font-weight: 700;">-- dB</span></div>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Latency Distribution (Serial Ingest)</div>
+          <div style="margin-top: 6px; font-size: 13px;">
+            <div>Median (p50): <span class="mono" id="sumP50" style="font-weight: 700; color: #22c55e;">-- ms</span></div>
+            <div>Tail Latency (p95): <span class="mono" id="sumP95" style="font-weight: 700;">-- ms</span></div>
+            <div>Worst Case (Max): <span class="mono" id="sumMax" style="font-weight: 700;">-- ms</span></div>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Empirical Log-Distance Path Loss Fit</div>
+          <div style="margin-top: 6px; font-size: 13px;">
+            <div>Model: <span class="mono" style="color: #a1a1aa;">RSSI = K - 10n*log10(d)</span></div>
+            <div>Path Loss Exponent (n): <span class="mono" id="sumN" style="font-weight: 700;">--</span></div>
+            <div>Regression Fit (R&sup2;): <span class="mono" id="sumR2" style="font-weight: 700;">--</span> <span style="font-size: 10px; color: #71717a;">(min 10 pts)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card">
+      <div class="card-title">
+        <span>Recent Packets (Last 50)</span>
+        <button class="btn" onclick="fetchRecent()">Refresh Table</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Time (UTC)</th>
+              <th>Via</th>
+              <th>Token</th>
+              <th>Seq</th>
+              <th>Distance</th>
+              <th>Latency</th>
+              <th>Jitter</th>
+              <th>RSSI</th>
+              <th>SNR</th>
+              <th>GPS Coordinates</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody id="pingTableBody">
+            <tr>
+              <td colspan="11" style="text-align: center; color: #71717a; padding: 24px;">No ping packets recorded yet. Transmit from the wearable device to populate.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      Standalone station benchmarking panel. Main dashboard is prebuilt; opened via RAMS_Rescuer_Desktop.exe --ping.
+    </footer>
+  </div>
+
+  <!-- Edit Station Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-box">
+      <h3>Edit Base Station Coordinates</h3>
+      <div class="form-group">
+        <label>Latitude</label>
+        <input type="text" id="inputLat" placeholder="17.613200">
+      </div>
+      <div class="form-group">
+        <label>Longitude</label>
+        <input type="text" id="inputLon" placeholder="121.727000">
+      </div>
+      <div class="form-group">
+        <label>Label</label>
+        <input type="text" id="inputLabel" placeholder="KM 42 Marker">
+      </div>
+      <div class="btn-group" style="justify-content: flex-end; margin-top: 16px;">
+        <button class="btn" onclick="closeEditModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveStationConfig()">Save Coordinates</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStation = { lat: 17.6132, lon: 121.7270, label: "Base Station" };
+
+    function fetchStation() {
+      fetch('/api/station')
+        .then(r => r.json())
+        .then(data => {
+          currentStation = data;
+          const lat = data.lat != null ? data.lat.toFixed(6) : "None";
+          const lon = data.lon != null ? data.lon.toFixed(6) : "None";
+          document.getElementById('stationCoords').innerText = lat + ", " + lon;
+          document.getElementById('stationSource').innerText = "Source: " + (data.source || "manual").toUpperCase();
+          document.getElementById('stationLabel').innerText = data.label || "Base Station";
+          document.getElementById('stationAccuracy').innerText = data.accuracyM != null ? "Accuracy: \u00B1" + data.accuracyM.toFixed(1) + " m" : "Accuracy: N/A";
+          if (data.lat != null && data.lon != null) {
+            document.getElementById('stationMapLink').href = "https://www.google.com/maps?q=" + data.lat + "," + data.lon;
+          }
+        }).catch(err => {});
+    }
+
+    function detectStationLocation() {
+      fetch('/api/station/detect', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          fetchStation();
+          if (data.status === "OK") {
+            alert("Windows location detected successfully: \u00B1" + (data.accuracyM || 0).toFixed(1) + " m");
+          } else {
+            alert("Windows location unavailable or accuracy worse than 50 m. Manual coordinates retained.");
+          }
+        }).catch(() => alert("Failed to invoke location detection."));
+    }
+
+    function openEditModal() {
+      document.getElementById('inputLat').value = currentStation.lat != null ? currentStation.lat : "";
+      document.getElementById('inputLon').value = currentStation.lon != null ? currentStation.lon : "";
+      document.getElementById('inputLabel').value = currentStation.label || "";
+      document.getElementById('editModal').style.display = "flex";
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = "none";
+    }
+
+    function saveStationConfig() {
+      const lat = parseFloat(document.getElementById('inputLat').value);
+      const lon = parseFloat(document.getElementById('inputLon').value);
+      const label = document.getElementById('inputLabel').value;
+      if (isNaN(lat) || isNaN(lon)) {
+        alert("Please enter valid decimal coordinates.");
+        return;
+      }
+      fetch('/api/station', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat: lat, lon: lon, label: label })
+      }).then(() => {
+        closeEditModal();
+        fetchStation();
+      });
+    }
+
+    function fetchRecent() {
+      fetch('/api/ping/recent?n=50')
+        .then(r => r.json())
+        .then(rows => {
+          if (!rows || rows.length === 0) return;
+          const latest = rows[0];
+
+          document.getElementById('liveLatency').innerText = latest.latencyMs + " ms";
+          const overhead = latest.latencyMs - (latest.airtimeMs || 246.8);
+          document.getElementById('liveStackOverhead').innerText = "Stack overhead: " + overhead.toFixed(1) + " ms";
+
+          if (latest.distanceM != null) {
+            document.getElementById('liveDistance').innerText = latest.distanceM >= 1000 ? 
+              (latest.distanceM / 1000).toFixed(2) + " km" : latest.distanceM.toFixed(1) + " m";
+          } else {
+            document.getElementById('liveDistance').innerText = "N/A";
+          }
+
+          document.getElementById('liveGps').innerText = latest.noFix ? "NO FIX (0, 0)" : latest.lat.toFixed(6) + ", " + latest.lon.toFixed(6);
+          document.getElementById('liveRssi').innerText = latest.rssi + " dBm";
+          const linkMargin = (latest.snr - (-12.5)).toFixed(1);
+          document.getElementById('liveSnr').innerText = "SNR: " + latest.snr.toFixed(1) + " dB | Margin: " + linkMargin + " dB";
+          document.getElementById('liveSeq').innerText = "#" + latest.seq;
+          document.getElementById('liveTransport').innerText = "Via: " + latest.via.toUpperCase() + " | Token: " + latest.token;
+
+          if (latest.clockSkewSuspect) {
+            document.getElementById('skewBanner').style.display = "block";
+          }
+
+          const tbody = document.getElementById('pingTableBody');
+          tbody.innerHTML = "";
+          rows.forEach(item => {
+            const tr = document.createElement('tr');
+            const distStr = item.distanceM != null ? (item.distanceM >= 1000 ? (item.distanceM/1000).toFixed(2) + " km" : item.distanceM.toFixed(1) + " m") : "--";
+            const jitStr = item.jitterMs != null ? item.jitterMs + " ms" : "--";
+            const flagBadge = item.clockSkewSuspect ? '<span class="badge badge-amber">SKEW</span>' : (item.noFix ? '<span class="badge badge-red">NO FIX</span>' : '<span class="badge badge-green">OK</span>');
+            
+            tr.innerHTML = `
+              <td class="mono">${item.recvUtc.substring(11, 23)}</td>
+              <td><span class="badge badge-blue">${item.via}</span></td>
+              <td class="mono">${item.token}</td>
+              <td class="mono">#${item.seq}</td>
+              <td class="mono">${distStr}</td>
+              <td class="mono" style="font-weight: 700; color: ${item.latencyMs > 500 ? '#f59e0b' : '#22c55e'}">${item.latencyMs} ms</td>
+              <td class="mono">${jitStr}</td>
+              <td class="mono">${item.rssi} dBm</td>
+              <td class="mono">${item.snr.toFixed(1)} dB</td>
+              <td class="mono" style="font-size: 11px;">${item.noFix ? 'NO FIX' : item.lat.toFixed(5) + ', ' + item.lon.toFixed(5)}</td>
+              <td>${flagBadge}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }).catch(err => {});
+    }
+
+    function fetchSummary() {
+      fetch('/api/ping/summary')
+        .then(r => r.json())
+        .then(s => {
+          document.getElementById('summaryRecords').innerText = s.totalRecords + " Packets Processed";
+          document.getElementById('sumLoss').innerText = s.packetLossPct.toFixed(1) + "%";
+          document.getElementById('sumJitter').innerText = s.meanJitterMs.toFixed(1) + " ms";
+          document.getElementById('sumMargin').innerText = s.linkMarginDb.toFixed(1) + " dB";
+
+          document.getElementById('sumP50').innerText = s.serialLatencyP50.toFixed(0) + " ms";
+          document.getElementById('sumP95').innerText = s.serialLatencyP95.toFixed(0) + " ms";
+          document.getElementById('sumMax').innerText = s.serialLatencyMax.toFixed(0) + " ms";
+
+          if (s.pathLossR2 > 0.1) {
+            document.getElementById('sumN').innerText = s.pathLossN.toFixed(2);
+            document.getElementById('sumR2').innerText = s.pathLossR2.toFixed(3);
+          } else {
+            document.getElementById('sumN').innerText = "--";
+            document.getElementById('sumR2').innerText = "--";
+          }
+        }).catch(err => {});
+    }
+
+    fetchStation();
+    fetchRecent();
+    fetchSummary();
+    setInterval(fetchRecent, 1000);
+    setInterval(fetchSummary, 5000);
+  </script>
+</body>
+</html>

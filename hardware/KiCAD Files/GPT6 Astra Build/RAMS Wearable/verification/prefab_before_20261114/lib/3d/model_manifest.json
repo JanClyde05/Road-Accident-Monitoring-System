@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-13",
+  "scope": "Visualization-only model attachments. No footprint pad, net, placement, courtyard or circuit changes.",
+  "coordinate_convention": "Offsets and XYZ Euler rotation are KiCad model coordinates before footprint rotation and side flip. VRML model unit is2.54mm; scales remain1.",
+  "attachments": [
+    {
+      "reference": "ANT1",
+      "expected_value": "2450AT18B100E",
+      "file": "Johanson_2450AT18x100.step",
+      "sha256": "7d3afc869543ea1b697aee6824adc8f8b73ba56896d97c82088a686380379d63",
+      "offset_mm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "same family package",
+      "source": "https://gitlab.com/kicad/libraries/kicad-packages3D/-/blob/master/RF_Antenna.3dshapes/Johanson_2450AT18x100.step",
+      "notes": "Copied unchanged from installed KiCad 10.0.6. Johanson AT18 family exterior; do not infer RF performance from model.",
+      "license": "CC-BY-SA-4.0 with KiCad design exception; model header retained."
+    },
+    {
+      "reference": "Y1",
+      "expected_value": "ABM8-40.000MHZ-10-1-U-T",
+      "file": "Crystal_ABM8G_package.step",
+      "sha256": "9123b0bc558d87e226d70ed8c9033afb2418f41148436a7d0e9655867ab11148",
+      "offset_mm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "approximate package",
+      "source": "https://gitlab.com/kicad/libraries/kicad-packages3D/-/blob/master/Crystal.3dshapes/Crystal_SMD_Abracon_ABM8G-4Pin_3.2x2.5mm.step",
+      "notes": "ABM8G visualization only. ABM8 exact manufacturer STEP endpoint returned HTTP 403. 3.2x2.5mm class, not exact ABM8 frequency/height/markings.",
+      "license": "KiCad library CC-BY-SA-4.0 with design exception; file header retained."
+    },
+    {
+      "reference": "U1",
+      "expected_value": "ESP32-S3FH4R2",
+      "file": "ESP32S3_QFN56_package.step",
+      "sha256": "a7e1b68d7c240016a0c468e633f7967f445758a90dea110c3eff24882158aaa8",
+      "offset_mm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "approximate package",
+      "source": "https://gitlab.com/kicad/libraries/kicad-packages3D/-/blob/master/Package_DFN_QFN.3dshapes/QFN-56-1EP_7x7mm_P0.4mm_EP5.6x5.6mm.step",
+      "notes": "Generic QFN56 7x7 0.4mm pitch. Model EP5.6 differs from exact ESP32-S3 EP5.7; marks/height are generic. Actual custom footprint unchanged.",
+      "license": "File header GPL-3.0-or-later with design exception; header retained. See LICENSE_KiCad.md for collection policy."
+    },
+    {
+      "reference": "SW1",
+      "expected_value": "MSK12C02",
+      "file": "MSK12C02_ProtoFlow.wrl",
+      "sha256": "e9b364d65bf0415cb62642f5162949b692f494e7c8acc1dcca5c2fa704c24c79",
+      "offset_mm": [
+        0,
+        -1,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "named-part third-party",
+      "source": "https://www.protoflow.ai/library/parts/C431540/files/SW-SMD_3P-L6.6-W2.7-LS7.8-P1.50.wrl",
+      "notes": "FastEDA/ProtoFlow named MSK12C02. Corrected source origin: body center to local0 and actuator towards footprint +Y. 180deg plus offsetY=-1mm; contacts and pegs visually checked against unchanged local footprint. 1.5mm model body height is illustrative.",
+      "license": "Free public download; asset-specific redistribution license not published in downloaded file/page. Retain source and do not claim open-license grant."
+    },
+    {
+      "reference": "LED1",
+      "expected_value": "WS2812B-2020 STOCK VERIFY",
+      "file": "WS2812B-2020_ProtoFlow.wrl",
+      "sha256": "954dda1856b52ee07069d668df6a9c9ebbb47ff00e8862bf00cb24b828808a07",
+      "offset_mm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "named-part third-party",
+      "source": "https://www.protoflow.ai/library/parts/C965555/files/LED-SMD_4P-L2.0-W2.0-H0.8-TL_WS2812B-2020.wrl",
+      "notes": "2020 package 2.0x2.0x0.84mm; source footprint matches target pad order. Stock electrical revision and supply limits still require physical qualification. Not SK6805-EC15.",
+      "license": "Free public download; asset-specific redistribution license not published in downloaded file/page. Retain source and do not claim open-license grant."
+    },
+    {
+      "reference": "U2",
+      "expected_value": "Ai-Thinker-Ra-02",
+      "file": "Ra-02_local.step",
+      "sha256": "45a000c0e44f865fc00c51cd678e6c2d512a411f51f957acce7340f9d2777588",
+      "offset_mm": [
+        -8,
+        8.5,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "user-supplied named-part model",
+      "source": "D:/KiCad things/3D Models/LoRa_Module_RA-02_AiThinker.step",
+      "notes": "Local STEP raw bounds [-16,0]x[0,17]x[0,3.03]mm. Rotation180 and offsets(-8,+8.5,0) center body and put U.FL next to pad1 in native top-side convention, checked against manufacturer front/back geometry. KiCad applies bottom-side flip automatically. Model3.03mm height is below nominal3.2mm; no enclosure-clearance proof.",
+      "license": "User-provided Autodesk STEP dated2020-08-19; original author/download URL/license absent; reused unchanged, no redistribution license inferred."
+    },
+    {
+      "reference": "BZ1",
+      "expected_value": "9650 Active 3V STOCK",
+      "file": "Buzzer_9650_envelope.wrl",
+      "sha256": "12b1f22400c0e45913e839bc8dac38a9b118481f425f4813a4875d55e22e4939",
+      "offset_mm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_deg": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "match": "illustrative envelope",
+      "source": "https://en.jlg-sound.com/productshow-46057459.html",
+      "notes": "Original9.6x9.6x5.0mm nominal square envelope based on existing manufacturer geometry records. No exact free CAD for unbranded owned stock located. Contacts, sound opening and polarity mark illustrative; actual stock fit/height/polarity verification remains required. Cosmetic top marks raised 0.002mm above the nominal 5mm body to avoid coincident-surface rendering.",
+      "license": "Original project geometry, CC0-1.0."
+    }
+  ],
+  "files": {
+    "Buzzer_9650_envelope.wrl": {
+      "bytes": 3688,
+      "sha256": "12b1f22400c0e45913e839bc8dac38a9b118481f425f4813a4875d55e22e4939"
+    },
+    "Crystal_ABM8G_package.step": {
+      "bytes": 44816,
+      "sha256": "9123b0bc558d87e226d70ed8c9033afb2418f41148436a7d0e9655867ab11148"
+    },
+    "ESP32S3_QFN56_package.step": {
+      "bytes": 623064,
+      "sha256": "a7e1b68d7c240016a0c468e633f7967f445758a90dea110c3eff24882158aaa8"
+    },
+    "Johanson_2450AT18x100.step": {
+      "bytes": 52412,
+      "sha256": "7d3afc869543ea1b697aee6824adc8f8b73ba56896d97c82088a686380379d63"
+    },
+    "LICENSE_KiCad.md": {
+      "bytes": 2101,
+      "sha256": "45d2bce75e5a4208f5afb01b8fb2c406e700371c4fe2b5f5cd5c443d46db4d8f"
+    },
+    "MSK12C02_ProtoFlow.wrl": {
+      "bytes": 75744,
+      "sha256": "e9b364d65bf0415cb62642f5162949b692f494e7c8acc1dcca5c2fa704c24c79"
+    },
+    "MSK12C02_source_footprint.txt": {
+      "bytes": 2915,
+      "sha256": "4663161749313655611a004ec46e52c45a0827f05dcb5b921789ac709baa022e"
+    },
+    "Ra-02_local.step": {
+      "bytes": 805279,
+      "sha256": "45a000c0e44f865fc00c51cd678e6c2d512a411f51f957acce7340f9d2777588"
+    },
+    "WS2812B-2020_ProtoFlow.wrl": {
+      "bytes": 38486,
+      "sha256": "954dda1856b52ee07069d668df6a9c9ebbb47ff00e8862bf00cb24b828808a07"
+    },
+    "WS2812B-2020_source_footprint.txt": {
+      "bytes": 1980,
+      "sha256": "c1ffa1dd250501a9fd554e509b88597237d213b8c3686aaf72f5189d3ce10759"
+    }
+  }
+}

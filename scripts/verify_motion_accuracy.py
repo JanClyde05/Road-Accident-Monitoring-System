@@ -6,7 +6,7 @@ import json
 import glob
 import os
 
-benchmark_dir = r"d:\Antigravity\Projects\Danger Monitoring System V2\apps\android_app\app\src\main\assets\motion_benchmarks"
+benchmark_dir = r"d:\Antigravity\Projects\Road Accident Monitoring System\apps\android_app\app\src\main\assets\motion_benchmarks"
 benchmarks = sorted(glob.glob(os.path.join(benchmark_dir, "*.json")))
 
 print("=" * 85)

@@ -440,6 +440,8 @@
     setInterval(ensureMapSize, 600);
 
     window.updateUserPos = function(lat, lon, hdg, showNearby) {
+      var prevLat = currentLat;
+      var prevLon = currentLon;
       currentLat = lat;
       currentLon = lon;
       currentHdg = hdg;
@@ -462,7 +464,8 @@
       // Only auto-pan to user if user hasn't manually moved or panned the map in the last 45 seconds, or on explicit recenter
       if (!isUserPanning || (Date.now() - lastUserPanTime > 45000)) {
         isUserPanning = false;
-        map.panTo([lat, lon], { animate: true, duration: 0.5 });
+        var dy = Math.abs(lat - prevLat), dx = Math.abs(lon - prevLon);
+        map.panTo([lat, lon], { animate: (dy > 0.00005 || dx > 0.00005), duration: 0.5 });
       }
     };
 

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "lina",
+    "name": "Lina Cruz",
+    "token": "DEMO-041",
+    "role": "Motorcycle rider",
+    "vehicle": "Commuter motorcycle",
+    "location": "Enrile Boulevard",
+    "lat": 17.6542287,
+    "lon": 121.7445909,
+    "status": "Active alert",
+    "color": "#ff758c",
+    "events": [
+      {
+        "type": "alert",
+        "title": "Crash alert received",
+        "time": "2026-11-12T14:06:00+08:00",
+        "g": 7.2
+      },
+      {
+        "type": "false_alarm",
+        "title": "Rider cancelled an earlier alert",
+        "time": "2026-11-10T08:21:00+08:00",
+        "g": 2.9
+      },
+      {
+        "type": "telemetry",
+        "title": "Wearable registration",
+        "time": "2026-11-08T09:12:00+08:00",
+        "g": 1.0
+      }
+    ]
+  },
+  {
+    "id": "ivo",
+    "name": "Ivo Reyes",
+    "token": "DEMO-052",
+    "role": "Bicycle rider",
+    "vehicle": "City bicycle",
+    "location": "Dalan na Paccorofun",
+    "lat": 17.6519906,
+    "lon": 121.7527109,
+    "status": "Test signal",
+    "color": "#ffbf63",
+    "events": [
+      {
+        "type": "test",
+        "title": "Test signal received",
+        "time": "2026-11-12T14:02:00+08:00",
+        "g": 1.1
+      },
+      {
+        "type": "telemetry",
+        "title": "Wearable registration",
+        "time": "2026-11-09T10:10:00+08:00",
+        "g": 1.0
+      }
+    ]
+  },
+  {
+    "id": "mara",
+    "name": "Mara Lim",
+    "token": "DEMO-063",
+    "role": "Pedestrian",
+    "vehicle": "On foot",
+    "location": "Carig road network",
+    "lat": 17.6535369,
+    "lon": 121.7545992,
+    "status": "Cleared",
+    "color": "#69e0bd",
+    "events": [
+      {
+        "type": "alert",
+        "status": "RESCUED",
+        "title": "Incident marked rescued",
+        "time": "2026-11-12T13:47:00+08:00",
+        "g": 5.2
+      },
+      {
+        "type": "telemetry",
+        "title": "Wearable registration",
+        "time": "2026-11-08T10:28:00+08:00",
+        "g": 1.0
+      }
+    ]
+  }
+]

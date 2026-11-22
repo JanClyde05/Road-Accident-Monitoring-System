@@ -1,0 +1,987 @@
+{
+  "labels": {
+    "C34": {
+      "side": "F",
+      "xy": [
+        129.625,
+        105.8
+      ],
+      "angle": 0,
+      "distance_mm": 5.033,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "SW2": {
+      "side": "F",
+      "xy": [
+        121.05,
+        105.775
+      ],
+      "angle": 90,
+      "distance_mm": 3.752,
+      "box_cells": [
+        26,
+        45
+      ]
+    },
+    "C33": {
+      "side": "F",
+      "xy": [
+        106.425,
+        116.7
+      ],
+      "angle": 0,
+      "distance_mm": 1.3,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "TP3": {
+      "side": "F",
+      "xy": [
+        138.05,
+        113.425
+      ],
+      "angle": 90,
+      "distance_mm": 1.75,
+      "box_cells": [
+        26,
+        41
+      ]
+    },
+    "C11": {
+      "side": "F",
+      "xy": [
+        106.875,
+        118.0
+      ],
+      "angle": 0,
+      "distance_mm": 5.065,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "SW1": {
+      "side": "F",
+      "xy": [
+        102.475,
+        105.8
+      ],
+      "angle": 0,
+      "distance_mm": 5.2,
+      "box_cells": [
+        45,
+        26
+      ]
+    },
+    "SW3": {
+      "side": "F",
+      "xy": [
+        124.475,
+        110.8
+      ],
+      "angle": 0,
+      "distance_mm": 8.142,
+      "box_cells": [
+        45,
+        26
+      ]
+    },
+    "C21": {
+      "side": "F",
+      "xy": [
+        111.225,
+        101.5
+      ],
+      "angle": 0,
+      "distance_mm": 5.303,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "C15": {
+      "side": "F",
+      "xy": [
+        120.325,
+        110.8
+      ],
+      "angle": 0,
+      "distance_mm": 5.407,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "C13": {
+      "side": "F",
+      "xy": [
+        111.225,
+        118.35
+      ],
+      "angle": 0,
+      "distance_mm": 6.704,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "C25": {
+      "side": "F",
+      "xy": [
+        120.325,
+        112.1
+      ],
+      "angle": 0,
+      "distance_mm": 8.036,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R8": {
+      "side": "F",
+      "xy": [
+        106.15,
+        109.5
+      ],
+      "angle": 90,
+      "distance_mm": 4.404,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "U6": {
+      "side": "F",
+      "xy": [
+        132.75,
+        105.8
+      ],
+      "angle": 0,
+      "distance_mm": 2.89,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "Y1": {
+      "side": "F",
+      "xy": [
+        114.25,
+        106.65
+      ],
+      "angle": 90,
+      "distance_mm": 3.109,
+      "box_cells": [
+        26,
+        30
+      ]
+    },
+    "R7": {
+      "side": "F",
+      "xy": [
+        105.7,
+        105.8
+      ],
+      "angle": 0,
+      "distance_mm": 7.006,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "C24": {
+      "side": "F",
+      "xy": [
+        107.2,
+        103.175
+      ],
+      "angle": 90,
+      "distance_mm": 2.869,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R43": {
+      "side": "F",
+      "xy": [
+        140.05,
+        106.025
+      ],
+      "angle": 90,
+      "distance_mm": 1.35,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R9": {
+      "side": "F",
+      "xy": [
+        105.85,
+        104.35
+      ],
+      "angle": 90,
+      "distance_mm": 7.472,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "C18": {
+      "side": "F",
+      "xy": [
+        105.9,
+        102.475
+      ],
+      "angle": 90,
+      "distance_mm": 6.844,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "C32": {
+      "side": "F",
+      "xy": [
+        104.225,
+        101.35
+      ],
+      "angle": 0,
+      "distance_mm": 6.742,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "ANT1": {
+      "side": "F",
+      "xy": [
+        101.8,
+        101.35
+      ],
+      "angle": 0,
+      "distance_mm": 2.016,
+      "box_cells": [
+        52,
+        26
+      ]
+    },
+    "LED1": {
+      "side": "F",
+      "xy": [
+        137.1,
+        101.95
+      ],
+      "angle": 0,
+      "distance_mm": 2.136,
+      "box_cells": [
+        52,
+        26
+      ]
+    },
+    "D1": {
+      "side": "F",
+      "xy": [
+        113.9,
+        119.5
+      ],
+      "angle": 0,
+      "distance_mm": 7.779,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "TP2": {
+      "side": "F",
+      "xy": [
+        136.375,
+        114.05
+      ],
+      "angle": 0,
+      "distance_mm": 4.456,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "C35": {
+      "side": "F",
+      "xy": [
+        139.05,
+        101.625
+      ],
+      "angle": 90,
+      "distance_mm": 4.35,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R6": {
+      "side": "F",
+      "xy": [
+        115.5,
+        119.05
+      ],
+      "angle": 0,
+      "distance_mm": 7.544,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "C28": {
+      "side": "F",
+      "xy": [
+        140.2,
+        103.775
+      ],
+      "angle": 90,
+      "distance_mm": 1.3,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "D3": {
+      "side": "F",
+      "xy": [
+        140.75,
+        117.0
+      ],
+      "angle": 90,
+      "distance_mm": 1.95,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "TP1": {
+      "side": "F",
+      "xy": [
+        137.025,
+        106.95
+      ],
+      "angle": 0,
+      "distance_mm": 3.45,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "L5": {
+      "side": "F",
+      "xy": [
+        104.25,
+        105.525
+      ],
+      "angle": 90,
+      "distance_mm": 2.859,
+      "box_cells": [
+        26,
+        29
+      ]
+    },
+    "Q3": {
+      "side": "F",
+      "xy": [
+        123.05,
+        129.3
+      ],
+      "angle": 90,
+      "distance_mm": 2.45,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "R34": {
+      "side": "F",
+      "xy": [
+        116.1,
+        120.775
+      ],
+      "angle": 90,
+      "distance_mm": 7.819,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R35": {
+      "side": "F",
+      "xy": [
+        122.05,
+        111.275
+      ],
+      "angle": 90,
+      "distance_mm": 6.031,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R36": {
+      "side": "F",
+      "xy": [
+        124.775,
+        112.1
+      ],
+      "angle": 0,
+      "distance_mm": 7.632,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R11": {
+      "side": "F",
+      "xy": [
+        117.375,
+        119.05
+      ],
+      "angle": 0,
+      "distance_mm": 6.222,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R13": {
+      "side": "F",
+      "xy": [
+        140.35,
+        101.675
+      ],
+      "angle": 90,
+      "distance_mm": 7.354,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "L1": {
+      "side": "F",
+      "xy": [
+        108.775,
+        108.15
+      ],
+      "angle": 0,
+      "distance_mm": 3.506,
+      "box_cells": [
+        29,
+        26
+      ]
+    },
+    "Q1": {
+      "side": "F",
+      "xy": [
+        116.35,
+        122.5
+      ],
+      "angle": 0,
+      "distance_mm": 5.556,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "L4": {
+      "side": "F",
+      "xy": [
+        107.2,
+        101.325
+      ],
+      "angle": 90,
+      "distance_mm": 5.484,
+      "box_cells": [
+        26,
+        29
+      ]
+    },
+    "TP5": {
+      "side": "F",
+      "xy": [
+        126.875,
+        111.2
+      ],
+      "angle": 0,
+      "distance_mm": 5.93,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "TP4": {
+      "side": "F",
+      "xy": [
+        124.775,
+        113.4
+      ],
+      "angle": 0,
+      "distance_mm": 5.545,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "U4": {
+      "side": "F",
+      "xy": [
+        122.6,
+        130.75
+      ],
+      "angle": 0,
+      "distance_mm": 3.001,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "TP8": {
+      "side": "F",
+      "xy": [
+        126.25,
+        126.075
+      ],
+      "angle": 90,
+      "distance_mm": 1.75,
+      "box_cells": [
+        26,
+        41
+      ]
+    },
+    "FB1": {
+      "side": "F",
+      "xy": [
+        126.9,
+        112.5
+      ],
+      "angle": 0,
+      "distance_mm": 5.701,
+      "box_cells": [
+        42,
+        26
+      ]
+    },
+    "C3": {
+      "side": "F",
+      "xy": [
+        131.15,
+        113.0
+      ],
+      "angle": 0,
+      "distance_mm": 5.179,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "R39": {
+      "side": "F",
+      "xy": [
+        119.575,
+        117.3
+      ],
+      "angle": 0,
+      "distance_mm": 3.175,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R2": {
+      "side": "F",
+      "xy": [
+        116.4,
+        123.8
+      ],
+      "angle": 0,
+      "distance_mm": 3.748,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "R42": {
+      "side": "F",
+      "xy": [
+        129.275,
+        112.5
+      ],
+      "angle": 0,
+      "distance_mm": 4.969,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "C1": {
+      "side": "F",
+      "xy": [
+        117.4,
+        121.05
+      ],
+      "angle": 90,
+      "distance_mm": 2.658,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "R30": {
+      "side": "F",
+      "xy": [
+        117.85,
+        123.625
+      ],
+      "angle": 90,
+      "distance_mm": 2.951,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "C27": {
+      "side": "F",
+      "xy": [
+        129.325,
+        113.8
+      ],
+      "angle": 0,
+      "distance_mm": 7.659,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "J2": {
+      "side": "F",
+      "xy": [
+        119.275,
+        123.2
+      ],
+      "angle": 0,
+      "distance_mm": 6.373,
+      "box_cells": [
+        29,
+        26
+      ]
+    },
+    "Q5": {
+      "side": "F",
+      "xy": [
+        140.75,
+        115.35
+      ],
+      "angle": 90,
+      "distance_mm": 7.254,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "C16": {
+      "side": "F",
+      "xy": [
+        119.175,
+        120.75
+      ],
+      "angle": 0,
+      "distance_mm": 5.95,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R41": {
+      "side": "F",
+      "xy": [
+        132.125,
+        117.85
+      ],
+      "angle": 0,
+      "distance_mm": 7.129,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R38": {
+      "side": "F",
+      "xy": [
+        120.75,
+        119.025
+      ],
+      "angle": 90,
+      "distance_mm": 3.417,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "R12": {
+      "side": "F",
+      "xy": [
+        130.0,
+        115.525
+      ],
+      "angle": 90,
+      "distance_mm": 1.779,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "TP6": {
+      "side": "F",
+      "xy": [
+        126.875,
+        113.8
+      ],
+      "angle": 0,
+      "distance_mm": 5.401,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "C10": {
+      "side": "F",
+      "xy": [
+        127.0,
+        120.325
+      ],
+      "angle": 90,
+      "distance_mm": 2.675,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "C5": {
+      "side": "F",
+      "xy": [
+        122.35,
+        125.45
+      ],
+      "angle": 90,
+      "distance_mm": 2.804,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "BZ1": {
+      "side": "F",
+      "xy": [
+        135.675,
+        131.0
+      ],
+      "angle": 0,
+      "distance_mm": 6.012,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "TP7": {
+      "side": "F",
+      "xy": [
+        128.175,
+        115.1
+      ],
+      "angle": 0,
+      "distance_mm": 5.888,
+      "box_cells": [
+        41,
+        26
+      ]
+    },
+    "R1": {
+      "side": "F",
+      "xy": [
+        121.0,
+        120.75
+      ],
+      "angle": 0,
+      "distance_mm": 7.7,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "C7": {
+      "side": "F",
+      "xy": [
+        123.8,
+        124.5
+      ],
+      "angle": 0,
+      "distance_mm": 3.176,
+      "box_cells": [
+        32,
+        26
+      ]
+    },
+    "R4": {
+      "side": "F",
+      "xy": [
+        122.45,
+        127.05
+      ],
+      "angle": 90,
+      "distance_mm": 3.296,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "Q2": {
+      "side": "F",
+      "xy": [
+        130.35,
+        117.95
+      ],
+      "angle": 90,
+      "distance_mm": 4.79,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "R5": {
+      "side": "F",
+      "xy": [
+        123.75,
+        126.3
+      ],
+      "angle": 90,
+      "distance_mm": 2.75,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "R14": {
+      "side": "F",
+      "xy": [
+        129.05,
+        117.725
+      ],
+      "angle": 90,
+      "distance_mm": 2.919,
+      "box_cells": [
+        26,
+        43
+      ]
+    },
+    "U3": {
+      "side": "F",
+      "xy": [
+        127.75,
+        116.55
+      ],
+      "angle": 90,
+      "distance_mm": 7.692,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "R15": {
+      "side": "F",
+      "xy": [
+        122.975,
+        118.8
+      ],
+      "angle": 0,
+      "distance_mm": 5.4,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R37": {
+      "side": "F",
+      "xy": [
+        125.075,
+        119.45
+      ],
+      "angle": 0,
+      "distance_mm": 5.693,
+      "box_cells": [
+        43,
+        26
+      ]
+    },
+    "R3": {
+      "side": "F",
+      "xy": [
+        127.75,
+        118.15
+      ],
+      "angle": 90,
+      "distance_mm": 7.354,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "U5": {
+      "side": "F",
+      "xy": [
+        128.3,
+        119.95
+      ],
+      "angle": 90,
+      "distance_mm": 4.764,
+      "box_cells": [
+        26,
+        32
+      ]
+    },
+    "U2": {
+      "side": "B",
+      "xy": [
+        129.5,
+        101.65
+      ],
+      "angle": 0,
+      "distance_mm": 9.75,
+      "box_cells": [
+        32,
+        26
+      ]
+    }
+  },
+  "unplaced": [
+    "C12",
+    "C14",
+    "C17",
+    "C19",
+    "C2",
+    "C20",
+    "C22",
+    "C26",
+    "C29",
+    "C4",
+    "D2",
+    "J1",
+    "L2",
+    "Q4",
+    "R16",
+    "U1"
+  ],
+  "height_mm": 0.6,
+  "stroke_mm": 0.1,
+  "courtyard_avoidance": true
+}

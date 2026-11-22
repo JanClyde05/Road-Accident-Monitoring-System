@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-15",
+  "owner_decision": "Printable on-board labels where they fit, plus a complete labeled assembly drawing for every component",
+  "assembly_drawing_only_references": [
+    "L4",
+    "C19",
+    "C12",
+    "C26",
+    "C21",
+    "C27",
+    "C13",
+    "C15",
+    "R7",
+    "L1",
+    "SW2",
+    "SW3"
+  ],
+  "visible_references": 78,
+  "note": "Candidate; clearance polish/DRC/visual review required before promotion. RST and BOOT functional labels identify SW2 and SW3."
+}

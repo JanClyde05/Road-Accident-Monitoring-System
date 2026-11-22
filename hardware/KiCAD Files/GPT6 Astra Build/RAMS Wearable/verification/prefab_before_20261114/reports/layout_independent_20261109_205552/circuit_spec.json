@@ -1,0 +1,1914 @@
+{
+  "title": "RAMS JLCPCB bare ESP32-S3 wearable",
+  "date": "2026-11-09",
+  "revision": "J2 LDO engineering",
+  "symbol_libraries": {
+    "RAMS_JLC": "lib/RAMS_JLC.kicad_sym"
+  },
+  "sheets": [
+    {
+      "id": "power",
+      "title": "USB, protected battery and regulated power",
+      "notes": [
+        {
+          "x": 20,
+          "y": 23,
+          "text": "Single cell 4.2V LiPo. CHG_LINK DNP until cell/harness review. Owned AP2112 3.3V LDO.",
+          "size": 1.0
+        }
+      ]
+    },
+    {
+      "id": "mcu",
+      "title": "ESP32-S3FH4R2, clock and 2.4GHz RF",
+      "notes": [
+        {
+          "x": 150,
+          "y": 16,
+          "text": "RF values are reference starting values; tune on assembled final enclosure.",
+          "size": 1.0
+        }
+      ]
+    },
+    {
+      "id": "io",
+      "title": "LoRa, indicators, controls and test access",
+      "notes": [
+        {
+          "x": 150,
+          "y": 16,
+          "text": "Phone supplies IMU/GPS overBLE. Ra02 bottom hand solder after top reflow.",
+          "size": 1.0
+        }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "ref": "J1",
+      "lib_id": "Connector:USB_C_Receptacle_USB2.0_16P",
+      "value": "USB4105-GF-A",
+      "footprint": "RAMS_JLC:USB_C_Receptacle_GCT4105_NPTH",
+      "pins": {
+        "A1": "GND",
+        "B1": "GND",
+        "A12": "GND",
+        "B12": "GND",
+        "SH": "GND",
+        "A4": "VBUS",
+        "B4": "VBUS",
+        "A9": "VBUS",
+        "B9": "VBUS",
+        "A5": "CC1",
+        "B5": "CC2",
+        "A6": "USB_DP_CONN",
+        "B6": "USB_DP_CONN",
+        "A7": "USB_DN_CONN",
+        "B7": "USB_DN_CONN",
+        "A8": null,
+        "B8": null
+      },
+      "sheet": "power",
+      "x": 50.8,
+      "y": 63.5,
+      "rotation": 0,
+      "pcb_x": 106.5,
+      "pcb_y": 128.3,
+      "pcb_rotation": 0,
+      "description": "Exact GCT connector; generic owned USB socket fit is unverified"
+    },
+    {
+      "ref": "R1",
+      "lib_id": "Device:R",
+      "value": "5.1k 1%",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "CC1",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 88.9,
+      "y": 40.64,
+      "rotation": 0,
+      "pcb_x": 111.8,
+      "pcb_y": 126.2,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R2",
+      "lib_id": "Device:R",
+      "value": "5.1k 1%",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "CC2",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 109.22,
+      "y": 40.64,
+      "rotation": 0,
+      "pcb_x": 111.8,
+      "pcb_y": 128.2,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "D1",
+      "lib_id": "Power_Protection:USBLC6-2SC6",
+      "value": "USBLC6-2SC6",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "pins": {
+        "1": "USB_DN_CONN",
+        "2": "GND",
+        "3": "USB_DP_CONN",
+        "4": "USB_DP_ESD",
+        "5": "VBUS",
+        "6": "USB_DN_ESD"
+      },
+      "sheet": "power",
+      "x": 109.22,
+      "y": 83.82,
+      "rotation": 0,
+      "pcb_x": 106.6,
+      "pcb_y": 122.5,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C1",
+      "lib_id": "Device:C",
+      "value": "1uF 10V X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VBUS",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 137.16,
+      "y": 40.64,
+      "rotation": 0,
+      "pcb_x": 103.0,
+      "pcb_y": 123.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C2",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VBUS",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 157.48,
+      "y": 40.64,
+      "rotation": 0,
+      "pcb_x": 109.5,
+      "pcb_y": 123.1,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "U3",
+      "lib_id": "Battery_Management:LTC4054ES5-4.2",
+      "value": "LTC4054ES5-4.2",
+      "footprint": "Package_TO_SOT_SMD:TSOT-23-5",
+      "pins": {
+        "1": null,
+        "2": "GND",
+        "3": "B_PLUS",
+        "4": "CHG_IN",
+        "5": "CHG_PROG"
+      },
+      "sheet": "power",
+      "x": 187.96,
+      "y": 66.04,
+      "rotation": 0,
+      "pcb_x": 115.0,
+      "pcb_y": 124.2,
+      "pcb_rotation": 0,
+      "description": "100mA nominal; confirm cell charge rating; populate CHG_LINK after battery review"
+    },
+    {
+      "ref": "R3",
+      "lib_id": "Device:R",
+      "value": "10k 1%",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "CHG_PROG",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 226.06,
+      "y": 66.04,
+      "rotation": 0,
+      "pcb_x": 115.0,
+      "pcb_y": 121.6,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R30",
+      "lib_id": "Device:R",
+      "value": "0R CHG_LINK",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "VBUS",
+        "2": "CHG_IN"
+      },
+      "sheet": "power",
+      "x": 185.42,
+      "y": 35.56,
+      "rotation": 90,
+      "pcb_x": 113.1,
+      "pcb_y": 126.7,
+      "pcb_rotation": 90,
+      "description": "",
+      "dnp": true
+    },
+    {
+      "ref": "C3",
+      "lib_id": "Device:C",
+      "value": "1uF 10V X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "CHG_IN",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 170.18,
+      "y": 96.52,
+      "rotation": 0,
+      "pcb_x": 112.6,
+      "pcb_y": 123.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C4",
+      "lib_id": "Device:C",
+      "value": "4.7uF 10V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "B_PLUS",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 198.12,
+      "y": 96.52,
+      "rotation": 0,
+      "pcb_x": 117.7,
+      "pcb_y": 124.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "J2",
+      "lib_id": "RAMS_JLC:Battery_JST_SH",
+      "value": "SM02B-SRSS-TB",
+      "footprint": "Connector_JST:JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+      "pins": {
+        "1": "B_PLUS",
+        "2": "B_MINUS"
+      },
+      "sheet": "power",
+      "x": 264.16,
+      "y": 40.64,
+      "rotation": 0,
+      "pcb_x": 117.0,
+      "pcb_y": 129.6,
+      "pcb_rotation": 0,
+      "description": "Verify cable polarity with meter"
+    },
+    {
+      "ref": "U4",
+      "lib_id": "RAMS_JLC:DW01A_Slkor",
+      "value": "DW01A SLKOR",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "pins": {
+        "1": "DW_OD",
+        "2": "DW_CS",
+        "3": "DW_OC",
+        "4": null,
+        "5": "DW_VCC",
+        "6": "B_MINUS"
+      },
+      "sheet": "power",
+      "x": 287.02,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 122.0,
+      "pcb_y": 129.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "Q3",
+      "lib_id": "RAMS_JLC:FS8205A_Fuxin",
+      "value": "FS8205A Fuxin",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "pins": {
+        "1": "B_MINUS",
+        "2": "FET_DRAIN",
+        "3": "GND",
+        "4": "DW_OC",
+        "5": "FET_DRAIN",
+        "6": "DW_OD"
+      },
+      "sheet": "power",
+      "x": 355.6,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 126.0,
+      "pcb_y": 129.1,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R4",
+      "lib_id": "Device:R",
+      "value": "100R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "B_PLUS",
+        "2": "DW_VCC"
+      },
+      "sheet": "power",
+      "x": 251.46,
+      "y": 116.84,
+      "rotation": 90,
+      "pcb_x": 120.2,
+      "pcb_y": 126.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R5",
+      "lib_id": "Device:R",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "DW_CS",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 284.48,
+      "y": 116.84,
+      "rotation": 90,
+      "pcb_x": 123.4,
+      "pcb_y": 126.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C5",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "DW_VCC",
+        "2": "B_MINUS"
+      },
+      "sheet": "power",
+      "x": 317.5,
+      "y": 116.84,
+      "rotation": 0,
+      "pcb_x": 121.9,
+      "pcb_y": 126.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "D2",
+      "lib_id": "Diode:SS14",
+      "value": "SS14 SMA",
+      "footprint": "Diode_SMD:D_SMA",
+      "pins": {
+        "1": "SYS_IN",
+        "2": "VBUS"
+      },
+      "sheet": "power",
+      "x": 43.18,
+      "y": 149.86,
+      "rotation": 90,
+      "pcb_x": 104.0,
+      "pcb_y": 118.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "Q1",
+      "lib_id": "Transistor_FET:AO3401A",
+      "value": "AO3401A",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "VBUS",
+        "2": "SYS_IN",
+        "3": "B_PLUS"
+      },
+      "sheet": "power",
+      "x": 83.82,
+      "y": 152.4,
+      "rotation": 0,
+      "pcb_x": 109.0,
+      "pcb_y": 118.4,
+      "pcb_rotation": 0,
+      "description": "Reverse-oriented PMOS prevents USB from driving cell through body diode"
+    },
+    {
+      "ref": "R6",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "VBUS",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 114.3,
+      "y": 149.86,
+      "rotation": 0,
+      "pcb_x": 109.0,
+      "pcb_y": 116.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "SW1",
+      "lib_id": "RAMS_JLC:MSK12C02",
+      "value": "MSK12C02",
+      "footprint": "Button_Switch_SMD:SW_SPDT_Shouhan_MSK12C02",
+      "pins": {
+        "1": "LED_GATE",
+        "2": "GND",
+        "3": "SYS_EN",
+        "SH": "GND"
+      },
+      "sheet": "power",
+      "x": 40.64,
+      "y": 200.66,
+      "rotation": 0,
+      "pcb_x": 101.6,
+      "pcb_y": 111.5,
+      "pcb_rotation": 90,
+      "description": "ON grounds LED gate; OFF grounds LDO enable; control current only"
+    },
+    {
+      "ref": "R7",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "SYS_IN",
+        "2": "SYS_EN"
+      },
+      "sheet": "power",
+      "x": 83.82,
+      "y": 200.66,
+      "rotation": 0,
+      "pcb_x": 105.2,
+      "pcb_y": 112.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "U5",
+      "lib_id": "Regulator_Linear:AP2112K-3.3",
+      "value": "AP2112K-3.3TRG1",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "pins": {
+        "1": "SYS_IN",
+        "2": "GND",
+        "3": "SYS_EN",
+        "4": null,
+        "5": "+3V3"
+      },
+      "sheet": "power",
+      "x": 160.02,
+      "y": 193.04,
+      "rotation": 0,
+      "pcb_x": 124.0,
+      "pcb_y": 121.7,
+      "pcb_rotation": 0,
+      "description": "Owned 600mA LDO; qualify USB heat and battery dropout"
+    },
+    {
+      "ref": "C7",
+      "lib_id": "Device:C",
+      "value": "10uF 16V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "SYS_IN",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 121.92,
+      "y": 238.76,
+      "rotation": 0,
+      "pcb_x": 121.4,
+      "pcb_y": 121.7,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C10",
+      "lib_id": "Device:C",
+      "value": "10uF 16V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 190.5,
+      "y": 238.76,
+      "rotation": 0,
+      "pcb_x": 126.6,
+      "pcb_y": 119.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "Q4",
+      "lib_id": "Transistor_FET:Q_NMOS_GSD",
+      "value": "DMN2056U-7",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "+3V3",
+        "2": "VBAT_SENSE",
+        "3": "VBAT_DIV"
+      },
+      "sheet": "power",
+      "x": 322.58,
+      "y": 180.34,
+      "rotation": 0,
+      "pcb_x": 123.8,
+      "pcb_y": 116.3,
+      "pcb_rotation": 0,
+      "description": "Gate at 3V3; body diode blocks battery-to-ADC when off; Rds specified at1.5V"
+    },
+    {
+      "ref": "R15",
+      "lib_id": "Device:R",
+      "value": "30k 1%",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "B_PLUS",
+        "2": "VBAT_DIV"
+      },
+      "sheet": "power",
+      "x": 302.26,
+      "y": 226.06,
+      "rotation": 0,
+      "pcb_x": 123.0,
+      "pcb_y": 113.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R16",
+      "lib_id": "Device:R",
+      "value": "10k 1%",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "VBAT_SENSE",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 330.2,
+      "y": 226.06,
+      "rotation": 0,
+      "pcb_x": 125.5,
+      "pcb_y": 115.1,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C29",
+      "lib_id": "Device:C",
+      "value": "1nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VBAT_SENSE",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "x": 358.14,
+      "y": 226.06,
+      "rotation": 0,
+      "pcb_x": 125.5,
+      "pcb_y": 117.0,
+      "pcb_rotation": 90,
+      "description": "Small ADC filter,10us off discharge via10k; verify on/off transients; do not increase to100nF"
+    },
+    {
+      "ref": "U1",
+      "lib_id": "RAMS_JLC:ESP32-S3FH4R2",
+      "value": "ESP32-S3FH4R2",
+      "footprint": "RAMS_JLC:ESP32-S3FH4R2_QFN56_EP5p7",
+      "pins": {
+        "1": "RF_LNA",
+        "2": "VDD_RF",
+        "3": "VDD_RF",
+        "4": "MCU_EN",
+        "5": "BOOT_BTN",
+        "6": "BUZZER_CTRL",
+        "7": "VBAT_SENSE",
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": "LORA_DIO0",
+        "14": "LORA_RST",
+        "15": "LORA_NSS",
+        "16": "LORA_MOSI",
+        "17": "LORA_SCK",
+        "18": "LORA_MISO",
+        "19": null,
+        "20": "+3V3",
+        "21": null,
+        "22": null,
+        "23": null,
+        "24": null,
+        "25": "USB_DN",
+        "26": "USB_DP",
+        "27": null,
+        "28": null,
+        "29": "VDD_SPI",
+        "30": null,
+        "31": null,
+        "32": null,
+        "33": null,
+        "34": null,
+        "35": null,
+        "36": "NEO_DATA",
+        "37": null,
+        "38": null,
+        "39": null,
+        "40": null,
+        "41": null,
+        "42": null,
+        "43": null,
+        "44": null,
+        "45": null,
+        "46": "+3V3",
+        "47": null,
+        "48": null,
+        "49": "UART_TX",
+        "50": "UART_RX",
+        "51": "STRAP45",
+        "52": "STRAP46",
+        "53": "XTAL_N",
+        "54": "XTAL_P_DRV",
+        "55": "+3V3",
+        "56": "+3V3",
+        "57": "GND"
+      },
+      "sheet": "mcu",
+      "x": 83.82,
+      "y": 139.7,
+      "rotation": 0,
+      "pcb_x": 115.0,
+      "pcb_y": 112.0,
+      "pcb_rotation": 0,
+      "description": "4MB embedded flash / 2MB embedded quad PSRAM"
+    },
+    {
+      "ref": "L1",
+      "lib_id": "Device:L",
+      "value": "2.0nH >=500mA",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "VDD_RF"
+      },
+      "sheet": "mcu",
+      "x": 167.64,
+      "y": 43.18,
+      "rotation": 90,
+      "pcb_x": 108.0,
+      "pcb_y": 111.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C11",
+      "lib_id": "Device:C",
+      "value": "10uF 10V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "VDD_RF",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 195.58,
+      "y": 43.18,
+      "rotation": 0,
+      "pcb_x": 109.2,
+      "pcb_y": 113.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C12",
+      "lib_id": "Device:C",
+      "value": "1uF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VDD_RF",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 218.44,
+      "y": 43.18,
+      "rotation": 0,
+      "pcb_x": 110.4,
+      "pcb_y": 111.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C13",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VDD_RF",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 241.3,
+      "y": 43.18,
+      "rotation": 0,
+      "pcb_x": 110.4,
+      "pcb_y": 112.1,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C14",
+      "lib_id": "Device:C",
+      "value": "10uF 10V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 266.7,
+      "y": 43.18,
+      "rotation": 0,
+      "pcb_x": 111.8,
+      "pcb_y": 107.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C15",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 172.72,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 117.0,
+      "pcb_y": 107.2,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C16",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 195.58,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 114.4,
+      "pcb_y": 117.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C17",
+      "lib_id": "Device:C",
+      "value": "1uF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VDD_SPI",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 218.44,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 119.7,
+      "pcb_y": 114.5,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C20",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "VDD_SPI",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 241.3,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 121.1,
+      "pcb_y": 114.5,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C21",
+      "lib_id": "Device:C",
+      "value": "10nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 266.7,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 112.0,
+      "pcb_y": 107.7,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C22",
+      "lib_id": "Device:C",
+      "value": "1uF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 289.56,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 110.5,
+      "pcb_y": 107.7,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R8",
+      "lib_id": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "MCU_EN"
+      },
+      "sheet": "mcu",
+      "x": 167.64,
+      "y": 114.3,
+      "rotation": 0,
+      "pcb_x": 107.5,
+      "pcb_y": 113.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R34",
+      "lib_id": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "BOOT_BTN"
+      },
+      "sheet": "mcu",
+      "x": 218.44,
+      "y": 114.3,
+      "rotation": 0,
+      "pcb_x": 111.0,
+      "pcb_y": 115.5,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R35",
+      "lib_id": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "STRAP45",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 243.84,
+      "y": 114.3,
+      "rotation": 0,
+      "pcb_x": 118.0,
+      "pcb_y": 106.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R36",
+      "lib_id": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "STRAP46",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 269.24,
+      "y": 114.3,
+      "rotation": 0,
+      "pcb_x": 116.5,
+      "pcb_y": 106.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R9",
+      "lib_id": "Device:R",
+      "value": "22R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "XTAL_P_DRV",
+        "2": "XTAL_P"
+      },
+      "sheet": "mcu",
+      "x": 167.64,
+      "y": 154.94,
+      "rotation": 90,
+      "pcb_x": 112.9,
+      "pcb_y": 107.1,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "Y1",
+      "lib_id": "Device:Crystal_GND24_Small",
+      "value": "ABM8-40.000MHZ-10-1-U-T",
+      "footprint": "RAMS_JLC:Crystal_Abracon_ABM8_3225",
+      "pins": {
+        "1": "XTAL_P",
+        "2": "GND",
+        "3": "XTAL_N",
+        "4": "GND"
+      },
+      "sheet": "mcu",
+      "x": 208.28,
+      "y": 154.94,
+      "rotation": 0,
+      "pcb_x": 112.8,
+      "pcb_y": 103.9,
+      "pcb_rotation": 0,
+      "description": "CL10pF; 12pF starting loads assume about4pF stray; validate startup/frequency"
+    },
+    {
+      "ref": "C24",
+      "lib_id": "Device:C",
+      "value": "12pF C0G",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "XTAL_P",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 187.96,
+      "y": 187.96,
+      "rotation": 0,
+      "pcb_x": 110.8,
+      "pcb_y": 104.2,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C25",
+      "lib_id": "Device:C",
+      "value": "12pF C0G",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "XTAL_N",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 228.6,
+      "y": 187.96,
+      "rotation": 0,
+      "pcb_x": 114.9,
+      "pcb_y": 103.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C18",
+      "lib_id": "Device:C",
+      "value": "1.5pF C0G RF",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "RF_LNA",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 167.64,
+      "y": 231.14,
+      "rotation": 0,
+      "pcb_x": 110.4,
+      "pcb_y": 109.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "L2",
+      "lib_id": "Device:L",
+      "value": "2.4nH RF",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "pins": {
+        "1": "RF_LNA",
+        "2": "RF_MATCH"
+      },
+      "sheet": "mcu",
+      "x": 195.58,
+      "y": 231.14,
+      "rotation": 90,
+      "pcb_x": 109.1,
+      "pcb_y": 108.9,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C19",
+      "lib_id": "Device:C",
+      "value": "1.5pF C0G RF",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "RF_MATCH",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 223.52,
+      "y": 231.14,
+      "rotation": 0,
+      "pcb_x": 107.8,
+      "pcb_y": 109.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C32",
+      "lib_id": "Device:C",
+      "value": "1.2pF C0G RF",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "RF_MATCH",
+        "2": "ANT_TUNE"
+      },
+      "sheet": "mcu",
+      "x": 254,
+      "y": 231.14,
+      "rotation": 90,
+      "pcb_x": 107.0,
+      "pcb_y": 107.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "L4",
+      "lib_id": "Device:L",
+      "value": "2.7nH RF",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "pins": {
+        "1": "ANT_TUNE",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 281.94,
+      "y": 231.14,
+      "rotation": 0,
+      "pcb_x": 108.2,
+      "pcb_y": 106.5,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "L5",
+      "lib_id": "Device:L",
+      "value": "3.3nH RF",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "pins": {
+        "1": "ANT_TUNE",
+        "2": "ANT_FEED"
+      },
+      "sheet": "mcu",
+      "x": 309.88,
+      "y": 231.14,
+      "rotation": 90,
+      "pcb_x": 105.7,
+      "pcb_y": 105.6,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "ANT1",
+      "lib_id": "Device:Antenna_Chip",
+      "value": "2450AT18B100E",
+      "footprint": "RAMS_JLC:Johanson_B100_3216",
+      "pins": {
+        "1": "ANT_FEED",
+        "2": null
+      },
+      "sheet": "mcu",
+      "x": 350.52,
+      "y": 231.14,
+      "rotation": 0,
+      "pcb_x": 102.6,
+      "pcb_y": 103.2,
+      "pcb_rotation": 180,
+      "description": "Pin2 NC; all-layer6.5mmcornerno-metalregion"
+    },
+    {
+      "ref": "C33",
+      "lib_id": "Device:C",
+      "value": "1uF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "MCU_EN",
+        "2": "GND"
+      },
+      "sheet": "mcu",
+      "x": 322.58,
+      "y": 116.84,
+      "rotation": 0,
+      "pcb_x": 106.0,
+      "pcb_y": 114.8,
+      "pcb_rotation": 0,
+      "description": "Standard ESP32 enable RC with R8=10k; reset button discharges this node"
+    },
+    {
+      "ref": "U2",
+      "lib_id": "RF_Module:Ai-Thinker-Ra-02",
+      "value": "Ai-Thinker-Ra-02",
+      "footprint": "RF_Module:Ai-Thinker-Ra-01-LoRa",
+      "pins": {
+        "1": "GND",
+        "2": "GND",
+        "3": "LORA_VDD",
+        "4": "LORA_RST",
+        "5": "LORA_DIO0",
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": "GND",
+        "10": null,
+        "11": null,
+        "12": "LORA_SCK_DEV",
+        "13": "LORA_MISO",
+        "14": "LORA_MOSI",
+        "15": "LORA_NSS",
+        "16": "GND"
+      },
+      "sheet": "io",
+      "x": 73.66,
+      "y": 83.82,
+      "rotation": 0,
+      "pcb_x": 129.5,
+      "pcb_y": 111.4,
+      "pcb_rotation": 0,
+      "description": "Bottom hand solder; separate433MHzU.FLantenna",
+      "side": "B"
+    },
+    {
+      "ref": "FB1",
+      "lib_id": "Device:FerriteBead",
+      "value": "MGGB1005M800HT-LF",
+      "footprint": "Inductor_SMD:L_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "LORA_VDD"
+      },
+      "sheet": "io",
+      "x": 43.18,
+      "y": 33.02,
+      "rotation": 90,
+      "pcb_x": 126.0,
+      "pcb_y": 107.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C26",
+      "lib_id": "Device:C",
+      "value": "10uF 10V X5R",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "LORA_VDD",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 73.66,
+      "y": 33.02,
+      "rotation": 0,
+      "pcb_x": 127.7,
+      "pcb_y": 107.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "C27",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "LORA_VDD",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 101.6,
+      "y": 33.02,
+      "rotation": 0,
+      "pcb_x": 129.2,
+      "pcb_y": 107.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R11",
+      "lib_id": "Device:R",
+      "value": "33R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "LORA_SCK",
+        "2": "LORA_SCK_DEV"
+      },
+      "sheet": "io",
+      "x": 127,
+      "y": 73.66,
+      "rotation": 90,
+      "pcb_x": 116.0,
+      "pcb_y": 117.3,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R37",
+      "lib_id": "Device:R",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "LORA_NSS"
+      },
+      "sheet": "io",
+      "x": 127,
+      "y": 111.76,
+      "rotation": 0,
+      "pcb_x": 117.5,
+      "pcb_y": 117.3,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "LED1",
+      "lib_id": "LED:WS2812B-2020",
+      "value": "WS2812B-2020 STOCK VERIFY",
+      "footprint": "LED_SMD:LED_WS2812B-2020_PLCC4_2.0x2.0mm",
+      "pins": {
+        "1": null,
+        "2": "GND",
+        "3": "NEO_DIN",
+        "4": "LED_PWR"
+      },
+      "sheet": "io",
+      "x": 203.2,
+      "y": 66.04,
+      "rotation": 0,
+      "pcb_x": 136.5,
+      "pcb_y": 104.0,
+      "pcb_rotation": 0,
+      "description": "Ordered2020 genericDC5V; raw battery/USB switched supply; DNP for first bringup pending stock voltage/current qualification",
+      "dnp": true
+    },
+    {
+      "ref": "R13",
+      "lib_id": "Device:R",
+      "value": "33R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "NEO_SHIFT",
+        "2": "NEO_DIN"
+      },
+      "sheet": "io",
+      "x": 167.64,
+      "y": 38.1,
+      "rotation": 90,
+      "pcb_x": 134.8,
+      "pcb_y": 106.5,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "C28",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "LED_PWR",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 238.76,
+      "y": 38.1,
+      "rotation": 0,
+      "pcb_x": 134.0,
+      "pcb_y": 103.8,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "Q5",
+      "lib_id": "Transistor_FET:AO3401A",
+      "value": "AO3401A",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "LED_GATE",
+        "2": "SYS_IN",
+        "3": "LED_PWR"
+      },
+      "sheet": "io",
+      "x": 170.18,
+      "y": 111.76,
+      "rotation": 0,
+      "pcb_x": 131.3,
+      "pcb_y": 106.4,
+      "pcb_rotation": 0,
+      "description": "Owned PMOS switches LED raw supply without putting load through50mA slider"
+    },
+    {
+      "ref": "R41",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "SYS_IN",
+        "2": "LED_GATE"
+      },
+      "sheet": "io",
+      "x": 208.28,
+      "y": 111.76,
+      "rotation": 0,
+      "pcb_x": 129,
+      "pcb_y": 106.4,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "U6",
+      "lib_id": "Logic_LevelTranslator:SN74LVC1T45DBV",
+      "value": "SN74LVC1T45DBVR",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND",
+        "3": "NEO_DATA",
+        "4": "NEO_SHIFT",
+        "5": "+3V3",
+        "6": "LED_PWR"
+      },
+      "sheet": "io",
+      "x": 205.74,
+      "y": 76.2,
+      "rotation": 0,
+      "pcb_x": 131.3,
+      "pcb_y": 103.3,
+      "pcb_rotation": 0,
+      "description": "A-to-B translator; Ioff prevents back-power with either supply off; NOT a voltage converter"
+    },
+    {
+      "ref": "C34",
+      "lib_id": "Device:C",
+      "value": "100nF X7R",
+      "footprint": "Capacitor_SMD:C_0402_1005Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 243.84,
+      "y": 111.76,
+      "rotation": 0,
+      "pcb_x": 129,
+      "pcb_y": 103.2,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R42",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "NEO_DATA",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 167.64,
+      "y": 76.2,
+      "rotation": 0,
+      "pcb_x": 129.3,
+      "pcb_y": 109,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R43",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "NEO_DIN",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 269.24,
+      "y": 76.2,
+      "rotation": 0,
+      "pcb_x": 138.7,
+      "pcb_y": 106,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "BZ1",
+      "lib_id": "Device:Buzzer",
+      "value": "9650 Active 3V STOCK",
+      "footprint": "RAMS_JLC:Buzzer_9650_SMD_Stock_HandSolder",
+      "pins": {
+        "1": "+3V3",
+        "2": "BUZZER_NEG"
+      },
+      "sheet": "io",
+      "x": 327.66,
+      "y": 55.88,
+      "rotation": 0,
+      "pcb_x": 135.3,
+      "pcb_y": 125.0,
+      "pcb_rotation": 0,
+      "description": "Owned active DC-tone buzzer; two published contact envelopes accommodated; dry-fit polarity and hand-solder after reflow"
+    },
+    {
+      "ref": "Q2",
+      "lib_id": "Transistor_BJT:BC817",
+      "value": "BC817-25",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "BUZZER_BASE",
+        "2": "GND",
+        "3": "BUZZER_NEG"
+      },
+      "sheet": "io",
+      "x": 325.12,
+      "y": 104.14,
+      "rotation": 0,
+      "pcb_x": 135.0,
+      "pcb_y": 117.2,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R12",
+      "lib_id": "Device:R",
+      "value": "330R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "BUZZER_CTRL",
+        "2": "BUZZER_BASE"
+      },
+      "sheet": "io",
+      "x": 284.48,
+      "y": 96.52,
+      "rotation": 90,
+      "pcb_x": 131.7,
+      "pcb_y": 115.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R14",
+      "lib_id": "Device:R",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "BUZZER_BASE",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 287.02,
+      "y": 129.54,
+      "rotation": 0,
+      "pcb_x": 131.7,
+      "pcb_y": 116.5,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "D3",
+      "lib_id": "Diode:1N4148W",
+      "value": "1N4148W",
+      "footprint": "Diode_SMD:D_SOD-123",
+      "pins": {
+        "1": "+3V3",
+        "2": "BUZZER_NEG"
+      },
+      "sheet": "io",
+      "x": 365.76,
+      "y": 78.74,
+      "rotation": 0,
+      "pcb_x": 138.8,
+      "pcb_y": 117.0,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "SW2",
+      "lib_id": "Switch:SW_Push",
+      "value": "3x4mm RESET",
+      "footprint": "Button_Switch_SMD:SW_SPST_TS-1088-xR020",
+      "pins": {
+        "1": "MCU_EN",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 53.34,
+      "y": 167.64,
+      "rotation": 0,
+      "pcb_x": 119.5,
+      "pcb_y": 102.5,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "SW3",
+      "lib_id": "Switch:SW_Push",
+      "value": "3x4mm BOOT/CANCEL",
+      "footprint": "Button_Switch_SMD:SW_SPST_TS-1088-xR020",
+      "pins": {
+        "1": "BOOT_BTN",
+        "2": "GND"
+      },
+      "sheet": "io",
+      "x": 116.84,
+      "y": 167.64,
+      "rotation": 0,
+      "pcb_x": 125.0,
+      "pcb_y": 102.5,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "R38",
+      "lib_id": "Device:R",
+      "value": "22R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "USB_DP_ESD",
+        "2": "USB_DP"
+      },
+      "sheet": "io",
+      "x": 190.5,
+      "y": 167.64,
+      "rotation": 90,
+      "pcb_x": 112.5,
+      "pcb_y": 119.1,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "R39",
+      "lib_id": "Device:R",
+      "value": "22R",
+      "footprint": "Resistor_SMD:R_0402_1005Metric",
+      "pins": {
+        "1": "USB_DN_ESD",
+        "2": "USB_DN"
+      },
+      "sheet": "io",
+      "x": 243.84,
+      "y": 167.64,
+      "rotation": 90,
+      "pcb_x": 114.0,
+      "pcb_y": 119.1,
+      "pcb_rotation": 90,
+      "description": ""
+    },
+    {
+      "ref": "TP1",
+      "lib_id": "Connector:TestPoint",
+      "value": "GND",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "GND"
+      },
+      "sheet": "io",
+      "x": 45.72,
+      "y": 218.44,
+      "rotation": 0,
+      "pcb_x": 139.8,
+      "pcb_y": 109.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP2",
+      "lib_id": "Connector:TestPoint",
+      "value": "+3V3",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "+3V3"
+      },
+      "sheet": "io",
+      "x": 127.0,
+      "y": 218.44,
+      "rotation": 0,
+      "pcb_x": 139.8,
+      "pcb_y": 111.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP3",
+      "lib_id": "Connector:TestPoint",
+      "value": "B_PLUS",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "B_PLUS"
+      },
+      "sheet": "io",
+      "x": 208.28,
+      "y": 218.44,
+      "rotation": 0,
+      "pcb_x": 139.8,
+      "pcb_y": 113.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP4",
+      "lib_id": "Connector:TestPoint",
+      "value": "UART_TX",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "UART_TX"
+      },
+      "sheet": "io",
+      "x": 289.56,
+      "y": 218.44,
+      "rotation": 0,
+      "pcb_x": 121.4,
+      "pcb_y": 109.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP5",
+      "lib_id": "Connector:TestPoint",
+      "value": "UART_RX",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "UART_RX"
+      },
+      "sheet": "io",
+      "x": 45.72,
+      "y": 243.84,
+      "rotation": 0,
+      "pcb_x": 122.9,
+      "pcb_y": 109.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP6",
+      "lib_id": "Connector:TestPoint",
+      "value": "MCU_EN",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "MCU_EN"
+      },
+      "sheet": "io",
+      "x": 127.0,
+      "y": 243.84,
+      "rotation": 0,
+      "pcb_x": 124.4,
+      "pcb_y": 109.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP7",
+      "lib_id": "Connector:TestPoint",
+      "value": "BOOT_BTN",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "BOOT_BTN"
+      },
+      "sheet": "io",
+      "x": 208.28,
+      "y": 243.84,
+      "rotation": 0,
+      "pcb_x": 125.9,
+      "pcb_y": 109.0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "TP8",
+      "lib_id": "Connector:TestPoint",
+      "value": "SYS_IN",
+      "footprint": "TestPoint:TestPoint_Pad_D1.0mm",
+      "pins": {
+        "1": "SYS_IN"
+      },
+      "sheet": "io",
+      "x": 289.56,
+      "y": 243.84,
+      "rotation": 0,
+      "pcb_x": 129.0,
+      "pcb_y": 129.7,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG001",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "GND"
+      },
+      "sheet": "io",
+      "x": 53.34,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG002",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "B_MINUS"
+      },
+      "sheet": "io",
+      "x": 86.36000000000001,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG003",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "VBUS"
+      },
+      "sheet": "io",
+      "x": 119.38,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG004",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "CHG_IN"
+      },
+      "sheet": "io",
+      "x": 152.4,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG005",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "SYS_IN"
+      },
+      "sheet": "io",
+      "x": 185.42000000000002,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG006",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "VDD_RF"
+      },
+      "sheet": "io",
+      "x": 218.44,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG007",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "LORA_VDD"
+      },
+      "sheet": "io",
+      "x": 251.46,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG008",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "DW_VCC"
+      },
+      "sheet": "io",
+      "x": 284.48,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    },
+    {
+      "ref": "#FLG009",
+      "lib_id": "power:PWR_FLAG",
+      "value": "PWR_FLAG",
+      "footprint": "",
+      "pins": {
+        "1": "LED_PWR"
+      },
+      "sheet": "io",
+      "x": 317.5,
+      "y": 269.24,
+      "rotation": 0,
+      "pcb_x": 0,
+      "pcb_y": 0,
+      "pcb_rotation": 0,
+      "description": ""
+    }
+  ]
+}

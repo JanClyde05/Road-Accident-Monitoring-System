@@ -1,0 +1,562 @@
+{
+  "navigation": [
+    [
+      "Choose Full exhibit or Finals talk before starting.",
+      "We will follow the report from the road to the operator. The full exhibit gives us time to inspect the evidence at each step."
+    ],
+    [
+      "Press F or use Enter fullscreen. Press F again to leave.",
+      "Let me give the road the full screen so everyone can follow the route."
+    ],
+    [
+      "Use Next chapter, the right arrow or a clicker. Use the left arrow to return.",
+      "Let’s follow what happens next. If we move back one step, we can see where that information came from."
+    ],
+    [
+      "Open Chapter index with I. Choose a chapter, or click a section along the bottom.",
+      "We can go straight to the part you asked about. Each section follows one presenter’s part of the same report."
+    ],
+    [
+      "Open Field notes with N. Expand Inspect source records. Close with Esc.",
+      "Here is the source for this step. The notes identify the project file or published record behind the claim."
+    ],
+    [
+      "Open Presenter script inside Field notes, or use the PDF on another screen.",
+      "These cues follow the controls in the order we are demonstrating them. Let’s return to the exhibit."
+    ],
+    [
+      "If WebGL is unavailable, point to the local stills or use the film controls.",
+      "The same equipment and incident stages are visible here. I’ll use the pictures to show the component or phase we are discussing."
+    ]
+  ],
+  "chapters": {
+    "overview": {
+      "full": [
+        [
+          "Face the audience. Leave the road moving.",
+          "Two riders reach this bend. One hits a pothole and rides on. The other falls and cannot reach the phone. Both phones feel a jolt. Which one should raise an alarm?"
+        ],
+        [
+          "Drag slowly along the corridor. Click Sweep terrain.",
+          "Follow the amber road. If nobody sees the fall, how does the report leave this bend?"
+        ],
+        [
+          "Click Begin presentation.",
+          "That is the question behind our Road Accident Monitoring System."
+        ]
+      ],
+      "finals": [
+        [
+          "Hold the opening view. Click Begin presentation.",
+          "A pothole and a fall can both jolt a phone. Which one needs a report, and how does it reach a station? That is the question behind RAMS."
+        ]
+      ],
+      "more": [
+        [
+          "Click Lens rain, then click again to clear it.",
+          "Look at how little of the bend you can see through a wet lens. A witness is one way an incident gets reported. On a quiet road there may be none."
+        ],
+        [
+          "Pause scene motion, then resume.",
+          "Hold the view here. The amber line is the route we will follow from rider to receiving station."
+        ]
+      ]
+    },
+    "team": {
+      "full": [
+        [
+          "Point to each name in order.",
+          "I’m Ernest John Galace. With me are Precious Nina Garcia, April Ann Palattao, Stephanie Ranjo and Jan Clyde Talosig. We are Electronics Engineering researchers from Cagayan State University, Carig Campus."
+        ],
+        [
+          "Indicate the five speaking parts. Click Next chapter.",
+          "Precious will take us onto the road. April will show us what the phone measures. Stephanie will open the wearable and follow the radio signal. Jan will meet it at the desk. First, why does that handoff matter?"
+        ]
+      ],
+      "finals": [
+        [
+          "Indicate the names. Advance.",
+          "I’m Ernest John Galace. With Precious Nina Garcia, April Ann Palattao, Stephanie Ranjo and Jan Clyde Talosig, we built this project at Cagayan State University, Carig Campus."
+        ]
+      ],
+      "more": []
+    },
+    "problem": {
+      "full": [
+        [
+          "Indicate 2011, then 2021.",
+          "The Philippine Statistics Authority recorded 7,938 road traffic deaths in 2011 and 11,096 in 2021. WHO Philippines and the Department of Transportation reported those figures. Each number is a national total across road users."
+        ],
+        [
+          "Hold on the coastline.",
+          "Those totals cannot tell us how long any one person waited for help. Our question is narrower. If an injured person cannot call or give directions, what useful information could reach an operator?"
+        ],
+        [
+          "Advance and hand over to Precious.",
+          "Precious, take us to the rider before the trip. What has to be working before an alert can leave the road?"
+        ]
+      ],
+      "finals": [
+        [
+          "Compare the two years. Advance to Road incidents.",
+          "The Philippines recorded 11,096 road traffic deaths in 2021. That count gives the scale of the problem. Our project addresses one part of it. Someone who falls may be unable to call or give a location. Precious will show what the phone can observe in that moment."
+        ]
+      ],
+      "more": [
+        [
+          "Open Source during questions. Return to the exhibit tab.",
+          "This is the dated WHO and Department of Transportation release citing the Philippine Statistics Authority. It supplies the national context for our question."
+        ]
+      ]
+    },
+    "pairing": {
+      "full": [
+        [
+          "Let Prepare play. Point to the phone.",
+          "Before I set out, I have two things with me. The phone carries the motion sensors and supplies my location when it has a fix."
+        ],
+        [
+          "Pause when the Bluetooth link appears.",
+          "This short connection is Bluetooth Low Energy. It joins the phone to the wearable I’m carrying. The wearable contains the radio that can reach a receiver farther away."
+        ],
+        [
+          "Resume to Monitor. Advance.",
+          "With those two devices paired, follow what happens when ordinary travel is interrupted."
+        ]
+      ],
+      "finals": [],
+      "more": [
+        [
+          "Drag the timeline back to Prepare. Click Replay scenario.",
+          "Watch the order once more. The phone and wearable first establish a local connection. A station enters the picture later."
+        ]
+      ]
+    },
+    "scenarios": {
+      "full": [
+        [
+          "Let Motorcycle play into the slide; pause it.",
+          "Look at the rider as the bike leans over. The initial jolt is brief, but the rider’s orientation can stay changed after the slide. A phone carried on the body can register part of that sequence."
+        ],
+        [
+          "Click Car. Watch the junction contact; scrub just past it.",
+          "Now watch the two vehicles meet. The bodywork deforms and the vehicles lose speed. The phone measures its own motion. It cannot tell us how much damage either vehicle sustained."
+        ],
+        [
+          "Click Pedestrian. Pause at the crossing.",
+          "Here the person carrying the phone is on foot. Watch the motion before contact and then the change as the person loses balance. We have changed who carries the sensor."
+        ],
+        [
+          "Click Fall. Play from Walking to Loss of footing, then through Ground contact.",
+          "This person falls without a vehicle striking them. Their phone moves with them. If only the phone fell, the person might still be standing. Those two events deserve different interpretations."
+        ],
+        [
+          "Click Next chapter.",
+          "These are illustrated incidents. Let’s see what the actual phone app makes available to its rider."
+        ]
+      ],
+      "finals": [
+        [
+          "Click Fall. Play through ground contact, then advance.",
+          "Watch the person lose their footing. No vehicle hits them. A phone carried in a pocket can register rotation and impact. A dropped phone can also hit the ground. That is why our classifier considers orientation and speed alongside the peak. April will show the difference."
+        ]
+      ],
+      "more": [
+        [
+          "Select any scenario and click Replay scenario.",
+          "Watch the seconds before contact this time. Ordinary motion gives us the context that a single peak cannot."
+        ],
+        [
+          "Drag the timeline backwards. Then press the right arrow while the slider has focus.",
+          "We can inspect the same instant again. These are staged motions for explanation. Their timing does not measure performance on real people."
+        ]
+      ]
+    },
+    "mobile": {
+      "full": [
+        [
+          "Select Wearable and Enlarge capture. Close it.",
+          "This is the Android Wearable screen in a disconnected session. The rider can scan, choose a wearable and check the link state here. A disconnected screen is useful because it makes a missing link visible before travel."
+        ],
+        [
+          "Select Telemetry. Enlarge it, point to the axes and close it.",
+          "The phone shows acceleration and rotation. This capture has an empty sensor history. On a trip, readings come from the phone’s sensors."
+        ],
+        [
+          "Select Voice. Advance to Detection and hand over to April.",
+          "This earlier handset capture shows the voice overlay. A rider can issue a supported command without navigating the screen. April, which readings help distinguish a fall from an ordinary jolt?"
+        ]
+      ],
+      "finals": [],
+      "more": []
+    },
+    "detection": {
+      "full": [
+        [
+          "Start on Pothole. Click Play trace.",
+          "This pothole reaches 4.18 g. Watch the cursor pass the peak. The plot covers just under one second, and playback is slowed so we can follow it."
+        ],
+        [
+          "Click Pause trace or drag the sample slider.",
+          "Each point is one sample. The readout tells us the time and acceleration at that instant. The phone ends almost level in this fixture."
+        ],
+        [
+          "Select Walking, then Phone drop.",
+          "Walking gives a repeating pattern. A loose phone can produce a sharp shock all by itself. A high reading needs context."
+        ],
+        [
+          "Select Fall, then Impact. Advance.",
+          "In the fall, the sensor finishes at a very different angle. In the impact fixture, the peak is 8.50 g and the combined tilt change is 154.5 degrees. These traces were generated. Now let’s look at where they came from."
+        ]
+      ],
+      "finals": [],
+      "more": []
+    },
+    "datasets": {
+      "full": [
+        [
+          "Start on Packaged traces. Select Fall, then Pothole.",
+          "The small charts share a scale. Select a family and you can read its base peak, change in tilt and file count. There are eleven files per family. The public research catalog and these generated files have different origins."
+        ],
+        [
+          "Click Source catalog.",
+          "SisFall and MobiFall are among the research datasets our project names. They document falls and ordinary activities. We can trace the 121 files shipped in our app to our local generator and its variations."
+        ],
+        [
+          "Click Field collection. Return to Packaged traces and advance.",
+          "For measured evidence, IMU Studio can record a labeled phone session and export readings and features. We would keep entire sessions aside for evaluation so the same trip does not appear on both sides of the test."
+        ]
+      ],
+      "finals": [],
+      "more": [
+        [
+          "Select Fall.",
+          "This generated fall ends with a large change of orientation."
+        ],
+        [
+          "Select Impact.",
+          "Here the short shock reaches 8.50 g. Read the peak beside the tilt."
+        ],
+        [
+          "Select Skid.",
+          "A skid can have a smaller peak and still finish at a different angle."
+        ],
+        [
+          "Select Normal ride.",
+          "This is the baseline of a moving vehicle in the generator."
+        ],
+        [
+          "Select Phone drop.",
+          "The handset can hit the ground while its owner stays upright."
+        ],
+        [
+          "Select Phone shake.",
+          "Repetitive shaking gives the classifier another ordinary disturbance to recognize."
+        ],
+        [
+          "Select Pothole.",
+          "A pothole can produce a strong shock while the phone finishes almost level."
+        ],
+        [
+          "Select Running.",
+          "The repeating peaks come from the modeled running cadence."
+        ],
+        [
+          "Select Speed bump.",
+          "Here the motion is spread across a rise and fall as the vehicle passes a bump."
+        ],
+        [
+          "Select Walking.",
+          "A regular walking rhythm gives us another comparison with a sudden fall."
+        ],
+        [
+          "Select Wind flutter.",
+          "Small rapid oscillations represent the disturbance of riding in the wind."
+        ],
+        [
+          "Open a linked dataset title. Return to the exhibit.",
+          "This is the publisher’s record for the selected collection. The traces we plotted come from the packaged Android fixtures."
+        ]
+      ]
+    },
+    "calibration": {
+      "full": [
+        [
+          "Start on Dataset, then select Threshold.",
+          "Here are 33 accident-labeled and 88 benign fixtures. To see what calibration does, take the default pothole and impact sessions. Their peaks leave a gap. The CSV import rule places the example threshold halfway between them."
+        ],
+        [
+          "Set Benign session to Dropped phone.",
+          "Dropping the phone changes the benign peak. Watch the threshold move as the example changes."
+        ],
+        [
+          "Set Accident-labeled session to Skid.",
+          "The benign peak now exceeds the skid peak. The import uses the accident peak in this case. A single cutoff cannot separate the two."
+        ],
+        [
+          "Click Rider feedback. Let the room read the three steps.",
+          "If I dismiss a false alarm, the phone stops the alarm, records the dismissal and requests a cancellation through the wearable. That tap does not store a new motion pattern. The classifier has a separate saved-pattern matcher for peaks below six g."
+        ],
+        [
+          "Select Language. Advance and hand over to Stephanie.",
+          "Voice uses a different resource. The app has written name variants, wake prefixes and a generated question-and-answer file. Stephanie will show how a spoken request becomes an app action."
+        ]
+      ],
+      "finals": [
+        [
+          "Select Threshold. Point to the midpoint.",
+          "Our app ships 121 generated motion traces in eleven families. In this two-session example, the pothole and impact peaks leave a gap. Labeled CSV sessions can calibrate a threshold. The phone also checks rotation and speed."
+        ],
+        [
+          "Select Rider feedback. Advance to RAMS AI.",
+          "Dismissing an alarm stops it, records the dismissal and requests a cancellation. A separate matcher handles saved motion profiles below six g. The current cancel action does not save a new profile. Stephanie will take us from that motion logic to the rider’s voice."
+        ]
+      ],
+      "more": [
+        [
+          "Set Normal ride under Benign session.",
+          "A smoother benign example moves the comparison point. We are using that selected session’s peak."
+        ],
+        [
+          "Set Fall under Accident-labeled session.",
+          "A fall gives us another labeled accident to compare with that ordinary ride."
+        ],
+        [
+          "Restore Pothole and Impact.",
+          "Real CSV calibration considers all labeled sessions in the file. These two fixtures let us see the arithmetic."
+        ]
+      ]
+    },
+    "assistant": {
+      "full": [
+        [
+          "Click Wake word. Follow Speech, Pattern, Wake.",
+          "Say “Hey RAMS.” Android transcribes the sound. RAMS compares candidate text with its written wake patterns. That is why a spelling such as “rhams” can still open the command window."
+        ],
+        [
+          "Click App action.",
+          "“Lakad ako” gives the app a walking intent. It can switch the user category to Pedestrian and prepare a spoken confirmation."
+        ],
+        [
+          "Click Personal reply. Select Connected, then Disconnected.",
+          "Ask, “Is my wearable connected?” With a link, the app can use the current state and reported battery. Without it, the useful answer is where to pair. The same question can need two different answers."
+        ],
+        [
+          "Click Gemini cache. Open the packaged Q&A key, then close it. Advance.",
+          "A successful answer to an eligible online query can be cached under a normalized key. The example here comes from the separate bundled collection. “What is sensor fusion?” maps to “fusion sensor.” The app ships 1,655 generated Q&A entries."
+        ]
+      ],
+      "finals": [
+        [
+          "Click App action, then Personal reply. Choose Connected. Advance.",
+          "“Lakad ako” changes the user category to Pedestrian. “Is my wearable connected?” takes a different route. It consults the device state. RAMS also has 1,655 bundled question-and-answer entries and can cache an eligible online answer for later use."
+        ]
+      ],
+      "more": []
+    },
+    "hardware": {
+      "full": [
+        [
+          "Start on Prototype. Drag to orbit, then zoom in.",
+          "This is a reconstruction of our fabricated 50 by 43 millimeter carrier. Look for the SuperMini development module, the separate Ra-02 radio breakout and the buzzer. The board layout and manuscript guided this view."
+        ],
+        [
+          "Click Flip board. Click Reset board view.",
+          "This side shows how the carrier brings the module connections onto one board. Returning to the top gives us the same starting angle for a fair comparison."
+        ],
+        [
+          "Select Custom SMD. Drag to orbit the RAMS Wearable.",
+          "Our four-layer RAMS Wearable is 42 by 32 millimeters. Its ESP32-S3 mounts directly to the board, freeing the space occupied by the plug-in module on the prototype."
+        ],
+        [
+          "Click Flip board; hold on the underside.",
+          "There is the Ra-02 radio on the underside. Putting it here changes how the parts share the board area. This is the CAD assembly. Electrical operation of an assembled first article still needs verification."
+        ],
+        [
+          "Click Reset board view, then Next chapter.",
+          "We have seen where the radio sits. Now follow the actual information it needs to send."
+        ]
+      ],
+      "finals": [
+        [
+          "Select Prototype, then Custom SMD.",
+          "Our fabricated carrier uses an ESP32-S3 SuperMini module and a separate Ra-02 breakout. The custom four-layer RAMS Wearable mounts the processor directly."
+        ],
+        [
+          "Click Flip board. Hold, then advance.",
+          "Turn it over and you can see where the Ra-02 sits on the underside. This is the custom board’s CAD assembly. The physical board we can demonstrate today is the SuperMini carrier."
+        ]
+      ],
+      "more": [
+        [
+          "Scroll or pinch to zoom out. Click Prototype again.",
+          "At this scale the difference is easier to see. Both designs serve the wearable radio role. They package its components differently."
+        ]
+      ]
+    },
+    "relay": {
+      "full": [
+        [
+          "Select Phone. Follow the camera in.",
+          "The handset assesses motion and supplies coordinates when it has a location fix."
+        ],
+        [
+          "Click Follow the signal to Wearable.",
+          "Bluetooth carries the event to the wearable. The wearable prepares the radio packet."
+        ],
+        [
+          "Click Follow the signal to Receiver. Hold through the camera move.",
+          "Watch the camera pull back. The 433 megahertz LoRa hop ends at a receiver in range. Actual range needs field measurements."
+        ],
+        [
+          "Select Header.",
+          "Thirteen bytes identify the message type, device token and sender’s uptime counter."
+        ],
+        [
+          "Select Latitude.",
+          "Four bytes carry the latitude of the available fix."
+        ],
+        [
+          "Select Longitude.",
+          "Four more carry longitude. Together these values locate the report."
+        ],
+        [
+          "Select Event.",
+          "One byte carries the event code."
+        ],
+        [
+          "Select Peak g.",
+          "Four bytes carry peak acceleration. That brings us to 26. The registered profile travels separately."
+        ],
+        [
+          "Select Station; click Replay handoff. Advance and hand over to Jan.",
+          "USB takes the decoded report to Windows. Jan, show us what the operator can open."
+        ]
+      ],
+      "finals": [
+        [
+          "Select Wearable, then Receiver. Point to the byte groups.",
+          "Bluetooth carries the phone’s event to the wearable. LoRa carries a 26-byte packet to a receiver in range. Thirteen bytes are the header. Coordinates take eight, the event code takes one, and peak acceleration takes four."
+        ],
+        [
+          "Select Station. Advance to the rescue desk.",
+          "The receiver forwards the report over USB. Profile details and cancellations travel separately. Jan will show what the operator sees."
+        ]
+      ],
+      "more": [
+        [
+          "Click a previous node or select the same node again.",
+          "Let’s follow that boundary again. The radio path connects wearable to receiver. The desk gets the decoded report over a different link."
+        ]
+      ]
+    },
+    "desktop": {
+      "full": [
+        [
+          "Open Incident map. Point to the pins.",
+          "This station view uses fictional demonstration records. Each marker represents a wearable. A location gives the operator a starting point. It does not by itself identify a person or explain their condition."
+        ],
+        [
+          "Select the red Lina pin. Open rider profile.",
+          "This pin brings up Lina Cruz. We can read the identity associated with this device and compare it with the incident we selected. The token helps connect a radio report to information registered separately."
+        ],
+        [
+          "Select Incident history. Point to the newest entry, then the earlier cancellation.",
+          "Here is Lina’s current alert. There is a prior cancellation and an earlier registration in the same person’s history. The earlier cancellation belongs to its own event. It does not clear today’s alert."
+        ],
+        [
+          "Open Registered profiles. Choose another person, then return to the map.",
+          "This is a second way into the records. Change the rider and the linked history changes too. An operator can check the right person before coordinating a response."
+        ],
+        [
+          "Click Next chapter.",
+          "We have followed a report to a human decision. Now let’s ask which parts of that chain we have actually measured."
+        ]
+      ],
+      "finals": [
+        [
+          "Select Lina’s red pin. Open rider profile, then Incident history. Advance.",
+          "These are fictional station records. Lina’s pin leads to her registered profile. Her history shows today’s alert, an earlier cancellation and her registration. An operator can distinguish those events before deciding whom to contact."
+        ]
+      ],
+      "more": [
+        [
+          "Choose the Ivo pin.",
+          "Ivo’s record is a test. The operator can recognize a test transmission before treating it as an active alert."
+        ],
+        [
+          "Choose the Mara pin.",
+          "Mara’s record is cleared. A cleared state belongs to that particular record."
+        ],
+        [
+          "Open Diagnostics. Select Reception, then Enlarge capture. Close.",
+          "This is the project’s receiver diagnostics screen. The modeled airtime on that screen is an estimate. Field latency requires timestamps from the sender and receiver."
+        ],
+        [
+          "Select Unit registry, then Hotspots. Enlarge a capture and close it.",
+          "The registry capture shows the dashboard’s empty state. The hotspot screen groups stored coordinates. Three nearby historical points can meet its default clustering threshold. That is a different question from one person’s incident history."
+        ]
+      ]
+    },
+    "validation": {
+      "full": [
+        [
+          "Indicate 33 / 33, then 88 / 88.",
+          "We replayed stored features from 121 generated fixtures through the compiled Android classifier on a desktop JVM. All 33 accident flags and all 88 benign flags matched. This run began after feature extraction."
+        ],
+        [
+          "Point to Subtype errors.",
+          "The binary answer hid a mistake. All eleven potholes received the wind-flutter subtype. Both suppress the alarm. The eleven fall fixtures were labeled as severe collisions. They still raised an alert, but that description of the motion was wrong."
+        ],
+        [
+          "Advance.",
+          "The next evidence has to come from separate measured trips, packet delivery tests and synchronized timing through to the station."
+        ]
+      ],
+      "finals": [
+        [
+          "Point to both counts and the subtype row. Advance.",
+          "On 121 generated feature vectors, the compiled classifier matched every alarm flag. Yet all eleven potholes received the wind-flutter subtype, and all eleven falls received the severe-collision subtype. The replay tells us where these rules worked and where their descriptions failed. Field accuracy and end-to-end timing still need measurement."
+        ]
+      ],
+      "more": [
+        [
+          "Open Field notes, then Inspect source records. Open JVM replay results. Return and close notes.",
+          "This file gives one result per fixture and identifies the code and inputs used. A judge can inspect the individual errors behind the totals."
+        ]
+      ]
+    },
+    "impact": {
+      "full": [
+        [
+          "Select Road user.",
+          "For the rider, the benefit we want is a second way to report an incident. In trials, we would count both missed events and false alerts per labeled trip."
+        ],
+        [
+          "Select Receiving station.",
+          "For the station, measure how many packets arrive, whether the location is usable, and how long the report takes to reach the desk."
+        ],
+        [
+          "Select Response team. Face the audience.",
+          "For the person answering, the test is whether the record supports a timely decision. Could the operator acknowledge it, identify the right rider and act on the location? Those are outcomes we can measure."
+        ],
+        [
+          "Hand over to the prototype demonstration.",
+          "We began with a rider who might be unable to call. We can now show the next step in person, with a clearly identified test event and the equipment in front of us."
+        ]
+      ],
+      "finals": [
+        [
+          "Select Response team. Hand over to the prototype demo.",
+          "Our next field trial will measure missed alerts, delivery and time to acknowledgement. The aim is simple. If the rider cannot call, give an operator a report they can act on. We’ll now demonstrate the prototype."
+        ]
+      ],
+      "more": [
+        [
+          "Click Return to overview when the demonstration ends.",
+          "We are back at the road where the report began. We can revisit the circuit board, motion data or receiving station for your questions."
+        ]
+      ]
+    }
+  }
+}

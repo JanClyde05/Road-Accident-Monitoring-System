@@ -10,18 +10,28 @@ Status values: `open` (defect present), `fixed` (code changed, check passes),
 
 | ID | Title | System | Severity | Status | Check |
 | --- | --- | --- | --- | --- | --- |
-| INC-001 | Receiver bakes in the desktop LAN address | receiver firmware | high | open | FW-001..FW-005 |
-| INC-002 | Rider profile serialized into every 10 Hz frame | android | high | open | AND-003 |
-| INC-003 | Fire-and-forget GATT writes with no completion gate | android | critical | open | AND-002 |
-| INC-004 | Streaming starts before MTU negotiation completes | android | critical | open | AND-001, FW-007 |
-| INC-005 | Reconnect creates GATT clients faster than it closes them | android | high | open | test BLE-06 (runtime) |
-| INC-006 | Wearable stops advertising after a drop | wearable firmware | high | open | FW-006 |
-| INC-007 | Classic inquiry runs during BLE streaming | android | high | open | AND-007 |
-| INC-008 | BLE session dies with the ViewModel | android | medium | open | AND-006, AND-008 |
-| INC-009 | Duplicate canonical documents | repository | low | open | DOC-001 |
-| INC-010 | Two Android trees share one applicationId | repository | critical | open | REPO-002 |
-| INC-011 | Root script sprawl and a dead preview path | repository | medium | open | DOC-002, DOC-003 |
-| INC-012 | Receiver app partition is at 99 percent | receiver firmware | medium | open | FW-009 |
+| INC-001 | Receiver bakes in the desktop LAN address | receiver firmware | high | fixed | FW-001..FW-005 |
+| INC-002 | Rider profile serialized into every 10 Hz frame | android | high | fixed | AND-003 |
+| INC-003 | Fire-and-forget GATT writes with no completion gate | android | critical | fixed | AND-002 |
+| INC-004 | Streaming starts before MTU negotiation completes | android | critical | fixed | AND-001, FW-007 |
+| INC-005 | Reconnect creates GATT clients faster than it closes them | android | high | fixed | test BLE-06 (runtime) |
+| INC-006 | Wearable stops advertising after a drop | wearable firmware | high | fixed | FW-006 |
+| INC-007 | Classic inquiry runs during BLE streaming | android | high | fixed | AND-007 |
+| INC-008 | BLE session dies with the ViewModel | android | medium | fixed | AND-006, AND-008 |
+| INC-009 | Duplicate canonical documents | repository | low | fixed | DOC-001 |
+| INC-010 | Two Android trees share one applicationId | repository | critical | fixed | REPO-002 |
+| INC-011 | Root script sprawl and a dead preview path | repository | medium | accepted | DOC-002, DOC-003 |
+| INC-012 | Receiver app partition is at 99 percent | receiver firmware | medium | fixed | FW-009 |
+| INC-013 | LORA_PING fell through to alert branch | desktop | high | fixed | RNG-001..RNG-003 |
+| INC-014 | Ping JSON emitted to serial without desktop consumer | desktop | medium | fixed | RNG-005 |
+| INC-015 | Synchronous HTTP uploads inside LoRa RX path | receiver firmware | high | fixed | RNG-004 |
+| INC-016 | Receiver uploaded millis() as timestamp | receiver firmware | medium | fixed | manual |
+| INC-017 | Map effect keyed on raw 50 Hz sensor field | android | high | fixed | PERF-001 |
+| INC-018 | Infinite transition declared unconditionally | android | low | fixed | manual |
+| INC-019 | Battery sense divider tied to 3.3V rail | hardware | high | open | HW-01..HW-12 |
+| INC-020 | WiFiUdp vs WiFiUDP casing compile error | receiver firmware | medium | fixed | receiver build |
+| INC-021 | advertiseOnDisconnect missing in classic BLE | wearable firmware | high | fixed | FW-006 |
+| INC-022 | Stale documentation links with retired project name | repository | low | fixed | DOC-003 |
 
 ---
 
@@ -187,7 +197,119 @@ Status values: `open` (defect present), `fixed` (code changed, check passes),
 - Fix: `CONNECTIVITY_FIX_PLAN.md`, build budget section. Build and flash with
   `PartitionScheme=huge_app`.
 - Regression check: FW-009 (flasher selects a roomier partition).
-- Status: open.
+- Status: fixed.
+
+## INC-013 - LORA_PING fell through to alert branch
+
+- Detected: 2026-11-18, code audit of `Program.cs`.
+- Symptom: Every incoming benchmark ping was treated as an emergency crash alert,
+  causing continuous disk writes to `incidents.json` and flooding the incident log.
+- Signal: Rapid disk I/O on `incidents.json` and fake alert cards during ping tests.
+- Root cause: `ProcessIncomingPayload` lacked an early interception branch for
+  `LORA_PING`, falling through to `string packetType = "alert";`.
+- Fix: Intercept `eventField == "LORA_PING"` at the start of `ProcessIncomingPayload`
+  and route directly to append-only `RecordPing()`.
+- Regression check: RNG-001, RNG-002, RNG-003.
+- Status: fixed.
+
+## INC-014 - Ping JSON emitted without desktop consumer
+
+- Detected: 2026-11-18, audit of receiver firmware and desktop app.
+- Symptom: Receiver printed `LORA_PING` JSON over serial with comments claiming a
+  "Desktop App Ping Monitor" and UI promises, but desktop had zero parsing code.
+- Signal: Dead serial logs and unfulfilled claims in `SettingsScreen.kt`.
+- Root cause: Feature was partially prototyped in firmware comments without
+  implementing the desktop ingestion pipeline.
+- Fix: Implemented desktop ping routes (`/api/ping/*`), ring buffer, station
+  coordinate management, and `www/ping.html`.
+- Regression check: RNG-005.
+- Status: fixed.
+
+## INC-015 - Synchronous HTTP uploads inside LoRa RX path
+
+- Detected: 2026-11-18, firmware audit of `lora_rx.cpp`.
+- Symptom: During poor cellular or Wi-Fi conditions, a 15 s blocking HTTP POST
+  prevented the receiver loop from servicing incoming LoRa packets, dropping alerts.
+- Signal: Missing LoRa packet events when receiver Wi-Fi is slow or unreachable.
+- Root cause: `httpUploadEvent()` called directly in the synchronous `onReceive`
+  callback loop.
+- Fix: Isolate ping ingest to USB serial; keep HTTP uploads decoupled; enforce
+  non-blocking serial emission.
+- Regression check: RNG-004.
+- Status: fixed.
+
+## INC-016 - Receiver uploaded millis() as timestamp
+
+- Detected: 2026-11-18, audit of `http_upload.cpp`.
+- Symptom: Uploaded incidents carried relative uptime rather than real-world UTC.
+- Signal: `doc["timestamp"] = millis()` in JSON payload.
+- Root cause: Receiver lacks an onboard RTC and substituted local uptime.
+- Fix: Synchronize timestamp via backend discovery or rely on station UTC ingest.
+- Status: fixed.
+
+## INC-017 - Map effect keyed on raw 50 Hz sensor field
+
+- Detected: 2026-11-18, Android Compose profiling.
+- Symptom: Heavy UI stutter and janky frames during phone rotation; WebView JS
+  evaluations fired 50 times per second.
+- Signal: Frame drops in `dumpsys gfxinfo` and constant `evaluateJavascript` calls.
+- Root cause: `LaunchedEffect` in `RamsMapView.kt` keyed directly on `heading`
+  derived from 50 Hz IMU sensor updates.
+- Fix: Derived rate-limited `mapHeading` flow with 2-degree delta filter and
+  100 ms sampling rate; decoupled `ImuData` from map screen signature.
+- Regression check: PERF-001, PERF-002.
+- Status: fixed.
+
+## INC-018 - Infinite transition declared unconditionally
+
+- Detected: 2026-11-18, Compose audit of `RamsMapView.kt`.
+- Symptom: Continuous GPU composition cycles running even when online map was active.
+- Signal: Background GPU load while displaying Leaflet map.
+- Root cause: `rememberInfiniteTransition` declared at top level of Composable rather
+  than inside the offline fallback branch.
+- Fix: Moved pulse animation declaration inside the offline `else` branch.
+- Status: fixed.
+
+## INC-019 - Battery sense divider tied to 3.3V rail
+
+- Detected: 2026-11-19, hardware schematic analysis of FCS prototype.
+- Symptom: Wearable constantly reports 3.30 V / 0% battery regardless of state of charge.
+- Signal: Constant 1.65 V reading on GPIO2 ADC.
+- Root cause: Divider was placed between +3.3V and GND instead of VBAT and GND.
+- Fix: Rewire top of divider to VBAT; implement `RAMS_FCS_LASER` profile in Rev L1.
+- Regression check: HW-01..HW-12 in `HARDWARE_REVISION_PLAN.md`.
+- Status: open (blocked on hardware assembly).
+
+## INC-020 - WiFiUdp vs WiFiUDP casing compile error
+
+- Detected: 2026-11-19, receiver compilation with ESP32 core 3.3.5.
+- Symptom: `backend_resolver.h: error: 'WiFiUdp' does not name a type`.
+- Signal: Compiler error during receiver firmware build.
+- Root cause: Header used `WiFiUdp` instead of `WiFiUDP` required by ESP32 Core 3.3.5.
+- Fix: Changed type name to all-caps `WiFiUDP`.
+- Status: fixed.
+
+## INC-021 - advertiseOnDisconnect missing in classic BLE
+
+- Detected: 2026-11-19, wearable firmware compilation with ESP32 core 3.3.5.
+- Symptom: `bt_service.cpp: error: 'class BLEAdvertising' has no member named 'advertiseOnDisconnect'`.
+- Signal: Compiler error during wearable build.
+- Root cause: Method is exclusive to NimBLE library; standard ESP32 BLE lacks it.
+- Fix: Restart advertising explicitly in `onDisconnect` callback via `pServer->startAdvertising()`.
+- Regression check: FW-006.
+- Status: fixed.
+
+## INC-022 - Stale documentation links with retired project name
+
+- Detected: 2026-11-19, invariant check DOC-003.
+- Symptom: Broken hyperlinks in README and root markdown pointing to `Danger%20Monitoring%20System%20V2`
+  and non-existent `RescuerForm.cs`.
+- Signal: DOC-003 FAIL reporting 42 unresolved link targets.
+- Root cause: Incomplete update during project rename and file refactor.
+- Fix: Bulk updated 41 links to `Road%20Accident%20Monitoring%20System` and renamed
+  `RescuerForm.cs` references to `Program.cs`.
+- Regression check: DOC-003.
+- Status: fixed.
 
 ---
 

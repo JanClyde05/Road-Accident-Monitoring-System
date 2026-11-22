@@ -1,0 +1,211 @@
+{
+  "before_sha256": "6324d7e8b265b8847b3e7732ee832006ab7d42e5baa9c1719f38440d98ba0ff4",
+  "after_sha256": "564bf6a82f7a4458bca9a5f078e8487dbf9b1f133d96f1584eb9aed279dfc248",
+  "changes": [
+    {
+      "uuid": "0aee5954-6e07-41e5-a6e4-e2f86125fec7",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "117d0588-e5cc-4a30-9f04-8463119f739e",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "374b7b43-112c-4a73-860a-11c51d204ef8",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "3cc8eea7-1d05-44f4-a2e5-c3aac22cb537",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "41de04a2-eab0-423b-97d6-39b61b75a2c6",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "88b227b9-bacd-4280-a4dc-cbe2d9f69f2e",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "99584084-3020-4c9b-9412-1eaaba56901f",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "a2c891c9-ff64-45b1-8379-0e2bdfb6bd97",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "a5486c80-e6a7-4bcc-a322-57013115e503",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "a7268958-844d-482d-964e-bd6fdd738fdb",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "aa5c3482-e11d-49e6-996a-14c6dd43a290",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "b3da0888-6c88-452d-950e-b1d414c5d77e",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "b9460ee2-5585-4a1d-8f1d-0e4482d13232",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "decc1153-ebb0-4dae-bebc-d55760bdbcd9",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "e86a2172-6973-44d0-87b1-db7e5149d9b2",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "ef7d292c-3017-4adf-90d2-82a07365166c",
+      "net": "RF_MATCH",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "2b31d560-d20b-41b9-aad1-5f349bfcd627",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "2fd417e4-c1ae-4f99-899c-54e4e9b24d3d",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "3da3186a-7f6c-400b-9cb9-df23b23ee430",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "434e1daf-7a3c-4676-95a4-19bb9816cb07",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "5c9475c7-bf5d-48ed-a68f-667cd6957cc1",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "68f7a09e-b450-4b23-b634-a9b33ed8e204",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "6fbd2189-c446-497e-9fa6-4a345d798dff",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "80602240-2958-4416-b858-9642803457cf",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "8b0ad37e-8b51-495a-8eb8-88778869d9f4",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "b040b282-3736-4062-9a7f-156d1663312d",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "b0e3d983-a0c1-4541-9cc2-d4f74e058432",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "e7835f54-afeb-44d7-b968-e8f907300e4c",
+      "net": "ANT_TUNE",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "04fa42a1-921a-404f-92af-2e6cd808a09a",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "0a368cb7-6ef1-4662-9121-0eb033bcf268",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "54056a52-222a-4d33-a20d-7b211f4c8064",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "5ffe6774-bb79-4270-9ce1-d363d384cd74",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "b04239c0-b485-4401-807f-fe07004dc96a",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    },
+    {
+      "uuid": "c7ed38ba-3619-410d-a410-4326ffb0d02f",
+      "net": "ANT_FEED",
+      "from_mm": 0.18,
+      "to_mm": 0.15
+    }
+  ],
+  "reason": "Official JLC coated-coplanar calculator: .15mm gives 48.52 ohm, vs .18mm 44.51 ohm. Same centreline/endpoints; antenna keepout part remains antenna matching geometry, not a uniform 50 ohm line."
+}

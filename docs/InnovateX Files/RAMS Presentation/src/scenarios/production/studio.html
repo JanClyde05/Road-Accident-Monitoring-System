@@ -1,0 +1,12 @@
+<!doctype html><meta charset="utf-8"><title>RAMS road scene render</title>
+<style>html,body{margin:0;background:#07111a}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import {makeFilm} from './film.js';
+const params=new URLSearchParams(location.search);
+try{
+  const film=await makeFilm(Number(params.get('width'))||896,Number(params.get('height'))||384);
+  window.still=(id,t,quality=.94)=>film.render(id,t).toDataURL('image/jpeg',quality);
+  film.render('car',0);window.ready=true;
+}catch(e){window.failure=String(e.stack||e);console.error(e);}
+</script>

@@ -38,13 +38,16 @@
 
 // ── Backend API ─────────────────────────────────────────────────────────────
 
-// --- OPTION A: Desktop App LAN Bridge (Port 8888) ---
-// #define BACKEND_URL       "http://192.168.123.5:8888"
-// #define BACKEND_URL       "http://175.16.3.157:8888"
-#define BACKEND_URL       "http://10.238.240.180:8888"
-
-// --- OPTION B: Production Netlify ---
-//#define BACKEND_URL       "https://road-accident-monitoring-system.netlify.app"
+// --- Discovery & Backend Configuration ---
+#define BACKEND_URL             ""
+#define BACKEND_URL_FALLBACK    ""            // empty = no compile-time default
+#define BACKEND_UDP_PORT        8889
+#define BACKEND_HEALTH_PATH     "/api/health"
+#define BACKEND_PROBE_TIMEOUT_MS 1200
+#define BACKEND_DISCOVER_TRIES  3
+#define BACKEND_DISCOVER_WINDOW_MS 450
+#define BACKEND_REPROBE_INTERVAL_MS 600000UL   // 10 min
+#define BACKEND_FAIL_THRESHOLD  3
 
 #define UPLOAD_ENDPOINT   "/api/upload"
 

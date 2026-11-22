@@ -1,0 +1,1277 @@
+{
+  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "kicad": "10.0.6",
+  "footprints": 90,
+  "segments": 1440,
+  "vias": 181,
+  "via_drill_paste_only_intersections": [],
+  "bypass_geometry": [
+    {
+      "supply_pad": "U6.1",
+      "capacitor": "C34",
+      "direct_supply_pad_distance_mm": 1.6119,
+      "nearest_ground_via_mm": 0.72,
+      "ground_via": [
+        131.4,
+        100.8
+      ]
+    },
+    {
+      "supply_pad": "U6.6",
+      "capacitor": "C35",
+      "direct_supply_pad_distance_mm": 1.915,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        135.18,
+        100.95
+      ]
+    },
+    {
+      "supply_pad": "LED1.4",
+      "capacitor": "C28",
+      "direct_supply_pad_distance_mm": 1.7012,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        138.2,
+        103.32
+      ]
+    },
+    {
+      "supply_pad": "U5.1",
+      "capacitor": "C7",
+      "direct_supply_pad_distance_mm": 3.3007,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        121.0,
+        122.925
+      ]
+    },
+    {
+      "supply_pad": "U5.5",
+      "capacitor": "C10",
+      "direct_supply_pad_distance_mm": 2.2022,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        126.3,
+        123.775
+      ]
+    },
+    {
+      "supply_pad": "U1.2",
+      "capacitor": "C12",
+      "direct_supply_pad_distance_mm": 2.5677,
+      "nearest_ground_via_mm": 0.8,
+      "ground_via": [
+        108.32,
+        110.2
+      ]
+    },
+    {
+      "supply_pad": "U1.3",
+      "capacitor": "C13",
+      "direct_supply_pad_distance_mm": 2.9602,
+      "nearest_ground_via_mm": 0.8994,
+      "ground_via": [
+        107.65,
+        112.7
+      ]
+    },
+    {
+      "supply_pad": "U1.20",
+      "capacitor": "C16",
+      "direct_supply_pad_distance_mm": 1.27,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        113.7,
+        117.68
+      ]
+    },
+    {
+      "supply_pad": "U1.46",
+      "capacitor": "C15",
+      "direct_supply_pad_distance_mm": 1.4272,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        116.305,
+        105.725
+      ]
+    },
+    {
+      "supply_pad": "U1.55",
+      "capacitor": "C21",
+      "direct_supply_pad_distance_mm": 1.8902,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        110.7,
+        106.32
+      ]
+    },
+    {
+      "supply_pad": "U1.56",
+      "capacitor": "C22",
+      "direct_supply_pad_distance_mm": 4.667,
+      "nearest_ground_via_mm": 0.7,
+      "ground_via": [
+        108.1,
+        104.62
+      ]
+    },
+    {
+      "supply_pad": "U1.29",
+      "capacitor": "C17",
+      "direct_supply_pad_distance_mm": 1.6807,
+      "nearest_ground_via_mm": 1.4001,
+      "ground_via": [
+        119.99,
+        113.01
+      ]
+    },
+    {
+      "supply_pad": "U1.29",
+      "capacitor": "C20",
+      "direct_supply_pad_distance_mm": 1.6807,
+      "nearest_ground_via_mm": 1.4001,
+      "ground_via": [
+        119.99,
+        116.19
+      ]
+    }
+  ],
+  "antenna_foreign_tracks_or_vias": [],
+  "antenna_foreign_pads": [],
+  "antenna_zone_boundary_contacts": [
+    "F.Cu",
+    "B.Cu",
+    "In1.Cu",
+    "In2.Cu"
+  ],
+  "antenna_interior_test_tolerance_mm": 0.001,
+  "antenna_zone_fill_intersections": [],
+  "critical_other_layer_segments": [
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "start": [
+        106.25,
+        126.4
+      ],
+      "end": [
+        105.55,
+        125.7
+      ],
+      "width_mm": 0.15
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "start": [
+        105.55,
+        125.7
+      ],
+      "end": [
+        105.55,
+        124.2
+      ],
+      "width_mm": 0.15
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "start": [
+        106.75,
+        124.2
+      ],
+      "end": [
+        107.45,
+        124.2
+      ],
+      "width_mm": 0.15
+    }
+  ],
+  "In1_track_segments": [],
+  "USB_BCu_reference_gaps_0p05mm_sampling": [
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "start": [
+        106.25,
+        126.4
+      ],
+      "end": [
+        105.55,
+        125.7
+      ],
+      "width_mm": 0.15,
+      "samples_without_In2_GND": [
+        [
+          106.25,
+          126.4
+        ],
+        [
+          106.215,
+          126.365
+        ],
+        [
+          106.18,
+          126.33
+        ],
+        [
+          106.145,
+          126.295
+        ],
+        [
+          106.11,
+          126.26
+        ],
+        [
+          106.075,
+          126.225
+        ],
+        [
+          106.04,
+          126.19
+        ],
+        [
+          106.005,
+          126.155
+        ],
+        [
+          105.97,
+          126.12
+        ]
+      ]
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "start": [
+        105.55,
+        125.7
+      ],
+      "end": [
+        105.55,
+        124.2
+      ],
+      "width_mm": 0.15,
+      "samples_without_In2_GND": [
+        [
+          105.55,
+          124.6
+        ],
+        [
+          105.55,
+          124.55
+        ],
+        [
+          105.55,
+          124.5
+        ],
+        [
+          105.55,
+          124.45
+        ],
+        [
+          105.55,
+          124.4
+        ],
+        [
+          105.55,
+          124.35
+        ],
+        [
+          105.55,
+          124.3
+        ],
+        [
+          105.55,
+          124.25
+        ],
+        [
+          105.55,
+          124.2
+        ]
+      ]
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "start": [
+        106.75,
+        124.2
+      ],
+      "end": [
+        107.45,
+        124.2
+      ],
+      "width_mm": 0.15,
+      "samples_without_In2_GND": [
+        [
+          106.75,
+          124.2
+        ],
+        [
+          106.8,
+          124.2
+        ],
+        [
+          106.85,
+          124.2
+        ],
+        [
+          106.9,
+          124.2
+        ],
+        [
+          106.95,
+          124.2
+        ],
+        [
+          107.0,
+          124.2
+        ],
+        [
+          107.05,
+          124.2
+        ],
+        [
+          107.1,
+          124.2
+        ],
+        [
+          107.15,
+          124.2
+        ],
+        [
+          107.2,
+          124.2
+        ],
+        [
+          107.25,
+          124.2
+        ],
+        [
+          107.3,
+          124.2
+        ],
+        [
+          107.35,
+          124.2
+        ],
+        [
+          107.4,
+          124.2
+        ],
+        [
+          107.45,
+          124.2
+        ]
+      ]
+    }
+  ],
+  "GND_filled_outline_counts": {
+    "F.Cu": 18,
+    "B.Cu": 7,
+    "In1.Cu": 1,
+    "In2.Cu": 7
+  },
+  "reference_gap_classification": [
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.85,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.95,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.05,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.15,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.25,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.65,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.55,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.45,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.35,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.25,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.55,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.55,
+        124.103125
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.55,
+        124.00625
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.55,
+        123.909375
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "F.Cu",
+      "point": [
+        105.55,
+        123.8125
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.35,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.45,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.55,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.65,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.75,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.25,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.15,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.05,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.95,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.85,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        106.75,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.25,
+        124.48
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.25,
+        124.386667
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.25,
+        124.293333
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.25,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.45,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.45,
+        124.103125
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.45,
+        124.00625
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.45,
+        123.909375
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "F.Cu",
+      "point": [
+        107.45,
+        123.8125
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.25,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.182143,
+        104.082143
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.114286,
+        104.014286
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.046429,
+        103.946429
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.978571,
+        103.878571
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.910714,
+        103.810714
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.842857,
+        103.742857
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.775,
+        103.675
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.707143,
+        103.607143
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.639286,
+        103.539286
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.571429,
+        103.471429
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.503571,
+        103.403571
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.435714,
+        103.335714
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.367857,
+        103.267857
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        104.3,
+        103.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.75,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.7,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        106.40625,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        106.3125,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        106.21875,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        106.125,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        106.03125,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.9375,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.84375,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.75,
+        104.2
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.7,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.61,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.52,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.43,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.34,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "ANT_FEED",
+      "layer": "F.Cu",
+      "point": [
+        105.25,
+        104.15
+      ],
+      "cause": "antenna_exclusion"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.25,
+        126.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.215,
+        126.365
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.18,
+        126.33
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.145,
+        126.295
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.11,
+        126.26
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.075,
+        126.225
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.04,
+        126.19
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.005,
+        126.155
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.97,
+        126.12
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.6
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.55
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.5
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.45
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.4
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.35
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.3
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.25
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DN_CONN",
+      "layer": "B.Cu",
+      "point": [
+        105.55,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.75,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.8,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.85,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.9,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        106.95,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.0,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.05,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.1,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.15,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.2,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.25,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.3,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.35,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.4,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    },
+    {
+      "net": "USB_DP_CONN",
+      "layer": "B.Cu",
+      "point": [
+        107.45,
+        124.2
+      ],
+      "cause": "signal_via_antipad"
+    }
+  ],
+  "unexplained_reference_gap_samples": [],
+  "USB_reference_foreign_tracks": [],
+  "USB_total_track_lengths_mm": {
+    "DP": 20.795088071284574,
+    "DN": 20.755087296526007
+  }
+}
+VIA_PAD_INTERSECTIONS 9 PASTE 0 REFERENCE_GAP_SEGMENTS 11

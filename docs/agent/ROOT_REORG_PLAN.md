@@ -236,7 +236,7 @@ Known items at the time of writing:
    missing file. Historical documents are allowed to rot (`DOC-005` is a WARN),
    but fix it while you are there.
 3. Every absolute `file://` link assumes the repository lives at
-   `D:\Antigravity\Projects\Danger Monitoring System V2`. On a worktree or a second
+   `D:\Antigravity\Projects\Road Accident Monitoring System`. On a worktree or a second
    machine they all break. Convert navigation documents to repository-relative
    links; keep absolute links only in historical notes.
 

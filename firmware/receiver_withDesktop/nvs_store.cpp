@@ -41,3 +41,23 @@ void nvsClearWifi() {
   _prefs.remove("wifi_pass");
   Serial.println(F("[NVS] WiFi credentials cleared"));
 }
+
+void nvsSaveBackend(const String& host, uint16_t port) {
+  _prefs.putString("backend_host", host);
+  _prefs.putUShort("backend_port", port);
+  _prefs.putUInt("backend_ts", (uint32_t)(millis() / 1000));
+}
+
+String nvsGetBackendHost() {
+  return _prefs.getString("backend_host", "");
+}
+
+uint16_t nvsGetBackendPort() {
+  return _prefs.getUShort("backend_port", 0);
+}
+
+void nvsClearBackend() {
+  _prefs.remove("backend_host");
+  _prefs.remove("backend_port");
+  _prefs.remove("backend_ts");
+}

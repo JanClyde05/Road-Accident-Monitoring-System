@@ -1,0 +1,14 @@
+[
+  {
+    "name": "diodes_dmn2056u_ds38480.pdf",
+    "url": "https://www.diodes.com/datasheet/download/DMN2056U.pdf",
+    "status": "not_saved",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "adi_ltc4054_405442xf.pdf",
+    "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/405442xf.pdf",
+    "status": "not_saved",
+    "error": "The read operation timed out"
+  }
+]

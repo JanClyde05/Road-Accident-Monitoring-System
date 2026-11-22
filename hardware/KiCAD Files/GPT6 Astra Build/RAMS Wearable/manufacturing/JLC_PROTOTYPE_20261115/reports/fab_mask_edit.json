@@ -1,0 +1,11 @@
+{
+  "before_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "after_sha256": "6324d7e8b265b8847b3e7732ee832006ab7d42e5baa9c1719f38440d98ba0ff4",
+  "backup": "verification\\prefab_before_20261114",
+  "ground_vias_top_tented_bottom_open": 9,
+  "mask_window_side_mm": 1.2,
+  "mask_corner_chamfer_mm": 0.1,
+  "paste_window_side_mm": 1.12,
+  "paste_corner_chamfer_mm": 0.06,
+  "paste_coverage_percent": 61.41951369652201
+}

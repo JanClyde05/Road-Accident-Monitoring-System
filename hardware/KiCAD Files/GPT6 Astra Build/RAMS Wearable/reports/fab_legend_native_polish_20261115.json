@@ -1,0 +1,24 @@
+{
+  "initial": {
+    "TP7": [
+      [
+        "silk TP7",
+        0.0,
+        0.151
+      ]
+    ]
+  },
+  "moves": [
+    {
+      "iteration": 0,
+      "reference": "TP7",
+      "delta": [
+        0.0,
+        0.025
+      ],
+      "remaining": 0
+    }
+  ],
+  "remaining": {},
+  "note": "Native effective-shape checks; candidate only, CLI DRC still required."
+}

@@ -67,6 +67,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.ConnectionConfigDialog
 import com.example.ui.components.CsvExportDialog
 import com.example.ui.components.DesignRulesDialog
+import com.example.ui.components.PingMonitorDialog
 import com.example.ui.components.RamsHeader
 import com.example.ui.components.RiderLoginDialog
 import com.example.ui.components.VoiceBubbleOverlay
@@ -201,6 +202,8 @@ fun RamsDashboardScreen(
 ) {
   val gps by viewModel.gpsState.collectAsStateWithLifecycle()
   val imu by viewModel.imuState.collectAsStateWithLifecycle()
+  val mapHeading by viewModel.mapHeading.collectAsStateWithLifecycle()
+  val mapBeamAperture by viewModel.mapBeamAperture.collectAsStateWithLifecycle()
   val linkStatus by viewModel.linkStatus.collectAsStateWithLifecycle()
   val syncStatus by viewModel.syncStatus.collectAsStateWithLifecycle()
   val imuHistory by viewModel.imuHistory.collectAsStateWithLifecycle()
@@ -272,6 +275,9 @@ fun RamsDashboardScreen(
   val showCsvDialog by viewModel.showCsvDialog.collectAsStateWithLifecycle()
   val csvDialogInitialTab by viewModel.csvDialogInitialTab.collectAsStateWithLifecycle()
   val imuCalibration by viewModel.imuCalibration.collectAsStateWithLifecycle()
+  val isPingActive by viewModel.isPingModeActive.collectAsStateWithLifecycle()
+  val pingLog by viewModel.pingLog.collectAsStateWithLifecycle()
+  val showPingDialog by viewModel.showPingDialog.collectAsStateWithLifecycle()
 
   val isRecordingCsv by viewModel.csvExportManager.isRecording.collectAsStateWithLifecycle()
   val recordedCsvCount by viewModel.csvExportManager.recordedCount.collectAsStateWithLifecycle()
@@ -391,7 +397,8 @@ fun RamsDashboardScreen(
         RamsNavTab.MAP -> {
           MapScreen(
             gps = gps,
-            imu = imu,
+            headingDeg = mapHeading,
+            beamAperture = mapBeamAperture,
             events = allEvents,
             selectedEvent = selectedEvent,
             onSelectEvent = { viewModel.selectEvent(it) },
@@ -542,6 +549,14 @@ fun RamsDashboardScreen(
       onClearImported = { viewModel.clearImportedData() },
       initialTab = csvDialogInitialTab,
       onDismiss = { viewModel.setCsvDialogVisible(false) }
+    )
+  }
+
+  if (showPingDialog) {
+    PingMonitorDialog(
+      isPingActive = isPingActive,
+      pingLog = pingLog,
+      onDismiss = { viewModel.setPingDialogVisible(false) }
     )
   }
 

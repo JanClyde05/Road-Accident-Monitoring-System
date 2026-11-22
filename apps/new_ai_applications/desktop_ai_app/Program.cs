@@ -26,6 +26,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Globalization;
+using System.Reflection;
+using System.Net.NetworkInformation;
 
 namespace RamsRescuerDesktop
 {
@@ -51,6 +54,26 @@ namespace RamsRescuerDesktop
         private static List<string> _localLanIPs = new List<string>();
         private static TcpListener _lanTcpListener;
         private static Thread _lanTcpThread;
+        private static UdpClient _discoveryUdp;
+        private static Thread _discoveryThread;
+
+        // Ping Measurement & Range Verification Engine
+        private static readonly object _pingLock = new object();
+        private static string _pingLogPath;
+        private static string _stationConfigPath;
+        private static double? _stationLat = null;
+        private static double? _stationLon = null;
+        private static string _stationLabel = "Base Station";
+        private static string _stationSource = "manual";
+        private static double? _stationAccuracyM = null;
+        private static DateTime _stationUpdatedUtc = DateTime.UtcNow;
+        private static readonly List<string> _recentPingsBuffer = new List<string>();
+        private class PingTokenState
+        {
+            public long T2Ms;
+            public long T0Ms;
+        }
+        private static readonly Dictionary<string, PingTokenState> _lastPingByToken = new Dictionary<string, PingTokenState>(StringComparer.OrdinalIgnoreCase);
 
         [STAThread]
         static void Main(string[] args)
@@ -61,8 +84,11 @@ namespace RamsRescuerDesktop
                 _wwwDir = Path.Combine(appDir, "www");
                 _dataFilePath = Path.Combine(appDir, "incidents.json");
                 _registrationsFilePath = Path.Combine(appDir, "registrations.json");
+                _pingLogPath = Path.Combine(appDir, "ping-log.jsonl");
+                _stationConfigPath = Path.Combine(appDir, "station-config.json");
 
-                // Initialize incident and registration stores
+                // Initialize station config, incident and registration stores
+                LoadStationConfig();
                 LoadRegistrations();
                 LoadIncidents();
 
@@ -72,11 +98,28 @@ namespace RamsRescuerDesktop
                 // Start Non-Admin LAN TCP Bridge on port 8888 for optional Wi-Fi receiver ingestion
                 StartLanReceiverBridge();
 
+                // Start UDP Discovery Responder on port 8889 for receiver backend auto-discovery
+                StartDiscoveryResponder();
+
                 // Start Embedded Local HTTP Server on open port (8080-8095)
                 _port = StartServer(8080);
 
+                // Handle optional --ping argument to launch into Range & Latency Benchmark panel directly
+                bool openPingMode = false;
+                if (args != null)
+                {
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        if (string.Equals(args[i], "--ping", StringComparison.OrdinalIgnoreCase))
+                        {
+                            openPingMode = true;
+                            break;
+                        }
+                    }
+                }
+
                 // Launch Native Desktop App Window via Edge App Mode
-                string appUrl = string.Format("http://127.0.0.1:{0}/", _port);
+                string appUrl = openPingMode ? string.Format("http://127.0.0.1:{0}/ping.html", _port) : string.Format("http://127.0.0.1:{0}/", _port);
                 try
                 {
                     Process edgeProc = LaunchEdgeApp(appUrl);
@@ -100,6 +143,7 @@ namespace RamsRescuerDesktop
                 // Cleanup server when user closes the app window
                 _serialRunning = false;
                 try { if (_lanTcpListener != null) _lanTcpListener.Stop(); } catch { }
+                try { if (_discoveryUdp != null) _discoveryUdp.Close(); } catch { }
                 try
                 {
                     if (_listener != null && _listener.IsListening)
@@ -298,6 +342,13 @@ namespace RamsRescuerDesktop
 
             string eventField = ExtractField(payload, "event");
             string token = ExtractField(payload, "deviceToken") ?? ExtractField(payload, "token") ?? "";
+
+            // Intercept LoRa Ping packets for latency and range analysis (never record as incident)
+            if (!string.IsNullOrEmpty(eventField) && eventField.Equals("LORA_PING", StringComparison.OrdinalIgnoreCase))
+            {
+                RecordPing(payload, "serial", DateTime.UtcNow);
+                return;
+            }
 
             string packetType = "alert";
             if (!string.IsNullOrEmpty(eventField))
@@ -601,8 +652,86 @@ namespace RamsRescuerDesktop
                     Name = "RAMS_LAN_Bridge"
                 };
                 _lanTcpThread.Start();
+                Console.WriteLine("[LAN-BRIDGE] Listening on port 8888");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[LAN-BRIDGE] Failed to bind 8888: {0}", ex.Message);
+            }
+        }
+
+        private static void StartDiscoveryResponder()
+        {
+            try
+            {
+                _discoveryUdp = new UdpClient(8889);
+                _discoveryThread = new Thread(DiscoveryWorker) { IsBackground = true, Name = "RAMS_Discovery" };
+                _discoveryThread.Start();
+                Console.WriteLine("[DISCOVERY] Responding on UDP 8889");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[DISCOVERY] Bind failed: {0}", ex.Message);
+            }
+        }
+
+        private static string LocalAddressFor(IPAddress remote)
+        {
+            try
+            {
+                byte[] rBytes = remote.GetAddressBytes();
+                foreach (NetworkInterface netInterface in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (netInterface.OperationalStatus != OperationalStatus.Up) continue;
+                    IPInterfaceProperties ipProps = netInterface.GetIPProperties();
+                    foreach (UnicastIPAddressInformation addr in ipProps.UnicastAddresses)
+                    {
+                        if (addr.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            byte[] lBytes = addr.Address.GetAddressBytes();
+                            if (lBytes[0] == rBytes[0] && lBytes[1] == rBytes[1] && lBytes[2] == rBytes[2])
+                            {
+                                return addr.Address.ToString();
+                            }
+                        }
+                    }
+                }
+                foreach (IPAddress ip in Dns.GetHostAddresses(Dns.GetHostName()))
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
+                    {
+                        return ip.ToString();
+                    }
+                }
             }
             catch { }
+            return "127.0.0.1";
+        }
+
+        private static void DiscoveryWorker()
+        {
+            IPEndPoint remote = new IPEndPoint(IPAddress.Any, 0);
+            while (!_exitRequested)
+            {
+                try
+                {
+                    byte[] data = _discoveryUdp.Receive(ref remote);
+                    string text = Encoding.ASCII.GetString(data);
+                    if (!text.StartsWith("RAMS_DISCOVER_V1 ")) continue;
+
+                    string nonce = text.Substring(17).Trim();
+                    string host = LocalAddressFor(remote.Address);
+                    string json = string.Format(
+                        "{{\"svc\":\"rams-desktop\",\"v\":1,\"host\":\"{0}\",\"port\":8888,\"nonce\":\"{1}\"}}",
+                        host, nonce);
+                    byte[] reply = Encoding.UTF8.GetBytes(json);
+                    _discoveryUdp.Send(reply, reply.Length, remote);
+                    Console.WriteLine("[DISCOVERY] Answered {0} with {1}", remote, host);
+                }
+                catch (SocketException) { }
+                catch (ObjectDisposedException) { break; }
+                catch { }
+            }
         }
 
         private static void LanTcpWorker()
@@ -635,6 +764,18 @@ namespace RamsRescuerDesktop
                     if (bytesRead > 0)
                     {
                         string req = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        if (req.StartsWith("GET /api/health", StringComparison.OrdinalIgnoreCase) || req.IndexOf("GET /api/health", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            string healthBody = "{\"status\":\"OK\",\"svc\":\"rams-desktop\",\"port\":8888}";
+                            byte[] payload = Encoding.UTF8.GetBytes(healthBody);
+                            string head = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nAccess-Control-Allow-Origin: *\r\nConnection: close\r\nContent-Length: " + payload.Length + "\r\n\r\n";
+                            byte[] headBytes = Encoding.ASCII.GetBytes(head);
+                            stream.Write(headBytes, 0, headBytes.Length);
+                            stream.Write(payload, 0, payload.Length);
+                            stream.Flush();
+                            return;
+                        }
+
                         int bodyIdx = req.IndexOf("\r\n\r\n");
                         if (bodyIdx >= 0)
                         {
@@ -847,6 +988,67 @@ namespace RamsRescuerDesktop
                 return;
             }
 
+            // Route: GET /api/health (Discovery & System Health Check)
+            if (rawUrl.Equals("/api/health", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                res.ContentType = "application/json; charset=utf-8";
+                res.StatusCode = 200;
+                string healthJson = string.Format("{{\"status\":\"HEALTHY\",\"port\":{0},\"mode\":\"STANDALONE_DESKTOP\",\"timestamp\":\"{1}\"}}", _port, DateTime.UtcNow.ToString("o"));
+                byte[] healthBytes = Encoding.UTF8.GetBytes(healthJson);
+                res.OutputStream.Write(healthBytes, 0, healthBytes.Length);
+                res.Close();
+                return;
+            }
+
+            // Route: GET /api/ping/recent (Last N LoRa Ping Records)
+            if (rawUrl.StartsWith("/api/ping/recent", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                HandleGetPingRecent(req, res);
+                return;
+            }
+
+            // Route: GET /api/ping/summary (Aggregated Latency, Jitter, Loss & Path Loss Summary)
+            if (rawUrl.Equals("/api/ping/summary", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                HandleGetPingSummary(res);
+                return;
+            }
+
+            // Route: GET /api/ping/export.csv (CSV Export for Field Tests)
+            if (rawUrl.Equals("/api/ping/export.csv", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                HandleGetPingExportCsv(res);
+                return;
+            }
+
+            // Route: POST /api/ping (Wi-Fi Receiver Direct Ingestion)
+            if (rawUrl.Equals("/api/ping", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                HandlePostPing(req, res);
+                return;
+            }
+
+            // Route: GET or POST /api/station (Base Station Coordinates Config)
+            if (rawUrl.Equals("/api/station", StringComparison.OrdinalIgnoreCase))
+            {
+                if (req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                {
+                    HandlePostStationConfig(req, res);
+                }
+                else
+                {
+                    HandleGetStationConfig(res);
+                }
+                return;
+            }
+
+            // Route: POST /api/station/detect (Attempt Windows Location Service Auto-Fix)
+            if (rawUrl.Equals("/api/station/detect", StringComparison.OrdinalIgnoreCase) && req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                HandleDetectStationLocation(res);
+                return;
+            }
+
             // Static File Serving from www/
             ServeStaticFile(rawUrl, res);
         }
@@ -899,6 +1101,551 @@ namespace RamsRescuerDesktop
 
             byte[] data = Encoding.UTF8.GetBytes(json);
             res.OutputStream.Write(data, 0, data.Length);
+            res.Close();
+        }
+
+        private static string EscapeJsonString(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            return s.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "").Replace("\n", "\\n");
+        }
+
+        private static void LoadStationConfig()
+        {
+            try
+            {
+                if (File.Exists(_stationConfigPath))
+                {
+                    string json = File.ReadAllText(_stationConfigPath, Encoding.UTF8);
+                    string latStr = ExtractField(json, "lat");
+                    string lonStr = ExtractField(json, "lon");
+                    string labelStr = ExtractField(json, "label");
+                    string srcStr = ExtractField(json, "source");
+                    string accStr = ExtractField(json, "accuracyM");
+                    string updStr = ExtractField(json, "updatedUtc");
+
+                    double latVal, lonVal, accVal;
+                    if (!string.IsNullOrEmpty(latStr) && double.TryParse(latStr, NumberStyles.Float, CultureInfo.InvariantCulture, out latVal))
+                        _stationLat = latVal;
+                    if (!string.IsNullOrEmpty(lonStr) && double.TryParse(lonStr, NumberStyles.Float, CultureInfo.InvariantCulture, out lonVal))
+                        _stationLon = lonVal;
+                    if (!string.IsNullOrEmpty(labelStr)) _stationLabel = labelStr;
+                    if (!string.IsNullOrEmpty(srcStr)) _stationSource = srcStr;
+                    if (!string.IsNullOrEmpty(accStr) && double.TryParse(accStr, NumberStyles.Float, CultureInfo.InvariantCulture, out accVal))
+                        _stationAccuracyM = accVal;
+                    DateTime dt;
+                    if (!string.IsNullOrEmpty(updStr) && DateTime.TryParse(updStr, null, DateTimeStyles.AdjustToUniversal, out dt))
+                        _stationUpdatedUtc = dt;
+                }
+                else
+                {
+                    _stationLat = 17.613200;
+                    _stationLon = 121.727000;
+                    _stationLabel = "Base Station (KM 42 Tuguegarao)";
+                    _stationSource = "manual";
+                    _stationAccuracyM = null;
+                    SaveStationConfig();
+                }
+            }
+            catch { }
+        }
+
+        private static void SaveStationConfig()
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("{");
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"lat\":{0},", _stationLat.HasValue ? _stationLat.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"lon\":{0},", _stationLon.HasValue ? _stationLon.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat("\"label\":\"{0}\",", EscapeJsonString(_stationLabel));
+                sb.AppendFormat("\"source\":\"{0}\",", EscapeJsonString(_stationSource));
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"accuracyM\":{0},", _stationAccuracyM.HasValue ? _stationAccuracyM.Value.ToString("0.0", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat("\"updatedUtc\":\"{0}\"", _stationUpdatedUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+                sb.Append("}");
+                File.WriteAllText(_stationConfigPath, sb.ToString(), Encoding.UTF8);
+            }
+            catch { }
+        }
+
+        private static void RecordPing(string payload, string via, DateTime ingestTime)
+        {
+            try
+            {
+                string token = ExtractField(payload, "token");
+                if (string.IsNullOrEmpty(token)) token = ExtractField(payload, "deviceToken");
+                if (string.IsNullOrEmpty(token)) token = "UNKNOWN";
+
+                string seqStr = ExtractField(payload, "seq");
+                if (string.IsNullOrEmpty(seqStr)) seqStr = ExtractField(payload, "pingSequence");
+                long seq = 0;
+                long.TryParse(seqStr, out seq);
+
+                string latStr = ExtractField(payload, "lat");
+                if (string.IsNullOrEmpty(latStr)) latStr = ExtractField(payload, "latitude");
+                double lat = 0.0;
+                double.TryParse(latStr, NumberStyles.Float, CultureInfo.InvariantCulture, out lat);
+
+                string lonStr = ExtractField(payload, "lon");
+                if (string.IsNullOrEmpty(lonStr)) lonStr = ExtractField(payload, "longitude");
+                double lon = 0.0;
+                double.TryParse(lonStr, NumberStyles.Float, CultureInfo.InvariantCulture, out lon);
+
+                string phoneEpochStr = ExtractField(payload, "phoneEpoch");
+                if (string.IsNullOrEmpty(phoneEpochStr)) phoneEpochStr = ExtractField(payload, "phoneEpochMs");
+                long phoneEpoch = 0;
+                long.TryParse(phoneEpochStr, out phoneEpoch);
+
+                string rssiStr = ExtractField(payload, "rssi");
+                int rssi = -999;
+                int.TryParse(rssiStr, out rssi);
+
+                string snrStr = ExtractField(payload, "snr");
+                double snr = 0.0;
+                double.TryParse(snrStr, NumberStyles.Float, CultureInfo.InvariantCulture, out snr);
+
+                string airtimeStr = ExtractField(payload, "airtimeMs");
+                double airtime = 246.8;
+                if (!string.IsNullOrEmpty(airtimeStr))
+                    double.TryParse(airtimeStr, NumberStyles.Float, CultureInfo.InvariantCulture, out airtime);
+
+                bool noFix = (Math.Abs(lat) < 0.000001 && Math.Abs(lon) < 0.000001) ||
+                             string.Equals(ExtractField(payload, "noFix"), "true", StringComparison.OrdinalIgnoreCase);
+
+                long t2Ms = (long)(ingestTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                long latencyMs = t2Ms - phoneEpoch;
+
+                double? distanceM = null;
+                if (!noFix && _stationLat.HasValue && _stationLon.HasValue)
+                {
+                    distanceM = HotspotPredictor.CalculateHaversineDistance(_stationLat.Value, _stationLon.Value, lat, lon);
+                }
+
+                long? jitterMs = null;
+                lock (_pingLock)
+                {
+                    PingTokenState prev;
+                    if (_lastPingByToken.TryGetValue(token, out prev))
+                    {
+                        long t2Diff = t2Ms - prev.T2Ms;
+                        long t0Diff = phoneEpoch - prev.T0Ms;
+                        jitterMs = Math.Abs(t2Diff - t0Diff);
+                    }
+                    _lastPingByToken[token] = new PingTokenState { T2Ms = t2Ms, T0Ms = phoneEpoch };
+                }
+
+                bool clockSkewSuspect = (latencyMs < 0 || latencyMs < (long)airtime);
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("{");
+                sb.Append("\"v\":1,");
+                sb.AppendFormat("\"recvUtc\":\"{0}\",", ingestTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+                sb.AppendFormat("\"t2Ms\":{0},", t2Ms);
+                sb.AppendFormat("\"via\":\"{0}\",", via);
+                sb.AppendFormat("\"token\":\"{0}\",", EscapeJsonString(token));
+                sb.AppendFormat("\"seq\":{0},", seq);
+                sb.AppendFormat("\"t0Ms\":{0},", phoneEpoch);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"airtimeMs\":{0:0.0},", airtime);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"lat\":{0:0.000000},", lat);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"lon\":{0:0.000000},", lon);
+                sb.AppendFormat("\"noFix\":{0},", noFix ? "true" : "false");
+                sb.AppendFormat("\"rssi\":{0},", rssi);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"snr\":{0:0.0},", snr);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"stationLat\":{0},", _stationLat.HasValue ? _stationLat.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"stationLon\":{0},", _stationLon.HasValue ? _stationLon.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat("\"stationSrc\":\"{0}\",", EscapeJsonString(_stationSource));
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"stationAccM\":{0},", _stationAccuracyM.HasValue ? _stationAccuracyM.Value.ToString("0.0", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"distanceM\":{0},", distanceM.HasValue ? distanceM.Value.ToString("0.0", CultureInfo.InvariantCulture) : "null");
+                sb.AppendFormat("\"latencyMs\":{0},", latencyMs);
+                sb.AppendFormat("\"jitterMs\":{0},", jitterMs.HasValue ? jitterMs.Value.ToString() : "null");
+                sb.AppendFormat("\"clockSkewSuspect\":{0}", clockSkewSuspect ? "true" : "false");
+                sb.Append("}");
+
+                string recordJson = sb.ToString();
+
+                lock (_pingLock)
+                {
+                    if (!string.IsNullOrEmpty(_pingLogPath))
+                    {
+                        File.AppendAllText(_pingLogPath, recordJson + "\n", Encoding.UTF8);
+                    }
+                    _recentPingsBuffer.Insert(0, recordJson);
+                    if (_recentPingsBuffer.Count > 200)
+                    {
+                        _recentPingsBuffer.RemoveAt(_recentPingsBuffer.Count - 1);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private static void HandleGetPingRecent(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            res.ContentType = "application/json; charset=utf-8";
+            int limit = 50;
+            string nStr = req.QueryString["n"];
+            if (!string.IsNullOrEmpty(nStr)) int.TryParse(nStr, out limit);
+            if (limit <= 0) limit = 50;
+            if (limit > 200) limit = 200;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            lock (_pingLock)
+            {
+                int count = Math.Min(limit, _recentPingsBuffer.Count);
+                for (int i = 0; i < count; i++)
+                {
+                    if (i > 0) sb.Append(",");
+                    sb.Append(_recentPingsBuffer[i]);
+                }
+            }
+            sb.Append("]");
+            byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandleGetPingSummary(HttpListenerResponse res)
+        {
+            res.ContentType = "application/json; charset=utf-8";
+            List<string> snapshot = new List<string>();
+            lock (_pingLock)
+            {
+                snapshot.AddRange(_recentPingsBuffer);
+            }
+
+            int count = snapshot.Count;
+            long minSeq = long.MaxValue, maxSeq = long.MinValue;
+            List<double> latenciesSerial = new List<double>();
+            List<double> latenciesHttp = new List<double>();
+            List<double> jitters = new List<double>();
+            List<double> distances = new List<double>();
+            List<double> logDistances = new List<double>();
+            List<double> rssiList = new List<double>();
+            double lastSnr = 0.0;
+            int skewCount = 0;
+
+            for (int i = 0; i < count; i++)
+            {
+                string p = snapshot[i];
+                string sSeq = ExtractField(p, "seq");
+                long seqVal;
+                if (long.TryParse(sSeq, out seqVal))
+                {
+                    if (seqVal < minSeq) minSeq = seqVal;
+                    if (seqVal > maxSeq) maxSeq = seqVal;
+                }
+
+                string via = ExtractField(p, "via") ?? "serial";
+                string sLat = ExtractField(p, "latencyMs");
+                double latVal;
+                if (double.TryParse(sLat, NumberStyles.Float, CultureInfo.InvariantCulture, out latVal))
+                {
+                    if (via.Equals("http", StringComparison.OrdinalIgnoreCase)) latenciesHttp.Add(latVal);
+                    else latenciesSerial.Add(latVal);
+                }
+
+                string sJit = ExtractField(p, "jitterMs");
+                double jitVal;
+                if (!string.IsNullOrEmpty(sJit) && double.TryParse(sJit, NumberStyles.Float, CultureInfo.InvariantCulture, out jitVal))
+                {
+                    jitters.Add(jitVal);
+                }
+
+                string sDist = ExtractField(p, "distanceM");
+                string sNoFix = ExtractField(p, "noFix");
+                double distVal;
+                if (!string.Equals(sNoFix, "true", StringComparison.OrdinalIgnoreCase) &&
+                    !string.IsNullOrEmpty(sDist) && double.TryParse(sDist, NumberStyles.Float, CultureInfo.InvariantCulture, out distVal))
+                {
+                    if (distVal > 0)
+                    {
+                        distances.Add(distVal);
+                        string sRssi = ExtractField(p, "rssi");
+                        double rVal;
+                        if (double.TryParse(sRssi, NumberStyles.Float, CultureInfo.InvariantCulture, out rVal))
+                        {
+                            logDistances.Add(Math.Log10(distVal));
+                            rssiList.Add(rVal);
+                        }
+                    }
+                }
+
+                if (i == 0)
+                {
+                    string sSnr = ExtractField(p, "snr");
+                    double.TryParse(sSnr, NumberStyles.Float, CultureInfo.InvariantCulture, out lastSnr);
+                }
+
+                if (string.Equals(ExtractField(p, "clockSkewSuspect"), "true", StringComparison.OrdinalIgnoreCase))
+                {
+                    skewCount++;
+                }
+            }
+
+            double lossPct = 0.0;
+            if (minSeq <= maxSeq && maxSeq > 0)
+            {
+                long expected = maxSeq - minSeq + 1;
+                if (expected > count)
+                {
+                    lossPct = ((double)(expected - count) / expected) * 100.0;
+                }
+            }
+
+            latenciesSerial.Sort();
+            latenciesHttp.Sort();
+            distances.Sort();
+
+            double p50Serial = latenciesSerial.Count > 0 ? latenciesSerial[latenciesSerial.Count / 2] : 0.0;
+            double p95Serial = latenciesSerial.Count > 0 ? latenciesSerial[(int)(latenciesSerial.Count * 0.95)] : 0.0;
+            double maxSerial = latenciesSerial.Count > 0 ? latenciesSerial[latenciesSerial.Count - 1] : 0.0;
+
+            double p50Http = latenciesHttp.Count > 0 ? latenciesHttp[latenciesHttp.Count / 2] : 0.0;
+            double p95Http = latenciesHttp.Count > 0 ? latenciesHttp[(int)(latenciesHttp.Count * 0.95)] : 0.0;
+            double maxHttp = latenciesHttp.Count > 0 ? latenciesHttp[latenciesHttp.Count - 1] : 0.0;
+
+            double meanJitter = 0.0;
+            if (jitters.Count > 0)
+            {
+                double sum = 0;
+                for (int j = 0; j < jitters.Count; j++) sum += jitters[j];
+                meanJitter = sum / jitters.Count;
+            }
+
+            double minDist = distances.Count > 0 ? distances[0] : 0.0;
+            double medDist = distances.Count > 0 ? distances[distances.Count / 2] : 0.0;
+            double maxDist = distances.Count > 0 ? distances[distances.Count - 1] : 0.0;
+
+            double pathLossN = 0.0, pathLossK = 0.0, pathLossR2 = 0.0;
+            if (logDistances.Count >= 10)
+            {
+                int nPts = logDistances.Count;
+                double sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+                for (int k = 0; k < nPts; k++)
+                {
+                    double x = logDistances[k];
+                    double y = rssiList[k];
+                    sumX += x;
+                    sumY += y;
+                    sumXY += x * y;
+                    sumX2 += x * x;
+                    sumY2 += y * y;
+                }
+                double denom = (nPts * sumX2 - sumX * sumX);
+                if (Math.Abs(denom) > 1e-9)
+                {
+                    double slope = (nPts * sumXY - sumX * sumY) / denom;
+                    double intercept = (sumY - slope * sumX) / nPts;
+                    pathLossK = intercept;
+                    pathLossN = -slope / 10.0;
+
+                    double rDenom = Math.Sqrt((nPts * sumX2 - sumX * sumX) * (nPts * sumY2 - sumY * sumY));
+                    if (rDenom > 1e-9)
+                    {
+                        double r = (nPts * sumXY - sumX * sumY) / rDenom;
+                        pathLossR2 = r * r;
+                    }
+                }
+            }
+
+            double linkMargin = lastSnr - (-12.5); // Demodulation floor for SF9: -12.5 dB
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+            sb.AppendFormat("\"totalRecords\":{0},", count);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"packetLossPct\":{0:0.1},", lossPct);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"serialLatencyP50\":{0:0.0},", p50Serial);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"serialLatencyP95\":{0:0.0},", p95Serial);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"serialLatencyMax\":{0:0.0},", maxSerial);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"httpLatencyP50\":{0:0.0},", p50Http);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"httpLatencyP95\":{0:0.0},", p95Http);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"httpLatencyMax\":{0:0.0},", maxHttp);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"meanJitterMs\":{0:0.1},", meanJitter);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"distanceMinM\":{0:0.0},", minDist);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"distanceMedianM\":{0:0.0},", medDist);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"distanceMaxM\":{0:0.0},", maxDist);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"pathLossN\":{0:0.2},", pathLossN);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"pathLossK\":{0:0.1},", pathLossK);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"pathLossR2\":{0:0.3},", pathLossR2);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"linkMarginDb\":{0:0.1},", linkMargin);
+            sb.AppendFormat("\"clockSkewSuspectCount\":{0}", skewCount);
+            sb.Append("}");
+
+            byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandleGetPingExportCsv(HttpListenerResponse res)
+        {
+            res.ContentType = "text/csv; charset=utf-8";
+            res.Headers.Add("Content-Disposition", "attachment; filename=\"rams_ping_export.csv\"");
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("recvUtc,via,token,seq,t0Ms,t2Ms,latencyMs,jitterMs,airtimeMs,lat,lon,noFix,rssi,snr,stationLat,stationLon,distanceM,clockSkewSuspect");
+
+            lock (_pingLock)
+            {
+                if (File.Exists(_pingLogPath))
+                {
+                    using (StreamReader sr = new StreamReader(_pingLogPath, Encoding.UTF8))
+                    {
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            if (string.IsNullOrEmpty(line)) continue;
+                            sb.AppendFormat(CultureInfo.InvariantCulture, "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17}\n",
+                                ExtractField(line, "recvUtc") ?? "",
+                                ExtractField(line, "via") ?? "serial",
+                                ExtractField(line, "token") ?? "",
+                                ExtractField(line, "seq") ?? "0",
+                                ExtractField(line, "t0Ms") ?? "0",
+                                ExtractField(line, "t2Ms") ?? "0",
+                                ExtractField(line, "latencyMs") ?? "0",
+                                ExtractField(line, "jitterMs") ?? "",
+                                ExtractField(line, "airtimeMs") ?? "246.8",
+                                ExtractField(line, "lat") ?? "0",
+                                ExtractField(line, "lon") ?? "0",
+                                ExtractField(line, "noFix") ?? "false",
+                                ExtractField(line, "rssi") ?? "-999",
+                                ExtractField(line, "snr") ?? "0",
+                                ExtractField(line, "stationLat") ?? "",
+                                ExtractField(line, "stationLon") ?? "",
+                                ExtractField(line, "distanceM") ?? "",
+                                ExtractField(line, "clockSkewSuspect") ?? "false");
+                        }
+                    }
+                }
+            }
+
+            byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandleGetStationConfig(HttpListenerResponse res)
+        {
+            res.ContentType = "application/json; charset=utf-8";
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"lat\":{0},", _stationLat.HasValue ? _stationLat.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"lon\":{0},", _stationLon.HasValue ? _stationLon.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null");
+            sb.AppendFormat("\"label\":\"{0}\",", EscapeJsonString(_stationLabel));
+            sb.AppendFormat("\"source\":\"{0}\",", EscapeJsonString(_stationSource));
+            sb.AppendFormat(CultureInfo.InvariantCulture, "\"accuracyM\":{0},", _stationAccuracyM.HasValue ? _stationAccuracyM.Value.ToString("0.0", CultureInfo.InvariantCulture) : "null");
+            sb.AppendFormat("\"updatedUtc\":\"{0}\"", _stationUpdatedUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+            sb.Append("}");
+            byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandlePostStationConfig(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            res.ContentType = "application/json; charset=utf-8";
+            string body = "";
+            using (StreamReader sr = new StreamReader(req.InputStream, req.ContentEncoding))
+            {
+                body = sr.ReadToEnd();
+            }
+
+            string latStr = ExtractField(body, "lat");
+            string lonStr = ExtractField(body, "lon");
+            string labelStr = ExtractField(body, "label");
+
+            double latVal, lonVal;
+            if (!string.IsNullOrEmpty(latStr) && double.TryParse(latStr, NumberStyles.Float, CultureInfo.InvariantCulture, out latVal))
+                _stationLat = latVal;
+            if (!string.IsNullOrEmpty(lonStr) && double.TryParse(lonStr, NumberStyles.Float, CultureInfo.InvariantCulture, out lonVal))
+                _stationLon = lonVal;
+            if (!string.IsNullOrEmpty(labelStr))
+                _stationLabel = labelStr;
+
+            _stationSource = "manual";
+            _stationAccuracyM = null;
+            _stationUpdatedUtc = DateTime.UtcNow;
+            SaveStationConfig();
+
+            res.StatusCode = 200;
+            byte[] bytes = Encoding.UTF8.GetBytes("{\"status\":\"OK\",\"message\":\"Station coordinates updated\"}");
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandleDetectStationLocation(HttpListenerResponse res)
+        {
+            res.ContentType = "application/json; charset=utf-8";
+            bool success = false;
+            try
+            {
+                Type watcherType = Type.GetType("System.Device.Location.GeoCoordinateWatcher, System.Device, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+                if (watcherType != null)
+                {
+                    object watcher = Activator.CreateInstance(watcherType);
+                    MethodInfo tryStart = watcherType.GetMethod("TryStart", new Type[] { typeof(bool), typeof(TimeSpan) });
+                    if (tryStart != null)
+                    {
+                        bool started = (bool)tryStart.Invoke(watcher, new object[] { false, TimeSpan.FromSeconds(8) });
+                        if (started)
+                        {
+                            PropertyInfo posProp = watcherType.GetProperty("Position");
+                            object pos = posProp.GetValue(watcher, null);
+                            if (pos != null)
+                            {
+                                PropertyInfo locProp = pos.GetType().GetProperty("Location");
+                                object loc = locProp.GetValue(pos, null);
+                                if (loc != null)
+                                {
+                                    PropertyInfo isUnknownProp = loc.GetType().GetProperty("IsUnknown");
+                                    bool isUnknown = (bool)isUnknownProp.GetValue(loc, null);
+                                    PropertyInfo accProp = loc.GetType().GetProperty("HorizontalAccuracy");
+                                    double acc = (double)accProp.GetValue(loc, null);
+                                    if (!isUnknown && acc > 0 && acc <= 50)
+                                    {
+                                        PropertyInfo latProp = loc.GetType().GetProperty("Latitude");
+                                        PropertyInfo lonProp = loc.GetType().GetProperty("Longitude");
+                                        _stationLat = (double)latProp.GetValue(loc, null);
+                                        _stationLon = (double)lonProp.GetValue(loc, null);
+                                        _stationAccuracyM = acc;
+                                        _stationSource = "windows";
+                                        _stationUpdatedUtc = DateTime.UtcNow;
+                                        SaveStationConfig();
+                                        success = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    MethodInfo stop = watcherType.GetMethod("Stop");
+                    if (stop != null) stop.Invoke(watcher, null);
+                }
+            }
+            catch { }
+
+            string status = success ? "OK" : "REJECTED_OR_UNAVAILABLE";
+            string json = string.Format("{{\"status\":\"{0}\",\"source\":\"{1}\",\"lat\":{2},\"lon\":{3},\"accuracyM\":{4}}}",
+                status, _stationSource,
+                _stationLat.HasValue ? _stationLat.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null",
+                _stationLon.HasValue ? _stationLon.Value.ToString("0.000000", CultureInfo.InvariantCulture) : "null",
+                _stationAccuracyM.HasValue ? _stationAccuracyM.Value.ToString("0.0", CultureInfo.InvariantCulture) : "null");
+            byte[] bytes = Encoding.UTF8.GetBytes(json);
+            res.OutputStream.Write(bytes, 0, bytes.Length);
+            res.Close();
+        }
+
+        private static void HandlePostPing(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            string body = "";
+            using (StreamReader sr = new StreamReader(req.InputStream, req.ContentEncoding))
+            {
+                body = sr.ReadToEnd();
+            }
+            RecordPing(body, "http", DateTime.UtcNow);
+            res.ContentType = "application/json; charset=utf-8";
+            res.StatusCode = 200;
+            byte[] bytes = Encoding.UTF8.GetBytes("{\"status\":\"OK\"}");
+            res.OutputStream.Write(bytes, 0, bytes.Length);
             res.Close();
         }
 
@@ -1175,6 +1922,12 @@ namespace RamsRescuerDesktop
         {
             string eventField = ExtractField(payload, "event");
             string token = ExtractField(payload, "deviceToken") ?? ExtractField(payload, "token") ?? "";
+
+            // If ping reaches here, ignore it and return null
+            if (!string.IsNullOrEmpty(eventField) && eventField.Equals("LORA_PING", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
 
             string packetType = "alert";
             if (!string.IsNullOrEmpty(eventField))

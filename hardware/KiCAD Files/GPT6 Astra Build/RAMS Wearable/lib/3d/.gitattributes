@@ -1,0 +1,4 @@
+# Preserve downloaded model byte identities across Windows checkouts.
+*.step -text
+*.stp -text
+*.wrl -text

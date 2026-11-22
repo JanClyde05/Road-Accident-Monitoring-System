@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-15",
+  "source_sha256": {
+    "RAMS_JLC_S3.kicad_sch": "ed30c824135b1972ddfa3bea19e725966aef67a154318457bd1cc5a3dbd405e6",
+    "RAMS_JLC_S3_io.kicad_sch": "11ccfba8d61f218d611ed60808768e7ba577f6d450acbbc99a9f0524c69cd1f6",
+    "RAMS_JLC_S3_mcu.kicad_sch": "f64982ff617b2677cb2115aab49f95d9f8db9c5d22e2c757d368029506f33a35",
+    "RAMS_JLC_S3_power.kicad_sch": "fe24f4785832dec6be607bc23adcee6016e82b10e765f0de1c082a0ff10c29c1",
+    "RAMS_JLC_S3.kicad_pro": "ef101c0cf36179e5837838609da19ec9fc2b382768b5a2ab22f249fadf1a5bb3",
+    "RAMS_JLC_S3.kicad_dru": "b155d2f5f3b67178106565cd3292cc8038c4136cf71d94bccadc1a99843c2210",
+    "fp-lib-table": "fba4e809073992e45b4717d3c4ade3bda694a145992c265e7ffc15879f1faf73",
+    "sym-lib-table": "d8cc53c807eac9de5a0ba9dbc6af31956a4df3f64c7837bdb60ce2a66f5a7b31",
+    "lib/RAMS_JLC.pretty/Buzzer_9650_SMD_Stock_HandSolder.kicad_mod": "fef313a4a998878d35bdb004df5e07c360f781305af731b47ff6ba7f52f0c52f",
+    "lib/RAMS_JLC.pretty/Buzzer_PUI_SMI-1027-TW-3V-R.kicad_mod": "28d9fe3acad9925c291faff5930e529aba0adb5554782214efdc428eebb1fbb6",
+    "lib/RAMS_JLC.pretty/Crystal_Abracon_ABM8_3225.kicad_mod": "7767f690dfee6463f7ac30a60f0f65f3e4f0bbf731cba2e43239b51441f4ecd5",
+    "lib/RAMS_JLC.pretty/ESP32-S3FH4R2_QFN56_EP5p7.kicad_mod": "bae611e0ec03f6c4d26bcf195408a4b664a36c3cd55459e4d555341710ac60f0",
+    "lib/RAMS_JLC.pretty/Johanson_B100_3216.kicad_mod": "ed0370c75712ee7818770850f7e1516bd693246001fe5b32d8025ce0a99d9e85",
+    "lib/RAMS_JLC.pretty/SW_SPDT_Shouhan_MSK12C02.kicad_mod": "2ed9d359e48ab026551c140019a247cbf29f3063885c060c19b7c7ad5b606ae5",
+    "lib/RAMS_JLC.pretty/SW_SPST_TS-1088-xR020.kicad_mod": "add8704300b5fc07181e6a0feeb535dc7516376cbe0e66301f6db49741982496",
+    "lib/RAMS_JLC.pretty/TPS63020_DSJ14.kicad_mod": "01ae86aa0c83a16c9ce2961f491bcc650993c82e5a5a8ebce62c3bf49afc0a44",
+    "lib/RAMS_JLC.pretty/USB4105_GND_NPTH_Clearance.kicad_mod": "44c29246053c93c8bc9f3162f1f47563086daa892de37a6268f90ccf02e46215",
+    "lib/RAMS_JLC.pretty/USB_C_Receptacle_GCT4105_NPTH.kicad_mod": "8faac80e0c59fd61e87198a7836e0308c41d2bda6cab12e70d2d256780572708",
+    "lib/RAMS_JLC.kicad_sym": "8bcd9548d36207e85076f6e2aec3ce29b009391ce600953f87af42c106730f46",
+    "RAMS_JLC_S3.kicad_pcb": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a"
+  },
+  "report_sha256": {
+    "final_drc.json": "4b1a9e80cfc664630ffc61197a4c3f32ad21e2d08931898272120bd6a5748180",
+    "final_erc.json": "3c9a885da2859e3a303af3240eae61ccd39a219f17d32c8f4534c208c2a67028"
+  },
+  "commands": [
+    {
+      "args": [
+        "pcb",
+        "drc",
+        "--format",
+        "json",
+        "--all-track-errors",
+        "--schematic-parity",
+        "--severity-all",
+        "--exit-code-violations",
+        "--refill-zones",
+        "--save-board",
+        "--output",
+        "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\reports\\final_drc.json",
+        "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "stdout": "Found 0 violations\nFound 0 unconnected items\nFound 0 schematic parity issues\nSaved DRC Report to D:/Antigravity/Projects/Danger Monitoring System V2/hardware/KiCAD Files/GPT6 Astra Build/RAMS Wearable/reports/final_drc.json\nSaved board\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "sch",
+        "erc",
+        "--format",
+        "json",
+        "--severity-all",
+        "--exit-code-violations",
+        "--output",
+        "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\reports\\final_erc.json",
+        "D:\\Antigravity\\Projects\\Danger Monitoring System V2\\hardware\\KiCAD Files\\GPT6 Astra Build\\RAMS Wearable\\RAMS_JLC_S3.kicad_sch"
+      ],
+      "exit_code": 0,
+      "stdout": "Found 0 violations\nSaved ERC Report to D:/Antigravity/Projects/Danger Monitoring System V2/hardware/KiCAD Files/GPT6 Astra Build/RAMS Wearable/reports/final_erc.json\n",
+      "stderr": ""
+    }
+  ]
+}

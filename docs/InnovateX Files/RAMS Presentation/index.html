@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#090e13" />
+    <meta
+      name="description"
+      content="The RAMS InnovateX research exhibit. Explore phone-based crash detection, motion benchmarks and the hardware behind a LoRa alert."
+    />
+    <title>RAMS - Road Accident Monitoring System | InnovateX 2026</title>
+    <link rel="icon" href="public/mark.jpg" />
+    <link rel="stylesheet" href="assets/fonts.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="chapters.css" />
+  </head>
+  <body>
+    <a class="skip" href="#chapter-title">Skip to chapter</a>
+    <header class="mast">
+      <a class="brand" href="#overview" aria-label="RAMS overview"
+        ><img src="public/mark.jpg" width="39" height="39" alt="" /><span>RAMS</span></a
+      >
+      <span class="mast-sub">Research exhibit</span>
+      <nav aria-label="Presentation tools">
+        <select id="program" aria-label="Presentation route">
+          <option value="full">Full exhibit · 17:30</option>
+          <option value="finals">Finals talk · 6:00</option>
+        </select>
+        <button id="open-index" class="quiet">
+          <i data-icon="index"></i> <span>Chapter index</span></button
+        ><button id="full" class="iconbtn" aria-label="Enter fullscreen" title="Enter fullscreen (F)">
+          <i data-icon="full"></i>
+        </button>
+      </nav>
+    </header>
+    <main id="exhibit">
+      <section class="stage" aria-labelledby="chapter-title">
+        <div class="intro">
+          <div class="kicker">
+            <span class="waves" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></span
+            ><span id="category">INNOVATEX 2026</span><span class="slash">/</span
+            ><span id="sub-category">SYSTEM OVERVIEW</span>
+          </div>
+          <h1 id="chapter-title" tabindex="-1">Road Accident<br />Monitoring<br /><em>System.</em></h1>
+          <p class="summary" id="summary">
+            A phone senses a possible crash. A wearable relays the alert by radio. A rescue station
+            receives the report, even beyond cellular coverage.
+          </p>
+          <div class="actions">
+            <button id="primary" class="primary">
+              <i data-icon="play"></i><span>Begin presentation</span></button
+            ><button id="notes" class="notes"><i data-icon="book"></i><span>Field notes</span></button>
+          </div>
+        </div>
+        <div class="visual" id="visual">
+          <div
+            class="road"
+            id="road"
+            role="img"
+            aria-label="Illustrative three-dimensional point-cloud terrain with a road corridor and an event marker"
+          ></div>
+          <div id="road-ui">
+            <div class="figure-label">
+              <i data-icon="focus"></i><span>ROAD CORRIDOR</span
+              ><span class="fig-type">/ &nbsp; POINT CLOUD</span>
+            </div>
+            <div id="beacon" class="beacon" aria-hidden="true"><span></span><b>EVENT SITE</b></div>
+            <div class="visual-foot">
+              <span class="orbit-hint"><i data-icon="orbit"></i><span>Drag to orbit</span></span>
+              <div class="scene-tools">
+                <button id="scan" aria-label="Sweep terrain" title="Sweep terrain">
+                  <i data-icon="scan"></i></button
+                ><button id="rain" aria-label="Toggle lens rain" aria-pressed="false" title="Lens rain">
+                  <i data-icon="rain"></i></button
+                ><button id="motion" aria-label="Pause scene motion" title="Pause scene motion">
+                  <i data-icon="pause"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="exhibit-panel" hidden></div>
+        </div>
+      </section>
+      <footer class="deck">
+        <div class="deck-head">
+          <div class="chapter-status">
+            <span class="active-dash"></span><span class="mono">CHAPTER</span
+            ><strong id="current">01</strong><span class="total" id="total">/ 15</span>
+            <span id="chapter-name"></span>
+          </div>
+          <div class="deck-buttons">
+            <span class="keyboard-hint">Navigate chapters</span
+            ><button
+              id="back"
+              class="iconbtn"
+              aria-label="Previous chapter"
+              title="Previous chapter (Left arrow)"
+              disabled
+            >
+              <i data-icon="left"></i></button
+            ><button
+              id="next"
+              class="iconbtn"
+              aria-label="Next chapter"
+              title="Next chapter (Right arrow)"
+            >
+              <i data-icon="right"></i>
+            </button>
+          </div>
+        </div>
+        <nav id="chapter-nav" aria-label="Presentation sections"></nav>
+      </footer>
+    </main>
+    <dialog id="drawer" aria-labelledby="drawer-title">
+      <div class="dialog-inner">
+        <header>
+          <p class="eyebrow" id="drawer-label"></p>
+          <button id="close" class="iconbtn" aria-label="Close dialog">
+            <i data-icon="close"></i>
+          </button>
+        </header>
+        <h2 id="drawer-title"></h2>
+        <div id="drawer-body"></div>
+      </div>
+    </dialog>
+    <div id="announcement" class="sr-only" aria-live="polite"></div>
+    <noscript>This interactive presentation needs JavaScript. Enable it and reopen this file.</noscript>
+    <script src="assets/presentation.js" defer></script>
+  </body>
+</html>

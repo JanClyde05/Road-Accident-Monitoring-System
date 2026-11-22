@@ -137,6 +137,76 @@ points nowhere useful. Use `[System.IO.File]::WriteAllText` with
 
 Caught by inspecting the subject bytes of `8f31457`; the amend removed it.
 
+### L-14 - A comment and a UI string are not evidence of a feature
+
+`lora_rx.cpp:342` promised a "Desktop App Ping Monitor" and
+`SettingsScreen.kt:1608` promised a logger; neither existed in the desktop
+consumer. Verify the consumer, not the producer.
+
+Enforced by RNG-005.
+
+### L-15 - Never measure a millisecond with a blocking network call
+
+A 15 s timeout in the receive path is 60x the window being measured. Pings must
+be logged over direct USB serial first, and any Wi-Fi upload path must be
+isolated in an asynchronous task that drops stale packets rather than queueing
+them.
+
+Enforced by RNG-004.
+
+### L-16 - Before optimising a Compose screen, confirm which field is churning
+
+`beamAperture` looked noisy but is quantized to five discrete values; the cost
+was `yawDegrees` alone driving WebView JavaScript bridge evaluations at 50 Hz.
+Measure the individual field rate, not the enclosing data class.
+
+Enforced by PERF-001, PERF-002.
+
+### L-17 - A voltage divider must sit between the measured rail and ground
+
+The prototype FCS circuit connected the divider between `+3.3V` and `GND`,
+reading 1.65 V at all times regardless of actual cell voltage. A battery divider
+must sit between `VBAT` and `GND`. Never connect the top of a battery sense
+divider to a regulated output.
+
+Documented in `HARDWARE_REVISION_PLAN.md` and INC-019.
+
+### L-18 - Toolchain type names are exact; watch capitalization across cores
+
+In ESP32 Arduino Core 3.3.5, the UDP socket type is `WiFiUDP` (all caps), not
+`WiFiUdp`. Case mismatches cause immediate compile aborts. Always check header
+declarations in the active ESP32 framework version before introducing network
+classes.
+
+Enforced by receiver compile gate.
+
+### L-19 - Arduino-ESP32 classic BLE lacks NimBLE convenience methods
+
+`pAdvertising->advertiseOnDisconnect(true)` is a NimBLE-only extension and does
+not exist in the standard Arduino-ESP32 BLE library. The classic BLE stack
+requires re-triggering advertising explicitly in the server's `onDisconnect`
+callback via `pServer->startAdvertising()`.
+
+Enforced by FW-006 and wearable compile gate.
+
+### L-20 - Verify link targets against current filenames before committing docs
+
+`RescuerForm.cs` was renamed to `Program.cs` during the AI dashboard rework, but
+documentation references remained pointed at the old file, breaking navigation.
+Cross-reference checks must validate physical path existence for all documentation
+links.
+
+Enforced by DOC-003.
+
+### L-21 - Project name migrations require complete path audits
+
+When renaming a project or workspace directory, all absolute and relative
+`file:///` URIs in README and index documentation must be audited and updated.
+Leaving retired project names (`Danger Monitoring System V2`) creates 404 links
+and violates workspace naming directives.
+
+Enforced by DOC-003 and Project Name Authority rule.
+
 ## Corrections made during this audit
 
 These are the mistakes in the analysis itself. Keeping them prevents the same

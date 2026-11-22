@@ -1,5 +1,22 @@
 # RAMS Workspace Rules & Operating Directives
 
+## 0. Project Name Authority (Binding)
+
+This project is **RAMS - Road Accident Monitoring System**.
+
+- Canonical folder: `D:\Antigravity\Projects\Road Accident Monitoring System`
+- Canonical title: `RAMS - Road Accident Monitoring System`
+- **Retired names.** `Danger Monitoring System`, `Danger Monitoring System V2`
+  and `DMS V2` are obsolete. Do not use them in new code, docs, UI strings,
+  commit messages, file names or folder names. If an existing file still
+  carries one of the retired names, replace it when you next touch that file.
+- Historical artifacts (build logs, `evidence/`, `reports/`, `verification/`,
+  `docs/agent/verification-log.jsonl`) are immutable records. Leave retired
+  names inside them untouched; rewriting a log would falsify the record.
+- The workspace is bound by path, not by name. If the folder is renamed again,
+  update this section first so every agent inherits the new path.
+
+
 ## 1. Ponytail Decision Ladder (Token Usage Optimization)
 Enforce the "lazy senior developer" mindset on every interaction:
 1. **YAGNI**: Don't build what wasn't requested. Keep modifications minimal.
@@ -18,13 +35,14 @@ Replace framework orchestration and monolithic prompt stuffing with filesystem-a
 4. **Surgical Context Loading**: Read only the specific lines or files needed for the immediate step.
 
 ## 3. RAMS Master System Anchors (Graphify & Obsidian)
-- **Directory Map & Navigation Index**: [DIRECTORY_MAP.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/DIRECTORY_MAP.md)
-- **Memory Map & Graphify Reference**: [MEMORY_MAP.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/MEMORY_MAP.md)
-- **Obsidian Memory Map**: [RAMS_OBSIDIAN_MEMORY_MAP.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/docs/MD%20Files/RAMS_OBSIDIAN_MEMORY_MAP.md)
-- **System Architecture**: [00_SYSTEM_ARCHITECTURE.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/00_SYSTEM_ARCHITECTURE.md)
-- **Design Guidelines (Zero-Emoji)**: [DESIGN_RULES.md](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/DESIGN_RULES.md)
-- **Shared LoRa Packet Protocol**: [protocol.h](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/firmware/shared/protocol.h)
-- **Hardware & Manufacturing**: [hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/)
+- **Execution Plan (start here)**: [docs/agent/EXECUTION_PLAN.md](docs/agent/EXECUTION_PLAN.md)
+- **Directory Map & Navigation Index**: [DIRECTORY_MAP.md](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/DIRECTORY_MAP.md)
+- **Memory Map & Graphify Reference**: [MEMORY_MAP.md](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/MEMORY_MAP.md)
+- **Obsidian Memory Map**: [RAMS_OBSIDIAN_MEMORY_MAP.md](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/docs/MD%20Files/RAMS_OBSIDIAN_MEMORY_MAP.md)
+- **System Architecture**: [00_SYSTEM_ARCHITECTURE.md](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/00_SYSTEM_ARCHITECTURE.md)
+- **Design Guidelines (Zero-Emoji)**: [DESIGN_RULES.md](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/DESIGN_RULES.md)
+- **Shared LoRa Packet Protocol**: [protocol.h](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/shared/protocol.h)
+- **Hardware & Manufacturing**: [hardware/KiCAD Files/Antigravity Build/RAMS - PCB - Rev C/](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/hardware/KiCAD%20Files/Antigravity%20Build/RAMS%20-%20PCB%20-%20Rev%20C/)
 
 ## 4. Multi-Account & Persistent Workspace Enforcement
 These instructions are bound directly to this workspace repository. They persist across all user accounts, agent sessions, subagents, and IDE instances.

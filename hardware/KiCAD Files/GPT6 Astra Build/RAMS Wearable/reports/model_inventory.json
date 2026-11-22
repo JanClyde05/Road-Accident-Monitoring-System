@@ -1,5 +1,5 @@
 {
-  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
   "physical_positions_with_models": 82,
   "test_pads_without_models": 8,
   "models": {

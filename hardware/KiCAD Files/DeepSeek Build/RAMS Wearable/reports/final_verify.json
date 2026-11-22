@@ -1,0 +1,702 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-19T22:43:18",
+    "ignored_checks": [],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad A8 [unconnected-(J1-SBU1-PadA8)] of J1 on F.Cu",
+                    "pos": {
+                        "x": 107.75,
+                        "y": 125.32
+                    },
+                    "uuid": "4fc64cf9-bc51-4d79-ad5a-0ce13ac36643"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad B8 [unconnected-(J1-SBU2-PadB8)] of J1 on F.Cu",
+                    "pos": {
+                        "x": 104.75,
+                        "y": 125.32
+                    },
+                    "uuid": "2f969130-9781-4e62-b16c-6b7281178a6f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [unconnected-(U3-~{CHRG}-Pad1)] of U3 on F.Cu",
+                    "pos": {
+                        "x": 131.3625,
+                        "y": 109.55
+                    },
+                    "uuid": "7385a2b8-122d-4ea4-afcd-8c6f30826094"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 4 [unconnected-(U4-NC-Pad4)] of U4 on F.Cu",
+                    "pos": {
+                        "x": 120.87,
+                        "y": 128.2625
+                    },
+                    "uuid": "fbed2c09-9134-4f2d-8ddf-3d6ce77576c6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 4 [unconnected-(U5-NC-Pad4)] of U5 on F.Cu",
+                    "pos": {
+                        "x": 125.1375,
+                        "y": 122.95
+                    },
+                    "uuid": "a9aa2c32-bd5a-41e1-b715-c99754c68d67"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [unconnected-(ANT1-PCB_Trace-Pad2)] of ANT1 on F.Cu",
+                    "pos": {
+                        "x": 100.9,
+                        "y": 103.2
+                    },
+                    "uuid": "977cb20f-90d0-4e5f-8ea4-4085411f2965"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 8 [unconnected-(U1-GPIO3-Pad8)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 112.2
+                    },
+                    "uuid": "87f94ad0-a64f-4f17-99c7-a99bdc815273"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 9 [unconnected-(U1-GPIO4-Pad9)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 112.6
+                    },
+                    "uuid": "cb6092e5-779a-4656-9f22-0e92a89ed459"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 10 [unconnected-(U1-GPIO5-Pad10)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 113.0
+                    },
+                    "uuid": "a9324037-39d5-4e0a-ab54-454731b7a30f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 11 [unconnected-(U1-GPIO6-Pad11)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 113.4
+                    },
+                    "uuid": "4e25c6bc-6fdb-4c2d-bfb7-9e0b7b69a734"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 12 [unconnected-(U1-GPIO7-Pad12)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 113.8
+                    },
+                    "uuid": "19da3d1b-d34f-42d1-9fee-0dbcbef316fe"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 19 [unconnected-(U1-GPIO14-Pad19)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 114.0,
+                        "y": 115.45
+                    },
+                    "uuid": "96fb00ba-253a-462c-a8b2-686f124db6ff"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 21 [unconnected-(U1-XTAL_32K_P-Pad21)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 114.8,
+                        "y": 115.45
+                    },
+                    "uuid": "8a3f3aff-6041-4b72-bc6b-5a51d51e4395"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 22 [unconnected-(U1-XTAL_32K_N-Pad22)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 115.2,
+                        "y": 115.45
+                    },
+                    "uuid": "b873ada3-ce4e-460b-90b0-2264719edee3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 23 [unconnected-(U1-GPIO17-Pad23)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 115.6,
+                        "y": 115.45
+                    },
+                    "uuid": "810b8f4f-c978-48ee-9111-2e4f67bbe2ab"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 24 [unconnected-(U1-GPIO18-Pad24)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 116.0,
+                        "y": 115.45
+                    },
+                    "uuid": "61b1171b-fabe-42a4-8f9c-8b4e798a0ae4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 27 [unconnected-(U1-GPIO21-Pad27)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 117.2,
+                        "y": 115.45
+                    },
+                    "uuid": "a76787e0-4624-4c58-9311-c636b88721ba"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 28 [unconnected-(U1-SPICS1-Pad28)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 117.6,
+                        "y": 115.45
+                    },
+                    "uuid": "7d83d704-d096-4bf4-86f3-406b6375e9a6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 30 [unconnected-(U1-SPIHD-Pad30)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 114.2
+                    },
+                    "uuid": "a1834059-93c8-41cb-b8b2-67e2ae816f04"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 31 [unconnected-(U1-SPIWP-Pad31)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 113.8
+                    },
+                    "uuid": "cba8f5be-a3a0-4187-a720-364b7e83fdae"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 32 [unconnected-(U1-SPICS0-Pad32)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 113.4
+                    },
+                    "uuid": "e49c689b-8659-478f-bf31-6a20d951fee2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 33 [unconnected-(U1-SPICLK-Pad33)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 113.0
+                    },
+                    "uuid": "8555d16a-c757-415d-9053-77cf36108c44"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 34 [unconnected-(U1-SPIQ-Pad34)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 112.6
+                    },
+                    "uuid": "7a543584-8645-416b-9eb4-4c0355349ee5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 35 [unconnected-(U1-SPID-Pad35)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 112.2
+                    },
+                    "uuid": "866ef6b4-309d-4eec-b54c-a909434458f0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 37 [unconnected-(U1-SPICLK_P-Pad37)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 111.4
+                    },
+                    "uuid": "4f14ed6a-81c0-4f0b-9924-5c88b99c49dd"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 38 [unconnected-(U1-GPIO33-Pad38)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 111.0
+                    },
+                    "uuid": "e9d2ba4b-cbce-4afb-900a-9ed36021c571"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 39 [unconnected-(U1-GPIO34-Pad39)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 110.6
+                    },
+                    "uuid": "fdb89938-c09d-413e-933b-07c5f0252319"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 40 [unconnected-(U1-GPIO35-Pad40)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 110.2
+                    },
+                    "uuid": "f798b6c4-0d86-4f82-9939-6c1ca64585b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 41 [unconnected-(U1-GPIO36-Pad41)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 109.8
+                    },
+                    "uuid": "33eb1fdc-4d9e-4ceb-81bc-26c9d4a5937d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 42 [unconnected-(U1-GPIO37-Pad42)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 118.45,
+                        "y": 109.4
+                    },
+                    "uuid": "85e72eca-f50a-41d5-bd01-5cdc2e189c71"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 43 [unconnected-(U1-GPIO38-Pad43)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 117.6,
+                        "y": 108.55
+                    },
+                    "uuid": "95b942c8-413a-406c-b716-cd98828cd056"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 44 [unconnected-(U1-MTCK-Pad44)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 117.2,
+                        "y": 108.55
+                    },
+                    "uuid": "45db7913-5973-4de5-b4b9-f85c9dcb53d6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 45 [unconnected-(U1-MTDO-Pad45)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 116.8,
+                        "y": 108.55
+                    },
+                    "uuid": "64b9b316-af68-4ce2-be82-c8a3c553b09e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 47 [unconnected-(U1-MTDI-Pad47)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 116.0,
+                        "y": 108.55
+                    },
+                    "uuid": "82822f3f-0ebf-4e3f-9fc9-74d4928d8240"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 48 [unconnected-(U1-MTMS-Pad48)] of U1 on F.Cu",
+                    "pos": {
+                        "x": 115.6,
+                        "y": 108.55
+                    },
+                    "uuid": "f4e429bf-c23f-4cfb-b00a-9b0c0400cf88"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [unconnected-(LED1-DOUT-Pad1)] of LED1 on F.Cu",
+                    "pos": {
+                        "x": 135.585,
+                        "y": 103.45
+                    },
+                    "uuid": "694d0651-e635-4857-923c-0f92e95ecea0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 6 [unconnected-(U2-DIO1-Pad6)] of U2 on B.Cu",
+                    "pos": {
+                        "x": 137.5,
+                        "y": 114.4
+                    },
+                    "uuid": "3afd82b5-768e-4f0b-9256-a9b7ebbac916"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 7 [unconnected-(U2-DIO2-Pad7)] of U2 on B.Cu",
+                    "pos": {
+                        "x": 137.5,
+                        "y": 116.4
+                    },
+                    "uuid": "29f686e7-a010-4584-bbb5-083aa791ca0d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 8 [unconnected-(U2-DIO3-Pad8)] of U2 on B.Cu",
+                    "pos": {
+                        "x": 137.5,
+                        "y": 118.4
+                    },
+                    "uuid": "f4a5093d-a71b-4f15-9c04-5b574fedbe20"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 10 [unconnected-(U2-DIO4-Pad10)] of U2 on B.Cu",
+                    "pos": {
+                        "x": 121.5,
+                        "y": 116.4
+                    },
+                    "uuid": "97305c0f-e839-4b55-8f30-09b071df7a16"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 11 [unconnected-(U2-DIO5-Pad11)] of U2 on B.Cu",
+                    "pos": {
+                        "x": 121.5,
+                        "y": 114.4
+                    },
+                    "uuid": "4f8606ba-d9b2-4666-9bf6-113a4ecbe6b7"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        }
+    ],
+    "source": "RAMS_JLC_S3.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 5 [BOOT_BTN] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 111.0
+                    },
+                    "uuid": "c944ca48-eafb-4653-a156-44e8ecff7c29"
+                },
+                {
+                    "description": "Track [BOOT_BTN] on In2.Cu, length 9.8967 mm",
+                    "pos": {
+                        "x": 115.3469,
+                        "y": 105.8889
+                    },
+                    "uuid": "c202291c-a7d2-4f53-bb11-578393cbc7eb"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 1 [LORA_SCK] of R11 on F.Cu",
+                    "pos": {
+                        "x": 110.99,
+                        "y": 117.0
+                    },
+                    "uuid": "1f7c6a18-7bf1-4e76-9695-e9effc919fd0"
+                },
+                {
+                    "description": "Pad 17 [LORA_SCK] of U1 on F.Cu",
+                    "pos": {
+                        "x": 113.2,
+                        "y": 115.45
+                    },
+                    "uuid": "a8a7b8d7-281a-4370-832d-643ef04b5c42"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Pad 6 [BUZZER_CTRL] of U1 on F.Cu",
+                    "pos": {
+                        "x": 111.55,
+                        "y": 111.4
+                    },
+                    "uuid": "54ec243a-1e8a-4ac3-a01c-f179f03f5104"
+                },
+                {
+                    "description": "Pad 1 [BUZZER_CTRL] of R12 on F.Cu",
+                    "pos": {
+                        "x": 131.19,
+                        "y": 115.0
+                    },
+                    "uuid": "f9f2bad1-4fa1-4cb5-bd5e-8989e92cae59"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": []
+}

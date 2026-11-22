@@ -1,5 +1,5 @@
 {
-  "board_sha256": "d59c7348a7ca82d890a9c0347848d4778a9ddeb140f87ee5ff83a3dc22fd5aa8",
+  "board_sha256": "cf926980e8fdaecfb1abeb252f0ca73cc0cfbd4e5cad11143fd9a3e0ee21964a",
   "kicad": "10.0.6",
   "footprints": 90,
   "segments": 1440,
@@ -16,7 +16,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -31,7 +31,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -46,7 +46,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -61,7 +61,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -76,7 +76,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -91,7 +91,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -106,7 +106,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -121,7 +121,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     },
@@ -136,7 +136,7 @@
       "pad_net": "GND",
       "same_net": true,
       "tented_front": true,
-      "tented_back": true,
+      "tented_back": false,
       "filled": false,
       "capped": false
     }
@@ -479,7 +479,7 @@
     "RF_MATCH": {
       "length_mm": 3.4792,
       "widths_mm": {
-        "0.18": 3.4792
+        "0.15": 3.4792
       },
       "segments": 16
     },
@@ -515,14 +515,14 @@
     "ANT_TUNE": {
       "length_mm": 2.6206,
       "widths_mm": {
-        "0.18": 2.6206
+        "0.15": 2.6206
       },
       "segments": 12
     },
     "ANT_FEED": {
       "length_mm": 3.4777,
       "widths_mm": {
-        "0.18": 3.4777
+        "0.15": 3.4777
       },
       "segments": 6
     },
@@ -965,7 +965,7 @@
         104.3,
         103.2
       ],
-      "width_mm": 0.18,
+      "width_mm": 0.15,
       "samples_without_In1_GND": [
         [
           105.25,
@@ -1040,7 +1040,7 @@
         105.7,
         104.15
       ],
-      "width_mm": 0.18,
+      "width_mm": 0.15,
       "samples_without_In1_GND": [
         [
           105.75,
@@ -1063,7 +1063,7 @@
         105.75,
         104.2
       ],
-      "width_mm": 0.18,
+      "width_mm": 0.15,
       "samples_without_In1_GND": [
         [
           106.40625,
@@ -1110,7 +1110,7 @@
         105.25,
         104.15
       ],
-      "width_mm": 0.18,
+      "width_mm": 0.15,
       "samples_without_In1_GND": [
         [
           105.7,

@@ -335,13 +335,15 @@ bool loraRxUpdate() {
     case PKT_PING: {
       if (bytesRead < (int)sizeof(PingPacket)) break;
       PingPacket* pkt = (PingPacket*)buf;
+      bool noFix = (pkt->latitude == 0.0f && pkt->longitude == 0.0f);
 
-      Serial.printf("[LORA-RX] 📡 PING BENCHMARK | Token: %-8s | Seq: %lu | Lat: %.6f | Lon: %.6f | RSSI: %d dBm | SNR: %.1f dB\n",
+      Serial.printf("[LORA-RX] PING BENCHMARK | Token: %-8s | Seq: %lu | Lat: %.6f | Lon: %.6f | RSSI: %d dBm | SNR: %.1f dB\n",
                     token, pkt->pingSequence, pkt->latitude, pkt->longitude, rssi, snr);
 
       // JSON output over Serial for Desktop App Ping Monitor
-      Serial.printf("{\"event\":\"LORA_PING\",\"token\":\"%s\",\"seq\":%lu,\"lat\":%.6f,\"lon\":%.6f,\"phoneEpoch\":%llu,\"rssi\":%d,\"snr\":%.1f,\"rxMillis\":%lu}\n",
-                    token, pkt->pingSequence, pkt->latitude, pkt->longitude, pkt->phoneEpochMs, rssi, snr, millis());
+      Serial.printf("{\"event\":\"LORA_PING\",\"token\":\"%s\",\"seq\":%lu,\"lat\":%.6f,\"lon\":%.6f,\"phoneEpoch\":%llu,\"rssi\":%d,\"snr\":%.1f,\"rxMillis\":%lu,\"airtimeMs\":246.8,\"noFix\":%s}\n",
+                    token, pkt->pingSequence, pkt->latitude, pkt->longitude, pkt->phoneEpochMs, rssi, snr, millis(),
+                    noFix ? "true" : "false");
       break;
     }
 

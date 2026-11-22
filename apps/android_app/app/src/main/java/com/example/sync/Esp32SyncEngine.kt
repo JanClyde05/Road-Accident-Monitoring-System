@@ -21,12 +21,15 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -34,6 +37,7 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import org.json.JSONObject
+import java.io.IOException
 import java.io.OutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -84,6 +88,10 @@ class Esp32SyncEngine(
   val syncStatus: StateFlow<Esp32SyncStatus> = _syncStatus.asStateFlow()
 
   var onWearableCancelRequested: (() -> Unit)? = null
+  var onPingAckReceived: ((Long) -> Unit)? = null
+  var onPingAck: ((Long) -> Unit)?
+    get() = onPingAckReceived
+    set(value) { onPingAckReceived = value }
 
   private var syncLoopJob: Job? = null
   private var activeSocket: Socket? = null
@@ -106,6 +114,10 @@ class Esp32SyncEngine(
   private var rateTimer = System.currentTimeMillis()
   @Volatile private var isManualDisconnect = false
   @Volatile private var negotiatedMtu = 23
+  private val writePermits = Channel<Unit>(Channel.CONFLATED)
+  private val connectMutex = Mutex()
+  private var mtuReady: CompletableDeferred<Int>? = null
+  private var lastProfileSentMs = 0L
   // Auto-reconnect state for BLE
   private var pendingBleReconnectDevice: BluetoothDevice? = null
   private var pendingBleReconnectGps: (() -> GpsData)? = null
@@ -344,18 +356,28 @@ class Esp32SyncEngine(
     getGps: () -> GpsData,
     getImu: () -> ImuData,
     getRiderProfile: () -> RiderProfile
-  ) {
+  ) = connectMutex.withLock {
     val appContext = context ?: throw IllegalStateException("Context required for BLE GATT connection")
     isManualDisconnect = false
     pendingBleReconnectDevice = device
     pendingBleReconnectGps = getGps
     pendingBleReconnectImu = getImu
     pendingBleReconnectProfile = getRiderProfile
+
+    activeBleGatt?.let { old ->
+      runCatching { old.disconnect() }
+      runCatching { old.close() }
+    }
+    activeBleGatt = null
+    activeBleRxChar = null
+    negotiatedMtu = 23
+    mtuReady = CompletableDeferred()
     val connectionLatch = CompletableDeferred<Boolean>()
 
     val gattCallback = object : BluetoothGattCallback() {
       override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
         if (newState == BluetoothProfile.STATE_CONNECTED) {
+          mtuReady = CompletableDeferred()
           reconnectLoopJob?.cancel()
           reconnectLoopJob = null
           try {
@@ -384,6 +406,7 @@ class Esp32SyncEngine(
           }, 300)
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
           negotiatedMtu = 23
+          mtuReady?.complete(23)
           try { gatt.close() } catch (_: Exception) {}
           activeBleGatt = null
           activeBleRxChar = null
@@ -436,8 +459,8 @@ class Esp32SyncEngine(
               }
             }
 
-            // Request MTU 512 for fast telemetry transfer
-            try { gatt.requestMtu(512) } catch (_: Exception) {}
+            // Request MTU 247 for fast telemetry transfer
+            try { gatt.requestMtu(247) } catch (_: Exception) {}
 
             val finalName = try { device.name ?: "RAMS Wearable" } catch (_: SecurityException) { "RAMS Wearable" }
             _syncStatus.value = _syncStatus.value.copy(
@@ -470,6 +493,14 @@ class Esp32SyncEngine(
         }
       }
 
+      override fun onCharacteristicWrite(
+        gatt: BluetoothGatt,
+        characteristic: BluetoothGattCharacteristic,
+        status: Int
+      ) {
+        writePermits.trySend(Unit)
+      }
+
       override fun onCharacteristicChanged(
         gatt: BluetoothGatt,
         characteristic: BluetoothGattCharacteristic
@@ -480,9 +511,8 @@ class Esp32SyncEngine(
       }
 
       override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
-        if (status == BluetoothGatt.GATT_SUCCESS) {
-          negotiatedMtu = mtu
-        }
+        negotiatedMtu = if (status == BluetoothGatt.GATT_SUCCESS) mtu else 23
+        mtuReady?.complete(negotiatedMtu)
       }
 
       override fun onCharacteristicChanged(
@@ -507,6 +537,8 @@ class Esp32SyncEngine(
 
     val connected = withTimeoutOrNull(15000L) { connectionLatch.await() } ?: false
     if (connected) {
+      // Bounded wait for negotiated MTU before streaming begins
+      negotiatedMtu = withTimeoutOrNull(1200L) { mtuReady?.await() } ?: 23
       // Store reconnect references for auto-reconnect on disconnect
       pendingBleReconnectDevice = device
       pendingBleReconnectGps = getGps
@@ -526,19 +558,24 @@ class Esp32SyncEngine(
     val mtuPayload = (negotiatedMtu - 3).coerceIn(20, 509)
     var offset = 0
     while (offset < bytes.size) {
-      val chunkSize = Math.min(mtuPayload, bytes.size - offset)
+      val chunkSize = minOf(mtuPayload, bytes.size - offset)
       val chunk = bytes.copyOfRange(offset, offset + chunkSize)
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        gatt.writeCharacteristic(rxChar, chunk, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE)
+      writePermits.tryReceive() // clear any stale permit
+      val accepted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        gatt.writeCharacteristic(rxChar, chunk, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT) == android.bluetooth.BluetoothStatusCodes.SUCCESS
       } else {
         rxChar.value = chunk
-        rxChar.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+        rxChar.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
         gatt.writeCharacteristic(rxChar)
       }
-      offset += chunkSize
-      if (offset < bytes.size) {
-        delay(25L) // Inter-chunk pacing to avoid BLE buffer congestion
+      if (!accepted) {
+        delay(10L)
+        continue // retry the same chunk
       }
+      if (withTimeoutOrNull(300L) { writePermits.receive() } == null) {
+        throw IOException("GATT write timed out at offset $offset")
+      }
+      offset += chunkSize
     }
   }
 
@@ -551,25 +588,37 @@ class Esp32SyncEngine(
     rateTimer = System.currentTimeMillis()
     packetCountAccumulator = 0
     bytesAccumulator = 0L
+    lastProfileSentMs = 0L
 
     while (scope.isActive && activeBleGatt != null && activeBleRxChar != null) {
       val gps = getGps()
       val imu = getImu()
       val profile = getRiderProfile()
 
-      val payload = buildTelemetryPacket(gps, imu, profile)
-      val bytes = (payload + "\n").toByteArray(Charsets.UTF_8)
+      val now = System.currentTimeMillis()
+      val gatt = activeBleGatt
+      val rx = activeBleRxChar
 
-      try {
-        val gatt = activeBleGatt
-        val rx = activeBleRxChar
-        if (gatt != null && rx != null) {
+      if (gatt != null && rx != null) {
+        // Send profile frame on connect and every 30s
+        if (lastProfileSentMs == 0L || (now - lastProfileSentMs >= 30_000L)) {
+          lastProfileSentMs = now
+          try {
+            val profPayload = buildProfilePacket(profile)
+            val profBytes = (profPayload + "\n").toByteArray(Charsets.UTF_8)
+            writeBleBytes(gatt, rx, profBytes)
+          } catch (_: Exception) {}
+        }
+
+        val payload = buildTelemetryPacket(gps, imu)
+        val bytes = (payload + "\n").toByteArray(Charsets.UTF_8)
+
+        try {
           writeBleBytes(gatt, rx, bytes)
 
           packetCountAccumulator++
           bytesAccumulator += bytes.size
 
-          val now = System.currentTimeMillis()
           if (now - rateTimer >= 1000L) {
             _syncStatus.value = _syncStatus.value.copy(
               packetsSent = _syncStatus.value.packetsSent + packetCountAccumulator,
@@ -581,17 +630,18 @@ class Esp32SyncEngine(
             bytesAccumulator = 0L
             rateTimer = now
           }
+        } catch (e: Exception) {
+          // Log transient error but continue streaming instead of breaking
+          _syncStatus.value = _syncStatus.value.copy(
+            statusMessage = "BLE write error (retrying): ${e.message}"
+          )
+          delay(200L) // Brief backoff before retry
+          continue
         }
-      } catch (e: Exception) {
-        // Log transient error but continue streaming instead of breaking
-        _syncStatus.value = _syncStatus.value.copy(
-          statusMessage = "BLE write error (retrying): ${e.message}"
-        )
-        delay(200L) // Brief backoff before retry
-        continue
       }
 
-      delay(100L) // 10Hz BLE streaming interval
+      val bleIntervalMs = 100L
+      delay(bleIntervalMs) // 10Hz BLE streaming interval
     }
   }
 
@@ -609,6 +659,12 @@ class Esp32SyncEngine(
             statusMessage = "Wearable Alert Cancelled (Physical Button Pressed)"
           )
           onWearableCancelRequested?.invoke()
+        } else if (json.optString("type") == "PING_ACK") {
+          val seq = json.optLong("seq", -1L)
+          _syncStatus.value = _syncStatus.value.copy(
+            statusMessage = if (seq >= 0) "WEARABLE PING ACK #$seq" else "WEARABLE PING ACK CONFIRMED"
+          )
+          onPingAckReceived?.invoke(seq)
         } else if (json.optString("type") == "tel") {
           _syncStatus.value = _syncStatus.value.copy(
             lastTransmittedJson = text.trim()
@@ -666,7 +722,7 @@ class Esp32SyncEngine(
       val imu = getImu()
       val profile = getRiderProfile()
 
-      val payload = buildTelemetryPacket(gps, imu, profile)
+      val payload = buildTelemetryPacket(gps, imu)
       val bytesSize = payload.toByteArray(Charsets.UTF_8).size
 
       // Send to WebSocket if connected
@@ -706,7 +762,7 @@ class Esp32SyncEngine(
       val imu = getImu()
       val profile = getRiderProfile()
 
-      val payload = buildTelemetryPacket(gps, imu, profile)
+      val payload = buildTelemetryPacket(gps, imu)
       val bytesSize = payload.toByteArray(Charsets.UTF_8).size
 
       packetCountAccumulator++
@@ -743,7 +799,7 @@ class Esp32SyncEngine(
       val imu = getImu()
       val profile = getRiderProfile()
 
-      val payload = buildTelemetryPacket(gps, imu, profile)
+      val payload = buildTelemetryPacket(gps, imu)
       val bytes = (payload + "\n").toByteArray(Charsets.UTF_8)
 
       try {
@@ -787,7 +843,7 @@ class Esp32SyncEngine(
       val imu = getImu()
       val profile = getRiderProfile()
 
-      val payload = buildTelemetryPacket(gps, imu, profile)
+      val payload = buildTelemetryPacket(gps, imu)
       val bytesSize = payload.toByteArray(Charsets.UTF_8).size
 
       packetCountAccumulator++
@@ -951,9 +1007,9 @@ class Esp32SyncEngine(
     }
   }
 
-  private fun buildTelemetryPacket(gps: GpsData, imu: ImuData, profile: RiderProfile): String {
+  private fun buildProfilePacket(profile: RiderProfile): String {
     return JSONObject().apply {
-      put("type", "TELEMETRY")
+      put("type", "TEL")
       put("token", profile.token)
       put("rider", profile.riderName)
       put("plate", profile.plateNumber)
@@ -967,6 +1023,12 @@ class Esp32SyncEngine(
       put("allergies", profile.allergies)
       put("driveLink", profile.driveLink)
       put("photoUrl", RiderProfile.formatDirectDriveUrl(profile.driveLink))
+    }.toString()
+  }
+
+  private fun buildTelemetryPacket(gps: GpsData, imu: ImuData): String {
+    return JSONObject().apply {
+      put("type", "TELEMETRY")
       put("t", System.currentTimeMillis())
       put("lat", String.format(Locale.US, "%.6f", gps.latitude).toDouble())
       put("lon", String.format(Locale.US, "%.6f", gps.longitude).toDouble())

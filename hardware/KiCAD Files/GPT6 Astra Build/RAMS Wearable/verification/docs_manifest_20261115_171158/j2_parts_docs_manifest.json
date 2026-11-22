@@ -1,0 +1,24 @@
+{
+  "revision": "J2 LDO engineering",
+  "spec_sha256": "bdddbc78828b2d359abed5dccf3ce7d517b007f9fb321221f10c6786891f430c",
+  "footprint_positions": 90,
+  "copper_test_pads": 8,
+  "component_positions": 82,
+  "initial_fit": 80,
+  "dnp": [
+    "R30",
+    "LED1"
+  ],
+  "files": {
+    "BOM_PROCUREMENT.csv": "22563a159078a9ae9e84b6c6c281f38774bc16cbdc51a02b9f43cafb32df8a13",
+    "PARTS_AND_FIRMWARE.md": "6841e4b5b68606238c5e95eefb9052788b346cf738e7887ab56851fcf95ca82a",
+    "ASSEMBLY_AND_BRINGUP.md": "26cf89e96a367188bae64234f2b7e88550decc76b6bcd26854c6e93d54441dd4"
+  },
+  "preserved_files": {
+    "BOM_PROCUREMENT.csv": "62060fc9f43282692177af3b02bb43602b2376f35af055bd2936404376cf9b20",
+    "ASSEMBLY_AND_BRINGUP.md": "8dc7261c02a323daa6deadfad229ec9a1c5c0726447672b7b72ad7f4177ba1f3",
+    "PARTS_AND_FIRMWARE.md": "745ad555103a47d02d20227414ec298a90f3b7e95d09fd877d3b19cd7dbcaa57"
+  },
+  "normal_fit_after_qualification": 82,
+  "refresh_note": "2026-11-13 presentation-only revision, unchanged circuit/copper and firmware; compact legend requires print qualification; physical gates remain open."
+}
