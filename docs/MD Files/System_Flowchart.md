@@ -36,13 +36,13 @@ A **System Flowchart** illustrates the physical flow of data, control signals, a
 flowchart TD
     %% ENTITY 1: INPUT SENSORS & USER
     subgraph SENSING_STAGE["STAGE 1: INPUT ACQUISITION & SENSING"]
-        GPS_SAT["🛰️ Multi-GNSS Constellation\n(GPS / BeiDou Satellites)"]
-        PHYS_ACCEL["🏃 Physical Motion / Crash Event\n(Impact G-Force & Orientation Change)"]
+        GPS_SAT["Multi-GNSS Constellation\n(GPS / BeiDou Satellites)"]
+        PHYS_ACCEL["Physical Motion / Crash Event\n(Impact G-Force & Orientation Change)"]
         USER_ACTION["\Rider Physical Input\n(Pushbutton / Phone UI)/"]
 
-        PHONE_IMU["[/Smartphone 100Hz Fused IMU\nAccelerometer & Gyroscope/]"]
+        PHONE_IMU["[/Smartphone 50Hz Fused IMU\nAccelerometer & Gyroscope/]"]
         PHONE_GNSS["[/Smartphone Dual-Band GNSS\nSub-meter Coordinate Stream/]"]
-        WEARABLE_BTN["[/Wearable Physical Pushbutton\nGPIO 5 Hardware Interrupt/]"]
+        WEARABLE_BTN["[/Wearable Physical Pushbutton\nGPIO 0 Hardware Interrupt/]"]
 
         PHYS_ACCEL --> PHONE_IMU
         GPS_SAT --> PHONE_GNSS
@@ -55,12 +55,12 @@ flowchart TD
         PHONE_GNSS --> BLE_LINK
         PHONE_IMU --> BLE_LINK
 
-        MCU_WEARABLE["[ESP32-S3 Wearable Firmware\nCrash FSM & Telemetry Engine]"]
+        MCU_WEARABLE["[ESP32-S3 Wearable Firmware\nRelay FSM & Telemetry Engine]"]
         BLE_LINK --> MCU_WEARABLE
         WEARABLE_BTN --> MCU_WEARABLE
 
-        BZR_OUT[">Active Buzzer Audible Alarm\nGPIO 4 High-Decibel Siren]"]
-        NEO_OUT[">WS2812B NeoPixel Status LED\nGPIO 48 RGB Color Ring]"]
+        BZR_OUT[">Active Buzzer Audible Alarm\nGPIO 1 High-Decibel Siren]"]
+        NEO_OUT[">WS2812B NeoPixel Status LED\nGPIO 48 Single RGB LED]"]
 
         MCU_WEARABLE --> BZR_OUT
         MCU_WEARABLE --> NEO_OUT

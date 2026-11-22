@@ -743,7 +743,7 @@ class RamsAiAssistantEngine(
         if (lower.contains("how does the system work") || lower.contains("how does rams work") ||
             lower.contains("system architecture") || lower.contains("explain rams") ||
             lower.contains("paano gumagana ang rams") || lower.contains("how it works") || lower.contains("what is rams")) {
-            return@withContext "RAMS operates as a distributed edge-computing road safety ecosystem. A body-worn ESP32-S3 sensor node and companion smartphone evaluate fused kinematic telemetry at up to 100 Hertz. If an anomalous impact shock followed by sudden immobility is detected, a 10-second fail-safe countdown begins. If not cancelled by voice or tactile controls, an emergency 433 MHz LoRa radio packet is transmitted off-grid to nearby base stations, while cellular links dispatch real-time incident coordinates to emergency rescue centers."
+            return@withContext "RAMS operates as a distributed edge-computing road safety ecosystem. The companion smartphone evaluates fused 50 Hertz kinematic telemetry and LiteRT neural classification while streaming to a body-worn ESP32-S3 LoRa relay beacon. If an anomalous impact shock followed by sudden immobility is detected, a 10-second fail-safe countdown begins. If not cancelled by voice or tactile controls, an emergency 433 MHz LoRa radio packet is transmitted off-grid to nearby base stations, while cellular links dispatch real-time incident coordinates to emergency rescue centers."
         }
 
         // 2. Program Flow & Data Pipeline
@@ -919,7 +919,7 @@ class RamsAiAssistantEngine(
         }
 
         if (lower.contains("how to connect") || lower.contains("pair wearable") || lower.contains("connect wearable")) {
-            return@withContext "Go to the Wearable tab, ensure phone Bluetooth is on, and tap 'Scan and Connect Wearable'. RAMS will automatically bind over BLE GATT service 0xFFE0 to receive 100 Hertz MPU-6050 fall detection and battery telemetry."
+            return@withContext "Go to the Wearable tab, ensure phone Bluetooth is on, and tap 'Scan and Connect Wearable'. RAMS binds over the BLE Nordic UART Service and streams your phone's GPS and motion frames to the wearable relay, then reads back its battery level and false-alarm events."
         }
 
         if (lower.contains("ai guard") || lower.contains("edge ai") || lower.contains("cognition") || lower.contains("ai suite") || lower.contains("neural")) {

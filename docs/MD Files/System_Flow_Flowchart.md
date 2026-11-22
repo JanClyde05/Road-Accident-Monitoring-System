@@ -4,6 +4,14 @@
 > *Presentation & System Defense Reference Guide*  
 > *Source Codebase: `Working Code - Do Not Touch/Road-Accident-Monitoring-System-main/`*
 
+> [!WARNING]
+> **Scope: frozen reference snapshot, not the live tree.** These flows describe the
+> code preserved in `Working Code - Do Not Touch/`, including the Generation 1
+> wearable that sampled an MPU-6050 and parsed ATGM336H GPS on the wrist unit. The
+> live wearable is a BLE-to-LoRa relay with no onboard IMU and no onboard GPS. For
+> the current architecture see
+> [`00_SYSTEM_ARCHITECTURE.md`](../../00_SYSTEM_ARCHITECTURE.md).
+
 ---
 
 ## 1. High-Level System Architecture & Ecosystem Topology
@@ -12,33 +20,33 @@ The **Road Accident Monitoring System (RAMS)** is an integrated IoT-RF emergency
 
 ```mermaid
 flowchart TB
-    subgraph SENSING_NODE["🏍️ RIDER SENSING NODE (On-Person / On-Bike)"]
+    subgraph SENSING_NODE["RIDER SENSING NODE (On-Person / On-Bike)"]
         direction TB
-        PHONE["📱 Android Companion App\n• 100Hz Hardware-Fused IMU\n• Multi-GNSS Sub-Meter Location\n• Rider Medical Profile & SOS UI"]
-        WEARABLE["⚡ ESP32-S3 Wearable Unit\n• Active Buzzer & NeoPixel Ring\n• Physical False Alarm Button\n• Ra-02 SX1278 LoRa Transmitter (433MHz)\n• BLE Nordic UART Service (NUS)"]
-        PHONE <== "BLE (Nordic UART) / 2.4GHz WiFi SoftAP\nTelemetry, GPS & Profile Sync" ==> WEARABLE
+        PHONE["Android Companion App\n• 50Hz Hardware-Fused IMU\n• Multi-GNSS Sub-Meter Location\n• Rider Medical Profile & SOS UI"]
+        WEARABLE["ESP32-S3 Wearable Relay\n• Active Buzzer & NeoPixel Status\n• Physical False Alarm Button\n• Ra-02 SX1278 LoRa Transmitter (433MHz)\n• BLE Nordic UART Service (NUS)"]
+        PHONE <== "BLE (Nordic UART)\nTelemetry, GPS & Profile Sync" ==> WEARABLE
     end
 
-    subgraph RF_TRANSMISSION["📡 LONG-RANGE RF LINK (Zero-Cellular Infrastructure)"]
-        LORA_AIR["📶 433 MHz LoRa Chirp Spread Spectrum (CSS)\n• Bandwidth: 125 kHz | SF: 9 | CR: 4/5 | Power: 17 dBm\n• Range: Multi-Kilometer Non-Line-of-Sight Coverage"]
+    subgraph RF_TRANSMISSION["LONG-RANGE RF LINK (Zero-Cellular Infrastructure)"]
+        LORA_AIR["433 MHz LoRa Chirp Spread Spectrum (CSS)\n• Bandwidth: 125 kHz | SF: 9 | CR: 4/5 | Power: 17 dBm\n• Range: Multi-Kilometer Non-Line-of-Sight Coverage"]
     end
 
-    subgraph RECEIVER_GATEWAY["🏢 BASE STATION RECEIVER GATEWAY (Roadside / Emergency Post)"]
+    subgraph RECEIVER_GATEWAY["BASE STATION RECEIVER GATEWAY (Roadside / Emergency Post)"]
         direction TB
-        RX_CORE["📥 ESP32-S3 Receiver Unit\n• Ra-02 LoRa Receiver (SPI)\n• NeoPixel Status LED & GPIO Indicator\n• LittleFS Non-Volatile Flash Queue\n• NVS WiFi Credential Manager"]
-        AP_PORTAL["📶 WiFi Captive Portal\n'RAMS_Receiver_Setup'\n(Fallback Configuration)"]
+        RX_CORE["ESP32-S3 Receiver Unit\n• Ra-02 LoRa Receiver (SPI)\n• NeoPixel Status LED & GPIO Indicator\n• LittleFS Non-Volatile Flash Queue\n• NVS WiFi Credential Manager"]
+        AP_PORTAL["WiFi Captive Portal\n'RAMS_Receiver_Setup'\n(Fallback Configuration)"]
         RX_CORE -. "If Unconfigured" .-> AP_PORTAL
     end
 
-    subgraph INGESTION_PATHWAYS["🔀 DUAL INGESTION PATHWAYS"]
-        USB_LINK["🔌 USB Serial Direct Tether\n115200 Baud / DTR 8N1\n(Zero-Network Latency)"]
-        LAN_LINK["🌐 Local LAN WiFi / TCP\nHTTP POST :8080/api/upload\nTCP Socket Port 8888"]
+    subgraph INGESTION_PATHWAYS["DUAL INGESTION PATHWAYS"]
+        USB_LINK["USB Serial Direct Tether\n115200 Baud / DTR 8N1\n(Zero-Network Latency)"]
+        LAN_LINK["Local LAN WiFi / TCP\nHTTP POST :8080/api/upload\nTCP Socket Port 8888"]
     end
 
-    subgraph COMMAND_CENTER["🖥️ DISPATCH COMMAND CENTER & RESCUER STATION"]
+    subgraph COMMAND_CENTER["DISPATCH COMMAND CENTER & RESCUER STATION"]
         direction TB
-        DESKTOP_EXE["💻 RAMS Rescuer Desktop App (.exe)\n• Embedded Multi-Threaded HTTP Server\n• Background Serial COM Scanner\n• Local Storage (incidents.json, registrations.json)\n• LAN Wildcard Listener"]
-        EDGE_DASHBOARD["🗺️ Rescuer Mission Control Dashboard\n(Edge Chromeless App / Web Browser)\n• Real-Time Incident Map & Siren Strobe\n• Rider Dossier (Blood, Allergies, Contacts)\n• False Alarm Auto-Reconciliation\n• Rescuer Dispatch Status & Audit Log"]
+        DESKTOP_EXE["RAMS Rescuer Desktop App (.exe)\n• Embedded Multi-Threaded HTTP Server\n• Background Serial COM Scanner\n• Local Storage (incidents.json, registrations.json)\n• LAN Wildcard Listener"]
+        EDGE_DASHBOARD["Rescuer Mission Control Dashboard\n(Edge Chromeless App / Web Browser)\n• Real-Time Incident Map & Siren Strobe\n• Rider Dossier (Blood, Allergies, Contacts)\n• False Alarm Auto-Reconciliation\n• Rescuer Dispatch Status & Audit Log"]
         DESKTOP_EXE <== "Localhost / LAN Loopback" ==> EDGE_DASHBOARD
     end
 
@@ -65,13 +73,13 @@ The complete chronological lifecycle of the system from rider prep to emergency 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Rider as 🏍️ Rider
-    participant Phone as 📱 Android App
-    participant Wearable as ⚡ Wearable ESP32
-    participant LoRa as 📡 LoRa 433MHz
-    participant Receiver as 📥 Receiver ESP32
-    participant Desktop as 🖥️ Desktop Command Center
-    actor Rescuer as 🚑 Rescuer / Dispatcher
+    actor Rider as Rider
+    participant Phone as Android App
+    participant Wearable as Wearable ESP32 Relay
+    participant LoRa as LoRa 433MHz
+    participant Receiver as Receiver ESP32
+    participant Desktop as Desktop Command Center
+    actor Rescuer as Rescuer / Dispatcher
 
     %% Phase 1: Pairing & Setup
     rect rgb(24, 32, 54)
@@ -100,7 +108,7 @@ sequenceDiagram
     rect rgb(60, 20, 30)
     Note over Rider, Desktop: PHASE 3: IMPACT DETECTION & FALSE ALARM SUPPRESSION
     Rider->>Phone: High-G Crash / Fall Incident Occurs!
-    Phone->>Phone: IMU detects aMag > Threshold (or MPU-6050 Shock)
+    Phone->>Phone: Phone IMU & LiteRT 1D-CNN classify crash (aMag >= 3.5G)
     Phone->>Wearable: BLE Alert Signal (shock=1, aMag)
     Wearable->>Wearable: NeoPixel FLASH RED, Loud Buzzer Alarm Sounds!
     Note over Rider, Wearable: Pre-Alert Grace Period (Rider has opportunity to cancel)
@@ -143,7 +151,7 @@ The decision-making hierarchy inside the sensing unit (Phone IMU + Wearable ESP3
 
 ```mermaid
 flowchart TD
-    START(["🏍️ Normal Riding / Monitoring"]) --> SENSORS["Continuous Sensor Sampling\n• Phone: 100Hz Accelerometer & Gyroscope\n• Wearable: MPU-6050 & External GPS Stream"]
+    START(["Normal Riding / Monitoring"]) --> SENSORS["Continuous Sensor Sampling\n• Phone: 50Hz Accelerometer & Gyroscope\n• Phone: GNSS Position Fixes Streamed to Wearable"]
     
     SENSORS --> CALC["Calculate Acceleration Vector Magnitude:\naMag = sqrt(ax² + ay² + az²)\nCalculate Angular Deviation:\nPitch & Roll from Horizontal"]
 
@@ -154,14 +162,14 @@ flowchart TD
     NORMAL_TEL -- No --> SENSORS
     SEND_TEL --> SENSORS
 
-    IMPACT_CHK -- Yes --> PRE_ALERT["🚨 TRIGGER PRE-ALERT SEQUENCE\n• NeoPixel: Strobe Vibrant Red\n• Buzzer: High-Decibel Warning Pattern\n• Phone Display: 15-Second Emergency Countdown"]
+    IMPACT_CHK -- Yes --> PRE_ALERT["TRIGGER PRE-ALERT SEQUENCE\n• NeoPixel: Strobe Vibrant Red\n• Buzzer: High-Decibel Warning Pattern\n• Phone Display: 15-Second Emergency Countdown"]
 
     PRE_ALERT --> COUNTDOWN{"Rider Cancels Within\nGrace Period?\n(Wearable Button OR Phone Screen)"}
 
-    COUNTDOWN -- "YES (Button Pressed / Screen Cancelled)" --> DISMISS["📵 SUPPRESS FALSE ALARM\n• Stop Buzzer & Reset NeoPixel\n• Compile PKT_FALSE_ALARM (Type=2)\n• Send LoRa Cancellation Packet\n• Log Event as Resolved False Alarm"]
+    COUNTDOWN -- "YES (Button Pressed / Screen Cancelled)" --> DISMISS["SUPPRESS FALSE ALARM\n• Stop Buzzer & Reset NeoPixel\n• Compile PKT_FALSE_ALARM (Type=2)\n• Send LoRa Cancellation Packet\n• Log Event as Resolved False Alarm"]
     DISMISS --> START
 
-    COUNTDOWN -- "NO (Timer Reaches 0 / Rider Incapacitated)" --> LOCK_ALERT["🚨 ACCIDENT CONFIRMED\n• Lock Alert State\n• Read Precision Multi-GNSS Fix (Lat, Lon)\n• Compile Binary PKT_ALERT (Type=1)\n• Transmit over LoRa 433MHz\n• Continuous Beaconing until Dispatch ACK"]
+    COUNTDOWN -- "NO (Timer Reaches 0 / Rider Incapacitated)" --> LOCK_ALERT["ACCIDENT CONFIRMED\n• Lock Alert State\n• Read Precision Multi-GNSS Fix (Lat, Lon)\n• Compile Binary PKT_ALERT (Type=1)\n• Transmit over LoRa 433MHz\n• Continuous Beaconing until Dispatch ACK"]
 
     LOCK_ALERT --> BROADCAST["Radio Broadcast to Rescuer Stations"]
 
@@ -179,7 +187,7 @@ How the system guarantees zero data loss even during complete infrastructure fai
 
 ```mermaid
 flowchart TD
-    CRASH(["💥 Emergency Alert Generated"]) --> WEARABLE_TX["Wearable LoRa Transmitter\n(Independent of cellular towers / mobile data)"]
+    CRASH(["Emergency Alert Generated"]) --> WEARABLE_TX["Wearable LoRa Transmitter\n(Independent of cellular towers / mobile data)"]
     
     WEARABLE_TX --> LORA_AIR["Airborne 433MHz LoRa Packet\nPenetrates foliage, terrain, and weather"]
     
@@ -188,19 +196,19 @@ flowchart TD
     BASE_STATION --> DUAL_INGEST{"Evaluate Gateway Output Channels"}
 
     %% Path A: Direct USB
-    DUAL_INGEST -->|Channel 1: Direct Physical| USB_SERIAL["🔌 USB Serial COM Port\n(Zero Network Dependency)"]
+    DUAL_INGEST -->|Channel 1: Direct Physical| USB_SERIAL["USB Serial COM Port\n(Zero Network Dependency)"]
     USB_SERIAL --> DESKTOP_IN["Desktop App Serial Bridge Worker\n(Reads raw JSON line directly)"]
 
     %% Path B: Local Network / WiFi
     DUAL_INGEST -->|Channel 2: Network| WIFI_STATUS{"Gateway WiFi\nStatus?"}
     
-    WIFI_STATUS -- "Connected" --> HTTP_POST["🌐 HTTP POST to /api/upload\nTarget: Desktop LAN IP:8080"]
+    WIFI_STATUS -- "Connected" --> HTTP_POST["HTTP POST to /api/upload\nTarget: Desktop LAN IP:8080"]
     HTTP_POST --> DESKTOP_HTTP["Desktop Embedded HTTP Server\nIngests payload instantly"]
     
-    WIFI_STATUS -- "Disconnected / Router Down" --> FLASH_QUEUE["💾 LittleFS Non-Volatile Flash Queue\nSave alert to persistent onboard storage\n(Max 64 queued events)"]
+    WIFI_STATUS -- "Disconnected / Router Down" --> FLASH_QUEUE["LittleFS Non-Volatile Flash Queue\nSave alert to persistent onboard storage\n(Max 64 queued events)"]
     
     FLASH_QUEUE --> RETRY_DAEMON{"WiFi Connection\nRestored?"}
-    RETRY_DAEMON -- Yes --> DRAIN_QUEUE["🔄 Drain Queue in FIFO order\nPost all backlogged incidents to Server"]
+    RETRY_DAEMON -- Yes --> DRAIN_QUEUE["Drain Queue in FIFO order\nPost all backlogged incidents to Server"]
     RETRY_DAEMON -- No --> KEEP_BUFFER["Retain in Flash Memory\n(Zero loss upon reboot)"]
     DRAIN_QUEUE --> DESKTOP_HTTP
 
@@ -221,27 +229,27 @@ The operational flow on the Rescuer Desktop Application upon receiving an incide
 
 ```mermaid
 flowchart TD
-    PACKET_IN["📥 New Alert Ingested\n(via USB Serial or HTTP /api/upload)"] --> DEDUPL{"Is this a duplicate\npacket within 5s?"}
+    PACKET_IN["New Alert Ingested\n(via USB Serial or HTTP /api/upload)"] --> DEDUPL{"Is this a duplicate\npacket within 5s?"}
     
     DEDUPL -- Yes --> UPDATE_RSSI["Update RSSI & Last Seen Timestamp"]
     DEDUPL -- No --> PARSE_EVT["Build Incident Model\n• Event ID: RAMS-ALERT-yyyyMMdd-HHmmss\n• Lat / Lon Coordinates\n• Impact Magnitude (G-Force)\n• Timestamp"]
 
     PARSE_EVT --> PROFILE_MATCH{"Device Token Match in\nregistrations.json?"}
     
-    PROFILE_MATCH -- "Match Found" --> HYDRATE["🗂️ Enrich Incident with Rider Dossier:\n• Full Name & Photo\n• Blood Type & Allergies\n• Emergency Contact Phone & Name\n• Vehicle Model & Plate Number"]
+    PROFILE_MATCH -- "Match Found" --> HYDRATE["Enrich Incident with Rider Dossier:\n• Full Name & Photo\n• Blood Type & Allergies\n• Emergency Contact Phone & Name\n• Vehicle Model & Plate Number"]
     PROFILE_MATCH -- "Not Found" --> UNREGISTERED["Mark as 'Unknown Rider / Unregistered Token'\nDisplay raw token on radar"]
 
     HYDRATE --> UI_UPDATE
     UNREGISTERED --> UI_UPDATE
 
-    UI_UPDATE["🚨 Trigger Dispatch Station Alerts:\n1. Play Urgent Siren Sound Loop\n2. Center Tactical Map on GPS Fix\n3. Flash Incident Banner (RED ALERT)\n4. Generate Quick Route Navigation Link"]
+    UI_UPDATE["Trigger Dispatch Station Alerts:\n1. Play Urgent Siren Sound Loop\n2. Center Tactical Map on GPS Fix\n3. Flash Incident Banner (RED ALERT)\n4. Generate Quick Route Navigation Link"]
 
     UI_UPDATE --> RESCUER_ACTION{"Rescuer Triage Action"}
 
-    RESCUER_ACTION --> ACK["🚑 Click 'Dispatch Unit'\n• Status: DISPATCHED\n• Time logged in incidents.json"]
-    RESCUER_ACTION --> CALL_CONTACT["📞 Click Emergency Contact Phone Link\nCall relatives / next-of-kin directly"]
-    RESCUER_ACTION --> HOSP["🏥 Notify Designated Trauma Center\nSend Blood Type & G-Force telematics"]
-    RESCUER_ACTION --> RESOLVE["✅ Click 'Resolve Incident'\n• Status: RESOLVED\n• Archive record to database"]
+    RESCUER_ACTION --> ACK["Click 'Dispatch Unit'\n• Status: DISPATCHED\n• Time logged in incidents.json"]
+    RESCUER_ACTION --> CALL_CONTACT["Click Emergency Contact Phone Link\nCall relatives / next-of-kin directly"]
+    RESCUER_ACTION --> HOSP["Notify Designated Trauma Center\nSend Blood Type & G-Force telematics"]
+    RESCUER_ACTION --> RESOLVE["Click 'Resolve Incident'\n• Status: RESOLVED\n• Archive record to database"]
 
     style PACKET_IN fill:#1a1a2e,stroke:#e94560,color:#fff
     style HYDRATE fill:#0f3460,stroke:#16213e,color:#fff
@@ -257,7 +265,7 @@ How accidental triggers (dropping a phone, pothole bump) are cleanly cancelled w
 
 ```mermaid
 flowchart TD
-    ALARM_ACTIVE["🚨 Active Alert Visible on Rescuer Command Center\nStatus: 'CRITICAL / ACTIVE' | Siren Sounding"] --> EVENT_OCCURS["Rider realizes false alarm\n(e.g., dropped device or low-speed slip)"]
+    ALARM_ACTIVE["Active Alert Visible on Rescuer Command Center\nStatus: 'CRITICAL / ACTIVE' | Siren Sounding"] --> EVENT_OCCURS["Rider realizes false alarm\n(e.g., dropped device or low-speed slip)"]
 
     EVENT_OCCURS --> CANCEL_INPUT{"Cancellation Trigger"}
     CANCEL_INPUT -->|Input A| WEARABLE_BTN["Press Wearable Physical Button\n(debounced GPIO pin)"]
@@ -272,7 +280,7 @@ flowchart TD
 
     RX_DECODE --> DESKTOP_MATCH["Desktop ProcessIncomingPayload():\n• Search _eventsJsonList for matching deviceToken\n• If found, transition Status: 'FALSE ALARM'\n• If not found, cancel most recent active alert"]
 
-    DESKTOP_MATCH --> UI_CLEANUP["🖥️ Desktop Dashboard Updates:\n1. Siren Immediately Silenced\n2. Alert Banner changes to Green/Muted Grey\n3. Map Pin changed to 'False Alarm Resolved'\n4. Dispatchers Notified: 'Response Standdown'"]
+    DESKTOP_MATCH --> UI_CLEANUP["Desktop Dashboard Updates:\n1. Siren Immediately Silenced\n2. Alert Banner changes to Green/Muted Grey\n3. Map Pin changed to 'False Alarm Resolved'\n4. Dispatchers Notified: 'Response Standdown'"]
 
     style ALARM_ACTIVE fill:#e94560,stroke:#fff,color:#fff
     style CANCEL_PROC fill:#f39c12,stroke:#fff,color:#fff

@@ -5,7 +5,7 @@
 
 ---
 
-## 📋 Executive Summary of Issues & Root Causes
+## Executive Summary of Issues & Root Causes
 
 ```mermaid
 graph TD
@@ -34,15 +34,15 @@ graph TD
 
 ---
 
-## 🔍 Detailed Root-Cause Analysis
+## Detailed Root-Cause Analysis
 
 ### Issue 1: Desktop App — Rescued / False Alarm Does Not Stop SOS Alarms Immediately
 * **Location in Code**:
-  - [`desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/Program.cs#L858-L865) (`HandlePostRescue` and `ProcessContext`)
-  - [`UI Redesign/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx#L175-L220)
-  - [`UI Redesign/src/App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/App.tsx#L301-L355)
+  - [`desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/desktop_app/Program.cs#L858-L865) (`HandlePostRescue` and `ProcessContext`)
+  - [`UI Redesign/src/components/RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx#L175-L220)
+  - [`UI Redesign/src/App.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/App.tsx#L301-L355)
 * **Root Cause**:
-  1. **Partial Field Updates in Backend**: In [`desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/desktop_app/Program.cs#L947), `HandlePostRescue` replaced `"status":"RESCUED"`, but left `"type":"alert"`. In [`UI Redesign/src/types.ts`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/types.ts#L114-L120), `isEventActiveAlert()` checks `event.type === 'alert'`.
+  1. **Partial Field Updates in Backend**: In [`desktop_app/Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/desktop_app/Program.cs#L947), `HandlePostRescue` replaced `"status":"RESCUED"`, but left `"type":"alert"`. In [`UI Redesign/src/types.ts`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/types.ts#L114-L120), `isEventActiveAlert()` checks `event.type === 'alert'`.
   2. **No Dedicated False Alarm Route**: `RAMSWearableProfileOverlay.tsx` posted False Alarms to `/api/upload` with `{ type: 'false_alarm' }`. In `Program.cs`, line 520 only matched if `evStatus.IndexOf("ALERT") >= 0`. High-G alerts with status `"CRITICAL HIGH-G IMPACT"` did not contain `"ALERT"`, causing the match to fail!
   3. **Packet Re-injection from Hardware Buffer**: When an incident occurs, the wearable and receiver retry queues continue broadcasting LoRa packets. When a subsequent packet from the same device token arrives, `ProcessIncomingPayload` re-inserted a new `"ACTIVE ALERT"` at index 0, re-triggering the alarm 2–3 seconds later!
   4. **Stale Overlay Component State**: In `App.tsx`, `ramsSelectedEvent` was not updated in-place when the user clicked Rescued or False Alarm. The modal kept displaying the stale `isAlert = true` badge until closed and re-opened.
@@ -51,9 +51,9 @@ graph TD
 
 ### Issue 2: Receiver Station — IP Address Changes & Manual `config.h` Re-Flashing
 * **Location in Code**:
-  - [`receiver_withDesktop/config.h`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver_withDesktop/config.h#L41-L44)
-  - [`receiver_withDesktop/http_upload.cpp`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver_withDesktop/http_upload.cpp)
-  - [`receiver_withDesktop/wifi_manager.cpp`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/receiver_withDesktop/wifi_manager.cpp)
+  - [`receiver_withDesktop/config.h`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver_withDesktop/config.h#L41-L44)
+  - [`receiver_withDesktop/http_upload.cpp`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver_withDesktop/http_upload.cpp)
+  - [`receiver_withDesktop/wifi_manager.cpp`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/receiver_withDesktop/wifi_manager.cpp)
 * **Root Cause**:
   1. `BACKEND_URL` is hardcoded as a C preprocessor macro (`#define BACKEND_URL "http://10.146.164.180:8888"`).
   2. Whenever the PC changes Wi-Fi (e.g. from home to mobile hotspot or university network), the PC gets a new DHCP address. The receiver is completely unaware of this change and keeps sending HTTP POSTs to the old IP, causing timeouts.
@@ -63,8 +63,8 @@ graph TD
 
 ### Issue 3: Mobile App — Only Infinix Phone Works; Other Phones Disconnect / No IMU / Inaccurate GPS
 * **Location in Code**:
-  - [`android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt#L398-L415)
-  - [`android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt#L143-L157)
+  - [`android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt#L398-L415)
+  - [`android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt#L143-L157)
 * **Root Cause**:
   1. **Android BLE Concurrency Violation (MTU Request vs Descriptor Write)**:
      - In `onServicesDiscovered`, the code calls `gatt.writeDescriptor(...)` and immediately executes `gatt.requestMtu(512)` without waiting for `onDescriptorWrite`.
@@ -89,8 +89,8 @@ graph TD
 
 ### Issue 4: Mobile App — Registration Not Received Immediately by Desktop App
 * **Location in Code**:
-  - [`android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt#L521-L525)
-  - [`wearable_withApp/bt_service.cpp`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable_withApp/bt_service.cpp#L92-L94)
+  - [`android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt#L521-L525)
+  - [`wearable_withApp/bt_service.cpp`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable_withApp/bt_service.cpp#L92-L94)
 * **Root Cause**:
   1. In `RamsViewModel.kt`, `saveRiderProfile()` only writes to local `SharedPreferences`. It **never** triggers an immediate BLE transmission or network HTTP POST!
   2. In `wearable_withApp/bt_service.cpp`, `PROFILE_BROADCAST_INTERVAL_MS = 30000` throttled profile broadcasts to once every 30 seconds over LoRa.
@@ -100,8 +100,8 @@ graph TD
 
 ### Issue 5: Mobile App — Stuck in "Syncing" State & Prone to Disconnections
 * **Location in Code**:
-  - [`android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt#L773-L815)
-  - [`android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt#L346-L373)
+  - [`android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/android_app/app/src/main/java/com/example/ui/screens/WearableScreen.kt#L773-L815)
+  - [`android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/android_app/app/src/main/java/com/example/sync/Esp32SyncEngine.kt#L346-L373)
 * **Root Cause**:
   1. `WearableScreen.kt` displays `"Syncing"` under the device title even when connected, and the button label displays `"SYNCING"` with a spinner whenever `isConnecting` is true.
   2. Because of Issue 3, non-Infinix phones disconnect within 1–2 seconds. The auto-reconnect logic in `Esp32SyncEngine` immediately triggers a new connection attempt after 3 seconds, putting the app into a perpetual, unescapable `Connect -> Overrun -> Disconnect -> Reconnect` loop.
@@ -109,7 +109,7 @@ graph TD
 
 ---
 
-## 🛠️ Step-by-Step Fix Plan
+## Step-by-Step Fix Plan
 
 ### Module 1: Desktop Application (`desktop_app/` & `UI Redesign/`)
 
@@ -129,10 +129,10 @@ graph TD
   - Automatically adapts to any IP change without human intervention.
 
 #### 1.2 Frontend Instant State Synchronization (`UI Redesign/`)
-- In [`RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx):
+- In [`RAMSWearableProfileOverlay.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/components/RAMSWearableProfileOverlay.tsx):
   - In `handleMarkRescued` and `handleMarkFalseAlarm`, update the local component state immediately (`event.status = 'RESCUED'`, `event.type = 'rescued'`).
   - Route false alarm calls to `/api/events/false-alarm`.
-- In [`App.tsx`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/UI%20Redesign/src/App.tsx):
+- In [`App.tsx`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/UI%20Redesign/src/App.tsx):
   - In `fetchEvents()`, synchronize `ramsSelectedEvent` with the newly fetched list so open overlays update instantly without requiring close/reopen.
 - Re-bundle `UI Redesign` via `npm run build` and sync to `desktop_app/www/`. Recompile `RAMS_Rescuer_Desktop.exe`.
 
@@ -196,13 +196,13 @@ graph TD
 ### Module 4: Wearable Firmware (`wearable_withApp/`)
 
 #### 4.1 Immediate LoRa Dispatch on Registration
-- In [`wearable_withApp/bt_service.cpp`](file:///d:/Antigravity/Projects/Danger%20Monitoring%20System%20V2/wearable_withApp/bt_service.cpp):
+- In [`wearable_withApp/bt_service.cpp`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/wearable_withApp/bt_service.cpp):
   - When an incoming `REGISTER` or `RIDER_PROFILE` BLE message arrives from the phone, immediately transmit a `PKT_RIDER_PROFILE` packet over LoRa without waiting for the 30-second interval timer.
   - On `CANCEL_ALERT`, immediately stop the buzzer, set NeoPixel to armed, and send `PKT_FALSE_ALARM` via LoRa.
 
 ---
 
-## 🔬 Testing & Verification Matrix
+## Testing & Verification Matrix
 
 | Component | Test Case | Success Criteria |
 | :--- | :--- | :--- |
@@ -216,5 +216,5 @@ graph TD
 
 ---
 
-## 🚦 Awaiting Your Command
+## System Deployment & Verification
 This plan covers every aspect of the reported issues. Once you review and approve this plan, reply with **"execute"** or specify any adjustments, and implementation will commence across the modules.

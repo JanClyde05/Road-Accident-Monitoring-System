@@ -27,7 +27,7 @@ In accordance with the **IECEP Nationals AI Integration** guidelines, this rewor
 |                        RAMS RIDER MOBILE APPLICATION                        |
 |                                                                             |
 |  [Hardware Sensors]     [Wearable BLE Sync]     [Microphone (Gated)]        |
-|   50Hz Accel/Gyro        MPU-6050 Telemetry       Offline Audio Stream      |
+|   50Hz Accel/Gyro       Wearable Status/Ack       Offline Audio Stream      |
 |          │                       │                         │                |
 |          ▼                       ▼                         ▼                |
 |  ┌────────────────────────────────────────┐     ┌────────────────────────┐  |

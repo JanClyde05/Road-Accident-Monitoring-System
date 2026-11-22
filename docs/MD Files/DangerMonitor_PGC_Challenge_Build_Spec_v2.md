@@ -1,5 +1,14 @@
 # Danger Monitor System — Master Build Spec v2 (PGC Digital Innovation Challenge)
 
+> [!WARNING]
+> **Historical competition specification (Generation 1 of the system).** This document
+> records the original PGC Challenge proposal for the retired standalone-hardware build
+> (wearable MPU-6050 + ATGM336H GPS, SoftAP captive portal). The current production
+> architecture (RAMS Gen 2) is a phone-assisted relay with no onboard IMU and no
+> onboard GPS. For current system architecture, refer to
+> [`00_SYSTEM_ARCHITECTURE.md`](../../00_SYSTEM_ARCHITECTURE.md) and
+> [`MEMORY_MAP.md`](../../MEMORY_MAP.md).
+
 ## For: Opus 4.6, Antigravity IDE — Coding Assistant, Not Sole Author
 
 > **Supersedes** `DangerMonitor_PGC_Challenge_Build_Spec.md`. This version reflects the belt-clip form factor, on-device registration/offline map, full receiver WiFi provisioning, and data-driven FSM validation decided after that draft.

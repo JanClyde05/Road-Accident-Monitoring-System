@@ -46,7 +46,7 @@ For each identified cluster $C_k$, the system calculates an aggregate danger ind
 $$\text{HDI}_k = \sum_{i \in C_k} \left( 1.0 + 0.25 \cdot \text{PeakG}_i + 0.15 \cdot \frac{\text{SpeedKmh}_i}{10} + w_{\text{unresponsive}} \right)$$
 
 Where:
-- $\text{PeakG}_i$: Deceleration impact magnitude recorded by wearable MPU-6050.
+- $\text{PeakG}_i$: Deceleration impact magnitude recorded by phone IMU.
 - $\text{SpeedKmh}_i$: GPS velocity at point of collision.
 - $w_{\text{unresponsive}} = 2.5$ if the rider was confirmed unresponsive post-collision.
 

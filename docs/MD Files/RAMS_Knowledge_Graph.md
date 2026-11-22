@@ -7,9 +7,18 @@
 > **Master Obsidian Memory Map**: [[RAMS_OBSIDIAN_MEMORY_MAP.md]] | Root: [[MEMORY_MAP.md]]  
 > **Design Specification**: [[DESIGN_RULES.md]]
 
+> [!WARNING]
+> **Historical snapshot (Generation 1 of the system).** This graph documents the
+> retired standalone-hardware build: wearable MPU-6050 plus ATGM336H, SoftAP
+> captive portal, and Netlify cloud ingestion. The current wearable is a
+> phone-assisted relay with no onboard IMU and no onboard GPS, and it reaches the
+> receiver by LoRa only. For the live architecture see
+> [`00_SYSTEM_ARCHITECTURE.md`](../../00_SYSTEM_ARCHITECTURE.md) and
+> [`MEMORY_MAP.md`](../../MEMORY_MAP.md).
+
 ---
 
-## 🧠 System Identity Map
+## System Identity Map
 
 ```mermaid
 mindmap
@@ -53,7 +62,7 @@ mindmap
 
 ---
 
-## 📁 File Inventory (46 files total)
+## File Inventory (46 files total)
 
 ### shared/ (1 file)
 | File | Purpose | Dependencies |
@@ -132,7 +141,7 @@ mindmap
 
 ---
 
-## 🔗 Dependency Graph (Module-Level)
+## Dependency Graph (Module-Level)
 
 ```mermaid
 graph LR
@@ -220,7 +229,7 @@ graph LR
 
 ---
 
-## 🔄 Cross-Project Lineage
+## Cross-Project Lineage
 
 This project directly evolved from and adapts code from **GuardianTrack (GPS-Audio)**:
 
@@ -290,7 +299,7 @@ graph TD
 
 ---
 
-## 🔑 Key Thresholds (config.h)
+## Key Thresholds (config.h)
 
 | Threshold | Value | Spec Reference | Tunable Via |
 |-----------|-------|---------------|-------------|
@@ -311,7 +320,7 @@ graph TD
 
 ---
 
-## 🚀 Deployment Flow
+## Deployment Flow
 
 ```mermaid
 graph LR
@@ -359,7 +368,7 @@ graph LR
 
 ---
 
-## 🟢 False Alarm Resolution & Desktop Synchronization (October 2026)
+## False Alarm Resolution & Desktop Synchronization (October 2026)
 
 ### End-to-End False Alarm Flow
 ```mermaid
@@ -402,13 +411,13 @@ sequenceDiagram
 
 ---
 
-## 📊 Build Verification Status
+## Build Verification Status
 
 | Check | Result |
 |-------|--------|
-| Desktop C# Native Compiler (`build_exe.bat`) | ✅ `RAMS_Rescuer_Desktop.exe` built successfully |
-| UI Redesign `npm run build` | ✅ 2092 modules transformed, 0 errors |
-| Frontend Assets Deployment | ✅ Synced to `desktop_app/www/assets/` |
+| Desktop C# Native Compiler (`build_exe.bat`) | PASS (`RAMS_Rescuer_Desktop.exe` built successfully) |
+| UI Redesign `npm run build` | PASS (modules transformed, 0 errors) |
+| Frontend Assets Deployment | PASS (synced to `desktop_app/www/assets/`) |
 | Persistent Incident Database (`incidents.json`) | ✅ Verified false alarm type and status |
 | All wearable files present | ✅ 23 files |
 | All receiver files present | ✅ 15 files (incl. data/) |

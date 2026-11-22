@@ -88,7 +88,7 @@ graph TD
     %% Android App Subsystem (Phone Sensor & Profile Engine)
     subgraph Android_App["[[android_app/]] Companion Mobile Station"]
         A_MAIN["[[MainActivity.kt]]<br/>Jetpack Compose UI (4-Tab Layout)"]
-        A_SENS["[[PhoneSensorEngine.kt]]<br/>100Hz IMU (2.5g Trigger, 2s Sticky Shock) + Dual-Band GNSS"]
+        A_SENS["[[PhoneSensorEngine.kt]]<br/>50Hz IMU (2.5g Trigger, 2s Sticky Shock) + GNSS Providers"]
         A_SYNC["[[Esp32SyncEngine.kt]]<br/>BLE GATT (240B Chunked Pacing) + WebSocket Server"]
         A_PROF["[[RiderProfile.kt]]<br/>Base62 Token + Google Drive 2x2 CDN Formatter"]
         A_LOGIN["[[RiderLoginDialog.kt]]<br/>Quick Rider Sync Dialog"]
@@ -97,7 +97,7 @@ graph TD
 
     %% Wearable Relay Subsystem
     subgraph Wearable_System["[[wearable_withApp/wearable_withApp.ino]]"]
-        W_BT["[[wearable_withApp/bt_service.cpp]]<br/>BLE GATT Server (FFE0/FFE1) + Throttled LoRa Broadcast"]
+        W_BT["[[wearable_withApp/bt_service.cpp]]<br/>BLE NUS Peripheral (6E400001) + Throttled LoRa Broadcast"]
         W_NEO["[[wearable_withApp/neopixel.cpp]]<br/>RGB Status (Green: Armed, Red: Alert SOS)"]
         W_DET["[[wearable_withApp/detection.cpp]]<br/>Alert Latch & False-Alarm Cancellation FSM"]
         W_LORA["[[wearable_withApp/lora_tx.cpp]]<br/>SX1278 LoRa TX (433MHz, SF9, BW125k)"]
@@ -130,7 +130,7 @@ graph TD
     end
 
     %% Interconnections & Data Flows
-    A_SENS -->|100Hz Kinematics + GPS Vectors| A_SYNC
+    A_SENS -->|50Hz Kinematics + GPS Vectors| A_SYNC
     A_PROF -->|Credentials, Medical Info & GDrive 2x2 Photo| A_SYNC
     A_SYNC -->|BLE GATT JSON Packets| W_BT
     
@@ -235,7 +235,7 @@ graph TD
 ### Layer 6: RAMS IMU Studio Application (`RAMS IMU Studio Application/`)
 - **[[RAMS IMU Studio Application/app/]]**: Standalone high-rate inertial analysis and calibration suite.
 - **[[RAMS IMU Studio Application/build_and_install.bat]]**: Automated ADB probe, APK compilation, and device launch script.
-- **Real-Time 100Hz IMU Waveform Monitor**: High-fidelity sparklines for 3-axis accelerometer, gyroscope, tilt angles, and resultant acceleration magnitude.
+- **Real-Time IMU Waveform Monitor (`SENSOR_DELAY_GAME`, ~50 Hz)**: High-fidelity sparklines for 3-axis accelerometer, gyroscope, tilt angles, and resultant acceleration magnitude.
 - **Accident vs. ADL Correlation Studio**: Statistical feature extraction and classification rule derivation.
 - **Processed CSV & Calibration Rules Engine**: Exports filtered CSV and JSON thresholds directly ingested by `android_app/` for false alarm cancellation.
 

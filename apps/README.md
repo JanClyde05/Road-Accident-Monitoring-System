@@ -4,21 +4,21 @@ This directory serves as the centralized access hub for the **V2 Modern Software
 
 ---
 
-## 📱 [Mobile Android App (Rider Node)](../android_app/)
-- **Path**: `../android_app/`
-- **Description**: Full native Kotlin Jetpack Compose Android app utilizing the smartphone's calibrated 100Hz IMU, dual-band GPS, and live WebSocket telemetry streaming to the ESP32 wearable.
-- **One-Click Deploy**: Run `Build_And_Install_Android_App.bat` in this folder (or `../android_app/build_and_install.bat`).
+## [Mobile Android App (Rider Node)](android_app/)
+- **Path**: `apps/android_app/`
+- **Description**: Full native Kotlin Jetpack Compose Android app. The phone is the only sensor source: calibrated 50 Hz IMU (`SENSOR_DELAY_GAME`), GNSS from the GPS/network/passive providers, and edge-AI crash classification. Telemetry reaches the ESP32 wearable relay over the BLE Nordic UART Service.
+- **One-Click Deploy**: Run `Build_And_Install_Android_App.bat` in this folder (or `android_app/build_and_install.bat`).
 
 ---
 
-## 🖥️ [Desktop Rescuer App (Operations Station)](../desktop_app/)
-- **Path**: `../desktop_app/`
+## [Desktop Rescuer App (Operations Station)](desktop_app/)
+- **Path**: `apps/desktop_app/`
 - **Description**: Standalone Windows desktop executable (`RAMS_Rescuer_Desktop.exe`) featuring an embedded offline HTTP server, direct LoRa receiver ingestion API, and chromeless Edge App window.
-- **One-Click Launch**: Run `Launch_Desktop_Rescuer.bat` in this folder (or `../desktop_app/launch_desktop.bat`).
+- **One-Click Launch**: Run `Launch_Desktop_Rescuer.bat` in this folder (or `desktop_app/launch_desktop.bat`).
 
 ---
 
-## ⚡ Quick Launch Scripts
+## Quick Launch Scripts
 
 - **`Launch_Desktop_Rescuer.bat`**: Launches the desktop rescuer command center (`RAMS_Rescuer_Desktop.exe`).
 - **`Build_And_Install_Android_App.bat`**: Compiles the debug APK and installs directly to your USB-connected Android smartphone via ADB.

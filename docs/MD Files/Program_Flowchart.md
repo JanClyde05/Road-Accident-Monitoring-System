@@ -38,7 +38,7 @@ A **Program Flowchart** illustrates the detailed, step-by-step algorithmic execu
 ```mermaid
 flowchart TD
     START(["([START: Wearable Boot])"]) --> INIT_SERIAL["{{Initialize Serial Monitor\n115200 Baud, 500ms delay}}"]
-    INIT_SERIAL --> INIT_PINS["{{Initialize GPIO Peripherals\nNeoPixel=48, Buzzer=4, Button=5, Battery=2}}"]
+    INIT_SERIAL --> INIT_PINS["{{Initialize GPIO Peripherals\nNeoPixel=48, Buzzer=1, Button=0, Battery=2}}"]
     INIT_PINS --> LED_CYAN["[Set NeoPixel → Pulsing Cyan\n(Boot / Connecting State)]"]
     LED_CYAN --> BZR_BEEP["[[buzzerSetPattern(BZR_CONFIRM)\nSingle audible confirmation beep]]"]
     BZR_BEEP --> INIT_SENSORS["[[detectionInit() & gpsInit()\nSetup sensor buffers & registers]]"]
@@ -143,7 +143,7 @@ flowchart TD
     CHK_SHOCK{"Payload shock == 1\nOR type == 'EMERGENCY_ALERT'?"}
     
     %% Shock Detected
-    CHK_SHOCK -- "YES" --> CRASH_TRIGGER["🚨 TRIGGER CRASH ALERT\n[[detectionTriggerAlert()]]\n[Set NeoPixel → NEO_ALERT (Red Strobe)]\n[[buzzerSetPattern(BZR_ALERT) - Siren On]]"]
+    CHK_SHOCK -- "YES" --> CRASH_TRIGGER["TRIGGER CRASH ALERT\n[[detectionTriggerAlert()]]\n[Set NeoPixel → NEO_ALERT (Red Strobe)]\n[[buzzerSetPattern(BZR_ALERT) - Siren On]]"]
     CRASH_TRIGGER --> LORA_ALERT["[[loraSendAlert(token, lat, lon, aMag, EVENT_CRASH)]]\n[/Print: 'CRASH PACKET EMITTED OVER LORA'/]"]
     LORA_ALERT --> RET_WAIT
 
@@ -354,9 +354,9 @@ flowchart TD
     RETRY_SCAN --> SCAN_BLE
 
     CHK_FOUND -- "YES" --> CONNECT_GATT["[[BluetoothGatt.connectGatt()]]\n[Discover Nordic UART Service NUS]"]
-    CONNECT_GATT --> START_SENSORS["{{Register 100Hz Accelerometer & Gyroscope Listener}}\n{{Start FusedLocationProviderClient Updates (1Hz)}}"]
+    CONNECT_GATT --> START_SENSORS["{{Register 50Hz Sensor Stack (SENSOR_DELAY_GAME)}}\n{{Start FusedLocationProviderClient Updates (1Hz)}}"]
 
-    START_SENSORS --> SENSOR_LOOP{"Continuous Sensor Loop\n(Every 10ms)"}
+    START_SENSORS --> SENSOR_LOOP{"Continuous Sensor Loop\n(Every 20ms)"}
     
     SENSOR_LOOP --> READ_IMU["[/Read ax, ay, az, gx, gy, gz/]"]
     READ_IMU --> CALC_AMAG["[Compute aMag = sqrt(ax² + ay² + az²)]\n[Compute Pitch & Roll from Gravity Vector]"]
@@ -364,18 +364,18 @@ flowchart TD
     CALC_AMAG --> CHK_SHOCK_THRESH{"aMag >= 3.5G\nOR Tilt > 65° with 0 Speed\nOR Manual SOS Tapped?"}
 
     %% Impact Detected: Grace Period
-    CHK_SHOCK_THRESH -- "YES" --> SHOW_COUNTDOWN["🚨 LAUNCH 15-SECOND PRE-ALERT DIALOG\n[Play Warning Alarm Tone on Phone Speaker]\n[/Send BLE TX: {shock:1, type:'PRE_ALERT'}/]"]
+    CHK_SHOCK_THRESH -- "YES" --> SHOW_COUNTDOWN["LAUNCH 15-SECOND PRE-ALERT DIALOG\n[Play Warning Alarm Tone on Phone Speaker]\n[/Send BLE TX: {shock:1, type:'PRE_ALERT'}/]"]
     SHOW_COUNTDOWN --> AWAIT_CANCEL{"User Tapped\n'Cancel False Alarm'?"}
 
     AWAIT_CANCEL -- "YES (User Cancelled)" --> DISMISS_PHONE["[/Send BLE TX: {type:'CANCEL_ALERT'}/]\n[Dismiss Dialog & Resume Normal Loop]"]
     DISMISS_PHONE --> SENSOR_LOOP
 
-    AWAIT_CANCEL -- "NO (Timer Hits 0)" --> CONFIRM_EMERGENCY["🚨 CONFIRM EMERGENCY ALERT\n[/Send BLE TX: {shock:1, type:'EMERGENCY_ALERT', aMag: aMag}/]\n[Display 'Emergency Dispatched' Status Screen]"]
+    AWAIT_CANCEL -- "NO (Timer Hits 0)" --> CONFIRM_EMERGENCY["CONFIRM EMERGENCY ALERT\n[/Send BLE TX: {shock:1, type:'EMERGENCY_ALERT', aMag: aMag}/]\n[Display 'Emergency Dispatched' Status Screen]"]
     CONFIRM_EMERGENCY --> SENSOR_LOOP
 
     %% Normal Telemetry
-    CHK_SHOCK_THRESH -- "NO" --> CHK_TEL_TIMER{"Time Since Last\nBLE Telemetry >= 1000ms?"}
-    CHK_TEL_TIMER -- "YES" --> BUILD_TEL_JSON["[Build JSON: lat, lon, spd, alt, aMag, token, profile]\n[/Write to BLE NUS RX Characteristic/]"]
+    CHK_SHOCK_THRESH -- "NO" --> CHK_TEL_TIMER{"Time Since Last\nBLE Telemetry >= 100ms?"}
+    CHK_TEL_TIMER -- "YES" --> BUILD_TEL_JSON["[Build Sensor Frame JSON: lat, lon, spd, alt, aMag, token]\n[/Write to BLE NUS RX Characteristic with Flow Control/]"]
     CHK_TEL_TIMER -- "NO" --> SENSOR_LOOP
     BUILD_TEL_JSON --> SENSOR_LOOP
 

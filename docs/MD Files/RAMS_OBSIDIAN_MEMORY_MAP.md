@@ -33,7 +33,7 @@ design_system: Bold Typography & Minimalist (Zero-Emoji)
 
 The repository encompasses an integrated hardware-software disaster & highway safety ecosystem:
 - **Section 1: Working Code Baseline Snapshot (`Working Code - Do Not Touch/`)**: Golden reference archive preserving verified functional builds and data models.
-- **Section 2: Phone-Assisted BLE Wearable Relay (`wearable_withApp/`)**: The ESP32-S3 wearable functions as an ultra-compact body-worn BLE-to-LoRa relay node. All 100Hz IMU fused kinematics, dual-band GNSS, and rider registration credentials originate on the companion smartphone (`android_app/`), streaming to the wearable over BLE GATT (`0xFFE0 / 0xFFE1`).
+- **Section 2: Phone-Assisted BLE Wearable Relay (`wearable_withApp/`)**: The ESP32-S3 wearable functions as an ultra-compact body-worn BLE-to-LoRa relay node. All 50 Hz IMU fused kinematics, GNSS fixes, and rider registration credentials originate on the companion smartphone (`android_app/`), streaming to the wearable over the BLE Nordic UART Service (`6E400001-B5A3-F393-E0A9-E50E24DCCA9E`). The wearable has no onboard IMU and no onboard GPS receiver.
 - **Section 3: Long-Range 433MHz LoRa Uplink**: The wearable broadcasts extended `RiderProfilePacket` (233 bytes) and crash `AlertPacket` payloads across kilometers over 433MHz SX1278 Ra-02 RF links directly to receiver base stations (`receiver_withDesktop/`), completely bypassing cellular network outages.
 - **Section 4: Standalone Windows Rescuer Operations Center (`desktop_app/`)**: High-performance local command center with native C# host (`Program.cs`), embedded HTTP ingestion engine, borderless Microsoft Edge app-mode dashboard, persistent JSON storage, and full Google Drive 2x2 photo rendering.
 - **Section 5: Ponytail Token Optimization System (`.agents/`)**: Enforces a 7-step senior developer Decision Ladder to prevent token bloat and over-engineering across all AI agent interactions.
@@ -79,7 +79,7 @@ graph TD
     %% Android App Subsystem (Phone Sensor & Profile Engine)
     subgraph Android_App["[[android_app/]] Companion Mobile Station"]
         A_MAIN["[[MainActivity.kt]]<br/>Jetpack Compose UI (4-Tab Layout)"]
-        A_SENS["[[PhoneSensorEngine.kt]]<br/>100Hz IMU (2.5g Trigger, 2s Sticky Shock) + Dual-Band GNSS"]
+        A_SENS["[[PhoneSensorEngine.kt]]<br/>50Hz IMU (2.5g Trigger, 2s Sticky Shock) + GNSS Providers"]
         A_SYNC["[[Esp32SyncEngine.kt]]<br/>BLE GATT (240B Chunked Pacing) + WebSocket Server"]
         A_PROF["[[RiderProfile.kt]]<br/>Base62 Token + Google Drive 2x2 CDN Formatter"]
         A_LOGIN["[[RiderLoginDialog.kt]]<br/>Quick Rider Sync Dialog"]
@@ -88,7 +88,7 @@ graph TD
 
     %% Wearable Relay Subsystem
     subgraph Wearable_System["[[wearable_withApp/wearable_withApp.ino]]"]
-        W_BT["[[wearable_withApp/bt_service.cpp]]<br/>BLE GATT Server (FFE0/FFE1) + Throttled LoRa Broadcast"]
+        W_BT["[[wearable_withApp/bt_service.cpp]]<br/>BLE NUS Peripheral (6E400001) + Throttled LoRa Broadcast"]
         W_NEO["[[wearable_withApp/neopixel.cpp]]<br/>RGB Status (Green: Armed, Red: Alert SOS)"]
         W_DET["[[wearable_withApp/detection.cpp]]<br/>Alert Latch & False-Alarm Cancellation FSM"]
         W_LORA["[[wearable_withApp/lora_tx.cpp]]<br/>SX1278 LoRa TX (433MHz, SF9, BW125k)"]
@@ -121,7 +121,7 @@ graph TD
     end
 
     %% Interconnections & Data Flows
-    A_SENS -->|100Hz Kinematics + GPS Vectors| A_SYNC
+    A_SENS -->|50Hz Kinematics + GPS Vectors| A_SYNC
     A_PROF -->|Credentials, Medical Info & GDrive 2x2 Photo| A_SYNC
     A_SYNC -->|BLE GATT JSON Packets| W_BT
     
@@ -178,8 +178,8 @@ graph TD
   - `FalseAlarmPacket` (21 bytes): Incident dismissal packet.
 
 ### Layer 3: Wearable Sensor & Relay Node (`wearable_withApp/`)
-- **[[wearable_withApp/wearable_withApp.ino]]**: Main setup and 100Hz acquisition loop.
-- **[[wearable_withApp/bt_service.h]]** & **[[wearable_withApp/bt_service.cpp]]**: ESP32 BLE GATT service (`0xFFE0 / 0xFFE1`). Receives phone telemetry, parses JSON, injects GPS coordinates, and triggers throttled 30s LoRa profile sync.
+- **[[wearable_withApp/wearable_withApp.ino]]**: Main setup plus a `delay(5)` service pump that drives BLE, button, buzzer, NeoPixel, battery and periodic LoRa telemetry. No sensor acquisition loop exists on the wearable.
+- **[[wearable_withApp/bt_service.h]]** & **[[wearable_withApp/bt_service.cpp]]**: ESP32 BLE Nordic UART Service (`6E400001-B5A3-F393-E0A9-E50E24DCCA9E`; write `6E400002-...`, notify `6E400003-...`). Receives phone telemetry, parses JSON, injects GPS coordinates, and triggers throttled 30s LoRa profile sync.
 - **[[wearable_withApp/neopixel.h]]** & **[[wearable_withApp/neopixel.cpp]]**: WS2812B NeoPixel state machine: Blue (Connecting), Green (Armed & Connected), Red (SOS Crash Alert), Amber (Warning/Error).
 - **[[wearable_withApp/detection.h]]** & **[[wearable_withApp/detection.cpp]]**: Alert state latch and cancellation FSM.
 - **[[wearable_withApp/lora_tx.h]]** & **[[wearable_withApp/lora_tx.cpp]]**: SX1278 LoRa radio transmitter (433MHz, SF9, BW125kHz, CR4/5).
@@ -211,7 +211,7 @@ graph TD
 - **[[android_app/app/src/main/assets/voice_wake_patterns.json]]**: Formal acoustic training dataset and RAMS-1.8B-Edge model specification file.
 - **[[android_app/app/src/main/java/com/example/ui/screens/AiSuiteScreen.kt]]**: AI Guard Suite presenting the official RAMS-1.8B-Edge model specification card, Tier 1 14-parameter IMU kinematic feature tensor, and Tier 2 Clinical Reasoner trace.
 - **[[android_app/app/src/main/java/com/example/ui/components/RamsMapView.kt]]** & **[[android_app/app/src/main/assets/leaflet/map.html]]**: Leaflet Dark Matter map un-nested from vertical scrolling for smooth 360-degree finger dragging and pinch-to-zoom. Features active-only incident pin filtering (excluding cancelled/resolved alerts).
-- **[[android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt]]**: Smartphone 100Hz fused IMU with dynamic crash threshold tuning (`dynamicCrashThresholdG`), 2s sticky shock latch, and multi-provider GPS engine (500ms / 0m).
+- **[[android_app/app/src/main/java/com/example/sensor/PhoneSensorEngine.kt]]**: Smartphone 50 Hz fused IMU (`SENSOR_DELAY_GAME`) with dynamic crash threshold tuning (`dynamicCrashThresholdG`), 2s sticky shock latch, and multi-provider GPS engine (500ms / 0m).
 - **[[android_app/app/src/main/java/com/example/sensor/ImuCalibrationManager.kt]]**: Automated calibration engine calculating data-driven crash thresholds and ADL shake rejection filters from IMU Studio CSV exports.
 - **[[android_app/app/src/main/java/com/example/export/CsvExportManager.kt]]**: Dual EXPORT and IMPORT telemetry manager supporting column auto-detection, preview, and dataset merging.
 - **[[android_app/app/src/main/java/com/example/ui/components/CsvExportDialog.kt]]**: Monochromatic CSV management dialog with dual EXPORT / IMPORT tabs and live IMU calibration status indicators.
@@ -225,7 +225,7 @@ graph TD
 ### Layer 6: RAMS IMU Studio Application (`RAMS IMU Studio Application/`)
 - **[[RAMS IMU Studio Application/app/]]**: Standalone high-rate inertial analysis and calibration suite.
 - **[[RAMS IMU Studio Application/build_and_install.bat]]**: Automated ADB probe, APK compilation, and device launch script.
-- **Real-Time 100Hz IMU Waveform Monitor**: High-fidelity sparklines for 3-axis accelerometer, gyroscope, tilt angles, and resultant acceleration magnitude.
+- **Real-Time IMU Waveform Monitor (`SENSOR_DELAY_GAME`, ~50 Hz)**: High-fidelity sparklines for 3-axis accelerometer, gyroscope, tilt angles, and resultant acceleration magnitude.
 - **Accident vs. ADL Correlation Studio**: Statistical feature extraction and classification rule derivation.
 - **Processed CSV & Calibration Rules Engine**: Exports filtered CSV and JSON thresholds directly ingested by `android_app/` for false alarm cancellation.
 

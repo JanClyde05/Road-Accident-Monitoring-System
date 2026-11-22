@@ -45,7 +45,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    LOOP["🔄 loop() — Every ~5ms"] --> BG["Background Updates:\ngpsUpdate() → buzzerUpdate()\nneopixelUpdate() → btServiceUpdate()\nbatteryUpdate()"]
+    LOOP["loop() — Every ~5ms"] --> BG["Background Updates:\ngpsUpdate() → buzzerUpdate()\nneopixelUpdate() → btServiceUpdate()\nbatteryUpdate()"]
 
     BG --> BTN["buttonUpdate()"]
     BTN --> BTNCHK{Button\nPressed?}
@@ -53,14 +53,14 @@ flowchart TD
     BTNCHK -- No --> LED["NeoPixel State Management"]
     BTNCHK -- Yes --> ALERT_CHK{Active\nAlert?}
 
-    ALERT_CHK -- Yes --> CANCEL["📵 CANCEL FALSE ALARM\ndetectionAcknowledgeAlert()\nbuzzerOff()\nbuzzerSetPattern(BZR_CONFIRM)"]
+    ALERT_CHK -- Yes --> CANCEL["CANCEL FALSE ALARM\ndetectionAcknowledgeAlert()\nbuzzerOff()\nbuzzerSetPattern(BZR_CONFIRM)"]
     CANCEL --> LORA_FA{LoRa OK?}
     LORA_FA -- Yes --> SEND_FA["loraSendFalseAlarm(\n  token, lat, lon\n)"]
     LORA_FA -- No --> BLE_ACK
     SEND_FA --> BLE_ACK["BLE Notify Phone:\nCANCEL_ALERT_ACK"]
     BLE_ACK --> LED
 
-    ALERT_CHK -- No --> CHIRP["🔊 Status Check Chirp\nbuzzerSetPattern(BZR_CONFIRM)\nPrint: Token, BLE, GPS status"]
+    ALERT_CHK -- No --> CHIRP["Status Check Chirp\nbuzzerSetPattern(BZR_CONFIRM)\nPrint: Token, BLE, GPS status"]
     CHIRP --> LED
 
     LED --> LED_CHK{Has Active\nAlert?}
@@ -91,7 +91,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    RX["📲 BLE RX Characteristic\nonWrite() Callback"] --> BUF["Append chunk to _rxBuffer"]
+    RX["BLE RX Characteristic\nonWrite() Callback"] --> BUF["Append chunk to _rxBuffer"]
     BUF --> STRIP["Strip leading garbage\nbefore first '{'"]
     STRIP --> NL{Contains\n'\\n'?}
 
@@ -117,7 +117,7 @@ flowchart TD
     PROFILE_CHK -- No --> SHOCK_CHK
 
     SEND_PROFILE --> SHOCK_CHK{"shock == 1 ?\nOR type == EMERGENCY?"}
-    SHOCK_CHK -- Yes --> CRASH["🚨 CRASH DETECTED!\ndetectionTriggerAlert()\nNEO_ALERT → BZR_ALERT\nloraSendAlert(token, lat, lon, aMag)"]
+    SHOCK_CHK -- Yes --> CRASH["CRASH DETECTED!\ndetectionTriggerAlert()\nNEO_ALERT → BZR_ALERT\nloraSendAlert(token, lat, lon, aMag)"]
     SHOCK_CHK -- No --> DONE2["Continue"]
 
     MSG_TYPE -- "PING" --> PONG["Reply: PONG"]
@@ -175,7 +175,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    LOOP["🔄 loop() — Every ~5ms"] --> WIFI["wifiManagerUpdate()\n(Portal + auto-reconnect)"]
+    LOOP["loop() — Every ~5ms"] --> WIFI["wifiManagerUpdate()\n(Portal + auto-reconnect)"]
     WIFI --> LORA_CHK{LoRa OK?}
     LORA_CHK -- Yes --> LORA_RX["loraRxUpdate()"]
     LORA_CHK -- No --> QUEUE
@@ -194,13 +194,13 @@ flowchart TD
     TYPE -- PKT_REGISTER --> REG_PROC
     TYPE -- PKT_USER_TYPE --> UT_PROC
 
-    ALERT_PROC["🚨 ALERT\nNEO_RX_ALERT (Red strobe)\nPrint crash dashboard\nSerial JSON output"]
-    TEL_PROC["📡 TELEMETRY\nPrint: token, lat, lon, batt, RSSI\nSerial JSON output"]
-    FA_PROC["🟢 FALSE ALARM\nneopixelTriggerFalseAlarmFlash()\nneopixelClearAlert()\nSerial JSON output"]
-    PROFILE_PROC["👤 RIDER PROFILE\nExtract all fields\nPrint profile table\nSerial JSON output"]
-    TEST_PROC["🧪 TEST DRILL\nNEO_RX_ALERT\nSerial JSON output"]
-    REG_PROC["📝 REGISTER\nExtract name, photoUrl\nSerial JSON output"]
-    UT_PROC["👤 USER TYPE\nExtract category\nSerial JSON output"]
+    ALERT_PROC["ALERT\nNEO_RX_ALERT (Red strobe)\nPrint crash dashboard\nSerial JSON output"]
+    TEL_PROC["TELEMETRY\nPrint: token, lat, lon, batt, RSSI\nSerial JSON output"]
+    FA_PROC["FALSE ALARM\nneopixelTriggerFalseAlarmFlash()\nneopixelClearAlert()\nSerial JSON output"]
+    PROFILE_PROC["RIDER PROFILE\nExtract all fields\nPrint profile table\nSerial JSON output"]
+    TEST_PROC["TEST DRILL\nNEO_RX_ALERT\nSerial JSON output"]
+    REG_PROC["REGISTER\nExtract name, photoUrl\nSerial JSON output"]
+    UT_PROC["USER TYPE\nExtract category\nSerial JSON output"]
 
     ALERT_PROC --> UPLOAD
     TEL_PROC --> UPLOAD_TEL
@@ -254,7 +254,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["🖥️ Launch\nRAMS_Rescuer_Desktop.exe"] --> B["Resolve appDir\n_wwwDir = appDir/www/\n_dataFilePath = incidents.json\n_registrationsFilePath = registrations.json"]
+    A["Launch\nRAMS_Rescuer_Desktop.exe"] --> B["Resolve appDir\n_wwwDir = appDir/www/\n_dataFilePath = incidents.json\n_registrationsFilePath = registrations.json"]
     B --> C["LoadRegistrations()\nLoadIncidents()"]
     C --> D["StartSerialReceiverBridge()\n(Background thread: scan COM ports)"]
     D --> E["StartLanReceiverBridge()\n(TCP listener on port 8888)"]
@@ -272,7 +272,7 @@ flowchart TD
     I -- No --> I2["Fallback: Process.Start(url)\n(Default browser)"]
     I -- Yes --> J
 
-    I2 --> J["⏳ Main Loop\n(Keep alive while app window open)"]
+    I2 --> J["Main Loop\n(Keep alive while app window open)"]
     J --> ALIVE{"Check every 1s:\n_exitRequested?\nInactive > 15s?\n(after 30s grace)"}
     ALIVE -- "Active" --> J
     ALIVE -- "Exit / Inactive" --> CLEANUP["Cleanup:\n_serialRunning = false\nStop TCP listener\nStop HttpListener"]
@@ -286,7 +286,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph USB["🔌 USB Serial Bridge (Auto-Detect)"]
+    subgraph USB["USB Serial Bridge (Auto-Detect)"]
         S1["SerialMonitorWorker\n(scan COM ports every 2s)"]
         S1 --> S2["For each new port:\nSpawn ReadPortWorker thread"]
         S2 --> S3["SerialPort.Open()\n115200, 8N1, DTR=true"]
@@ -296,7 +296,7 @@ flowchart TD
         S5 -- No --> S4
     end
 
-    subgraph LAN["📡 LAN TCP Bridge (Port 8888)"]
+    subgraph LAN["LAN TCP Bridge (Port 8888)"]
         L1["TcpListener on 0.0.0.0:8888"]
         L1 --> L2["AcceptTcpClient()"]
         L2 --> L3["HandleLanClient()\n(ThreadPool)"]
@@ -304,7 +304,7 @@ flowchart TD
         L4 --> L5["ProcessIncomingPayload()"]
     end
 
-    subgraph HTTP["🌐 HTTP Server API"]
+    subgraph HTTP["HTTP Server API"]
         H1["POST /api/upload"]
         H1 --> H2["Read JSON body\nor form fields"]
         H2 --> H3["ProcessIncomingPayload()"]
@@ -394,7 +394,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    LAUNCH["📱 App Launch\nMainActivity.kt"] --> PERMS["Request Permissions:\nBluetooth, Location, Sensors"]
+    LAUNCH["App Launch\nMainActivity.kt"] --> PERMS["Request Permissions:\nBluetooth, Location, Sensors"]
     PERMS --> PROFILE["Load/Create Rider Profile:\nname, plate, contact, blood,\nvehicle, emergency info"]
     PROFILE --> SCAN["Scan for BLE Device:\n'RAMS Wearable'"]
     SCAN --> CONNECT["Connect BLE\n(Nordic UART Service - NUS)"]
@@ -403,10 +403,10 @@ flowchart TD
     CONNECTED -- No --> RETRY["Retry scan\nwith backoff"]
     CONNECTED -- Yes --> STREAMS["Start Sensor Streams"]
 
-    STREAMS --> GPS_STREAM["📍 GPS Provider\nFused Location Updates"]
-    STREAMS --> IMU_STREAM["📐 IMU Sensors\nAccelerometer + Gyroscope"]
+    STREAMS --> GPS_STREAM["GPS Provider\nFused Location Updates"]
+    STREAMS --> IMU_STREAM["IMU Sensors\nAccelerometer + Gyroscope"]
 
-    GPS_STREAM --> BUILD_TEL["Build JSON Telemetry:\n{\n  lat, lon, spd, alt, hdg,\n  ax, ay, az, amag,\n  gx, gy, gz, pitch, roll,\n  token, rider, plate, contact,\n  blood, vehicleModel,\n  emergencyContactName,\n  emergencyPhone, allergies,\n  photoUrl\n}"]
+    GPS_STREAM --> BUILD_TEL["Build Sensor JSON Frame:\n{\n  lat, lon, spd, alt, hdg,\n  ax, ay, az, amag,\n  gx, gy, gz, pitch, roll,\n  token\n}"]
     IMU_STREAM --> BUILD_TEL
 
     BUILD_TEL --> SHOCK_CHK{"Shock\nDetected?\n(amag > threshold)"}
@@ -420,8 +420,8 @@ flowchart TD
     WAIT --> GPS_STREAM
 
     subgraph USER_ACTIONS["User Actions"]
-        CANCEL_BTN["🛑 Cancel Alert Button"] --> CANCEL_MSG["BLE Send:\n{type:'CANCEL_ALERT'}"]
-        EDIT_PROFILE["✏️ Edit Profile"] --> SAVE["Save to local storage\n+ Include in next telemetry"]
+        CANCEL_BTN["Cancel Alert Button"] --> CANCEL_MSG["BLE Send:\n{type:'CANCEL_ALERT'}"]
+        EDIT_PROFILE["Edit Profile"] --> SAVE["Save to local storage\n+ Dispatch profile packet"]
     end
 
     style LAUNCH fill:#1a1a2e,stroke:#e94560,color:#fff

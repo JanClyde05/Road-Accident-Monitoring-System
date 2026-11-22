@@ -42,19 +42,19 @@ flowchart LR
         VOICE_FSM --> BLE_CLIENT
     end
 
-    subgraph NODE_2 ["NODE 2: Wearable Safety Node (ESP32-S3 WROOM-1)"]
+    subgraph NODE_2 ["NODE 2: Wearable Safety Node (ESP32-S3 SuperMini Relay)"]
         direction TB
-        BLE_SERVER["BLE GATT Peripheral Server<br/>(TX Char: 6E400003, RX Char: 6E400002)"]
-        WEAR_IMU["Onboard IMU (MPU6050)<br/>Wrist Impact & Rotational Variance"]
+        BLE_SERVER["BLE NUS Peripheral Server<br/>(TX Char: 6E400003, RX Char: 6E400002)"]
+        WEAR_IMU["No Onboard IMU<br/>50 Hz Phone Kinematics Arrive Over BLE"]
         WEAR_BTN["Mechanical Push Button<br/>Immediate Physical False-Alarm Abort"]
         
         subgraph WEAR_CORE ["Firmware Architecture (FreeRTOS)"]
             BT_SRV["bt_service.cpp<br/>JSON Packet Parser & Token Sync"]
-            DETECT_FSM["detection.cpp<br/>Two-Stage Fall / Skid / Impact FSM"]
+            DETECT_FSM["detection.cpp<br/>Alert Latch / Acknowledge State"]
             LORA_TX_MOD["lora_tx.cpp<br/>Packet Serialization & SPI Driver"]
         end
 
-        HAPTICS["Haptic / Visual Output<br/>- Piezo Buzzer (95dB PWM Alert)<br/>- WS2812B NeoPixel RGB State Beacon<br/>- Haptic Vibration Motor"]
+        HAPTICS["Haptic / Visual Output<br/>- Active Buzzer (GPIO1 Alert Pattern)<br/>- WS2812B NeoPixel RGB State Beacon"]
         SX1278_TX["Semtech SX1278 LoRa Transceiver<br/>433 MHz ISM Band / Ra-02 Module (+17 dBm)"]
 
         BLE_CLIENT <-. "BLE 2.4 GHz GATT Link<br/>(10Hz Telemetry & Ping)" .-> BLE_SERVER
@@ -118,7 +118,7 @@ flowchart TD
     subgraph STAGE_1 ["STAGE 1: Primary Kinematic & Transducer Sampling"]
         P_IMU["Mobile IMU: 50 Hz Accelerometer / Gyroscope"]
         P_GPS["Mobile GNSS: 1 Hz WGS84 Geodetic Fix"]
-        W_IMU["Wearable MPU6050: 100 Hz Wrist Shock Sensor"]
+        W_IMU["Wearable Relay: No Onboard IMU or GPS"]
         MIC_IN["Microphone: 16 kHz PCM Speech Recognition"]
     end
 

@@ -24,7 +24,7 @@ apps/android_app/app/src/main/
 │   │   └── AlarmSoundEngine.kt       # Continuous high-pitch SOS Morse klaxon and vibration loop
 │   │
 │   ├── connectivity/                 # Wearable Hardware Interface
-│   │   └── Esp32ConnectionManager.kt # Bluetooth LE GATT client (UUID 0xFFE0 / 0xFFE1) and auto-reconnect
+│   │   └── Esp32ConnectionManager.kt # Wi-Fi socket telemetry client with an offline simulation fallback
 │   │
 │   ├── export/                       # Data Persistence & Diagnostics
 │   │   └── CsvExportManager.kt       # 50Hz raw IMU CSV recorder, session exporter, and calibration manager
@@ -85,7 +85,8 @@ apps/android_app/app/src/main/
 * Enables RAMS to summon the Assistant Bubble on top of any active application (such as Facebook, Google Maps, or the Home launcher) when "Hey RAMS" is spoken.
 
 ### 2.4 Wearable Hardware Integration (BLE GATT)
-* Connects via BLE GATT (`0xFFE0` / `0xFFE1`) to the ESP32-S3 Wearable PCB, streaming 100Hz MPU-6050 fall detection flags and battery telemetry.
+* Connects over the BLE Nordic UART Service (`6E400001-B5A3-F393-E0A9-E50E24DCCA9E`; write `6E400002-...`, notify `6E400003-...`) to the ESP32-S3 wearable relay, pushing phone GPS/IMU frames down and reading battery telemetry and false-alarm events back up.
+* The wearable has no onboard IMU and no onboard GPS: the phone is the only sensor source, and the relay only re-transmits what it receives.
 * Supports bidirectional hardware cancellation: pressing the physical tactile button on the wearable instantly dispatches a cancel packet to the phone app and LoRa network.
 
 ---

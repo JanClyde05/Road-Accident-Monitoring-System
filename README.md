@@ -2,7 +2,7 @@
 
 **Real-Time Highway Incident Detection, LoRa Long-Range Telemetry, Dual-Tier Edge AI, and Rescuer Command Center**
 
-RAMS is an end-to-end, multi-tier emergency response platform engineered for real-time traffic accident detection and immediate rescue dispatch. Designed specifically for highway environments and rural road segments vulnerable to cellular coverage dropouts, RAMS pairs a custom wearable sensor relay node with high-rate inertial shock sensing, off-grid 433MHz LoRa long-range radio broadcast, dual-tier on-device neural edge classification, rider mobile telemetry synchronization, conversational voice AI, and a standalone command-center desktop application.
+RAMS is an end-to-end, multi-tier emergency response platform engineered for real-time traffic accident detection and immediate rescue dispatch. Designed specifically for highway environments and rural road segments vulnerable to cellular coverage dropouts, RAMS pairs a phone-assisted wearable relay node, off-grid 433MHz LoRa long-range radio broadcast, dual-tier on-device neural edge classification, rider mobile telemetry synchronization, conversational voice AI, and a standalone command-center desktop application. All inertial and GNSS sensing happens on the rider's Android phone; the wearable is a BLE-to-LoRa relay with no onboard IMU and no onboard GPS.
 
 ---
 
@@ -21,17 +21,17 @@ RAMS is an end-to-end, multi-tier emergency response platform engineered for rea
   |  - Cellular Fallback: Automated SMS Emergency Dispatch & Cloud REST Relay     |
   +---------------------------------------+---------------------------------------+
                                           |
-                              BLE GATT (0xFFE0 / 0xFFE1)
+                              BLE NUS (Nordic UART)
                                           |
                                           v
   +-------------------------------------------------------------------------------+
   |                            WEARABLE RELAY TIER                                |
   |  RAMS Custom Wearable PCB (ESP32-S3FH4R2, Rev C EPDC Edition)                 |
-  |  - 2-Stage Finite State Machine (Freefall -> Impact Spike -> Rest -> Latch)   |
-  |  - On-Board MPU-6050 Motion Engine & Crash Logic (100Hz I2C)                  |
+  |  - No On-Board IMU or GPS: Phone Streams Position and Motion Over BLE         |
+  |  - Crash FSM and 14-Feature Extraction Run On-Phone at 50 Hz                  |
   |  - 30-Second Auditory / Visual Warning & False-Alarm Cancellation Button      |
   |  - WS2812B RGB Status Indication (Armed, SOS Alert, Low Battery)              |
-  |  - On-Board Battery Management (TP4054 Charger + DW01A/FS8205A Protection)   |
+  |  - On-Board Battery Management (TP4054 Charger + DW01A/FS8205A Protection)    |
   +---------------------------------------+---------------------------------------+
                                           |
                         433MHz LoRa Link (SX1278, SF9, CR 4/5)
@@ -72,7 +72,7 @@ This directory routing table allows human engineers and AI agents to locate and 
 | **Android Mobile App** | [`apps/android_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/) | [`MainActivity.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/MainActivity.kt)<br>[`RamsViewModel.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/viewmodel/RamsViewModel.kt)<br>[`AndroidManifest.xml`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/AndroidManifest.xml) | Production Android Kotlin / Jetpack Compose application. Houses BLE GATT, GPS, real-time telemetry, and foreground service. |
 | **Edge AI & Assistant** | [`apps/android_app/.../ai/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/) | [`SensorAiInferenceEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/SensorAiInferenceEngine.kt)<br>[`VoiceAlarmCanceler.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt)<br>[`RamsAiAssistantEngine.kt`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt) | Dual-tier edge neural model, 100% offline "Hey RAMS" wake-word recognizer, and personalized conversational companion. |
 | **Standalone AI Suite** | [`apps/new_ai_applications/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/) | [`desktop_ai_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/desktop_ai_app/)<br>[`ai_resources_and_models/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/ai_resources_and_models/)<br>[`FREE_MOTION_DATASETS_DIRECTORY.md`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/new_ai_applications/ai_resources_and_models/FREE_MOTION_DATASETS_DIRECTORY.md) | Synchronized standalone twin applications, motion benchmark datasets, and 1-click build pipelines. |
-| **Wearable Firmware** | [`firmware/wearable_withApp/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/) | [`wearable_withApp.ino`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/wearable_withApp.ino) | ESP32-S3 firmware with MPU-6050 100Hz FSM, ATGM336H GPS parsing, SX1278 LoRa uplink, BLE GATT server, and WS2812B NeoPixel. |
+| **Wearable Firmware** | [`firmware/wearable_withApp/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/) | [`wearable_withApp.ino`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/wearable_withApp/wearable_withApp.ino) | ESP32-S3 phone-assisted relay firmware. Receives GPS, IMU and crash alerts over BLE NUS, holds or acknowledges the alert state, and transmits SX1278 LoRa uplink packets. No onboard IMU, no onboard GPS, WS2812B NeoPixel status. |
 | **Base Station Firmware** | [`firmware/receiver_withDesktop/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/receiver_withDesktop/) | [`receiver_withDesktop.ino`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/receiver_withDesktop/receiver_withDesktop.ino) | ESP32-S3 base station listening on 433MHz LoRa. Forwards alerts over USB Serial (`RAMS_PKT:...`) and Wi-Fi TCP/HTTP. |
 | **Shared RF Protocol** | [`firmware/shared/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/shared/) | [`protocol.h`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/firmware/shared/protocol.h) | Canonical C header defining packed binary RF structs (`LoRaAlertPacket`, `TelemetryPacket`), bitmasks, and RF channels. |
 | **Command Center Desktop** | [`apps/desktop_app/`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/) | [`Program.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/Program.cs)<br>[`HotspotPredictor.cs`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/HotspotPredictor.cs)<br>[`www/index.html`](file:///d:/Antigravity/Projects/Road%20Accident%20Monitoring%20System/apps/desktop_app/www/index.html) | Windows Rescuer Operations app (C# .NET / WebView2 + React 19). Handles serial auto-detect, klaxon alerts, and incident triage. |
@@ -109,8 +109,9 @@ The design, mathematical formulations, sensor calibration, and physical validati
   - Source: [UCI HAR Repository](https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones).
 
 ### 3.2 Hardware Standards & Semiconductor Specifications
-* **InvenSense MPU-6050 Motion Processing Unit**:
-  - $I^2C$ fast-mode protocol, internal digital low-pass filtering (DLPF 44Hz), $\pm 16g$ accelerometer full-scale, $\pm 2000^\circ/s$ gyroscope range.
+* **Android On-Device Sensor Stack (`SensorManager`)**:
+  - Registers `TYPE_ACCELEROMETER`, `TYPE_GYROSCOPE`, `TYPE_GRAVITY`, `TYPE_MAGNETIC_FIELD` and `TYPE_ROTATION_VECTOR` (with `TYPE_GEOMAGNETIC_ROTATION_VECTOR` and `TYPE_ORIENTATION` fallbacks) at `SENSOR_DELAY_GAME` (~50 Hz, ~20 ms).
+  - The wearable carries no IMU and no GPS receiver: every inertial and location sample originates on the phone and reaches the relay over BLE.
 * **Semtech SX1278 LoRa Transceiver**:
   - 433MHz ISM physical layer, Spreading Factor 9, 125 kHz Bandwidth, Coding Rate 4/5, $+17\text{ dBm}$ output power, link budget $>148\text{ dB}$.
 * **Espressif ESP32-S3FH4R2 Microcontroller**:

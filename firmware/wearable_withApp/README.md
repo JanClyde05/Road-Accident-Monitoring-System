@@ -30,11 +30,11 @@ This firmware runs on the **ESP32-S3 SuperMini** board paired with an **SX1278 (
 
 | Color / Pattern | Meaning |
 |---|---|
-| 🔵 **Pulsing Cyan** | Advertising BLE — Waiting for Android phone to connect |
-| 🟡 **Pulsing Yellow** | Connected to phone — Waiting for GPS fix |
-| 🟢 **Solid Green** | **Armed & Monitoring** — Phone connected, valid GPS fix, LoRa active |
-| 🔴 **Flashing Red SOS** | **CRASH / EMERGENCY ALERT ACTIVE** (Buzzer pulsing) |
-| 🔴 **Solid Red** | LoRa hardware initialization error |
+| **Pulsing Cyan** | Advertising BLE — Waiting for Android phone to connect |
+| **Pulsing Yellow** | Connected to phone — Waiting for GPS fix |
+| **Solid Green** | **Armed & Monitoring** — Phone connected, valid GPS fix, LoRa active |
+| **Flashing Red SOS** | **CRASH / EMERGENCY ALERT ACTIVE** (Buzzer pulsing) |
+| **Solid Red** | LoRa hardware initialization error |
 
 ---
 
