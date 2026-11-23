@@ -104,6 +104,37 @@ def main():
         page(title, "Six-minute finals talk. Bold lines are operator cues. Read the words beneath them aloud. Choose Finals talk before opening the overview. Times are elapsed from the start of the talk. The full exhibit and additional controls follow." if index == 0 else None)
         for key in ids:
             chapter(key, "finals")
+    page("Four-minute prototype demonstration",
+         "Live demonstration plan. Use a team-controlled receiver, station and fictional test profile. Rehearse with the exact phone and carrier you will take to the venue. Start the clock after the research talk.")
+    add_rows(doc, [
+        ("0:00–0:45   Show the fabricated carrier and the paired Android phone. Point out the receiver beside the station.",
+         "This is the SuperMini carrier we built. The phone supplies the motion readings and location. Look at the connection state on the phone, then at the receiver connected to the station."),
+        ("0:45–1:30   Open AI Guard. Find SAFETY SIMULATION LAB. Show the station’s latest event before tapping Severe Crash once.",
+         "This control injects a test alarm. It lets us demonstrate the reporting path without asking anyone to fall. The preset describes the scenario. We will read the values that actually reach the station."),
+        ("1:30–2:45   Show the phone alarm, then switch to the live station. Look for a new event matching the test device and time.",
+         "The phone has raised an alarm. Its local record tells us the test started. We look for a separate new record here to establish whether the receiver delivered it."),
+        ("2:45–3:35   If received, open the new event and read its displayed device, time and position status. If it is absent, keep the actual screen visible.",
+         "If received: “Here is the new report for our test device. This is the time and location status recorded by the station.” If absent: “The phone raised the test alarm. We have not confirmed receipt at this station.”"),
+        ("3:35–4:00   Point back to the source phone and receiving station. Hand over to questions.",
+         "This shows what we observed on this equipment today. A field trial needs many labeled events and many transmissions to estimate detection and delivery performance."),
+    ])
+    page("Five-minute research defense", "Any officially registered student researcher may answer. Choose the relevant evidence and leave time for the panel’s follow-up.")
+    add_rows(doc, [
+        ("Why use motion rules on a phone?",
+         "The rider already carries the sensors. The phone can evaluate a motion window without an internet request. We can inspect which threshold fired and reproduce a wrong subtype on the same inputs."),
+        ("What does the replay establish?",
+         "On precomputed features from 121 generated fixtures, the classifier matched 33 accident flags and 88 benign flags. All eleven falls received the severe-collision label and all eleven potholes received the wind-flutter label. We need independent, labeled field sessions to estimate real-world performance."),
+        ("If a judge cites 94% sensitivity and specificity from the earlier manuscript, which evidence supports today's slide?",
+         "The earlier manuscript reports a different set of 100 trials. We do not have the trial-level logs for those percentages in this evidence package. The results shown today come from the reproducible 121-fixture replay."),
+        ("Does tapping Severe Crash test detection?",
+         "It injects an alarm. A matching new station record shows the alert traveled on this setup. We evaluate the motion decision separately using labeled sensor inputs."),
+        ("Did RAMS learn new weights each time someone dismissed an alarm?",
+         "Dismissing an alarm records the action and requests cancellation. The application has a separate profile-learning function. The dismissal handler does not call it."),
+        ("What did generative AI contribute to development?",
+         "Gemini in Antigravity helped implement motion rules, communications and station software. Antigravity sessions wrote and ran the scripts for synthetic motion fixtures, text command variants and assistant Q&A. Claude and ChatGPT assisted the custom PCB work. Codex helped check the evidence and prepare the exhibit. We can show the code, fixtures and compiled replay behind the reported counts."),
+        ("How would you protect participants and judge feasibility?",
+         "Use consenting participants, test identifiers and controlled motions. Limit access to identifiable locations and agree on a retention period before collection. Measure missed events, false reports, radio coverage and battery runtime before deployment."),
+    ])
     pages = [
         ("Full exhibit   /   Research brief", ["overview", "team", "problem"]),
         ("Full exhibit   /   On the road", ["pairing", "scenarios"]),
@@ -118,14 +149,6 @@ def main():
         page(title, "Choose Full exhibit for the 17-minute 30-second walkthrough. Each speaker can keep this script open on a second screen. Use the additional controls after the walkthrough for questions." if index == 0 else None)
         for key in ids:
             chapter(key, "full")
-    doc.add_heading("Four minute physical demonstration", level=2)
-    add_rows(doc, [
-        ("Show the actual carrier beside the paired phone.", "This is the fabricated SuperMini carrier you saw in the reconstruction. Here is the phone’s current connection state."),
-        ("Indicate the test setting. Use the agreed test-event control on the demo equipment.", "We are sending an identified test event. Watch the source, then look at the receiving station."),
-        ("If received, point to the actual station event and read its displayed identity, time and location status.", "This is the station’s record of our test. Compare its device identity with the one we showed on the phone."),
-        ("If reception is still unconfirmed, leave the actual station state visible.", "We have a local test event. We have not yet confirmed receipt at the station."),
-        ("Invite questions.", "Which part would you like to inspect together? We can return to the motion trace, the board, the packet or the station record."),
-    ])
     page("Other controls and questions", "Use these lines when revisiting a chapter. They sit outside the timed script.")
     doc.add_heading("Navigation", level=2)
     add_rows(doc, cues["navigation"])

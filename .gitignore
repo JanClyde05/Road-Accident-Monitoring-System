@@ -37,3 +37,4 @@ npm-debug.log*
 # Local AI & Editor configuration
 .claude/
 *.local.json
+tools/harness2/

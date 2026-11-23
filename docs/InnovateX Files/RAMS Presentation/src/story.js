@@ -121,21 +121,21 @@ const consequences = [
     symbol: 'phone',
     title: 'A second way to raise an alert',
     text: 'A paired phone and wearable can originate an incident report. The rider can correct a false alarm if able.',
-    measure: 'Missed alerts and false alarms per labeled trip.',
+    measure: 'Missed alerts, false alarms per trip and hours per charge.',
   },
   {
     label: 'Receiving station',
     symbol: 'radio',
     title: 'A report with a device identity',
     text: 'Within radio reach, the receiver can pass an event, available coordinates and peak acceleration to the Windows station.',
-    measure: 'Delivered packets, valid fixes and event-to-station time.',
+    measure: 'Packet delivery, alert latency and receiver uptime.',
   },
   {
     label: 'Response team',
     symbol: 'desk',
     title: 'Information for a human decision',
-    text: 'An operator can review the incident and available rider details before coordinating a response through the local workflow.',
-    measure: 'Time to acknowledgement and completeness of the report.',
+    text: 'An operator reviews the alert and decides whom to contact. A field pilot would need rider consent and restricted access to identifiable routes and profiles.',
+    measure: 'Time to acknowledgement and hours of staffed coverage.',
   },
 ];
 export function impact(panel) {

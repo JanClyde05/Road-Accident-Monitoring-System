@@ -99,7 +99,7 @@ const added = [
     title: 'Reporting gap',
     headline: 'Who calls when the rider cannot?',
     summary:
-      'An injured road user may be unable to call or describe a location. On a road with few witnesses or limited cellular coverage, a receiving station may have no report to act on.',
+      'An injured rider may be unable to call or give a location. Can a phone recognize crash-like motion, and can a wearable relay that report to a staffed station when cellular coverage is poor?',
     notes: [
       {
         title: 'Put the numbers in context',
@@ -107,7 +107,7 @@ const added = [
       },
       {
         title: 'Name the engineering problem',
-        text: 'A hard jolt alone cannot tell a station what happened. RAMS must decide whether the phone’s motion is unusual, give the rider a way to correct a false alarm and carry useful information across a communications gap.',
+        text: 'Our engineering contribution connects a local motion decision and rider correction to a compact LoRa report and an operator’s incident history. Test the two questions separately: count detection errors on held-out phone sessions, then measure delivery and elapsed time to a receiver in range.',
       },
       {
         title: 'Hand off to the road user',
@@ -153,11 +153,11 @@ const added = [
     title: 'Road incidents',
     headline: 'Four incidents on the same road',
     summary:
-      'Follow a motorcycle slide, a junction collision, a pedestrian strike and a fall on foot. Pause at contact. For each person, ask what a phone in their pocket could actually sense.',
+      'Follow a motorcycle slide, a junction collision, a pedestrian strike and a fall while walking. Pause at contact. For each person, ask what a phone in their pocket could actually sense.',
     notes: [
       {
         title: 'Compare the four reconstructions',
-        text: 'Look at orientation after the motorcycle slide, the abrupt change of direction at the junction and the pedestrian’s motion during contact. In the fourth scene, a person loses their footing without a vehicle striking them. Compare a carried phone with the separate dropped-phone fixture in Detection.',
+        text: 'Watch how the wearer changes orientation after the motorcycle slide and how their motion changes at the crossing. In the fourth scene, the wearer loses their footing on level ground. Compare what their phone could sense with the separate dropped-phone fixture in Detection.',
       },
       {
         title: 'Keep the evidence clear',
@@ -223,7 +223,7 @@ const added = [
       },
       {
         title: 'Define a credible impact study',
-        text: 'Compare event-to-station time and successful delivery under matched coverage conditions. Count false alerts, missed events, stale or absent locations and operator acknowledgements. Response-time improvements or lives saved require separate evidence.',
+        text: 'With participant consent, restrict access to identifiable routes and profiles and use coded records in the study. Measure false alerts, missed events, event-to-station time and hours per charge. Record receiver uptime and staffing before estimating whether a station can sustain the service.',
       },
       {
         title: 'Hand off to the four-minute prototype demonstration',

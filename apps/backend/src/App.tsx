@@ -75,6 +75,25 @@ export default function App() {
     return () => window.removeEventListener('rams-refresh-events', handleImmediateRefresh);
   }, [fetchEvents]);
 
+  // Gracefully terminate backend server and release COM ports when window is closed
+  useEffect(() => {
+    const handleWindowClose = () => {
+      try {
+        navigator.sendBeacon('/api/exit');
+      } catch {
+        fetch('/api/exit', { method: 'POST', keepalive: true }).catch(() => {});
+      }
+    };
+
+    window.addEventListener('beforeunload', handleWindowClose);
+    window.addEventListener('pagehide', handleWindowClose);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose);
+      window.removeEventListener('pagehide', handleWindowClose);
+    };
+  }, []);
+
   const handleEventSelect = useCallback((event: EventData) => {
     setSelectedEvent(event);
     setProfileEvent(event);

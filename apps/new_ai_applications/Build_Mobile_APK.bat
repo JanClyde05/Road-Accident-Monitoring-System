@@ -1,6 +1,6 @@
 @echo off
 setlocal
-cd /d "%~dp0mobile_ai_app"
-call Build_APK.bat
+cd /d "%~dp0..\android_app"
+call build_and_install.bat %*
 exit /b %ERRORLEVEL%
 

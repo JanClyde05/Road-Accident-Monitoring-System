@@ -32,6 +32,7 @@ Status values: `open` (defect present), `fixed` (code changed, check passes),
 | INC-020 | WiFiUdp vs WiFiUDP casing compile error | receiver firmware | medium | fixed | receiver build |
 | INC-021 | advertiseOnDisconnect missing in classic BLE | wearable firmware | high | fixed | FW-006 |
 | INC-022 | Stale documentation links with retired project name | repository | low | fixed | DOC-003 |
+| INC-023 | Desktop background process holds serial COM port after UI close | desktop | high | fixed | test DESK-01 (runtime) |
 
 ---
 
@@ -309,6 +310,27 @@ Status values: `open` (defect present), `fixed` (code changed, check passes),
 - Fix: Bulk updated 41 links to `Road%20Accident%20Monitoring%20System` and renamed
   `RescuerForm.cs` references to `Program.cs`.
 - Regression check: DOC-003.
+- Status: fixed.
+
+## INC-023 - Desktop background process holds serial COM port after UI close
+
+- Detected: 2026-11-22, runtime ESP32 flash attempt.
+- Symptom: esptool/Arduino IDE fails with `PermissionError(13, 'Access is denied.', None, 5)`
+  when opening COM port.
+- Signal: `could not open port 'COM3': PermissionError(13, 'Access is denied.')`.
+- Root cause: `RAMS_Rescuer_Desktop.exe` compiled as `/target:winexe` spawned Microsoft
+  Edge app window (`msedge.exe --app=...`). Closing Edge did not terminate the desktop C#
+  process. `SerialMonitorWorker` kept exclusive OS handle locks on COM3/COM4 open
+  indefinitely in the background.
+- Fix:
+  1. Frontend sends `navigator.sendBeacon('/api/exit')` on `beforeunload` and `pagehide`.
+  2. Backend tracks spawned Edge process handle and terminates when Edge exits.
+  3. HTTP inactivity watchdog (>7s idle polling after 15s startup grace period) calls
+     `CloseAllSerialPorts()` and exits.
+  4. Registered `AppDomain.CurrentDomain.ProcessExit` and `Console.CancelKeyPress` to
+     close and dispose all active `SerialPort` handles.
+  5. Startup orphan killer terminates stale previous instances.
+- Regression check: test DESK-01 (runtime).
 - Status: fixed.
 
 ---

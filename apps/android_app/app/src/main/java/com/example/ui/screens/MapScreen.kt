@@ -1,17 +1,25 @@
 package com.example.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NearMe
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import com.example.model.DestinationRoute
 import androidx.compose.material3.Surface
@@ -20,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +58,7 @@ fun MapScreen(
   onFilterChange: (String) -> Unit = {},
   onSearchChange: (String) -> Unit = {}
 ) {
+  val context = LocalContext.current
   val showNearbyIncidents = riderProfile.showNearbyIncidents
   val activeHeading = if (headingDeg != 0f) headingDeg else gps.headingDegrees
 
@@ -140,22 +150,58 @@ fun MapScreen(
             }
           }
 
-          Button(
-            onClick = onClearRoute,
-            shape = RoundedCornerShape(6.dp),
-            colors = ButtonDefaults.buttonColors(
-              containerColor = Color(0xFF27272A),
-              contentColor = Color(0xFFEF4444)
-            ),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-            modifier = Modifier.height(28.dp)
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
           ) {
-            Text(
-              text = "CLEAR ROUTE",
-              fontSize = 9.sp,
-              fontFamily = FontFamily.Monospace,
-              fontWeight = FontWeight.Bold
-            )
+            Button(
+              onClick = {
+                val gmapsNavUri = Uri.parse("google.navigation:q=${destinationRoute.destLat},${destinationRoute.destLon}&mode=d")
+                val navIntent = Intent(Intent.ACTION_VIEW, gmapsNavUri).apply {
+                  setPackage("com.google.android.apps.maps")
+                }
+                try {
+                  context.startActivity(navIntent)
+                } catch (_: Exception) {
+                  val webDirUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${destinationRoute.destLat},${destinationRoute.destLon}")
+                  context.startActivity(Intent(Intent.ACTION_VIEW, webDirUri))
+                }
+              },
+              shape = RoundedCornerShape(6.dp),
+              colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF2563EB),
+                contentColor = Color.White
+              ),
+              contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+              modifier = Modifier.height(28.dp)
+            ) {
+              Icon(Icons.Default.NearMe, contentDescription = null, modifier = Modifier.size(12.dp))
+              Spacer(modifier = Modifier.width(3.dp))
+              Text(
+                text = "NAVIGATE",
+                fontSize = 9.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold
+              )
+            }
+
+            Button(
+              onClick = onClearRoute,
+              shape = RoundedCornerShape(6.dp),
+              colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF27272A),
+                contentColor = Color(0xFFEF4444)
+              ),
+              contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+              modifier = Modifier.height(28.dp)
+            ) {
+              Text(
+                text = "CLEAR",
+                fontSize = 9.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold
+              )
+            }
           }
         }
       }

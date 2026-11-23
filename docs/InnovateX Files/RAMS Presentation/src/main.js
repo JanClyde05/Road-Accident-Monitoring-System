@@ -34,7 +34,10 @@ const exhibits = {
   desktop,
   assistant,
   pairing: (panel) => scenarios(panel, { initial: 'pairing' }),
-  scenarios: (panel) => scenarios(panel, { initial: 'motorcycle' }),
+  scenarios: (panel) => {
+    const requested = new URLSearchParams(location.search).get('incident');
+    return scenarios(panel, { initial: ['car', 'pedestrian', 'fall'].includes(requested) ? requested : 'motorcycle' });
+  },
 };
 const hasTerrain = () => ['overview', 'relay'].includes(chapters[current]?.id);
 const title = $('chapter-title');
@@ -241,9 +244,13 @@ function openDialog(kind) {
       script.append(extra);
     }
     const resources = document.createElement('p');
-    for (const [extension, label] of [['pdf', 'Print script (PDF)'], ['docx', 'Edit script (Word)']]) {
+    for (const [file, label] of [
+      ['RAMS InnovateX 2026 National Finals Slides.pdf', 'Finals slides (PDF)'],
+      ['RAMS Presenter Script.pdf', 'Print script (PDF)'],
+      ['RAMS Presenter Script.docx', 'Edit script (Word)'],
+    ]) {
       const link = document.createElement('a');
-      link.href = 'public/presenters/RAMS Presenter Script.' + extension;
+      link.href = 'public/presenters/' + file;
       link.target = '_blank';
       link.rel = 'noopener';
       link.textContent = label;

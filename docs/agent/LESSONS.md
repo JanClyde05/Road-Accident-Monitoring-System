@@ -207,6 +207,22 @@ and violates workspace naming directives.
 
 Enforced by DOC-003 and Project Name Authority rule.
 
+### L-22 - Desktop UI host processes must release serial COM handles on window close
+
+When a background desktop service (`/target:winexe`) opens an app window in an external
+browser (e.g., `msedge.exe --app=...`), closing the browser window does not automatically
+kill the background host. Any background threads holding open `SerialPort` handles keep
+exclusive OS locks active indefinitely, causing subsequent ESP32 flashing or Arduino IDE
+uploads to fail with `PermissionError(13, 'Access is denied.')`.
+The host process must:
+1. Register `beforeunload` / `pagehide` beacon handlers (`navigator.sendBeacon('/api/exit')`)
+2. Monitor the browser process handle and exit when the browser process terminates
+3. Implement an HTTP polling inactivity watchdog (>7s idle) as a safety net
+4. Close and dispose all active `SerialPort` instances inside `AppDomain.ProcessExit`
+   and `Console.CancelKeyPress`.
+
+Enforced by runtime test DESK-01 and INC-023.
+
 ## Corrections made during this audit
 
 These are the mistakes in the analysis itself. Keeping them prevents the same
@@ -242,3 +258,7 @@ wrong assumption from being reintroduced.
 - Adding a second transport "for compatibility" without removing the first.
 - Copying a directory to "keep a backup" in the working tree. Use git.
 - Editing a checker to make a red run green.
+
+## Offline exhibit media
+
+Starting a local film is only one playback check. During exhibit testing the standard Python preview server returned the whole MP4 for a requested byte range. Chrome could open the film but could not reliably seek to the presenter's chosen phase. The exhibit server now serves valid ranges with HTTP 206. Check a mid-film seek, replay and chapter switch over loopback and from the extracted ZIP with networking disabled.

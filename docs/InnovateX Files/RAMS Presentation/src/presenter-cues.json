@@ -99,7 +99,7 @@
       "finals": [
         [
           "Compare the two years. Advance to Road incidents.",
-          "The Philippines recorded 11,096 road traffic deaths in 2021. That count gives the scale of the problem. Our project addresses one part of it. Someone who falls may be unable to call or give a location. Precious will show what the phone can observe in that moment."
+          "The Philippines recorded 11,096 road traffic deaths in 2021. When a rider cannot call or describe a location, who makes the first report? We linked a phone’s motion detector to a wearable radio and a receiving station. We asked two questions. Can the phone distinguish crash-like motion from ordinary movement? Can a report reach an operator when cellular coverage is poor?"
         ]
       ],
       "more": [
@@ -113,7 +113,7 @@
       "full": [
         [
           "Let Prepare play. Point to the phone.",
-          "Before I set out, I have two things with me. The phone carries the motion sensors and supplies my location when it has a fix."
+          "Watch the two devices the wearer carries. The phone senses motion and supplies a location when it has a fix. The paired wearable carries the radio."
         ],
         [
           "Pause when the Bluetooth link appears.",
@@ -147,8 +147,8 @@
           "Here the person carrying the phone is on foot. Watch the motion before contact and then the change as the person loses balance. We have changed who carries the sensor."
         ],
         [
-          "Click Fall. Play from Walking to Loss of footing, then through Ground contact.",
-          "This person falls without a vehicle striking them. Their phone moves with them. If only the phone fell, the person might still be standing. Those two events deserve different interpretations."
+          "Click Fall. Play Walking, pause at Loss of footing, then resume to Ground contact.",
+          "Watch the wearer lose their footing while walking. Their phone could register the impact when they land. A phone that slips from their hand could also register an impact. That is why a single peak is hard to interpret."
         ],
         [
           "Click Next chapter.",
@@ -157,8 +157,8 @@
       ],
       "finals": [
         [
-          "Click Fall. Play through ground contact, then advance.",
-          "Watch the person lose their footing. No vehicle hits them. A phone carried in a pocket can register rotation and impact. A dropped phone can also hit the ground. That is why our classifier considers orientation and speed alongside the peak. April will show the difference."
+          "Select Fall. Let the wearer walk, lose their footing and land. Advance to Calibration.",
+          "Watch the wearer lose their footing. Their phone could register an impact when they land. A dropped phone can register one too. The phone senses how it moves. It cannot tell what the person fell from, and a slow fall may escape detection. April will show how we tested that distinction."
         ]
       ],
       "more": [
@@ -206,7 +206,7 @@
         ],
         [
           "Select Fall, then Impact. Advance.",
-          "In the fall, the sensor finishes at a very different angle. In the impact fixture, the peak is 8.50 g and the combined tilt change is 154.5 degrees. These traces were generated. Now let’s look at where they came from."
+          "This Fall trace models a rider going over the handlebars at 42 kilometers per hour. It is a separate synthetic example from the pedestrian animation. The impact example peaks at 8.50 g. Let’s look at where the data came from."
         ]
       ],
       "finals": [],
@@ -231,7 +231,7 @@
       "more": [
         [
           "Select Fall.",
-          "This generated fall ends with a large change of orientation."
+          "This synthetic over-the-handlebars fall ends with a large change of orientation. It represents a moving rider."
         ],
         [
           "Select Impact.",
@@ -304,12 +304,12 @@
       ],
       "finals": [
         [
-          "Select Threshold. Point to the midpoint.",
-          "Our app ships 121 generated motion traces in eleven families. In this two-session example, the pothole and impact peaks leave a gap. Labeled CSV sessions can calibrate a threshold. The phone also checks rotation and speed."
+          "Show the generated corpus. Select Threshold and point to the midpoint.",
+          "We chose rules that run on the phone without internet. We can inspect why a jolt triggered an alert. The rules consider acceleration, rotation, tilt and speed when available. Our scripts generated 121 traces across eleven scenarios. Public fall datasets were research references. Here, labeled sessions set a threshold halfway between the highest benign peak and lowest accident peak when there is a gap."
         ],
         [
           "Select Rider feedback. Advance to RAMS AI.",
-          "Dismissing an alarm stops it, records the dismissal and requests a cancellation. A separate matcher handles saved motion profiles below six g. The current cancel action does not save a new profile. Stephanie will take us from that motion logic to the rider’s voice."
+          "When a rider cancels, the app stops the alarm, records the dismissal and requests a correction. That button alone does not teach the detector a new motion. Stephanie will show where voice fits."
         ]
       ],
       "more": [
@@ -348,8 +348,8 @@
       ],
       "finals": [
         [
-          "Click App action, then Personal reply. Choose Connected. Advance.",
-          "“Lakad ako” changes the user category to Pedestrian. “Is my wearable connected?” takes a different route. It consults the device state. RAMS also has 1,655 bundled question-and-answer entries and can cache an eligible online answer for later use."
+          "Select App action, then Personal reply. Choose Connected. Advance to Hardware.",
+          "The phrase on screen means “I’m walking.” Android transcribes it, and RAMS uses the words to select the pedestrian profile. Ask if the wearable is connected and RAMS checks the device state. Its personal assistant also has 1,655 generated question-and-answer entries. Those words help with replies. The phone makes its motion decision separately."
         ]
       ],
       "more": []
@@ -380,11 +380,11 @@
       "finals": [
         [
           "Select Prototype, then Custom SMD.",
-          "Our fabricated carrier uses an ESP32-S3 SuperMini module and a separate Ra-02 breakout. The custom four-layer RAMS Wearable mounts the processor directly."
+          "We hand-built the carrier with a SuperMini and an Ra-02 radio. Claude helped with the engineering brief, and ChatGPT helped design the custom four-layer board. The processor mounts directly on that board."
         ],
         [
           "Click Flip board. Hold, then advance.",
-          "Turn it over and you can see where the Ra-02 sits on the underside. This is the custom board’s CAD assembly. The physical board we can demonstrate today is the SuperMini carrier."
+          "Turn it over to see the Ra-02 underneath. That is the CAD design. We will demonstrate the SuperMini carrier."
         ]
       ],
       "more": [
@@ -476,7 +476,7 @@
       "finals": [
         [
           "Select Lina’s red pin. Open rider profile, then Incident history. Advance.",
-          "These are fictional station records. Lina’s pin leads to her registered profile. Her history shows today’s alert, an earlier cancellation and her registration. An operator can distinguish those events before deciding whom to contact."
+          "These records are fictional. Lina’s pin opens her profile. Her history shows today’s alert and an earlier cancellation. An operator reviews the report and decides whom to contact. In a field trial, we would obtain consent, restrict access to identifiable locations and use coded records for analysis."
         ]
       ],
       "more": [
@@ -515,8 +515,8 @@
       ],
       "finals": [
         [
-          "Point to both counts and the subtype row. Advance.",
-          "On 121 generated feature vectors, the compiled classifier matched every alarm flag. Yet all eleven potholes received the wind-flutter subtype, and all eleven falls received the severe-collision subtype. The replay tells us where these rules worked and where their descriptions failed. Field accuracy and end-to-end timing still need measurement."
+          "Point to both counts and the two subtype errors. Advance.",
+          "We replayed stored features through the compiled Android classifier. It flagged all 33 accident examples and suppressed all 88 benign ones. But all eleven potholes were called wind flutter, and all eleven over-the-handlebars examples were called severe collisions. We started after feature extraction, using generated examples. Their scores tell us how the rules behaved in this replay. Accuracy on real trips and time to the station still need testing."
         ]
       ],
       "more": [
@@ -547,8 +547,8 @@
       ],
       "finals": [
         [
-          "Select Response team. Hand over to the prototype demo.",
-          "Our next field trial will measure missed alerts, delivery and time to acknowledgement. The aim is simple. If the rider cannot call, give an operator a report they can act on. We’ll now demonstrate the prototype."
+          "Select Response team. Hand over to the four-minute prototype demonstration.",
+          "In a field pilot we would measure missed alerts, delivery time and hours per charge. We would also check who can keep the receiver staffed and powered. Now we’ll demonstrate the prototype."
         ]
       ],
       "more": [

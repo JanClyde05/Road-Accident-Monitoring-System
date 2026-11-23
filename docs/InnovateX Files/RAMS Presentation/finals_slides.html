@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RAMS - Road Accident Monitoring System | InnovateX 2026 National Finals</title>
+<style>
+@font-face{font-family:Jakarta;src:url('{{PUBLIC}}/fonts/jakarta.woff2');font-weight:400 800}
+@font-face{font-family:Plex;src:url('{{PUBLIC}}/fonts/plex.woff2')}
+@page{size:1280px 720px;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0c141b;color:#f0f4f4}
+body{font-family:Jakarta,'Segoe UI',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.slide{width:1280px;height:720px;position:relative;overflow:hidden;break-after:page;background:#0c141b;padding:44px 64px 50px}
+.slide:last-child{break-after:auto}
+.slide:after{content:"";position:absolute;inset:0;pointer-events:none;border-bottom:5px solid #294449}
+h1,h2,h3,p,figure{margin:0}
+h2{font-size:55px;letter-spacing:-2.6px;line-height:1.13;max-width:1145px;font-weight:740}
+h3{font-size:27px;line-height:1.25;letter-spacing:-.8px;font-weight:680}
+p{font-size:24px;line-height:1.44;color:#d2dadd;font-weight:450}
+.k{font:16px/1.3 Plex,monospace;letter-spacing:1.6px;text-transform:uppercase;color:#89dcd7;margin-bottom:14px}
+.src{position:absolute;left:64px;right:64px;bottom:20px;padding-top:10px;border-top:1px solid #304149;font-size:14px;line-height:1.2;letter-spacing:.05px;color:#a5b5bc}
+.src a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.ac{color:#83e0d9}.am{color:#ffbd73}
+.mono{font-family:Plex,monospace;font-weight:400}
+.tiny{font:17px/1.4 Plex,monospace;color:#b3c3ca}
+.strong{font-weight:730;color:#edf3f3}
+.line{border-top:1px solid #354950}
+.hero{background:radial-gradient(ellipse at 76% 47%,#142d32 0,#0b151a 48%,#0a1117 81%)}
+.heroart{position:absolute;right:-80px;top:63px;width:920px;z-index:0}
+.hero .front{position:relative;z-index:1}
+.hero .display{font-size:136px;line-height:.96;letter-spacing:-10px;font-weight:795;margin-top:67px}
+.hero h1{font-size:45px;line-height:1.14;letter-spacing:-2px;max-width:545px;margin:12px 0 22px}
+.hero .lead{max-width:515px;font-size:23px;line-height:1.42;color:#d3dfe0}
+.credit{position:absolute;left:64px;right:64px;bottom:62px;z-index:1;border-top:1px solid #34494c;padding-top:18px}
+.credit p{font-size:19px;line-height:1.55}.credit .people{font-weight:630;color:#f0f4f4}
+.figure-cap{font:16px/1.4 Plex,monospace;color:#adc0c5}
+.roadmap{position:absolute;width:315px;height:465px;right:158px;top:143px}
+.country{position:absolute;right:64px;top:133px;bottom:73px;width:505px;border-left:1px solid #30424a;background:radial-gradient(ellipse at 50% 50%,#123036,#0d191f 62%,#0c141b 85%)}
+.bigstat{font-size:112px;line-height:1;font-weight:770;letter-spacing:-7px}
+.statcaption{color:#e4ecef;font-size:26px;line-height:1.26;font-weight:600}
+.w680{width:666px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.paired{margin-top:38px;align-items:start}
+.scenes{display:grid;gap:14px}
+.scenes figure{position:relative;overflow:hidden;background:#081118}
+.scenes img{width:100%;height:161px;object-fit:cover;object-position:50% 48%;display:block}
+.scenes figcaption{position:absolute;left:13px;bottom:10px;background:#0a171ee8;color:white;font:15px/1.3 Plex,monospace;padding:4px 8px}
+.rows>div{border-top:1px solid #32454d;padding-top:12px;margin:18px 0}
+.rows h3{margin-bottom:4px}
+.rows p{font-size:21px;line-height:1.36}
+.measurement{background:linear-gradient(110deg,#0b161e,#10212a)}
+.chart{border:1px solid #32474f;background:#091219;padding:16px 15px 12px}
+.chart .legend{display:flex;align-items:center;gap:24px;font:17px/1.35 Plex,monospace}
+.chart svg{display:block;width:100%;height:auto;margin:0}
+.chartFoot{margin:4px 0 0;font-size:15px;color:#b1c3c9}
+.voiceimage{display:flex;justify-content:center;align-items:center;background:#071014;border:1px solid #2a4148;height:374px}
+.voiceimage img{object-fit:contain;width:90%;height:89%}
+.voiceq{font-size:27px;font-weight:680;letter-spacing:-.8px;margin-bottom:4px;color:#eff4f4}
+.board{position:relative;height:275px;display:flex;justify-content:center;align-items:center;border-top:1px solid #355057;background:radial-gradient(ellipse at 55% 46%,#193037,#0d171e 67%,#0c141b)}
+.board img{width:95%;height:95%;object-fit:contain}
+.ware h3{margin:14px 0 4px}.ware p{font-size:22px}
+.flow{display:flex;align-items:center;justify-content:space-between;margin-top:48px}
+.flow b{font-size:29px;letter-spacing:-.8px}.flow i{font:16px Plex,monospace;color:#93ded7;border-bottom:1px solid #518482;text-align:center;min-width:112px;padding-bottom:5px}
+.packet{display:flex;margin:20px 0 15px;gap:3px;width:100%;height:32px}
+.packet div{background-size:calc(100%/var(--n)) 100%;background-image:linear-gradient(to right,transparent calc(100% - 2px),#0c141b calc(100% - 2px));background-color:var(--fill);flex:var(--n)}
+.keys{display:flex;gap:35px;font-size:19px;line-height:1.4}.keys span{font-size:16px;display:block;color:#b9c8cc}
+.station-grid{display:grid;grid-template-columns:680px 1fr;gap:32px;margin-top:28px}
+.station-map,.station-id{width:100%;display:block}
+.station-map{border:1px solid #34444e}
+.history{display:flex;align-items:center;gap:18px;margin-top:14px}
+.history img{width:320px;border:1px solid #34444e}.history .tiny{font-size:14px}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:45px;margin:32px 0 22px}
+.results>div{border-top:1px solid #38555a;padding-top:14px}
+.results .bigstat{font-size:98px}.results .statcaption{font-size:23px}
+.errrow{display:grid;grid-template-columns:280px 1fr;line-height:1.4;font-size:23px;border-top:1px solid #35464b;padding:10px 0}
+.closeart{width:640px;height:440px;position:absolute;right:5px;top:122px;opacity:.76;object-fit:contain}
+.closingtext{position:relative;width:655px;z-index:1}
+.closingtext .rows>div{margin:14px 0}
+</style>
+</head>
+<body>
+<section class="slide hero">
+  <img class="heroart" src="{{PUBLIC}}/terrain.webp" alt="An illuminated road through a point-cloud landscape">
+  <div class="front"><div class="k">InnovateX 2026 National Finals</div>
+    <div class="display">RAMS</div>
+    <h1>Road Accident<br>Monitoring System</h1>
+    <p class="lead">Can a rider’s phone recognize a possible accident and get a report to a receiving station?</p>
+  </div>
+  <div class="credit"><p class="people">Ernest John Galace &nbsp;·&nbsp; Precious Nina Garcia &nbsp;·&nbsp; April Ann Palattao &nbsp;·&nbsp; Stephanie Ranjo &nbsp;·&nbsp; Jan Clyde Talosig</p><p>Cagayan State University, Carig Campus &nbsp; · &nbsp; Electronics Engineering</p></div>
+</section>
+
+<section class="slide">
+  <div class="k">Research problem</div><h2>Who calls when the rider cannot?</h2>
+  <div class="country"></div><img class="roadmap" src="{{PUBLIC}}/philippines.svg" alt="Map of the Philippine archipelago">
+  <div class="w680" style="margin-top:40px">
+    <div class="bigstat am">11,096</div><div class="statcaption">road traffic deaths in the Philippines in 2021</div>
+    <p style="margin-top:25px;max-width:630px">A rider may be unable to call or describe their location. With few witnesses or limited cellular coverage, the station may receive no report.</p>
+    <div style="border-left:3px solid #78d9d2;padding-left:19px;margin-top:25px;max-width:640px"><p><span class="strong">Research objective.</span> Identify a candidate event on the phone and send it by radio to a station in range.</p></div>
+  </div>
+  <div class="src">National total from PSA, cited by <a href="https://www.who.int/philippines/news/detail/31-05-2023-department-of-transportation--world-health-organization-launch-philippine-road-safety-action-plan-2023-2028">WHO Philippines and DOTr, 31 May 2023</a>. Delayed reporting was not counted separately. Coastline from Natural Earth.</div>
+</section>
+
+<section class="slide">
+  <div class="k">Road incident</div><h2>One hard jolt has several explanations</h2>
+  <div class="split paired" style="grid-template-columns:1.06fr .94fr">
+    <div class="scenes"><figure><img src="{{PUBLIC}}/scenarios/fall-0.webp" alt="Illustration of a person walking near the road"><figcaption>Walking</figcaption></figure>
+      <figure><img src="{{PUBLIC}}/scenarios/fall-2.webp" alt="The illustrated wearer after losing their footing"><figcaption>After losing footing</figcaption></figure>
+      <div class="figure-cap">Illustrated sequence on level ground</div></div>
+    <div style="padding:2px 0 0 12px"><p style="font-size:30px;line-height:1.35">If the wearer falls, the phone may register an impact. A dropped phone can also register one.</p>
+      <div class="rows" style="margin-top:22px"><div><h3 class="ac">What RAMS observes</h3><p>Phone acceleration, changes in orientation and speed around the event.</p></div>
+      <div><h3 class="ac">What remains uncertain</h3><p>A phone cannot establish injury. Slow falls can be missed.</p></div></div></div>
+  </div><div class="src">RAMS reconstruction using <a href="https://tevy.dev/models/casual-walker">tevy’s Casual Walker</a> and <a href="https://polyhaven.com/a/modern_evening_street">Poly Haven scenery</a>. The synthetic fall fixture represents a separate over-the-handlebars event.</div>
+</section>
+
+<section class="slide measurement">
+  <div class="k">AI method and inputs</div><h2>How the phone decides to raise an alert</h2>
+  <div class="split paired" style="grid-template-columns:1.25fr .9fr;gap:31px">
+    <div><div class="chart"><div class="legend"><span class="ac">━━ Pothole</span><span class="am">━━ Impact</span></div>
+      <svg viewBox="0 0 665 281" role="img" aria-label="Acceleration magnitude by time for two generated fixtures">
+        <g stroke="#2a3b43" stroke-width="1"><path d="M55 37H635M55 102H635M55 166.5H635M55 231H635"/></g>
+        <g fill="#bccbd1" font-size="15" font-family="Plex,monospace"><text x="14" y="42">9 g</text><text x="14" y="107">6 g</text><text x="14" y="171">3 g</text><text x="14" y="235">0 g</text><text x="54" y="259">0 s</text><text x="321" y="259">0.5 s</text><text x="595" y="259">1.0 s</text></g>
+        {{POTHOLE_TRACE}}{{IMPACT_TRACE}}
+      </svg>
+      <p class="chartFoot">Two synthetic base traces · acceleration magnitude · 50 Hz</p>
+    </div><p style="font-size:19px;margin-top:14px;max-width:605px">A rider can cancel a false alarm. The app records the dismissal and requests a correction. Saving a new motion profile requires a separate step.</p></div>
+    <div class="rows" style="margin-top:-18px"><div><h3 class="ac">Calibrate</h3><p>With labeled sessions, a pair of separated peaks can set a midpoint. Here 4.18 g and 8.50 g yield 6.34 g.</p></div>
+      <div><h3 class="ac">Classify on the phone</h3><p>Ordered motion rules also consider rotation and speed. Each decision can be inspected and runs without a cloud call.</p></div>
+      <div><h3 class="ac">Evaluate</h3><p>Public datasets informed the research. Local scripts generated 11 motion families and {{TOTAL}} labeled replay fixtures.</p></div></div>
+  </div><div class="src">RAMS Android motion benchmarks, CSV calibration and SensorAiInferenceEngine. The midpoint illustrates two sessions and is not a field operating threshold.</div>
+</section>
+
+<section class="slide">
+  <div class="k">The rider’s assistant</div><h2>What RAMS AI does with a voice request</h2>
+  <div class="split paired" style="grid-template-columns:.93fr 1.07fr">
+    <div><div class="voiceimage"><img src="{{PUBLIC}}/apps/android-voice.webp" alt="The RAMS Android voice-listening overlay"></div><div class="figure-cap" style="margin-top:8px">Archived Android wake overlay</div></div>
+    <div style="padding-top:2px"><p>Android transcribes speech. The app routes the recognized words to a command or a reply.</p>
+      <div class="rows"><div><div class="voiceq">“Lakad ako” <span style="font-size:20px;color:#a7c2c6">(I’m walking)</span></div><p>Sets the rider category to Pedestrian.</p></div>
+      <div><div class="voiceq">“Is my wearable connected?”</div><p>Reads the phone’s current connection state.</p></div>
+      <div><p><span class="strong ac">1,655 bundled Q&amp;A entries</span> support local replies. Eligible online answers can be cached. The motion classifier makes the accident decision separately.</p></div></div></div>
+  </div><div class="src">Android voice command routing, live device context and the packaged Q&amp;A file. Independent speaker accuracy has yet to be measured.</div>
+</section>
+
+<section class="slide">
+  <div class="k">Wearable hardware</div><h2>From a fabricated carrier to a custom board</h2>
+  <div class="split paired ware" style="margin-top:24px">
+    <figure><div class="board"><img src="{{PUBLIC}}/hardware/prototype.webp" alt="Board reconstruction with a SuperMini module and separate Ra-02 breakout"></div>
+      <h3>Fabricated SuperMini carrier</h3><p>50 × 43 mm. The carrier holds an ESP32-S3 SuperMini and a separate Ra-02 radio breakout.</p></figure>
+    <figure><div class="board"><img src="{{PUBLIC}}/hardware/custom-smd.webp" alt="KiCad assembly of the custom RAMS Wearable"></div>
+      <h3>RAMS Wearable <span class="ac">/</span> CAD design</h3><p>42 × 32 mm, four layers. The processor mounts directly to the board. Physical first-article verification remains open.</p></figure>
+  </div><div class="src">Left: reconstruction from the fabricated carrier’s KiCad layout and manuscript component images. Right: normal-population KiCad assembly of the custom design.</div>
+</section>
+
+<section class="slide">
+  <div class="k">System contribution</div><h2>What travels in 26 bytes?</h2>
+  <p style="margin-top:16px;max-width:1040px">RAMS links a decision made on the rider’s phone to a local radio receiver. The road-to-station LoRa hop needs a receiver in range and can operate without cellular service.</p>
+  <div class="flow"><b>Phone</b><i>BLE</i><b>Wearable</b><i>LoRa</i><b>Receiver</b><i>USB</i><b>Station</b></div>
+  <div style="border-top:1px solid #344a50;margin-top:48px;padding-top:20px"><h3>LoRa alert payload</h3>
+    <div class="packet" role="img" aria-label="26 bytes in wire order"><div style="--n:13;--fill:#458984"></div><div style="--n:4;--fill:#7cd3ce"></div><div style="--n:4;--fill:#a2e4db"></div><div style="--n:1;--fill:#ffc477"></div><div style="--n:4;--fill:#b0a688"></div></div>
+    <div class="keys"><div><b>13 B</b> &nbsp;Header<span>Type, device token, send-time counter</span></div><div><b>4 B</b> &nbsp;Latitude</div><div><b>4 B</b> &nbsp;Longitude</div><div><b>1 B</b> &nbsp;Event</div><div><b>4 B</b> &nbsp;Peak g</div></div></div>
+  <p style="font-size:22px;margin-top:26px">Registration data and cancellations each travel in a separate message.</p>
+  <div class="src">RAMS shared firmware protocol and receiver implementation. The 26-byte payload size excludes radio overhead.</div>
+</section>
+
+<section class="slide">
+  <div class="k">Rescue desk and privacy</div><h2>What can the receiving operator verify?</h2>
+  <div class="station-grid"><div><img class="station-map" src="{{PUBLIC}}/apps/station-map.webp" alt="RAMS map with three fictional wearable records in Carig">
+    <div class="history"><img src="{{PUBLIC}}/apps/station-lina-profile.webp" alt="Fictional registered rider record for Lina Cruz"><p class="tiny"><b class="ac">Lina’s incident history</b><br>12 Nov · Alert received<br>10 Nov · Earlier alert cancelled<br>08 Nov · Wearable registered</p></div>
+  </div><div class="rows" style="margin-top:-16px"><div><h3 class="ac">Review the alert</h3><p>The pin opens a registered rider. Their history distinguishes an alert, a cancellation and registration.</p></div>
+  <div><h3 class="ac">Confirm before acting</h3><p>A map pin gives a starting point. An operator still needs to verify the rider’s situation.</p></div>
+  <div><h3 class="ac">Protect rider data</h3><p>For field trials, obtain consent and limit access to identities, coordinates and histories.</p></div></div></div>
+  <div class="src">RAMS Windows station with fictional registrations and events. Streets and buildings: <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors (ODbL)</a>.</div>
+</section>
+
+<section class="slide measurement">
+  <div class="k">Validation results</div><h2>Alarm flags matched. Two subtypes failed.</h2>
+  <p style="margin-top:13px;max-width:1110px">The compiled Android classifier processed {{TOTAL}} generated feature vectors with an empty learned profile.</p>
+  <div class="results"><div><div class="bigstat ac">{{ACCIDENT}}</div><div class="statcaption">accident-labeled cases raised an alarm</div></div>
+    <div><div class="bigstat ac">{{BENIGN}}</div><div class="statcaption">benign cases suppressed an alarm</div></div></div>
+  <div class="errrow"><b class="am">All {{FALL}} fall cases</b><span>received the severe-collision subtype.</span></div>
+  <div class="errrow"><b class="am">All {{POTHOLE}} potholes</b><span>received the wind-flutter subtype.</span></div>
+  <p style="font-size:22px;margin-top:15px">Field accuracy, missed incidents and end-to-end alert latency still need measurement.</p>
+  <div class="src">Source: RAMS synthetic replay of runTier1Inference on stored features. This test begins after feature extraction and excludes the physical radio link.</div>
+</section>
+
+<section class="slide">
+  <div class="k">Impact and next trial</div><h2>Can a useful report reach the desk in time?</h2>
+  <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:45px;margin-top:35px">
+  <div class="closingtext" style="width:auto"><div class="rows" style="margin-top:-13px">
+    <div><h3 class="ac">On the road</h3><p>Freeze the settings, then count false alarms and missed events on held-out, labeled trips.</p></div>
+    <div><h3 class="ac">At the receiving station</h3><p>Measure packet delivery at known distances and time each event through operator acknowledgement.</p></div>
+    <div><h3 class="ac">In continued use</h3><p>Measure hours per charge. Check which stations can keep a receiver powered and staffed.</p></div></div>
+  </div>
+  <div><img style="width:100%;height:190px;object-fit:cover;border:1px solid #32494d" src="{{PUBLIC}}/relay/receiver.webp" alt="Illustration of a radio link between the road and station">
+    <div style="border-left:3px solid #ffc077;margin-top:20px;padding-left:16px"><h3 class="am">Prototype demonstration</h3><p style="font-size:22px;margin-top:5px">Pair the phone and carrier, send an identified test event, and inspect what the station receives.</p></div></div></div>
+  <div class="src">RAMS proposed field evaluation. The demonstration uses a test event. Research presentation: 6 minutes · Demonstration: 4 minutes · Defense: 5 minutes.</div>
+</section>
+</body>
+</html>

@@ -190,13 +190,11 @@ class VoiceAlarmCanceler(
             "cancelar",
             "kansel",
             "consol",
-            "console",
-            "stub",
-            "step"
+            "console"
         )
 
         private val CANCEL_REGEX = Regex(
-            "\\b(cancel|stop|cancer|counsel|council|cancle|cancell|kansel|consol|console|stub|step|quiet|silence|abort|dismiss|false\\s*alarm|im\\s*ok|i'?m\\s*ok|i\\s*am\\s*ok|im\\s*safe|i\\s*am\\s*safe|im\\s*fine|i\\s*am\\s*fine|tama\\s*na|tigil|hinto|para|patayin|shut\\s*up|turn\\s*off)\\b",
+            "\\b(cancel|stop|cancer|counsel|council|cancle|cancell|kansel|consol|console|quiet|silence|abort|dismiss|false\\s*alarm|im\\s*ok|i'?m\\s*ok|i\\s*am\\s*ok|im\\s*safe|i\\s*am\\s*safe|im\\s*fine|i\\s*am\\s*fine|tama\\s*na|tigil|hinto|para|patayin|shut\\s*up|turn\\s*off)\\b",
             RegexOption.IGNORE_CASE
         )
     }
@@ -268,6 +266,8 @@ class VoiceAlarmCanceler(
     private val dynamicCancelWords = mutableSetOf<String>()
     private var consecutiveErrorCount = 0
     private var useFallbackLanguage = false
+    private var lastNavTabChangeTime = 0L
+    private var lastNavTabTarget = ""
 
     init {
         loadVoicePatternsFromAssets()
@@ -344,7 +344,7 @@ class VoiceAlarmCanceler(
                 override fun onDone(utteranceId: String?) {
                     isTtsSpeaking = false
                     mainHandler.removeCallbacks(ttsWatchdog)
-                    // Resume listening after TTS finishes so follow-up commands are heard
+                    // Resume listening after TTS finishes so follow-up commands are heard (800ms debounce avoids acoustic echo)
                     mainHandler.postDelayed({
                         if (_engineState.value != VoiceEngineState.DORMANT &&
                             _engineState.value != VoiceEngineState.COMMAND_SPOTTED) {
@@ -355,7 +355,7 @@ class VoiceAlarmCanceler(
                             }
                             scheduleRestart(200L)
                         }
-                    }, 300)
+                    }, 800)
                 }
                 @Deprecated("Deprecated in Java")
                 override fun onError(utteranceId: String?) {
@@ -369,7 +369,7 @@ class VoiceAlarmCanceler(
                             }
                             scheduleRestart(200L)
                         }
-                    }, 300)
+                    }, 800)
                 }
             })
             Log.i(TAG, "TTS engine ready.")
@@ -843,40 +843,18 @@ class VoiceAlarmCanceler(
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, primaryLang)
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, primaryLang)
-                putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", arrayOf("en-US", "en-PH", "fil-PH"))
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
                 putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
-                putExtra("android.speech.extra.BIASING_STRINGS", TuguegaraoOfflineSpatialEngine.TUGUEGARAO_VOCABULARY_BIASING)
-                putExtra("android.speech.extras.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 3000L)
-                putExtra("android.speech.extras.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 2500L)
-                putExtra("android.speech.extras.SPEECH_INPUT_MINIMUM_LENGTH_MILLIS", 1000L)
             }
 
             try {
                 var recognizer = speechRecognizer
                 if (recognizer == null) {
-                    // Prefer Google App (full ASR with cloud + offline models) over GoogleTTS (limited offline-only)
-                    val googleAppComponent = android.content.ComponentName(
-                        "com.google.android.googlequicksearchbox",
-                        "com.google.android.voicesearch.serviceapi.GoogleRecognitionService"
-                    )
-                    val googleAppAvailable = try {
-                        context.packageManager.getServiceInfo(googleAppComponent, 0)
-                        true
-                    } catch (_: Exception) { false }
-
-                    recognizer = if (googleAppAvailable) {
-                        Log.i(TAG, "Creating SpeechRecognizer with Google App (GoogleRecognitionService)")
-                        SpeechRecognizer.createSpeechRecognizer(context, googleAppComponent)
-                    } else {
-                        Log.i(TAG, "Google App recognizer unavailable, using system default")
-                        SpeechRecognizer.createSpeechRecognizer(context)
-                    }
+                    recognizer = SpeechRecognizer.createSpeechRecognizer(context)
                     recognizer.setRecognitionListener(createRecognitionListener())
                     speechRecognizer = recognizer
-                    Log.i(TAG, "SpeechRecognizer instance initialized and listener attached")
+                    Log.i(TAG, "SpeechRecognizer initialized with system speech service")
                 } else {
                     if (isRecognitionActive) {
                         Log.d(TAG, "SpeechRecognizer is already listening, skipping redundant startListening")
@@ -904,12 +882,15 @@ class VoiceAlarmCanceler(
         }
     }
 
+    private var lastRecognizedText: String = ""
+
     private fun createRecognitionListener(): RecognitionListener {
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 isRestarting = false
                 consecutiveErrorCount = 0
                 isRecognitionActive = true
+                lastRecognizedText = ""
                 if (!isAwaitingCommandStage) {
                     _engineState.value = VoiceEngineState.LISTENING_FOR_WAKE_WORD
                 } else {
@@ -975,6 +956,17 @@ class VoiceAlarmCanceler(
                 }
                 Log.i(TAG, "SpeechRecognizer onError: $errMsg (state=${_engineState.value}, consecutive=$consecutiveErrorCount)")
 
+                // Crucial fallback: If Android's speech service dropped the final result or timed out after user spoke,
+                // but we received valid partial speech in onPartialResults(), process the salvaged transcript now!
+                if (isNormalSilence && lastRecognizedText.isNotBlank()) {
+                    val salvaged = lastRecognizedText
+                    lastRecognizedText = ""
+                    Log.i(TAG, "SpeechRecognizer onError($error) salvaging valid partial transcript: '$salvaged'")
+                    checkMatchesForTrigger(listOf(salvaged), isPartial = false)
+                } else {
+                    lastRecognizedText = ""
+                }
+
                 if (error == 12 || error == 13) {
                     Log.w(TAG, "SpeechRecognizer offline language unavailable; falling back to default locale.")
                     useFallbackLanguage = true
@@ -988,6 +980,20 @@ class VoiceAlarmCanceler(
                     } catch (_: Throwable) {}
                     speechRecognizer = null
                     consecutiveErrorCount = 0
+                }
+
+                // If in HEARING_SPEECH, revert back to appropriate listening state to unstick the UI
+                if (_engineState.value == VoiceEngineState.HEARING_SPEECH) {
+                    _engineState.value = if (isAwaitingCommandStage)
+                        VoiceEngineState.AWAITING_COMMAND
+                    else
+                        VoiceEngineState.LISTENING_FOR_WAKE_WORD
+                    Log.i(TAG, "State reverted from HEARING_SPEECH -> ${_engineState.value} on error $error")
+                }
+
+                // If bubble is visible and an error occurred with no salvaged speech, ensure auto-dismissal resumes
+                if (_isBubbleVisible.value && autoDismissJob == null) {
+                    scheduleAutoDismiss(6000L)
                 }
 
                 val shouldRestart = _engineState.value == VoiceEngineState.LISTENING_FOR_WAKE_WORD ||
@@ -1011,7 +1017,17 @@ class VoiceAlarmCanceler(
                 isRecognitionActive = false
                 onSpeechDetectedListener?.invoke(false)
                 consecutiveErrorCount = 0
-                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val rawMatches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val matches = if (!rawMatches.isNullOrEmpty()) {
+                    rawMatches
+                } else if (lastRecognizedText.isNotBlank()) {
+                    Log.i(TAG, "SpeechRecognizer onResults: using lastRecognizedText fallback '$lastRecognizedText'")
+                    listOf(lastRecognizedText)
+                } else {
+                    null
+                }
+                lastRecognizedText = ""
+
                 Log.i(TAG, "SpeechRecognizer onResults: matches=$matches (state=${_engineState.value})")
                 checkMatchesForTrigger(matches, isPartial = false)
 
@@ -1041,6 +1057,7 @@ class VoiceAlarmCanceler(
                 val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 if (!matches.isNullOrEmpty()) {
                     val top = matches[0]
+                    lastRecognizedText = top
                     Log.i(TAG, "SpeechRecognizer onPartialResults: '$top'")
                     _liveTranscriptFlow.value = top
                     if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
@@ -1091,33 +1108,31 @@ class VoiceAlarmCanceler(
             val t1 = tokens[i]
             if (t1 == "rams" || t1 == "ram" || t1 == "rhams" || t1 == "rham" ||
                 t1 == "roms" || t1 == "rems" || t1 == "rums" || t1 == "arms" ||
-                t1 == "ran" || t1 == "rims" || t1 == "wrams" || t1 == "hermes" ||
+                t1 == "rims" || t1 == "wrams" || t1 == "hermes" ||
                 t1 == "hyram" || t1 == "hyrams" || t1 == "airam" || t1 == "airams" ||
-                t1 == "heyrams" || t1 == "hirams" || t1 == "lamps" || t1 == "ramps" ||
-                t1 == "realms" || t1 == "lance" || t1 == "rance" || t1 == "dance" ||
-                t1 == "rhymes" || t1 == "rooms" || t1 == "rome" || t1 == "roams" ||
-                t1 == "rounds" || t1 == "lambs" || t1 == "rahms" || t1 == "roms" ||
-                t1 == "rans" || t1 == "ramps" || t1 == "romps" || t1 == "rems" ||
+                t1 == "heyrams" || t1 == "hirams" || t1 == "ramps" ||
+                t1 == "realms" || t1 == "rahms" || t1 == "roms" ||
+                t1 == "ramps" || t1 == "rems" ||
                 t1 == "rams!" || t1 == "rahm" || t1 == "rahms" || t1 == "ramz") {
                 return true
             }
-            if (levenshteinDistance(t1, "rams") <= 2) return true
+            if (levenshteinDistance(t1, "rams") <= 1) return true
 
             if (i + 1 < tokens.size) {
                 val pair = "$t1 ${tokens[i + 1]}"
-                if (levenshteinDistance(pair, "hey rams") <= 3 ||
-                    levenshteinDistance(pair, "hi rams") <= 3 ||
-                    levenshteinDistance(pair, "ok rams") <= 2 ||
-                    levenshteinDistance(pair, "yo rams") <= 2 ||
-                    levenshteinDistance(pair, "hoy rams") <= 2 ||
-                    levenshteinDistance(pair, "ay rams") <= 2 ||
-                    levenshteinDistance(pair, "ey rams") <= 2 ||
-                    levenshteinDistance(pair, "hai rams") <= 2 ||
-                    levenshteinDistance(pair, "hey ram") <= 2 ||
-                    levenshteinDistance(pair, "hi ram") <= 2 ||
-                    levenshteinDistance(pair, "uy rams") <= 2 ||
-                    levenshteinDistance(pair, "oi rams") <= 2 ||
-                    levenshteinDistance(pair, "hello rams") <= 3) {
+                if (levenshteinDistance(pair, "hey rams") <= 2 ||
+                    levenshteinDistance(pair, "hi rams") <= 2 ||
+                    levenshteinDistance(pair, "ok rams") <= 1 ||
+                    levenshteinDistance(pair, "yo rams") <= 1 ||
+                    levenshteinDistance(pair, "hoy rams") <= 1 ||
+                    levenshteinDistance(pair, "ay rams") <= 1 ||
+                    levenshteinDistance(pair, "ey rams") <= 1 ||
+                    levenshteinDistance(pair, "hai rams") <= 1 ||
+                    levenshteinDistance(pair, "hey ram") <= 1 ||
+                    levenshteinDistance(pair, "hi ram") <= 1 ||
+                    levenshteinDistance(pair, "uy rams") <= 1 ||
+                    levenshteinDistance(pair, "oi rams") <= 1 ||
+                    levenshteinDistance(pair, "hello rams") <= 2) {
                     return true
                 }
             }
@@ -1157,11 +1172,23 @@ class VoiceAlarmCanceler(
     private fun checkCategoryChangeCommand(normalized: String, originalText: String): Pair<String, String>? {
         val lower = normalized.lowercase(Locale.US)
 
+        // Ignore category commands if utterance is a route or navigation query
+        if (lower.contains("route") || lower.contains("navigate") || lower.contains("directions") ||
+            lower.contains("direction") || lower.contains("where is") || lower.contains("how to") ||
+            lower.contains("pin") || lower.contains("punta") || lower.contains("papunta") ||
+            lower.contains("take me to") || lower.contains("lead me to") ||
+            lower.contains("drive to") || lower.contains("drive me to") ||
+            lower.contains("dalhin mo") || lower.contains("dalhin kami") ||
+            lower.contains("show route") || lower.contains("how to get to") || lower.contains("how to go to")) {
+            return null
+        }
+
         // 1. Pedestrian / Walking
-        val isWalk = (lower.contains("walk") || lower.contains("walking") || lower.contains("pedestrian") ||
-            lower.contains("lakad") || lower.contains("maglakad") || lower.contains("lumakad") ||
-            lower.contains("maglalakad") || lower.contains("on foot") || lower.contains("jogging") ||
-            lower.contains("running")) && !lower.contains("don't walk") && !lower.contains("dont walk")
+        val isWalk = (lower.contains("walk mode") || lower.contains("walking mode") || lower.contains("pedestrian mode") ||
+            lower.contains("switch to walk") || lower.contains("change to walk") || lower.contains("set to walk") ||
+            lower.contains("switch to pedestrian") || lower.contains("on foot mode") ||
+            lower.contains("maglakad mode") || lower == "walk" || lower == "walking" || lower == "pedestrian") &&
+            !lower.contains("don't") && !lower.contains("dont")
         if (isWalk) {
             return Pair(
                 "Pedestrian",
@@ -1169,9 +1196,9 @@ class VoiceAlarmCanceler(
             )
         }
 
-        // 2. Car / Automobile
-        val isCar = lower.contains("use my car") || lower.contains("use car") ||
-            lower.contains("going to use my car") || lower.contains("i will drive") ||
+        // 2. Car / Automobile (Strictly explicit mode phrases to prevent intercepting destination routes)
+        val isCar = (lower.contains("use my car") || lower.contains("use car") ||
+            lower.contains("going to use my car") || lower.contains("i will drive my car") ||
             lower.contains("car mode") || lower.contains("driving mode") ||
             lower.contains("drive mode") || lower.contains("switch to car") ||
             lower.contains("change to car") || lower.contains("set to car") ||
@@ -1179,7 +1206,8 @@ class VoiceAlarmCanceler(
             lower.contains("gamitin ko kotse") || lower.contains("gamitin ang kotse") ||
             lower.contains("magmamaneho ako") || lower.contains("drive car") ||
             lower.contains("four wheels") || lower.contains("sasakyan mode") ||
-            lower.contains("gamitin ko sasakyan") || lower.contains("mag kotse")
+            lower.contains("gamitin ko sasakyan") || lower.contains("mag kotse") ||
+            lower == "car mode" || lower == "car driver") && !lower.contains("don't") && !lower.contains("dont")
         if (isCar) {
             return Pair(
                 "Car Driver",
@@ -1238,12 +1266,14 @@ class VoiceAlarmCanceler(
         // Keep bubble visible so user sees the confirmation and can issue follow-ups
         _isBubbleVisible.value = true
 
-        RamsOverlayManager.showVoiceOverlay(
-            prompt = "CATEGORY SWITCHED",
-            transcript = announcement,
-            state = VoiceEngineState.COMMAND_SPOTTED
-        )
-        RamsOverlayManager.scheduleAutoDismiss(8000L)
+        if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
+            RamsOverlayManager.showVoiceOverlay(
+                prompt = "CATEGORY SWITCHED",
+                transcript = announcement,
+                state = VoiceEngineState.COMMAND_SPOTTED
+            )
+            RamsOverlayManager.scheduleAutoDismiss(8000L)
+        }
 
         // Execute action immediately to persist the new category
         appActionHandler?.setTransitCategory(category)
@@ -1276,6 +1306,99 @@ class VoiceAlarmCanceler(
         }
     }
 
+    private fun handleOpenAppSpotted(announcement: String) {
+        val userMsg = VoiceChatMessage(sender = "USER", text = "Open RAMS")
+        val aiMsg = VoiceChatMessage(sender = "RAMS", text = announcement)
+        _chatMessagesFlow.value = _chatMessagesFlow.value + userMsg + aiMsg
+        _promptMessageFlow.value = announcement
+        _liveTranscriptFlow.value = "RAMS: $announcement"
+        _engineState.value = VoiceEngineState.COMMAND_SPOTTED
+
+        if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
+            RamsOverlayManager.showVoiceOverlay(
+                prompt = "OPENING APP",
+                transcript = announcement,
+                state = VoiceEngineState.COMMAND_SPOTTED
+            )
+            RamsOverlayManager.scheduleAutoDismiss(2500L)
+        }
+
+        speak(announcement)
+        appActionHandler?.openApp()
+
+        autoDismissJob?.cancel()
+        autoDismissJob = scope.launch(Dispatchers.Default) {
+            delay(2000)
+            dismissBubble()
+        }
+    }
+
+    private fun handleCloseAppSpotted(announcement: String) {
+        val userMsg = VoiceChatMessage(sender = "USER", text = "Close RAMS")
+        val aiMsg = VoiceChatMessage(sender = "RAMS", text = announcement)
+        _chatMessagesFlow.value = _chatMessagesFlow.value + userMsg + aiMsg
+        _promptMessageFlow.value = announcement
+        _liveTranscriptFlow.value = "RAMS: $announcement"
+        _engineState.value = VoiceEngineState.COMMAND_SPOTTED
+
+        if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
+            RamsOverlayManager.showVoiceOverlay(
+                prompt = "CLOSING APP",
+                transcript = announcement,
+                state = VoiceEngineState.COMMAND_SPOTTED
+            )
+            RamsOverlayManager.scheduleAutoDismiss(2000L)
+        }
+
+        speak(announcement)
+        appActionHandler?.closeApp()
+
+        autoDismissJob?.cancel()
+        autoDismissJob = scope.launch(Dispatchers.Default) {
+            delay(1500)
+            dismissBubble()
+        }
+    }
+
+    private fun handleNavTabSpotted(tab: String) {
+        val now = System.currentTimeMillis()
+        if (tab == lastNavTabTarget && (now - lastNavTabChangeTime) < 3000L) {
+            Log.d(TAG, "Ignoring duplicate rapid tab change to $tab")
+            return
+        }
+        lastNavTabChangeTime = now
+        lastNavTabTarget = tab
+
+        val announcement = "Navigating to $tab tab."
+        val userMsg = VoiceChatMessage(sender = "USER", text = "Go to $tab")
+        val aiMsg = VoiceChatMessage(sender = "RAMS", text = announcement)
+        _chatMessagesFlow.value = _chatMessagesFlow.value + userMsg + aiMsg
+        _promptMessageFlow.value = announcement
+        _liveTranscriptFlow.value = "RAMS: $announcement"
+        _engineState.value = VoiceEngineState.COMMAND_SPOTTED
+
+        if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
+            RamsOverlayManager.showVoiceOverlay(
+                prompt = "NAVIGATION",
+                transcript = announcement,
+                state = VoiceEngineState.COMMAND_SPOTTED
+            )
+            RamsOverlayManager.scheduleAutoDismiss(2500L)
+        }
+
+        speak(announcement)
+        appActionHandler?.navigateToTab(tab)
+        if (!RamsOverlayManager.isAppInForeground) {
+            appActionHandler?.openApp(tab)
+        }
+
+        autoDismissJob?.cancel()
+        autoDismissJob = scope.launch(Dispatchers.Default) {
+            delay(2000)
+            dismissBubble()
+        }
+    }
+
     private fun checkMatchesForTrigger(matches: List<String>?, isPartial: Boolean) {
         if (matches.isNullOrEmpty()) return
 
@@ -1291,49 +1414,131 @@ class VoiceAlarmCanceler(
         if (parsedList.isEmpty()) return
 
         // 1. CANCEL COMMANDS -- Check ALL candidate hypotheses first (highest safety priority)
-        for ((phrase, _, normalized) in parsedList) {
-            val isCancelWord = CANCEL_COMMANDS.any { cmd -> normalized.contains(cmd) } ||
-                dynamicCancelWords.any { cmd -> normalized.contains(cmd) } ||
-                CANCEL_REGEX.containsMatchIn(normalized) ||
-                (isAlarmActiveNow && (
-                    normalized.contains("cancel") || normalized.contains("stop") ||
-                    normalized.contains("safe") || normalized.contains("false") ||
-                    normalized.contains("tigil") || normalized.contains("hinto") ||
-                    normalized.contains("para") || normalized.contains("tama") ||
-                    normalized.contains("patayin") || normalized.contains("quiet") ||
-                    normalized.contains("silence") || normalized.contains("ok") ||
-                    normalized.contains("abort") || normalized.contains("dismiss")
-                ))
+        //    On partial results, only fire cancel during active alarm to prevent false triggers
+        if (!isPartial || isAlarmActiveNow) {
+            for ((phrase, _, normalized) in parsedList) {
+                val isCancelWord = CANCEL_COMMANDS.any { cmd -> normalized.contains(cmd) } ||
+                    dynamicCancelWords.any { cmd -> normalized.contains(cmd) } ||
+                    CANCEL_REGEX.containsMatchIn(normalized) ||
+                    (isAlarmActiveNow && (
+                        normalized.contains("cancel") || normalized.contains("stop") ||
+                        normalized.contains("safe") || normalized.contains("false") ||
+                        normalized.contains("tigil") || normalized.contains("hinto") ||
+                        normalized.contains("para") || normalized.contains("tama") ||
+                        normalized.contains("patayin") || normalized.contains("quiet") ||
+                        normalized.contains("silence") || normalized.contains("ok") ||
+                        normalized.contains("abort") || normalized.contains("dismiss")
+                    ))
 
-            if (isCancelWord) {
-                pendingQueryJob?.cancel()
-                pendingQueryJob = null
+                if (isCancelWord) {
+                    pendingQueryJob?.cancel()
+                    pendingQueryJob = null
 
-                if (isAlarmActiveNow || isAwaitingCommandStage) {
-                    Log.i(TAG, "Immediate cancel command in active alarm / awaiting stage: '$phrase'")
-                    handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
+                    if (isAlarmActiveNow || isAwaitingCommandStage) {
+                        Log.i(TAG, "Immediate cancel command in active alarm / awaiting stage: '$phrase'")
+                        handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
+                        return
+                    }
+
+                    if (normalized.contains("cancel") || normalized.contains("stop") ||
+                        normalized.contains("abort") || normalized.contains("dismiss") ||
+                        normalized.contains("false alarm") || normalized.contains("safe") ||
+                        normalized.contains("tigil") || normalized.contains("hinto") ||
+                        normalized.contains("para") || normalized.contains("tama na")) {
+                        Log.i(TAG, "Background cancel/stop command spotted: '$phrase'")
+                        handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
+                        return
+                    }
+                }
+            }
+        }
+
+        // 1B. APP CONTROL COMMANDS -- Open / Close App (checked unconditionally, hands-free)
+        if (!isPartial) {
+            for ((phrase, _, normalized) in parsedList) {
+                val isOpen = normalized == "open app" || normalized == "open the app" || normalized == "open rams" ||
+                    normalized == "launch app" || normalized == "launch rams" || normalized == "show app" ||
+                    normalized == "buksan ang app" || normalized == "buksan app" || normalized == "buksan rams" ||
+                    normalized == "ipakita ang app" || normalized == "open mobile app" || normalized == "open application" ||
+                    normalized.contains("open app") || normalized.contains("open the app") || normalized.contains("open rams") ||
+                    normalized.contains("opening rams") || normalized.contains("launch app") || normalized.contains("launch rams") ||
+                    normalized.contains("buksan ang app") || normalized.contains("buksan app")
+
+                if (isOpen) {
+                    Log.i(TAG, "Open app command spotted: '$phrase'")
+                    handleOpenAppSpotted("Opening RAMS application.")
                     return
                 }
 
-                if (normalized.contains("cancel") || normalized.contains("stop") ||
-                    normalized.contains("abort") || normalized.contains("dismiss") ||
-                    normalized.contains("false alarm") || normalized.contains("safe") ||
-                    normalized.contains("tigil") || normalized.contains("hinto") ||
-                    normalized.contains("para") || normalized.contains("tama na")) {
-                    Log.i(TAG, "Background cancel/stop command spotted: '$phrase'")
-                    handleSpottedCancelCommand(phrase.uppercase(Locale.US), 0.99f)
+                val isClose = normalized == "close app" || normalized == "close the app" || normalized == "close rams" ||
+                    normalized == "exit app" || normalized == "exit rams" || normalized == "quit app" ||
+                    normalized == "minimize app" || normalized == "hide app" || normalized == "close application" ||
+                    normalized == "isara ang app" || normalized == "isara app" || normalized == "isara rams" ||
+                    normalized.contains("close app") || normalized.contains("close the app") || normalized.contains("close rams") ||
+                    normalized.contains("closing rams") || normalized.contains("exit app") || normalized.contains("exit rams") ||
+                    normalized.contains("minimize app") || normalized.contains("hide app") ||
+                    normalized.contains("isara ang app") || normalized.contains("isara app")
+
+                if (isClose) {
+                    Log.i(TAG, "Close app command spotted: '$phrase'")
+                    handleCloseAppSpotted("Closing RAMS application.")
                     return
                 }
             }
         }
 
-        // 2. CATEGORY CHANGE COMMANDS -- Check ALL candidate hypotheses (e.g. 'walk mode' in candidates)
-        for ((phrase, phoneticallyClean, normalized) in parsedList) {
-            val catSwitch = checkCategoryChangeCommand(normalized, phoneticallyClean)
-            if (catSwitch != null) {
-                Log.i(TAG, "Category change command spotted: '$phrase' -> ${catSwitch.first}")
-                handleCategoryChangeSpotted(catSwitch.first, catSwitch.second)
-                return
+        // 1C. NAVIGATION TAB COMMANDS -- "go to map", "show map", "go to settings", etc.
+        // Requires explicit command intent or section/tab keyword to prevent ambient noise / TTS echo loops.
+        if (!isPartial) {
+            for ((phrase, _, normalized) in parsedList) {
+                val hasNavIntent = normalized.contains("go to") || normalized.contains("open") ||
+                    normalized.contains("show") || normalized.contains("view") || normalized.contains("switch to") ||
+                    normalized.contains("display") || normalized.contains("navigate to") ||
+                    normalized.contains("punta sa") || normalized.contains("buksan") || normalized.contains("tingnan") ||
+                    normalized.contains("lumipat sa") || normalized.contains("pumunta sa") ||
+                    normalized.contains("tab") || normalized.contains("section")
+
+                val tabTarget = when {
+                    hasNavIntent && (normalized.contains("map") || normalized.contains("mapa")) -> "MAP"
+                    hasNavIntent && (normalized.contains("telemetry") || normalized.contains("dashboard") || normalized.contains("speed")) -> "TELEMETRY"
+                    hasNavIntent && (normalized.contains("settings") || normalized.contains("setting") || normalized.contains("config")) -> "SETTINGS"
+                    hasNavIntent && (normalized.contains("wearable") || normalized.contains("relay")) -> "WEARABLE"
+                    hasNavIntent && (normalized.contains("ai suite") || normalized.contains("ai guard") || normalized.contains("neural")) -> "AI_SUITE"
+                    else -> null
+                }
+                if (tabTarget != null) {
+                    Log.i(TAG, "Navigation tab command spotted: '$phrase' -> $tabTarget")
+                    handleNavTabSpotted(tabTarget)
+                    return
+                }
+            }
+        }
+
+        // 1D. ROUTING & NAVIGATION COMMANDS (e.g. "route to Sky Ranch", "directions to Taal Vista", "drive to SM City")
+        if (!isPartial) {
+            for ((phrase, phoneticallyClean, _) in parsedList) {
+                val routeMatch = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|take us to|show route to|how to go to|how to get to|drive to|drive me to|paano pumunta sa|papunta sa|punta sa|punta tayo sa|dalhin mo ako sa|dalhin kami sa|pin)\\s+(.+)").find(phoneticallyClean)
+                if (routeMatch != null) {
+                    val dest = routeMatch.groupValues[1].trim()
+                    if (dest.length > 2) {
+                        Log.i(TAG, "Routing command spotted directly: '$dest'")
+                        openBubbleUi()
+                        handleConversationalQuery(phoneticallyClean)
+                        return
+                    }
+                }
+            }
+        }
+
+        // 2. CATEGORY CHANGE COMMANDS -- Check candidate hypotheses ONLY on final results
+        if (!isPartial) {
+            for ((phrase, phoneticallyClean, normalized) in parsedList) {
+                val catSwitch = checkCategoryChangeCommand(normalized, phoneticallyClean)
+                if (catSwitch != null) {
+                    Log.i(TAG, "Category change command spotted: '$phrase' -> ${catSwitch.first}")
+                    handleCategoryChangeSpotted(catSwitch.first, catSwitch.second)
+                    return
+                }
             }
         }
 
@@ -1464,7 +1669,7 @@ class VoiceAlarmCanceler(
         _liveTranscriptFlow.value = "Command: \"$phrase\""
         Log.i(TAG, "CANCEL COMMAND SPOTTED: '$phrase' (Confidence: $confidence)")
 
-        if (RamsOverlayManager.canDrawOverlays(context)) {
+        if (RamsOverlayManager.canDrawOverlays(context) && !RamsOverlayManager.isAppInForeground) {
             RamsOverlayManager.showVoiceOverlay(
                 prompt = "ALARM CANCELLED HANDS-FREE",
                 transcript = "Command: \"$phrase\"",
@@ -1576,8 +1781,11 @@ class VoiceAlarmCanceler(
         autoDismissJob = scope.launch(Dispatchers.Default) {
             delay(delayMs)
             withContext(Dispatchers.Main) {
-                if (_isBubbleVisible.value && !isTtsSpeaking && _engineState.value == VoiceEngineState.AWAITING_COMMAND) {
-                    Log.i(TAG, "Inactivity timeout in AWAITING_COMMAND stage. Auto-dismissing bubble to wake-word mode.")
+                if (_isBubbleVisible.value && !isTtsSpeaking &&
+                    (_engineState.value == VoiceEngineState.AWAITING_COMMAND ||
+                     _engineState.value == VoiceEngineState.HEARING_SPEECH ||
+                     _engineState.value == VoiceEngineState.CHATTING)) {
+                    Log.i(TAG, "Inactivity timeout in ${_engineState.value} stage. Auto-dismissing bubble to wake-word mode.")
                     dismissBubble()
                 }
             }

@@ -27,10 +27,17 @@ export const chapters = [
         title: 'State the objectives',
         text: 'The research asks whether the motion rules distinguish accident-like events from ordinary activity, and whether a paired wearable can deliver the resulting report to a receiver. The potential benefit is a second reporting route for a rider who cannot make a call.',
       },
+      {
+        title: 'Use of generative AI',
+        text: 'Google Gemini in Antigravity helped develop the Android motion rules, benchmark runner, radio firmware and station software. Antigravity sessions wrote and ran the scripts for synthetic motion fixtures, written voice-command variants and template-based Q&A. Claude prepared the PCB handoff and ChatGPT assisted with the custom four-layer design. The team built the physical SuperMini carrier by hand. Claude Sonnet and Google AI Studio helped explore earlier presentation designs. OpenAI Codex helped check the project evidence and create this exhibit, the slides and the script. The reported counts come from executing the compiled classifier.',
+      },
     ],
     sources: [
       { label: 'InnovateX research working paper', path: paper },
       { label: 'Phone-assisted wearable configuration', path: 'firmware/wearable_withApp/config.h' },
+      { label: 'PCB handoff brief and authorship', path: 'hardware/KiCAD Files/RAMS MD Files/RAMS PCB Handoff Brief for ChatGPT 6-Astra v0.1.md' },
+      { label: 'Compiled classifier replay record', path: innovateX + '/RAMS Presentation/verification/replay-output.tsv' },
+        { label: 'AI Use Disclosure Statement (PDF)', path: innovateX + '/RAMS Presentation/public/presenters/RAMS AI Use Disclosure.pdf' },
     ],
   },
   {
@@ -49,6 +56,14 @@ export const chapters = [
         title: 'Explain the decision',
         text: 'On Android, accelerometer, gyroscope and location readings give the classifier a rolling window of motion and an estimate of speed. Its rules look for combinations of shock, rotation and tilt. The 50 Hz timing shown here belongs to the synthetic files. Actual handset timing depends on the sensor callbacks.',
       },
+      {
+        title: 'Read the fall example in context',
+        text: 'The packaged Fall trace models a rider going over the handlebars at a scripted 42 km/h. The base trace reaches 6.99 g and changes orientation by 157.5°. All eleven fall-labeled fixtures raised the replay’s alarm flag, but the earlier severe-collision rule won. The replay contains no measured roadside drop, manhole or cliff fall.',
+      },
+      {
+        title: 'What the fall rule checks',
+        text: 'After the saved-profile and severe-collision checks, Fall & Slide requires speed ≥5 km/h, a peak ≥3.2 g and a combined pitch-and-roll change ≥50°. It also needs either a minimum below 0.25 g or a tilt change ≥60°. These are features of one sensor window. The rule neither measures drop height nor reconstructs the order of the movements. Live reporting also depends on how the app processes the event and on connectivity.',
+      },
     ],
     sources: [
       { label: 'Scripted pothole trace', path: benchmarks + '/benchmark_pothole.json' },
@@ -62,9 +77,9 @@ export const chapters = [
     id: 'calibration',
     title: 'Calibration',
     kicker: 'Data and adaptation',
-    headline: 'How the phone learns a threshold',
+    headline: 'Why the phone uses calibrated rules',
     summary:
-      'Labeled sessions can tune the motion thresholds. The team also generated 121 synthetic traces to exercise the decision rules across 11 scenarios.',
+      'The phone checks acceleration, rotation, tilt and available speed using rules that work offline. Labeled sessions can tune the thresholds. Our scripts generated 121 traces across 11 scenarios.',
     notes: [
       {
         title: 'Where the traces came from',
@@ -72,7 +87,7 @@ export const chapters = [
       },
       {
         title: 'What calibration does',
-        text: 'The app can record and label a phone session, export it and import labeled feature data. For a CSV import it compares peaks by session. When the lowest accident peak exceeds the highest benign peak, their midpoint becomes the acceleration threshold. Overlapping ranges use the lowest accident peak. This is data-calibrated classification with explicit rules.',
+        text: 'The app can record and label a phone session, export it and import labeled feature data. For a CSV import it compares peaks by session. When the lowest accident peak exceeds the highest benign peak, their midpoint becomes the acceleration threshold. Overlapping ranges use the lowest accident peak. The rules can run without a network connection, and a reviewer can trace which conditions raised an alarm.',
       },
       {
         title: 'Where the other training assets fit',
@@ -156,11 +171,11 @@ export const chapters = [
     kicker: 'Evidence and next tests',
     headline: 'Take the next test off the screen',
     summary:
-      'The Android classifier matched all 33 accident flags and 88 benign flags in the synthetic replay. It gave some motions the wrong subtype. Field performance remains an open question.',
+      'The Android classifier matched the alarm flag on every generated example. It mislabeled every pothole and fall subtype. Performance on real trips and time to the station still need measurement.',
     notes: [
       {
         title: 'State what the replay tests',
-        text: 'We ran the compiled Android classification function on a desktop JVM, using the stored features from all 121 fixtures and an empty learned profile. Its alarm decision agreed with all 33 accident labels and all 88 benign labels. All 11 scripted potholes received the benign wind-flutter subtype. This test starts after feature extraction and covers the binary alarm decision only.',
+        text: 'We ran the compiled Android classification function on a desktop JVM, using the stored features from all 121 fixtures and an empty learned profile. Its alarm decision agreed with all 33 accident labels and all 88 benign labels. All 11 potholes received the wind-flutter subtype. All 11 variants of the over-the-handlebars fall received severe collision. The tested function uses fixed motion rules. CSV calibration supplies a threshold to the live phone sensor engine. This replay starts after feature extraction. It does not test sensing, radio delivery or accuracy on real trips.',
       },
       {
         title: 'Describe the next trial',

@@ -49,6 +49,7 @@ namespace RamsRescuerDesktop
         private static Thread _serialMonitorThread;
         private static volatile bool _serialRunning = true;
         private static readonly Dictionary<string, Thread> _activePortReaders = new Dictionary<string, Thread>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, SerialPort> _activeSerialPorts = new Dictionary<string, SerialPort>(StringComparer.OrdinalIgnoreCase);
         private static readonly HashSet<string> _connectedPortNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private static string _lastDetectedPort = "NONE";
         private static List<string> _localLanIPs = new List<string>();
@@ -56,6 +57,28 @@ namespace RamsRescuerDesktop
         private static Thread _lanTcpThread;
         private static UdpClient _discoveryUdp;
         private static Thread _discoveryThread;
+
+        public static void CloseAllSerialPorts()
+        {
+            _serialRunning = false;
+            lock (_lock)
+            {
+                foreach (var kvp in _activeSerialPorts)
+                {
+                    try
+                    {
+                        if (kvp.Value != null)
+                        {
+                            if (kvp.Value.IsOpen) kvp.Value.Close();
+                            kvp.Value.Dispose();
+                        }
+                    }
+                    catch { }
+                }
+                _activeSerialPorts.Clear();
+                _connectedPortNames.Clear();
+            }
+        }
 
         // Ping Measurement & Range Verification Engine
         private static readonly object _pingLock = new object();
@@ -80,6 +103,23 @@ namespace RamsRescuerDesktop
         {
             try
             {
+                // Terminate any previous orphaned instances of RAMS_Rescuer_Desktop
+                try
+                {
+                    Process currentProc = Process.GetCurrentProcess();
+                    foreach (Process p in Process.GetProcessesByName(currentProc.ProcessName))
+                    {
+                        if (p.Id != currentProc.Id)
+                        {
+                            try { p.Kill(); p.WaitForExit(1000); } catch { }
+                        }
+                    }
+                }
+                catch { }
+
+                // Ensure all serial ports are closed if process exits unexpectedly
+                AppDomain.CurrentDomain.ProcessExit += (s, e) => CloseAllSerialPorts();
+
                 string appDir = AppDomain.CurrentDomain.BaseDirectory;
                 _wwwDir = Path.Combine(appDir, "www");
                 _dataFilePath = Path.Combine(appDir, "incidents.json");
@@ -120,12 +160,13 @@ namespace RamsRescuerDesktop
 
                 // Launch Native Desktop App Window via Edge App Mode
                 string appUrl = openPingMode ? string.Format("http://127.0.0.1:{0}/ping.html", _port) : string.Format("http://127.0.0.1:{0}/", _port);
+                Process edgeProc = null;
                 try
                 {
-                    Process edgeProc = LaunchEdgeApp(appUrl);
+                    edgeProc = LaunchEdgeApp(appUrl);
                     if (edgeProc == null)
                     {
-                        Process.Start(appUrl);
+                        edgeProc = Process.Start(appUrl);
                     }
                 }
                 catch { }
@@ -133,15 +174,37 @@ namespace RamsRescuerDesktop
                 DateTime startupTime = DateTime.UtcNow;
                 _lastActivity = DateTime.UtcNow;
 
-                // Maintain operations server while window is open:
-                // Server stays active indefinitely until explicit user shutdown (/api/exit) or process termination
+                // Monitor application window: auto-terminate and release COM ports when user closes window
                 while (!_exitRequested)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
+
+                    // Check 1: Edge process exited
+                    if (edgeProc != null)
+                    {
+                        try
+                        {
+                            if (edgeProc.HasExited)
+                            {
+                                _exitRequested = true;
+                                break;
+                            }
+                        }
+                        catch { }
+                    }
+
+                    // Check 2: Browser Inactivity Watchdog
+                    // React dashboard polls /api/events every 2.5s. If no HTTP traffic for > 7s after 15s initial startup:
+                    if ((DateTime.UtcNow - startupTime).TotalSeconds > 15 && 
+                        (DateTime.UtcNow - _lastActivity).TotalSeconds > 7)
+                    {
+                        _exitRequested = true;
+                        break;
+                    }
                 }
 
-                // Cleanup server when user closes the app window
-                _serialRunning = false;
+                // Window closed or exit requested — immediately release all COM ports and resources
+                CloseAllSerialPorts();
                 try { if (_lanTcpListener != null) _lanTcpListener.Stop(); } catch { }
                 try { if (_discoveryUdp != null) _discoveryUdp.Close(); } catch { }
                 try
@@ -153,6 +216,7 @@ namespace RamsRescuerDesktop
                     }
                 }
                 catch { }
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
@@ -241,6 +305,7 @@ namespace RamsRescuerDesktop
                     {
                         foreach (string p in portNames)
                         {
+                            if (!_serialRunning || _exitRequested) break;
                             lock (_lock)
                             {
                                 if (_activePortReaders.ContainsKey(p)) continue;
@@ -279,6 +344,7 @@ namespace RamsRescuerDesktop
                 sp.Open();
                 lock (_lock)
                 {
+                    _activeSerialPorts[portName] = sp;
                     _connectedPortNames.Add(portName);
                     _lastDetectedPort = portName;
                 }
@@ -316,6 +382,7 @@ namespace RamsRescuerDesktop
             {
                 lock (_lock)
                 {
+                    _activeSerialPorts.Remove(portName);
                     _connectedPortNames.Remove(portName);
                     _activePortReaders.Remove(portName);
                 }
@@ -892,13 +959,14 @@ namespace RamsRescuerDesktop
             if (rawUrl.Equals("/api/exit", StringComparison.OrdinalIgnoreCase) &&
                 req.HttpMethod.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {
+                CloseAllSerialPorts();
                 res.ContentType = "application/json; charset=utf-8";
                 byte[] exitBytes = Encoding.UTF8.GetBytes("{\"status\":\"EXIT_INITIATED\"}");
                 res.OutputStream.Write(exitBytes, 0, exitBytes.Length);
                 res.Close();
                 _exitRequested = true;
                 new Thread(() => {
-                    Thread.Sleep(300);
+                    Thread.Sleep(100);
                     Environment.Exit(0);
                 }).Start();
                 return;

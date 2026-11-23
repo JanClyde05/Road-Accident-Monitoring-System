@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-async function loadBoard(name) {
+export async function loadBoard(name) {
   const loader = new GLTFLoader();
   if (location.protocol !== 'file:') return loader.loadAsync('public/hardware/' + name + '.glb');
   // Local files cannot fetch neighboring GLBs. Load the same compressed bytes as a classic script.

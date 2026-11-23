@@ -305,11 +305,66 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     _activeNavTabFlow.value = null
   }
 
+  fun openApp(tab: RamsNavTab? = null) {
+    if (tab != null) {
+      _activeNavTabFlow.value = tab
+    }
+    if (RamsOverlayManager.isAppInForeground) {
+      return
+    }
+    try {
+      val ctx = getApplication<Application>()
+      val intent = Intent(ctx, com.example.MainActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        if (tab != null) {
+          putExtra("tab", tab.name)
+        }
+      }
+      ctx.startActivity(intent)
+      RamsOverlayManager.hideOverlay()
+    } catch (e: Exception) {
+      android.util.Log.w("RAMS_App", "openApp error: ${e.message}")
+    }
+  }
+
+  var onCloseApp: (() -> Unit)? = null
+
+  fun closeApp(): Boolean {
+    try {
+      onCloseApp?.invoke() ?: run {
+        val ctx = getApplication<Application>()
+        val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+          addCategory(Intent.CATEGORY_HOME)
+          flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        ctx.startActivity(homeIntent)
+      }
+      RamsOverlayManager.hideOverlay()
+      voiceAlarmCanceler.dismissBubble()
+      return true
+    } catch (e: Exception) {
+      android.util.Log.w("RAMS_App", "closeApp error: ${e.message}")
+      return false
+    }
+  }
+
   // App Action Execution Engine
   val appActionHandler: RamsAppActionHandler = object : RamsAppActionHandler {
     override fun setTransitCategory(category: String): Boolean {
       setUserCategory(category, userInitiated = true)
       return true
+    }
+
+    override fun openApp(targetTab: String?): Boolean {
+      val tab = targetTab?.let {
+        try { RamsNavTab.valueOf(it.uppercase(Locale.US)) } catch (_: Exception) { null }
+      }
+      this@RamsViewModel.openApp(tab)
+      return true
+    }
+
+    override fun closeApp(): Boolean {
+      return this@RamsViewModel.closeApp()
     }
 
     override fun navigateToTab(tabName: String): Boolean {
@@ -436,12 +491,29 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
       return Triple(landmark.lat, landmark.lon, landmark.name)
     }
 
-    // 2. Android System Geocoder with Tuguegarao / Cagayan Context
-    val candidateQueries = listOf(
-      "$q, Tuguegarao City, Cagayan, Philippines",
-      "$q, Tuguegarao, Cagayan",
-      q
-    )
+    // 2. Android System Geocoder with contextual Tagaytay or Tuguegarao prioritization
+    val currentGps = gpsState.value
+    val isNearTagaytay = (currentGps.hasFix && currentGps.latitude in 13.5..15.5) ||
+        q.contains("Tagaytay", ignoreCase = true) ||
+        q.contains("Sky Ranch", ignoreCase = true) ||
+        q.contains("Picnic Grove", ignoreCase = true) ||
+        q.contains("Taal", ignoreCase = true)
+
+    val candidateQueries = if (isNearTagaytay) {
+      listOf(
+        "$q, Tagaytay City, Cavite, Philippines",
+        "$q, Tagaytay, Cavite",
+        "$q, Tuguegarao City, Cagayan, Philippines",
+        q
+      )
+    } else {
+      listOf(
+        "$q, Tuguegarao City, Cagayan, Philippines",
+        "$q, Tuguegarao, Cagayan",
+        "$q, Tagaytay City, Cavite, Philippines",
+        q
+      )
+    }
     for (cand in candidateQueries) {
       try {
         val geocoder = Geocoder(getApplication<Application>().applicationContext, Locale.US)
@@ -458,7 +530,8 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
 
     // 3. Online OpenStreetMap Nominatim Fallback (Strictly road/place geocoding)
     try {
-      val encodedQ = URLEncoder.encode("$q, Tuguegarao, Cagayan", "UTF-8")
+      val searchLoc = if (isNearTagaytay) "Tagaytay, Cavite" else "Tuguegarao, Cagayan"
+      val encodedQ = URLEncoder.encode("$q, $searchLoc", "UTF-8")
       val nomUrl = "https://nominatim.openstreetmap.org/search?q=$encodedQ&format=json&limit=1"
       val conn = URL(nomUrl).openConnection() as HttpURLConnection
       conn.connectTimeout = 4000
@@ -599,55 +672,96 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   private fun generateOfflineTuguegaraoRoadRoute(userLat: Double, userLon: Double, destLat: Double, destLon: Double, label: String): DestinationRoute {
-    val roadNodes = mapOf(
-      "csucarig" to Pair(17.65905, 121.75318),
-      "carignorte_jct" to Pair(17.65350, 121.74850),
-      "cvmc_jct" to Pair(17.65661, 121.74702),
-      "caggay_jct" to Pair(17.64500, 121.75000),
-      "capitol_jct" to Pair(17.64848, 121.76037),
-      "mcnp_jct" to Pair(17.64210, 121.76150),
-      "airport_jct" to Pair(17.63800, 121.74100),
-      "airport_term" to Pair(17.64374, 121.73407),
-      "pengueruyu_jct" to Pair(17.63200, 121.73950),
-      "robinsons_tanza" to Pair(17.62806, 121.73350),
-      "dondomingo_jct" to Pair(17.62499, 121.73296),
-      "smcity_bagay" to Pair(17.62805, 121.71890),
-      "caritan_jct" to Pair(17.62200, 121.72200),
-      "ucv_balzain" to Pair(17.62402, 121.72871),
-      "usl_mabini" to Pair(17.61016, 121.72327),
-      "spup_mabini" to Pair(17.61733, 121.72351),
-      "smcenter_luna" to Pair(17.61275, 121.72379),
-      "cathedral_rizal" to Pair(17.61359, 121.73050),
-      "centro_gomez" to Pair(17.61449, 121.72806),
-      "buntun_hwy" to Pair(17.61360, 121.70500),
-      "buntun_bridge" to Pair(17.61437, 121.68643)
-    )
+    val isTagaytay = (userLat in 13.5..15.5) || (destLat in 13.5..15.5)
 
-    val roadEdges = listOf(
-      Pair("csucarig", "carignorte_jct"),
-      Pair("carignorte_jct", "cvmc_jct"),
-      Pair("cvmc_jct", "caggay_jct"),
-      Pair("caggay_jct", "airport_jct"),
-      Pair("airport_jct", "pengueruyu_jct"),
-      Pair("pengueruyu_jct", "robinsons_tanza"),
-      Pair("robinsons_tanza", "dondomingo_jct"),
-      Pair("caggay_jct", "capitol_jct"),
-      Pair("capitol_jct", "mcnp_jct"),
-      Pair("airport_jct", "airport_term"),
-      Pair("carignorte_jct", "smcity_bagay"),
-      Pair("smcity_bagay", "caritan_jct"),
-      Pair("caritan_jct", "spup_mabini"),
-      Pair("dondomingo_jct", "ucv_balzain"),
-      Pair("ucv_balzain", "caritan_jct"),
-      Pair("dondomingo_jct", "cathedral_rizal"),
-      Pair("cathedral_rizal", "centro_gomez"),
-      Pair("centro_gomez", "smcenter_luna"),
-      Pair("smcenter_luna", "usl_mabini"),
-      Pair("smcenter_luna", "spup_mabini"),
-      Pair("usl_mabini", "spup_mabini"),
-      Pair("spup_mabini", "buntun_hwy"),
-      Pair("buntun_hwy", "buntun_bridge")
-    )
+    val roadNodes = if (isTagaytay) {
+      mapOf(
+        "twin_lakes" to Pair(14.07220, 120.85400),
+        "mendez_crossing" to Pair(14.10220, 120.92550),
+        "ospital_tagaytay" to Pair(14.10270, 120.93270),
+        "mahogany_jct" to Pair(14.10390, 120.93660),
+        "city_hall_tagaytay" to Pair(14.10170, 120.93620),
+        "skyranch_jct" to Pair(14.09540, 120.93880),
+        "taal_vista" to Pair(14.09880, 120.94420),
+        "lourdes_church" to Pair(14.11390, 120.95750),
+        "ayala_serin" to Pair(14.11470, 120.96000),
+        "tagaytay_rotunda" to Pair(14.11530, 120.96200),
+        "tagaytay_med_ctr" to Pair(14.11650, 120.96020),
+        "fora_mall" to Pair(14.11620, 120.96310),
+        "picnic_grove" to Pair(14.13780, 120.99960),
+        "crosswinds_jct" to Pair(14.13740, 121.01180),
+        "peoples_park" to Pair(14.14440, 121.02050)
+      )
+    } else {
+      mapOf(
+        "csucarig" to Pair(17.65905, 121.75318),
+        "carignorte_jct" to Pair(17.65350, 121.74850),
+        "cvmc_jct" to Pair(17.65661, 121.74702),
+        "caggay_jct" to Pair(17.64500, 121.75000),
+        "capitol_jct" to Pair(17.64848, 121.76037),
+        "mcnp_jct" to Pair(17.64210, 121.76150),
+        "airport_jct" to Pair(17.63800, 121.74100),
+        "airport_term" to Pair(17.64374, 121.73407),
+        "pengueruyu_jct" to Pair(17.63200, 121.73950),
+        "robinsons_tanza" to Pair(17.62806, 121.73350),
+        "dondomingo_jct" to Pair(17.62499, 121.73296),
+        "smcity_bagay" to Pair(17.62805, 121.71890),
+        "caritan_jct" to Pair(17.62200, 121.72200),
+        "ucv_balzain" to Pair(17.62402, 121.72871),
+        "usl_mabini" to Pair(17.61016, 121.72327),
+        "spup_mabini" to Pair(17.61733, 121.72351),
+        "smcenter_luna" to Pair(17.61275, 121.72379),
+        "cathedral_rizal" to Pair(17.61359, 121.73050),
+        "centro_gomez" to Pair(17.61449, 121.72806),
+        "buntun_hwy" to Pair(17.61360, 121.70500),
+        "buntun_bridge" to Pair(17.61437, 121.68643)
+      )
+    }
+
+    val roadEdges = if (isTagaytay) {
+      listOf(
+        Pair("twin_lakes", "mendez_crossing"),
+        Pair("mendez_crossing", "ospital_tagaytay"),
+        Pair("ospital_tagaytay", "mahogany_jct"),
+        Pair("mahogany_jct", "city_hall_tagaytay"),
+        Pair("mendez_crossing", "skyranch_jct"),
+        Pair("skyranch_jct", "taal_vista"),
+        Pair("taal_vista", "lourdes_church"),
+        Pair("lourdes_church", "ayala_serin"),
+        Pair("ayala_serin", "tagaytay_rotunda"),
+        Pair("tagaytay_rotunda", "tagaytay_med_ctr"),
+        Pair("tagaytay_rotunda", "fora_mall"),
+        Pair("fora_mall", "picnic_grove"),
+        Pair("picnic_grove", "crosswinds_jct"),
+        Pair("crosswinds_jct", "peoples_park")
+      )
+    } else {
+      listOf(
+        Pair("csucarig", "carignorte_jct"),
+        Pair("carignorte_jct", "cvmc_jct"),
+        Pair("cvmc_jct", "caggay_jct"),
+        Pair("caggay_jct", "airport_jct"),
+        Pair("airport_jct", "pengueruyu_jct"),
+        Pair("pengueruyu_jct", "robinsons_tanza"),
+        Pair("robinsons_tanza", "dondomingo_jct"),
+        Pair("caggay_jct", "capitol_jct"),
+        Pair("capitol_jct", "mcnp_jct"),
+        Pair("airport_jct", "airport_term"),
+        Pair("carignorte_jct", "smcity_bagay"),
+        Pair("smcity_bagay", "caritan_jct"),
+        Pair("caritan_jct", "spup_mabini"),
+        Pair("dondomingo_jct", "ucv_balzain"),
+        Pair("ucv_balzain", "caritan_jct"),
+        Pair("dondomingo_jct", "cathedral_rizal"),
+        Pair("cathedral_rizal", "centro_gomez"),
+        Pair("centro_gomez", "smcenter_luna"),
+        Pair("smcenter_luna", "usl_mabini"),
+        Pair("smcenter_luna", "spup_mabini"),
+        Pair("usl_mabini", "spup_mabini"),
+        Pair("spup_mabini", "buntun_hwy"),
+        Pair("buntun_hwy", "buntun_bridge")
+      )
+    }
 
     fun nodeDist(p1: Pair<Double, Double>, p2: Pair<Double, Double>): Double {
       val dLat = (p2.first - p1.first) * 111.0
@@ -991,10 +1105,16 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Connect RamsOverlayManager listeners
+    RamsOverlayManager.onOpenAppListener = {
+      openApp()
+    }
+
     RamsOverlayManager.onActionChipSelectedListener = { action ->
       when (action) {
         "CANCEL_ALARM" -> cancelFalseAlarm()
-        "SET_CATEGORY_WALK" -> {
+        "ACTION_OPEN_RAMS" -> openApp()
+        "ACTION_CLOSE_RAMS" -> closeApp()
+        "SET_CATEGORY_WALK", "SET_CATEGORY_PEDESTRIAN" -> {
           appActionHandler.setTransitCategory("Pedestrian")
           voiceAlarmCanceler.speak("Switched to Pedestrian mode.")
           RamsOverlayManager.showVoiceOverlay("MODE CHANGED", "Switched to Pedestrian mode. Fall detection armed.", VoiceAlarmCanceler.VoiceEngineState.COMMAND_SPOTTED)
@@ -1004,8 +1124,31 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
           voiceAlarmCanceler.speak("Switched to Motorcycle Rider mode.")
           RamsOverlayManager.showVoiceOverlay("MODE CHANGED", "Switched to Motorcycle Rider mode. High-G crash algorithms armed.", VoiceAlarmCanceler.VoiceEngineState.COMMAND_SPOTTED)
         }
-        "NAV_MAP" -> appActionHandler.navigateToTab("MAP")
-        "NAV_TELEMETRY" -> appActionHandler.navigateToTab("TELEMETRY")
+        "SET_CATEGORY_CAR" -> {
+          appActionHandler.setTransitCategory("Car Driver")
+          voiceAlarmCanceler.speak("Switched to Car Driver mode.")
+          RamsOverlayManager.showVoiceOverlay("MODE CHANGED", "Switched to Car Driver mode. Collision filters armed.", VoiceAlarmCanceler.VoiceEngineState.COMMAND_SPOTTED)
+        }
+        "NAV_MAP" -> {
+          appActionHandler.navigateToTab("MAP")
+          openApp(RamsNavTab.MAP)
+        }
+        "NAV_TELEMETRY" -> {
+          appActionHandler.navigateToTab("TELEMETRY")
+          openApp(RamsNavTab.TELEMETRY)
+        }
+        "NAV_SETTINGS" -> {
+          appActionHandler.navigateToTab("SETTINGS")
+          openApp(RamsNavTab.SETTINGS)
+        }
+        "NAV_WEARABLE" -> {
+          appActionHandler.navigateToTab("WEARABLE")
+          openApp(RamsNavTab.WEARABLE)
+        }
+        "NAV_AI_SUITE" -> {
+          appActionHandler.navigateToTab("AI_SUITE")
+          openApp(RamsNavTab.AI_SUITE)
+        }
       }
     }
 
@@ -1234,11 +1377,14 @@ class RamsViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun cancelFalseAlarm() {
+    // Re-entry guard: prevent cascade loops if alarm is already inactive
+    if (!_isAlarmActive.value) return
+    _isAlarmActive.value = false
+
     alarmSoundEngine.duckVolume(false)
     alarmSoundEngine.stopEmergencyAlarm()
     alarmCountdownJob?.cancel()
     alarmCountdownJob = null
-    _isAlarmActive.value = false
     _alarmCountdownSeconds.value = 0
     voiceAlarmCanceler.setAlarmActiveState(false)
 

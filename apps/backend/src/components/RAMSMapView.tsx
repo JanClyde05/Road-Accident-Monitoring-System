@@ -175,6 +175,7 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
   const markersMapRef = useRef<Map<string, L.Marker>>(new Map());
   const selectedEventRef = useRef<EventData | null>(selectedEvent);
   selectedEventRef.current = selectedEvent;
+  const hasAutoCenteredRef = useRef(false);
 
   // Deduplicate and resolve strictly 1 pin per genuine wearable device / user
   const singleWearablePins = useMemo(() => {
@@ -308,6 +309,20 @@ export default function RAMSMapView({ events, selectedEvent, onEventSelect, them
       mapRef.current.invalidateSize();
     }
   }, [refreshTrigger]);
+
+  // Auto-center on initial events load if pins are available (e.g., Tagaytay presentation)
+  useEffect(() => {
+    if (!hasAutoCenteredRef.current && singleWearablePins.length > 0 && mapRef.current) {
+      const validPins = singleWearablePins.filter(
+        (p) => Math.abs(p.lat) > 0.001 && Math.abs(p.lon) > 0.001
+      );
+      if (validPins.length > 0) {
+        hasAutoCenteredRef.current = true;
+        const latest = validPins[0];
+        mapRef.current.setView([latest.lat, latest.lon], 14);
+      }
+    }
+  }, [singleWearablePins]);
 
   // Update clusters and markers on map viewport change or events change
   useEffect(() => {

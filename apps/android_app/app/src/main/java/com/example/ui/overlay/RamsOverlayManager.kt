@@ -69,6 +69,7 @@ object RamsOverlayManager {
     var onAlarmCancelledListener: (() -> Unit)? = null
     var onMicTappedListener: (() -> Unit)? = null
     var onOpenAppListener: (() -> Unit)? = null
+    var onCloseAppListener: (() -> Unit)? = null
     var onActionChipSelectedListener: ((action: String) -> Unit)? = null
 
     // Auto-dismiss runnable
@@ -94,6 +95,42 @@ object RamsOverlayManager {
             Settings.canDrawOverlays(ctx)
         } else {
             true
+        }
+    }
+
+    /**
+     * Directly launches the RAMS application bringing it to the foreground, optionally navigating to a specific tab.
+     */
+    fun openApp(tab: String? = null) {
+        val ctx = appContext ?: return
+        try {
+            val intent = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)?.apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                if (tab != null) putExtra("tab", tab)
+            } ?: Intent(ctx, Class.forName("com.example.MainActivity")).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                if (tab != null) putExtra("tab", tab)
+            }
+            ctx.startActivity(intent)
+            hideOverlay()
+            Log.i(TAG, "Successfully launched RAMS app to foreground (tab: $tab)")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to launch app: ${e.message}")
+        }
+    }
+
+    /**
+     * Minimizes/closes the RAMS application safely and hides the overlay.
+     */
+    fun closeApp() {
+        mainHandler.post {
+            try {
+                onCloseAppListener?.invoke()
+                hideOverlay()
+                Log.i(TAG, "Successfully triggered close app action")
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to close app: ${e.message}")
+            }
         }
     }
 
@@ -133,6 +170,10 @@ object RamsOverlayManager {
         transcript: String,
         state: VoiceAlarmCanceler.VoiceEngineState
     ) {
+        if (isAppInForeground) {
+            Log.d(TAG, "showVoiceOverlay: App is open in foreground. Floating overlay suppressed.")
+            return
+        }
         if (!canDrawOverlays()) {
             Log.d(TAG, "Overlay permission not granted. Requesting via intent fallback.")
             appContext?.let { requestOverlayPermission(it) }
@@ -209,6 +250,10 @@ object RamsOverlayManager {
      * Surfaces the urgent red alert floating overlay during an active crash alarm.
      */
     fun showAlarmOverlay(countdownSeconds: Int) {
+        if (isAppInForeground) {
+            Log.d(TAG, "showAlarmOverlay: App is open in foreground. Floating overlay suppressed.")
+            return
+        }
         if (!canDrawOverlays()) return
 
         mainHandler.post {
@@ -544,7 +589,8 @@ object RamsOverlayManager {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
             WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
@@ -630,7 +676,11 @@ object RamsOverlayManager {
                         "ACTION_LISTEN" -> onMicTappedListener?.invoke()
                         "ACTION_OPEN_RAMS" -> {
                             hideOverlay()
-                            onOpenAppListener?.invoke()
+                            if (onOpenAppListener != null) {
+                                onOpenAppListener?.invoke()
+                            } else {
+                                openApp()
+                            }
                         }
                         else -> {
                             onActionChipSelectedListener?.invoke(actionKey)
@@ -650,11 +700,15 @@ object RamsOverlayManager {
         }
 
         addChip("LISTEN", "ACTION_LISTEN", isPrimary = true)
-        addChip("WALK MODE", "SET_CATEGORY_PEDESTRIAN")
-        addChip("MOTOR MODE", "SET_CATEGORY_MOTORCYCLE")
+        addChip("OPEN APP", "ACTION_OPEN_RAMS", isPrimary = true)
+        addChip("CLOSE APP", "ACTION_CLOSE_RAMS")
         addChip("SHOW MAP", "NAV_MAP")
         addChip("TELEMETRY", "NAV_TELEMETRY")
-        addChip("OPEN RAMS", "ACTION_OPEN_RAMS")
+        addChip("SETTINGS", "NAV_SETTINGS")
+        addChip("WEARABLE", "NAV_WEARABLE")
+        addChip("AI SUITE", "NAV_AI_SUITE")
+        addChip("WALK MODE", "SET_CATEGORY_PEDESTRIAN")
+        addChip("MOTOR MODE", "SET_CATEGORY_MOTORCYCLE")
     }
 
     private fun setupAlarmActionButtons() {

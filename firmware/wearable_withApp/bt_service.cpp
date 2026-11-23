@@ -18,18 +18,24 @@
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
+#include <vector>
 
 static BLEServer* _pServer = nullptr;
 static BLECharacteristic* _pTxCharacteristic = nullptr;
-static bool _deviceConnected = false;
+static volatile bool _deviceConnected = false;
+static volatile bool _needsAdvertisingRestart = false;
+static uint32_t _disconnectTimeMs = 0;
 static char _deviceToken[9] = DEFAULT_DEVICE_TOKEN;
 static String _rxBuffer = "";
+static portMUX_TYPE _rxMux = portMUX_INITIALIZER_UNLOCKED;
+static std::vector<String> _rxQueue;
 
 static void _processIncomingMessage(const String& msg);
 
 class RamsServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) override {
     _deviceConnected = true;
+    _needsAdvertisingRestart = false;
     Serial.println(F("\n[BT] Companion Android Phone connected via BLE!"));
     neopixelSetState(NEO_ARMED);
     buzzerSetPattern(BZR_CONFIRM);
@@ -37,12 +43,12 @@ class RamsServerCallbacks : public BLEServerCallbacks {
 
   void onDisconnect(BLEServer* pServer) override {
     _deviceConnected = false;
+    _disconnectTimeMs = millis();
+    _needsAdvertisingRestart = true;
     Serial.println(F("\n[BT] Phone disconnected from BLE"));
     neopixelSetState(NEO_CONNECTING);
-    // advertiseOnDisconnect is NimBLE-only; restart manually here instead.
-    delay(100);
-    pServer->startAdvertising();
-    Serial.println(F("[BT] Advertising restarted from disconnect callback"));
+    // Note: Do not call startAdvertising() directly in onDisconnect callback on ESP32-S3.
+    // Clean restart is scheduled via btServiceUpdate() in main loop to prevent Bluedroid race.
   }
 };
 
@@ -69,16 +75,23 @@ class RamsRxCallbacks : public BLECharacteristicCallbacks {
           if (bIdx > 0) {
             completeMsg = completeMsg.substring(bIdx);
           }
-          Serial.printf("[BT-RX] Ingested message (%d bytes)\n", completeMsg.length());
-          _processIncomingMessage(completeMsg);
+          // Enqueue off the BLE stack task into main loop queue
+          portENTER_CRITICAL(&_rxMux);
+          if (_rxQueue.size() < 12) {
+            _rxQueue.push_back(completeMsg);
+          }
+          portEXIT_CRITICAL(&_rxMux);
         }
         newlineIdx = _rxBuffer.indexOf('\n');
       }
 
       // If buffer contains a standalone JSON object without newline
       if (_rxBuffer.startsWith("{") && _rxBuffer.endsWith("}")) {
-        Serial.printf("[BT-RX] Ingested JSON object (%d bytes)\n", _rxBuffer.length());
-        _processIncomingMessage(_rxBuffer);
+        portENTER_CRITICAL(&_rxMux);
+        if (_rxQueue.size() < 12) {
+          _rxQueue.push_back(_rxBuffer);
+        }
+        portEXIT_CRITICAL(&_rxMux);
         _rxBuffer = "";
       }
 
@@ -322,7 +335,28 @@ void btServiceInit() {
 }
 
 void btServiceUpdate() {
-  // Advertising restart handled in onDisconnect callback (see RamsServerCallbacks).
+  // 1. Clean advertising restart scheduled off the Bluedroid callback thread
+  if (_needsAdvertisingRestart && (millis() - _disconnectTimeMs >= 200)) {
+    _needsAdvertisingRestart = false;
+    if (_pServer != nullptr && !_deviceConnected) {
+      BLEDevice::startAdvertising();
+      Serial.println(F("[BT] Clean BLE advertising restarted from main loop"));
+    }
+  }
+
+  // 2. Process queued incoming BLE messages on the main Arduino loop task
+  // This keeps LoRa SPI transmissions and Buzzer off the FreeRTOS BLE host task
+  String nextMsg = "";
+  portENTER_CRITICAL(&_rxMux);
+  if (!_rxQueue.empty()) {
+    nextMsg = _rxQueue.front();
+    _rxQueue.erase(_rxQueue.begin());
+  }
+  portEXIT_CRITICAL(&_rxMux);
+
+  if (nextMsg.length() > 0) {
+    _processIncomingMessage(nextMsg);
+  }
 }
 
 bool btServiceIsConnected() {

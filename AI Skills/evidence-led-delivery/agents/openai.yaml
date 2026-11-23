@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evidence-led delivery"
+  short_description: "Coordinate complex work and verify the shipped result"
+  default_prompt: "Use $evidence-led-delivery to trace the request to its source, complete the deliverable and verify it through its normal entry point."

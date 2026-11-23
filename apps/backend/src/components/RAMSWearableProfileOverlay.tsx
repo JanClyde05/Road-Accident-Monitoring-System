@@ -18,8 +18,10 @@ import {
   Truck, 
   HeartPulse, 
   Share2,
-  Volume2
+  Volume2,
+  QrCode
 } from 'lucide-react';
+import { generateQrMatrix } from '../utils/qrGenerator';
 
 interface WearableProfileOverlayProps {
   event: EventData | null;
@@ -39,6 +41,7 @@ export default function RAMSWearableProfileOverlay({
   const [copiedCoords, setCopiedCoords] = useState(false);
   const [copiedDispatch, setCopiedDispatch] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
+  const [activeQr, setActiveQr] = useState<{ title: string; phone: string } | null>(null);
   const [imageError, setImageError] = useState(false);
   const [markingRescued, setMarkingRescued] = useState(false);
   const [isRescued, setIsRescued] = useState(event?.status === 'RESCUED' || event?.status === 'rescued');
@@ -73,6 +76,16 @@ export default function RAMSWearableProfileOverlay({
       })
       .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
   }, [allEvents, event]);
+
+  const qrMatrix = useMemo(() => {
+    if (!activeQr || !activeQr.phone) return null;
+    const cleanPhone = activeQr.phone.replace(/[^0-9+]/g, '');
+    try {
+      return generateQrMatrix(`tel:${cleanPhone}`);
+    } catch {
+      return null;
+    }
+  }, [activeQr]);
 
   if (!isOpen || !event) return null;
 
@@ -315,12 +328,25 @@ TIMESTAMP: ${formatTimestamp(event.createdAt)}`;
                 {emergencyName}
               </div>
               <div className="mt-1 flex items-center justify-between">
-                <a 
-                  href={`tel:${emergencyPhone.replace(/\s+/g, '')}`} 
-                  className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  {emergencyPhone}
-                </a>
+                <div className="flex items-center gap-2">
+                  <a 
+                    href={`tel:${emergencyPhone.replace(/\s+/g, '')}`} 
+                    className="font-mono text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    {emergencyPhone}
+                  </a>
+                  {emergencyPhone !== 'Not Specified' && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveQr({ title: `Emergency Contact (${emergencyName})`, phone: emergencyPhone })}
+                      title="Show Scannable QR Code for Fast Dialing"
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-neutral-600 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-[10px] font-mono cursor-pointer"
+                    >
+                      <QrCode className="w-3 h-3 text-emerald-500" />
+                      <span>QR</span>
+                    </button>
+                  )}
+                </div>
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
                   PRIMARY
                 </span>
@@ -341,8 +367,19 @@ TIMESTAMP: ${formatTimestamp(event.createdAt)}`;
               <div className="font-bold text-sm text-neutral-900 dark:text-neutral-100">
                 {vehicle}
               </div>
-              <div className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
-                Rider Contact: {phone}
+              <div className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono flex items-center justify-between">
+                <span>Rider Contact: {phone}</span>
+                {phone !== 'Not Specified' && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveQr({ title: `Rider Contact (${riderName})`, phone: phone })}
+                    title="Show Scannable QR Code for Fast Dialing"
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-neutral-600 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-[10px] font-mono cursor-pointer"
+                  >
+                    <QrCode className="w-3 h-3 text-emerald-500" />
+                    <span>QR</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -517,6 +554,66 @@ TIMESTAMP: ${formatTimestamp(event.createdAt)}`;
         </div>
 
       </div>
+
+      {/* Quick Rescuer Phone QR Code Modal */}
+      {activeQr && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4"
+          onClick={() => setActiveQr(null)}
+        >
+          <div 
+            className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-2xl max-w-xs w-full text-center space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+                <QrCode className="w-4 h-4 text-emerald-500" />
+                Quick Rescuer Dial
+              </span>
+              <button 
+                type="button"
+                onClick={() => setActiveQr(null)} 
+                className="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div>
+              <div className="text-sm font-bold text-neutral-900 dark:text-neutral-100">{activeQr.title}</div>
+              <div className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">{activeQr.phone}</div>
+            </div>
+            <div className="p-3 bg-white rounded-xl border border-neutral-200 shadow-inner flex items-center justify-center">
+              {qrMatrix ? (
+                <svg 
+                  viewBox={`0 0 ${(qrMatrix.length + 6) * 6} ${(qrMatrix.length + 6) * 6}`} 
+                  className="w-48 h-48"
+                >
+                  <rect width="100%" height="100%" fill="#ffffff" rx="4" />
+                  {qrMatrix.map((row, r) =>
+                    row.map((val, c) =>
+                      val ? (
+                        <rect
+                          key={`${r}-${c}`}
+                          x={(c + 3) * 6}
+                          y={(r + 3) * 6}
+                          width={6}
+                          height={6}
+                          fill="#0f172a"
+                        />
+                      ) : null
+                    )
+                  )}
+                </svg>
+              ) : (
+                <div className="text-xs text-neutral-400 py-8">QR generation unavailable</div>
+              )}
+            </div>
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-tight">
+              Scan with smartphone camera to call instantly.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,17 +8,23 @@ from zipfile import ZIP_DEFLATED, ZipFile
 def main():
     root = Path(__file__).resolve().parent
     destination = root.parent / "RAMS Presentation - Offline.zip"
-    files = [root / name for name in ("index.html", "style.css", "chapters.css", "README.md")]
+    files = [root / name for name in ("Finals.html", "index.html", "style.css", "chapters.css", "README.md")]
     for directory in ("assets", "public", "verification"):
         files.extend(sorted(path for path in (root / directory).rglob("*") if path.is_file()))
 
-    # These posters load only when WebGL is unavailable, so a normal preview
-    # can succeed even if an artwork export was interrupted.
+    # A normally playable clip can mask missing fallback frames; require both.
+    required = [root / "public/presenters" / f"RAMS Presenter Script.{ext}" for ext in ("docx", "pdf")]
+    required.append(root / "public/presenters/RAMS InnovateX 2026 National Finals Slides.pdf")
+    required.append(root / "public/presenters/RAMS AI Use Disclosure.pdf")
     for story in ("pairing", "motorcycle", "car", "pedestrian", "fall"):
+        required.append(root / "public/scenarios" / f"{story}.mp4")
         for phase in range(3):
-            poster = root / "public" / "scenarios" / f"{story}-{phase}.webp"
-            if not poster.is_file() or not poster.stat().st_size:
-                raise FileNotFoundError(poster)
+            required.append(root / "public/scenarios" / f"{story}-{phase}.webp")
+    for name in ("phone", "wearable", "receiver", "station"):
+        required.append(root / "public/relay" / f"{name}.webp")
+    for path in required:
+        if not path.is_file() or not path.stat().st_size:
+            raise FileNotFoundError(path)
 
     with NamedTemporaryFile(dir=destination.parent, suffix=".zip", delete=False) as temp:
         temporary = Path(temp.name)

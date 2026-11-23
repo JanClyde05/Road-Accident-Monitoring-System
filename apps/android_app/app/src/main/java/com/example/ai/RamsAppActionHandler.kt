@@ -16,6 +16,8 @@ interface RamsAppActionHandler {
     fun reconnectWearable(): Boolean
     fun triggerSimulation(): Boolean
     fun saveLearnedVoicePattern(query: String, response: String)
+    fun openApp(targetTab: String? = null): Boolean = false
+    fun closeApp(): Boolean = false
     fun pinAndRouteToLocation(locationQuery: String): Boolean = false
     fun clearMapRoute(): Boolean = false
     fun compactMotionData(): Int = 0

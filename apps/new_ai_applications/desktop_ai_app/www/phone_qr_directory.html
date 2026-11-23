@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RAMS Rescuer Emergency Phone Directory & QR Scanner</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 24px; }
+    h1 { font-size: 20px; text-transform: uppercase; letter-spacing: 1px; color: #38bdf8; margin-bottom: 4px; }
+    p.sub { font-size: 13px; color: #94a3b8; margin-top: 0; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; object-cover: cover; border: 2px solid #38bdf8; background: #0f172a; }
+    .name { font-size: 15px; font-weight: bold; text-transform: uppercase; color: #ffffff; }
+    .meta { font-size: 11px; font-family: monospace; color: #94a3b8; }
+    .qr-row { display: flex; gap: 14px; justify-content: space-around; margin-top: 12px; }
+    .qr-box { background: #ffffff; border-radius: 8px; padding: 8px; text-align: center; color: #0f172a; flex: 1; max-width: 140px; }
+    .qr-box img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    .qr-label { font-size: 9px; font-weight: bold; font-family: monospace; text-transform: uppercase; margin-top: 6px; }
+    .qr-num { font-size: 11px; font-family: monospace; font-weight: bold; color: #0284c7; word-break: break-all; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; font-family: monospace; background: #0369a1; color: #ffffff; }
+  </style>
+</head>
+<body>
+  <h1>RAMS Instant Emergency Dialer Directory</h1>
+  <p class="sub">Point any smartphone camera at a QR code to dial the rider or emergency contact instantly.</p>
+  <div class="grid">
+
+    <div class="card">
+      <div class="header">
+        <img class="avatar" src="https://lh3.googleusercontent.com/d/1GzdYF2HAY8i-coJ3cnVi0o2fmXMfKlle" alt="Jan Clyde T. Talosig" onerror="this.src='/logo.png'"/>
+        <div>
+          <div class="name">Jan Clyde T. Talosig</div>
+          <div class="meta">Rouser 135 • Plate: <span class="badge">EMERGENCY</span> • Token: RAMS-qyd</div>
+          <div class="meta" style="color: #ef4444; font-weight: bold; margin-top: 2px;">Blood: N/A</div>
+        </div>
+      </div>
+      <div class="qr-row">
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_primary_jan_clyde_t__talosig_rams_qyd.svg" alt="Primary Phone QR"/>
+          <div class="qr-label">Rider Contact</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_emergency_jan_clyde_t__talosig_rams_qyd.svg" alt="Emergency Contact QR"/>
+          <div class="qr-label">JC</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <img class="avatar" src="/logo.png" alt="Niña" onerror="this.src='/logo.png'"/>
+        <div>
+          <div class="name">Niña</div>
+          <div class="meta">Yamaha NMAX • Plate: <span class="badge">EMERGENCY</span> • Token: RAMS-qsv</div>
+          <div class="meta" style="color: #ef4444; font-weight: bold; margin-top: 2px;">Blood: N/A</div>
+        </div>
+      </div>
+      <div class="qr-row">
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_primary_ni_a_rams_qsv.svg" alt="Primary Phone QR"/>
+          <div class="qr-label">Rider Contact</div>
+          <div class="qr-num">9150769235</div>
+        </div>
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_emergency_ni_a_rams_qsv.svg" alt="Emergency Contact QR"/>
+          <div class="qr-label">Eliza Dela Cruz</div>
+          <div class="qr-num">9150769235</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <img class="avatar" src="/logo.png" alt="Nins" onerror="this.src='/logo.png'"/>
+        <div>
+          <div class="name">Nins</div>
+          <div class="meta">Yamaha NMAX • Plate: <span class="badge">EMERGENCY</span> • Token: RAMS-xXH</div>
+          <div class="meta" style="color: #ef4444; font-weight: bold; margin-top: 2px;">Blood: N/A</div>
+        </div>
+      </div>
+      <div class="qr-row">
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_primary_nins_rams_xxh.svg" alt="Primary Phone QR"/>
+          <div class="qr-label">Rider Contact</div>
+          <div class="qr-num">9150769235</div>
+        </div>
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_emergency_nins_rams_xxh.svg" alt="Emergency Contact QR"/>
+          <div class="qr-label">Eliza Dela Cruz</div>
+          <div class="qr-num">9150769235</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <img class="avatar" src="https://lh3.googleusercontent.com/d/1GzdYF2HAY8i-coJ3cnVi0o2fmXMfKlle" alt="Jan Clyde" onerror="this.src='/logo.png'"/>
+        <div>
+          <div class="name">Jan Clyde</div>
+          <div class="meta">Rouser 135 • Plate: <span class="badge">EMERGENCY</span> • Token: RAMS-cxE</div>
+          <div class="meta" style="color: #ef4444; font-weight: bold; margin-top: 2px;">Blood: N/A</div>
+        </div>
+      </div>
+      <div class="qr-row">
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_primary_jan_clyde_rams_cxe.svg" alt="Primary Phone QR"/>
+          <div class="qr-label">Rider Contact</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_emergency_jan_clyde_rams_cxe.svg" alt="Emergency Contact QR"/>
+          <div class="qr-label">Mother</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <img class="avatar" src="https://lh3.googleusercontent.com/d/1GzdYF2HAY8i-coJ3cnVi0o2fmXMfKlle" alt="Jan Clyde" onerror="this.src='/logo.png'"/>
+        <div>
+          <div class="name">Jan Clyde</div>
+          <div class="meta">Rouser 135 • Plate: <span class="badge">EMERGENCY</span> • Token: RAMS-PXl</div>
+          <div class="meta" style="color: #ef4444; font-weight: bold; margin-top: 2px;">Blood: N/A</div>
+        </div>
+      </div>
+      <div class="qr-row">
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_primary_jan_clyde_rams_pxl.svg" alt="Primary Phone QR"/>
+          <div class="qr-label">Rider Contact</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+        <div class="qr-box">
+          <img src="qrcodes/qr_emergency_jan_clyde_rams_pxl.svg" alt="Emergency Contact QR"/>
+          <div class="qr-label">Mother</div>
+          <div class="qr-num">09701258973</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

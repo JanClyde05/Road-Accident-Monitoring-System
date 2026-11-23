@@ -17,7 +17,7 @@ if errorlevel 1 (
 
 echo.
 echo [2/2] Compiling Mobile Android APK (LiteRT + Sherpa-ONNX + Dev Training)...
-call "%~dp0mobile_ai_app\Build_APK.bat" /nopause
+call "%~dp0..\android_app\build_and_install.bat" /nopause
 if errorlevel 1 (
     echo [ERROR] Mobile App build failed!
     pause
@@ -29,7 +29,7 @@ echo ===========================================================================
 echo   [ALL BUILDS COMPLETE] Both RAMS AI Applications Built Successfully!
 echo.
 echo   Desktop Application: %~dp0desktop_ai_app\RAMS_Rescuer_Desktop.exe
-echo   Mobile APK Package:  %~dp0mobile_ai_app\prebuilt_apk\RAMS_Mobile_AI_v2.5.apk
+echo   Mobile APK Package:  %~dp0..\android_app\app\build\outputs\apk\debug\app-debug.apk
 echo ===============================================================================
 echo.
 pause

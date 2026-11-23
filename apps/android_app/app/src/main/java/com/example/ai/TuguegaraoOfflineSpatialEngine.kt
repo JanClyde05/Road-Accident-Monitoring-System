@@ -231,6 +231,249 @@ object TuguegaraoOfflineSpatialEngine {
             category = "MARKET",
             aliases = listOf("don domingo", "don domingo market", "balzain market", "pamilihan"),
             navigationTips = "Major wet and dry market and northern provincial bus/van dispatch station."
+        ),
+        // --- TAGAYTAY CITY TEMPORARY / PRESENTATION LANDMARKS ---
+        Landmark(
+            id = "sky_ranch",
+            name = "Sky Ranch Tagaytay",
+            lat = 14.09540,
+            lon = 120.93880,
+            barangay = "Kaybagal South",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "TOURIST",
+            aliases = listOf("sky ranch", "skyranch", "sky ranch tagaytay", "skyranch tagaytay", "ferris wheel"),
+            navigationTips = "Iconic leisure park along Tagaytay-Nasugbu Highway with panoramic Taal Lake ridge view."
+        ),
+        Landmark(
+            id = "taal_vista",
+            name = "Taal Vista Hotel",
+            lat = 14.09880,
+            lon = 120.94420,
+            barangay = "Kaybagal South",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "HOTEL",
+            aliases = listOf("taal vista", "taal vista hotel", "taal vista tagaytay"),
+            navigationTips = "Historic hotel located on the ridge along Tagaytay-Nasugbu Highway overlooking Taal Volcano."
+        ),
+        Landmark(
+            id = "picnic_grove",
+            name = "Tagaytay Picnic Grove",
+            lat = 14.13780,
+            lon = 120.99960,
+            barangay = "Sungay East",
+            corridor = "Tagaytay-Calamba Road",
+            category = "PARK",
+            aliases = listOf("picnic grove", "tagaytay picnic grove", "picnic grove tagaytay"),
+            navigationTips = "Popular family destination along Tagaytay-Calamba Road with eco-trail, zipline, and ridge huts."
+        ),
+        Landmark(
+            id = "peoples_park",
+            name = "People's Park in the Sky",
+            lat = 14.14440,
+            lon = 121.02050,
+            barangay = "Dapdap West",
+            corridor = "Tagaytay-Calamba Road",
+            category = "PARK",
+            aliases = listOf("peoples park", "people's park", "peoples park in the sky", "people's park in the sky", "palace in the sky"),
+            navigationTips = "Highest point in Tagaytay City at Mt. Sungay along Tagaytay-Calamba Road offering 360-degree views."
+        ),
+        Landmark(
+            id = "tagaytay_rotunda",
+            name = "Tagaytay Rotunda (Olivarez Plaza)",
+            lat = 14.11530,
+            lon = 120.96200,
+            barangay = "Silang Junction South",
+            corridor = "Emilio Aguinaldo Highway / Tagaytay-Nasugbu Highway",
+            category = "TRANSIT",
+            aliases = listOf("tagaytay rotunda", "rotunda", "olivarez", "olivarez plaza", "silang junction"),
+            navigationTips = "Central roundabout connecting Aguinaldo Highway, Tagaytay-Calamba Road, and Tagaytay-Nasugbu Highway."
+        ),
+        Landmark(
+            id = "mahogany_market",
+            name = "Mahogany Beef Market & Bulalohan",
+            lat = 14.10390,
+            lon = 120.93660,
+            barangay = "Kaybagal South",
+            corridor = "Mahogany Avenue",
+            category = "MARKET",
+            aliases = listOf("mahogany market", "mahogany", "bulalohan", "mahogany bulalo", "bulalo market"),
+            navigationTips = "Famous market along Mahogany Avenue renowned for fresh beef and hot bulalo eateries."
+        ),
+        Landmark(
+            id = "tagaytay_med_center",
+            name = "Tagaytay Medical Center",
+            lat = 14.11650,
+            lon = 120.96020,
+            barangay = "Silang Junction North",
+            corridor = "Emilio Aguinaldo Highway",
+            category = "HOSPITAL",
+            aliases = listOf("tagaytay medical center", "tmc", "tagaytay medical", "tagaytay hospital", "ospital ng tagaytay medical"),
+            navigationTips = "Major tertiary private hospital situated along Emilio Aguinaldo Highway near the Rotunda with 24/7 ER."
+        ),
+        Landmark(
+            id = "ospital_ng_tagaytay",
+            name = "Ospital ng Tagaytay",
+            lat = 14.10270,
+            lon = 120.93270,
+            barangay = "Kaybagal South",
+            corridor = "Kaybagal South Road",
+            category = "HOSPITAL",
+            aliases = listOf("ospital ng tagaytay", "ont", "tagaytay city hospital", "public hospital tagaytay"),
+            navigationTips = "Public government hospital in Kaybagal South providing emergency and outpatient care."
+        ),
+        Landmark(
+            id = "tagaytay_city_hall",
+            name = "Tagaytay City Hall",
+            lat = 14.10170,
+            lon = 120.93620,
+            barangay = "Kaybagal South",
+            corridor = "Mahogany Avenue",
+            category = "GOVERNMENT",
+            aliases = listOf("tagaytay city hall", "city hall tagaytay", "tagaytay hall"),
+            navigationTips = "Municipal government seat of Tagaytay City along Mahogany Avenue."
+        ),
+        Landmark(
+            id = "tagaytay_police",
+            name = "Tagaytay City Police Station",
+            lat = 14.10140,
+            lon = 120.93550,
+            barangay = "Kaybagal South",
+            corridor = "Mahogany Avenue",
+            category = "POLICE",
+            aliases = listOf("tagaytay police", "tagaytay police station", "pnp tagaytay"),
+            navigationTips = "Main PNP station along Mahogany Avenue next to City Hall for emergency dispatch."
+        ),
+        Landmark(
+            id = "ayala_serin",
+            name = "Ayala Malls Serin",
+            lat = 14.11470,
+            lon = 120.96000,
+            barangay = "Silang Junction South",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "MALL",
+            aliases = listOf("ayala malls serin", "serin", "serin mall", "ayala serin", "ayala tagaytay"),
+            navigationTips = "Premier shopping and dining mall right beside Tagaytay Rotunda on the highway."
+        ),
+        Landmark(
+            id = "fora_mall",
+            name = "Fora Mall Tagaytay (Filinvest)",
+            lat = 14.11620,
+            lon = 120.96310,
+            barangay = "Silang Junction South",
+            corridor = "Emilio Aguinaldo Highway",
+            category = "MALL",
+            aliases = listOf("fora mall", "fora", "fora tagaytay", "filinvest fora"),
+            navigationTips = "Lifestyle center with supermarket and restaurants adjacent to Rotunda."
+        ),
+        Landmark(
+            id = "twin_lakes",
+            name = "Twin Lakes Tagaytay",
+            lat = 14.07220,
+            lon = 120.85400,
+            barangay = "Dayap Itaas / Laurel",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "MALL",
+            aliases = listOf("twin lakes", "twin lakes tagaytay", "twin lakes shopping"),
+            navigationTips = "Scenic European-style vineyard shopping complex on the western ridge toward Nasugbu."
+        ),
+        Landmark(
+            id = "crosswinds",
+            name = "Crosswinds Tagaytay",
+            lat = 14.13740,
+            lon = 121.01180,
+            barangay = "Iruhin Central",
+            corridor = "Tagaytay-Calamba Road",
+            category = "RESORT",
+            aliases = listOf("crosswinds", "crosswinds tagaytay", "swiss luxury resort"),
+            navigationTips = "Swiss-inspired pine tree resort and dining destination along Tagaytay-Calamba Road."
+        ),
+        Landmark(
+            id = "lourdes_church",
+            name = "Our Lady of Lourdes Parish Church",
+            lat = 14.11390,
+            lon = 120.95750,
+            barangay = "Silang Junction South",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "CHURCH",
+            aliases = listOf("lourdes church", "lourdes tagaytay", "our lady of lourdes"),
+            navigationTips = "Well-known wedding and pilgrim church located just west of Tagaytay Rotunda."
+        ),
+        Landmark(
+            id = "tagaytay_highlands",
+            name = "Tagaytay Highlands",
+            lat = 14.15280,
+            lon = 121.05420,
+            barangay = "Calabuso",
+            corridor = "Tagaytay-Calamba Road / Highlands Access Road",
+            category = "RESORT",
+            aliases = listOf("tagaytay highlands", "highlands", "highlands tagaytay", "country club"),
+            navigationTips = "Exclusive mountain resort and residential community perched on Tagaytay ridge."
+        ),
+        Landmark(
+            id = "bag_of_beans",
+            name = "Bag of Beans Athena Tagaytay",
+            lat = 14.09550,
+            lon = 120.93250,
+            barangay = "Mendez Crossing West",
+            corridor = "Tagaytay-Nasugbu Highway",
+            category = "RESTAURANT",
+            aliases = listOf("bag of beans", "bag of beans tagaytay", "athena", "coffee shop tagaytay"),
+            navigationTips = "Iconic garden cafe and bakery famous for brewed coffee and pies along Tagaytay-Nasugbu Highway."
+        ),
+        Landmark(
+            id = "antonios_restaurant",
+            name = "Antonio's Restaurant",
+            lat = 14.08470,
+            lon = 120.91020,
+            barangay = "Neogan",
+            corridor = "Purok 138 / Barangay Neogan",
+            category = "RESTAURANT",
+            aliases = listOf("antonios", "antonio's", "antonios restaurant", "antonio's tagaytay"),
+            navigationTips = "Fine-dining destination set in a lush colonial estate in Neogan, Tagaytay."
+        ),
+        Landmark(
+            id = "caleruega_church",
+            name = "Caleruega Church (Transfiguration Chapel)",
+            lat = 14.07220,
+            lon = 120.83510,
+            barangay = "Batulao / Caylaway",
+            corridor = "Tagaytay-Nasugbu Highway / Caleruega Road",
+            category = "CHURCH",
+            aliases = listOf("caleruega", "caleruega church", "transfiguration chapel", "chapel on the hill"),
+            navigationTips = "Famous retreat center and wedding chapel surrounded by gardens near Mt. Batulao."
+        ),
+        Landmark(
+            id = "sonyas_garden",
+            name = "Sonya's Garden",
+            lat = 14.08620,
+            lon = 120.85740,
+            barangay = "Buck Estate",
+            corridor = "Santa Rosa-Tagaytay Road / Buck Estate",
+            category = "RESORT",
+            aliases = listOf("sonyas garden", "sonya's garden", "sonyas", "sonya's"),
+            navigationTips = "Enchanting garden restaurant, bakery, and bed & breakfast tucked along Buck Estate."
+        ),
+        Landmark(
+            id = "paradizoo",
+            name = "Paradizoo Theme Farm",
+            lat = 14.14360,
+            lon = 120.90260,
+            barangay = "Mendez West",
+            corridor = "Mendez-Tagaytay Road",
+            category = "TOURIST",
+            aliases = listOf("paradizoo", "paradizoo farm", "paradizoo tagaytay", "petting zoo"),
+            navigationTips = "Agro-tourism farm and zoo featuring flower gardens, farm animals, and butterfly sanctuary."
+        ),
+        Landmark(
+            id = "puzzle_mansion",
+            name = "Puzzle Mansion",
+            lat = 14.11900,
+            lon = 120.90800,
+            barangay = "Asisan",
+            corridor = "Asisan Road",
+            category = "TOURIST",
+            aliases = listOf("puzzle mansion", "puzzle museum", "puzzle mansion tagaytay"),
+            navigationTips = "Guinness World Record jigsaw puzzle collection museum nestled in Asisan, Tagaytay."
         )
     )
 
@@ -243,7 +486,12 @@ object TuguegaraoOfflineSpatialEngine {
         "Pengue Ruyu", "Cataggaman", "Cataggaman Nuevo", "Atulayan", "Ugac", "Ugac Norte",
         "Ugac Sur", "Capatan", "Centro", "Bagay Road", "Maharlika Highway", "Tricycle",
         "Capacity", "Special trip", "Overcharge", "Pamasahe", "Magkano", "Ordinance",
-        "Direksyon", "Kanan", "Kaliwa", "Derecho", "Barya lang po", "Singsingil"
+        "Direksyon", "Kanan", "Kaliwa", "Derecho", "Barya lang po", "Singsingil",
+        // Tagaytay Presentation Additions
+        "Tagaytay", "Tagaytay City", "Sky Ranch", "Taal Vista", "Picnic Grove", "People's Park", "Palace in the Sky",
+        "Rotunda", "Olivarez", "Mahogany Market", "Bulalo", "Tagaytay Medical Center", "Ospital ng Tagaytay",
+        "Ayala Serin", "Fora Mall", "Twin Lakes", "Crosswinds", "Lourdes Church", "Tagaytay-Nasugbu Highway",
+        "Aguinaldo Highway", "Calamba Road"
     )
 
     /**
@@ -282,6 +530,20 @@ object TuguegaraoOfflineSpatialEngine {
         text = text.replace(Regex("(?i)\\b(domingo market|balzain market|pamilihan)\\b"), "Don Domingo Public Market")
         // Local dialects fare queries: Ibanag ("sano i plete") & Ilokano ("mano ti plete")
         text = text.replace(Regex("(?i)\\b(sano i plete|mano ti plete|magkano pamasahi|pamasahi)\\b"), "magkano pamasahe")
+
+        // Tagaytay misrecognitions
+        text = text.replace(Regex("(?i)\\b(taga tay|taga tai|taga toy|tagaytaye)\\b"), "Tagaytay")
+        text = text.replace(Regex("(?i)\\b(sky lunch|sky wrench|skyranch)\\b"), "Sky Ranch")
+        text = text.replace(Regex("(?i)\\b(pic nic grove|pick nick grove|picnic)\\b"), "Picnic Grove")
+        text = text.replace(Regex("(?i)\\b(peoples park|people park|palace in the sky|palace in sky)\\b"), "People's Park in the Sky")
+        text = text.replace(Regex("(?i)\\b(tal vista|taal vista hotel)\\b"), "Taal Vista Hotel")
+        text = text.replace(Regex("(?i)\\b(tagaytay rotunda|olivarez plaza|olivarez)\\b"), "Tagaytay Rotunda")
+        text = text.replace(Regex("(?i)\\b(tagaytay medical|tagaytay med|tagaytay hospital|tmc)\\b"), "Tagaytay Medical Center")
+        text = text.replace(Regex("(?i)\\b(mahogany market|mahogani|bulalo market|bulalohan)\\b"), "Mahogany Market")
+        text = text.replace(Regex("(?i)\\b(ayala serin|serin mall)\\b"), "Ayala Malls Serin")
+        text = text.replace(Regex("(?i)\\b(fora mall|filinvest fora)\\b"), "Fora Mall Tagaytay")
+        text = text.replace(Regex("(?i)\\b(twin lakes|twin lake)\\b"), "Twin Lakes Tagaytay")
+        text = text.replace(Regex("(?i)\\b(cross winds|crosswinds tagaytay)\\b"), "Crosswinds Tagaytay")
 
         return text
     }
@@ -332,14 +594,22 @@ object TuguegaraoOfflineSpatialEngine {
      */
     fun reverseGeocode(lat: Double, lon: Double): String {
         if (lat == 0.0 || lon == 0.0) {
-            return "Maharlika Highway, Tuguegarao City (GPS acquiring)"
+            return "GPS acquiring..."
+        }
+
+        val isTagaytayRegion = (lat in 13.5..15.5) && (lon in 120.5..121.5)
+        val defaultCity = if (isTagaytayRegion) "Tagaytay City, Cavite" else "Tuguegarao City, Cagayan"
+        val candidateLandmarks = if (isTagaytayRegion) {
+            LANDMARKS.filter { it.lat in 13.5..15.5 }
+        } else {
+            LANDMARKS.filter { it.lat > 16.0 }
         }
 
         // Find nearest landmark
         var closest: Landmark? = null
         var minDistance = Double.MAX_VALUE
 
-        for (lm in LANDMARKS) {
+        for (lm in candidateLandmarks) {
             val dist = calculateDistanceMeters(lat, lon, lm.lat, lm.lon)
             if (dist < minDistance) {
                 minDistance = dist
@@ -347,24 +617,24 @@ object TuguegaraoOfflineSpatialEngine {
             }
         }
 
-        val nearest = closest ?: return "Maharlika Highway, Tuguegarao City"
+        val nearest = closest ?: return if (isTagaytayRegion) "Tagaytay-Nasugbu Highway, Tagaytay City" else "Maharlika Highway, Tuguegarao City"
 
         return when {
             minDistance <= 80.0 -> {
                 "At ${nearest.name}, ${nearest.corridor}, Brgy. ${nearest.barangay}"
             }
-            minDistance <= 300.0 -> {
+            minDistance <= 400.0 -> {
                 val bearing = calculateBearing(nearest.lat, nearest.lon, lat, lon)
                 val dir = getCompassDirection(bearing)
                 "Along ${nearest.corridor}, ${minDistance.roundToInt()}m $dir of ${nearest.name}, Brgy. ${nearest.barangay}"
             }
-            minDistance <= 1200.0 -> {
+            minDistance <= 1500.0 -> {
                 val bearing = calculateBearing(nearest.lat, nearest.lon, lat, lon)
                 val dir = getCompassDirection(bearing)
                 "Brgy. ${nearest.barangay}, ${(minDistance / 1000.0).format(1)} km $dir of ${nearest.name}"
             }
             else -> {
-                "Tuguegarao City near Brgy. ${nearest.barangay} (${(minDistance / 1000.0).format(1)} km from ${nearest.name})"
+                "$defaultCity near Brgy. ${nearest.barangay} (${(minDistance / 1000.0).format(1)} km from ${nearest.name})"
             }
         }
     }
@@ -395,9 +665,9 @@ object TuguegaraoOfflineSpatialEngine {
     fun generateOfflineDirections(userLat: Double, userLon: Double, query: String): String? {
         val target = findTargetLandmark(query) ?: return null
 
-        // If user GPS is not yet locked, use Tuguegarao Centro as default origin
-        val fromLat = if (userLat != 0.0) userLat else 17.6133
-        val fromLon = if (userLon != 0.0) userLon else 121.7289
+        val isTagaytayTarget = target.lat in 13.5..15.5
+        val fromLat = if (userLat != 0.0) userLat else (if (isTagaytayTarget) 14.1153 else 17.6133)
+        val fromLon = if (userLon != 0.0) userLon else (if (isTagaytayTarget) 120.9620 else 121.7289)
         val hasRealGps = userLat != 0.0
 
         val distanceMeters = calculateDistanceMeters(fromLat, fromLon, target.lat, target.lon)
@@ -412,7 +682,7 @@ object TuguegaraoOfflineSpatialEngine {
         val originDesc = if (hasRealGps) {
             reverseGeocode(fromLat, fromLon)
         } else {
-            "Centro Tuguegarao"
+            if (isTagaytayTarget) "Tagaytay Rotunda" else "Centro Tuguegarao"
         }
 
         val legalFare = calculateLegalTricycleFare(distanceKm, isStudent = false)
@@ -422,7 +692,9 @@ object TuguegaraoOfflineSpatialEngine {
             append("Directions to ${target.name}: It is ${distanceKm.format(1)} km $direction from your location ($originDesc). ")
             append("Travel time is about $motoMinutes minutes by motorcycle or $trikeMinutes minutes by tricycle. ")
             append("Route: ${target.navigationTips} ")
-            append("Regulated tricycle fare for this distance is ₱$legalFare (₱$studentFare for students/PWDs).")
+            if (!isTagaytayTarget) {
+                append("Regulated tricycle fare for this distance is ₱$legalFare (₱$studentFare for students/PWDs).")
+            }
         }
     }
 

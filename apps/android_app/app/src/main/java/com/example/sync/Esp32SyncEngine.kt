@@ -115,6 +115,7 @@ class Esp32SyncEngine(
   @Volatile private var isManualDisconnect = false
   @Volatile private var negotiatedMtu = 23
   private val writePermits = Channel<Unit>(Channel.CONFLATED)
+  private val bleWriteMutex = Mutex()
   private val connectMutex = Mutex()
   private var mtuReady: CompletableDeferred<Int>? = null
   private var lastProfileSentMs = 0L
@@ -555,27 +556,29 @@ class Esp32SyncEngine(
 
   @SuppressLint("MissingPermission")
   private suspend fun writeBleBytes(gatt: BluetoothGatt, rxChar: BluetoothGattCharacteristic, bytes: ByteArray) {
-    val mtuPayload = (negotiatedMtu - 3).coerceIn(20, 509)
-    var offset = 0
-    while (offset < bytes.size) {
-      val chunkSize = minOf(mtuPayload, bytes.size - offset)
-      val chunk = bytes.copyOfRange(offset, offset + chunkSize)
-      writePermits.tryReceive() // clear any stale permit
-      val accepted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        gatt.writeCharacteristic(rxChar, chunk, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT) == android.bluetooth.BluetoothStatusCodes.SUCCESS
-      } else {
-        rxChar.value = chunk
-        rxChar.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-        gatt.writeCharacteristic(rxChar)
+    bleWriteMutex.withLock {
+      val mtuPayload = (negotiatedMtu - 3).coerceIn(20, 509)
+      var offset = 0
+      while (offset < bytes.size) {
+        val chunkSize = minOf(mtuPayload, bytes.size - offset)
+        val chunk = bytes.copyOfRange(offset, offset + chunkSize)
+        writePermits.tryReceive() // clear any stale permit
+        val accepted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          gatt.writeCharacteristic(rxChar, chunk, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT) == android.bluetooth.BluetoothStatusCodes.SUCCESS
+        } else {
+          rxChar.value = chunk
+          rxChar.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+          gatt.writeCharacteristic(rxChar)
+        }
+        if (!accepted) {
+          delay(10L)
+          continue // retry the same chunk
+        }
+        if (withTimeoutOrNull(1500L) { writePermits.receive() } == null) {
+          throw IOException("GATT write timed out at offset $offset")
+        }
+        offset += chunkSize
       }
-      if (!accepted) {
-        delay(10L)
-        continue // retry the same chunk
-      }
-      if (withTimeoutOrNull(300L) { writePermits.receive() } == null) {
-        throw IOException("GATT write timed out at offset $offset")
-      }
-      offset += chunkSize
     }
   }
 
@@ -658,7 +661,11 @@ class Esp32SyncEngine(
           _syncStatus.value = _syncStatus.value.copy(
             statusMessage = "Wearable Alert Cancelled (Physical Button Pressed)"
           )
-          onWearableCancelRequested?.invoke()
+          // Only trigger cancellation cascade if this was a physical button press on the wearable itself
+          val source = json.optString("source")
+          if (source == "wearable_button" || json.optString("type") == "BUTTON_CANCEL") {
+            onWearableCancelRequested?.invoke()
+          }
         } else if (json.optString("type") == "PING_ACK") {
           val seq = json.optLong("seq", -1L)
           _syncStatus.value = _syncStatus.value.copy(

@@ -141,6 +141,12 @@ class MainActivity : ComponentActivity() {
       }
       startActivity(openIntent)
     }
+    RamsOverlayManager.onCloseAppListener = {
+      moveTaskToBack(true)
+    }
+    viewModel.onCloseApp = {
+      moveTaskToBack(true)
+    }
 
     setContent {
       val isDarkTheme by viewModel.isDarkTheme.collectAsStateWithLifecycle()
@@ -160,9 +166,16 @@ class MainActivity : ComponentActivity() {
     handleIntent(intent)
   }
 
+  override fun onStart() {
+    super.onStart()
+    RamsOverlayManager.isAppInForeground = true
+    RamsOverlayManager.hideOverlay()
+  }
+
   override fun onResume() {
     super.onResume()
     RamsOverlayManager.isAppInForeground = true
+    RamsOverlayManager.hideOverlay()
     if (androidx.core.content.ContextCompat.checkSelfPermission(
         this,
         android.Manifest.permission.RECORD_AUDIO
@@ -174,6 +187,12 @@ class MainActivity : ComponentActivity() {
 
   override fun onPause() {
     super.onPause()
+    // Keep isAppInForeground true while activity is still visible in foreground
+  }
+
+  override fun onStop() {
+    super.onStop()
+    // App is now completely invisible in background
     RamsOverlayManager.isAppInForeground = false
   }
 
@@ -188,8 +207,11 @@ class MainActivity : ComponentActivity() {
       viewModel.voiceAlarmCanceler.injectSimulatedUserQuery(voiceQuery)
     }
     val tabName = intent?.getStringExtra("tab")?.uppercase() ?: return
+    intent.removeExtra("tab")
     try {
-      initialTabState.value = RamsNavTab.valueOf(tabName)
+      val target = RamsNavTab.valueOf(tabName)
+      initialTabState.value = target
+      viewModel.appActionHandler.navigateToTab(tabName)
     } catch (_: Exception) {}
   }
 }

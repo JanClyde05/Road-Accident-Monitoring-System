@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cinematic Exhibit"
+  short_description: "Design cinematic technical exhibits and inspection views"
+  default_prompt: "Use $cinematic-exhibit to build an interactive technical exhibit in the RAMS corridor visual style."

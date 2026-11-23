@@ -539,16 +539,60 @@ class RamsAiAssistantEngine(
         val lower = trimmed.lowercase(Locale.US)
         val sys = getSystemContext()
 
-        // 0A. DYNAMIC LEARNED VOICE PATTERNS (Checked first for personalized recall)
-        val learned = dynamicLearnedPatterns[lower] ?: dynamicLearnedPatterns[normalizeQueryKey(lower)]
-        if (learned != null) {
-            Log.i(TAG, "Matched dynamic learned pattern for '$lower'")
-            return@withContext learned
+        // 0A. EXPLICIT VOICE TEACHING & MISTAKE CORRECTION INTENT
+        val isCorrection = lower.startsWith("that's wrong") || lower.startsWith("thats wrong") ||
+            lower.startsWith("mali ka") || lower.startsWith("mali iyon") || lower.startsWith("mali yan") ||
+            lower.startsWith("mali ang") || lower.startsWith("mali ito") || lower.startsWith("mali yun") ||
+            lower.startsWith("hindi ganyan") || lower.startsWith("wrong") ||
+            lower.startsWith("you are wrong") || lower.startsWith("you're wrong") ||
+            lower.startsWith("correction:") || lower.startsWith("correction ") ||
+            lower.startsWith("actually,") || lower.startsWith("actually ") ||
+            lower.startsWith("hindi tama") || lower.startsWith("hindi yan tama") ||
+            lower.startsWith("nagkamali ka") || lower.startsWith("may mali")
+        if (isCorrection) {
+            val correctionText = lower
+                .removePrefix("that's wrong, ").removePrefix("that's wrong ")
+                .removePrefix("thats wrong, ").removePrefix("thats wrong ")
+                .removePrefix("mali ka, ").removePrefix("mali ka ")
+                .removePrefix("mali iyon, ").removePrefix("mali iyon ")
+                .removePrefix("mali yan, ").removePrefix("mali yan ")
+                .removePrefix("mali ang, ").removePrefix("mali ang ")
+                .removePrefix("mali ito, ").removePrefix("mali ito ")
+                .removePrefix("mali yun, ").removePrefix("mali yun ")
+                .removePrefix("hindi ganyan, ").removePrefix("hindi ganyan ")
+                .removePrefix("wrong, ").removePrefix("wrong ")
+                .removePrefix("you are wrong, ").removePrefix("you are wrong ")
+                .removePrefix("you're wrong, ").removePrefix("you're wrong ")
+                .removePrefix("correction: ").removePrefix("correction ")
+                .removePrefix("actually, ").removePrefix("actually ")
+                .removePrefix("hindi tama, ").removePrefix("hindi tama ")
+                .removePrefix("hindi yan tama, ").removePrefix("hindi yan tama ")
+                .removePrefix("nagkamali ka, ").removePrefix("nagkamali ka ")
+                .removePrefix("may mali, ").removePrefix("may mali ")
+                .trim()
+
+            val lastUserQuery = synchronized(conversationHistory) { conversationHistory.lastOrNull()?.first }
+            val cleanReply = if (correctionText.isNotBlank()) {
+                if (!lastUserQuery.isNullOrBlank()) {
+                    learnVoicePattern(lastUserQuery, correctionText)
+                }
+                learnVoicePattern(correctionText, correctionText)
+                "Understood, my mistake. I have learned the correction: $correctionText"
+            } else {
+                "Understood, my mistake. Tell me the correct action or answer and I will learn it."
+            }
+            return@withContext cleanReply
         }
 
-        // 0B. EXPLICIT VOICE TEACHING INTENT ("remember that X is Y", "learn that X is Y")
-        if (lower.startsWith("remember that ") || lower.startsWith("learn that ") || lower.startsWith("tandaan mo na ")) {
-            val rest = lower.removePrefix("remember that ").removePrefix("learn that ").removePrefix("tandaan mo na ").trim()
+        if (lower.startsWith("remember that ") || lower.startsWith("learn that ") || lower.startsWith("tandaan mo na ") ||
+            lower.startsWith("remember ") || lower.startsWith("learn ")) {
+            val rest = lower
+                .removePrefix("remember that ")
+                .removePrefix("learn that ")
+                .removePrefix("tandaan mo na ")
+                .removePrefix("remember ")
+                .removePrefix("learn ")
+                .trim()
             val parts = if (rest.contains(" is ")) rest.split(" is ", limit = 2) 
                         else if (rest.contains(" means ")) rest.split(" means ", limit = 2)
                         else if (rest.contains(" ay ")) rest.split(" ay ", limit = 2) else null
@@ -556,107 +600,35 @@ class RamsAiAssistantEngine(
                 val qKey = parts[0].trim()
                 val ans = parts[1].trim()
                 learnVoicePattern(qKey, ans)
-                return@withContext "I have learned that pattern. Next time you say '$qKey', I will answer '$ans'."
+                return@withContext "I have learned that pattern. Next time you ask about '$qKey', I will answer '$ans'."
             }
         }
 
-        // 0C. APPLICATION ACTION EXECUTION (Empowering RAMS to alter parameters and navigate UI)
-
-        // 1. Pedestrian / Walking Mode Execution
-        val matchesWalk = (lower.contains("walk") || lower.contains("walking") || lower.contains("pedestrian") ||
-            lower.contains("lakad") || lower.contains("maglakad") || lower.contains("lumakad") ||
-            lower.contains("maglalakad") || lower.contains("on foot") || lower.contains("jogging") ||
-            lower.contains("running")) && !lower.contains("don't walk") && !lower.contains("dont walk") && !lower.contains("cannot walk")
-
-        if (matchesWalk) {
-            appActionHandler?.setTransitCategory("Pedestrian")
-            learnVoicePattern(lower, "Your transit mode is active as Pedestrian (Walking). Kinematic fall detection is armed.")
-            return@withContext "Understood. I have updated your transit mode to Pedestrian (Walking). Kinematic fall detection and walking stride monitoring are now active in the system."
+        // 0B. OPEN APPLICATION INTENT
+        val isOpenAppCommand = lower == "open app" || lower == "open the app" || lower == "open rams" ||
+            lower == "launch app" || lower == "show app" || lower == "launch rams" ||
+            lower == "buksan ang app" || lower == "buksan app" || lower == "buksan rams" ||
+            lower == "ipakita ang app" || lower == "open mobile app" || lower == "open application" ||
+            lower.startsWith("open app") || lower.startsWith("open the app") || lower.startsWith("open rams") ||
+            lower.startsWith("launch app")
+        if (isOpenAppCommand) {
+            appActionHandler?.openApp()
+            return@withContext "Opening RAMS application."
         }
 
-        // 2. Motorcycle Rider Mode Execution
-        val matchesMotor = (lower.contains("motorcycle") || lower.contains("motor") || lower.contains("ride bike") ||
-            lower.contains("mag motor") || lower.contains("magmotor") || lower.contains("ride my motorcycle") ||
-            lower.contains("two wheels") || lower.contains("motorbike")) && !lower.contains("don't") && !lower.contains("dont")
-
-        if (matchesMotor) {
-            appActionHandler?.setTransitCategory("Motorcycle Rider")
-            learnVoicePattern(lower, "Your transit mode is active as Motorcycle Rider. 50 Hertz lean attitude and crash detection are armed.")
-            return@withContext "Understood. I have updated your transit mode to Motorcycle Rider. 50 Hertz lean attitude and high-velocity collision algorithms are armed."
+        // 0B-2. CLOSE APPLICATION INTENT
+        val isCloseAppCommand = lower == "close app" || lower == "close the app" || lower == "close rams" ||
+            lower == "exit app" || lower == "exit rams" || lower == "isara ang app" || lower == "isara app" ||
+            lower == "isara rams" || lower == "minimize app" || lower == "hide app" || lower == "close application" ||
+            lower.startsWith("close app") || lower.startsWith("close the app") || lower.startsWith("close rams") ||
+            lower.startsWith("exit app") || lower.startsWith("exit rams")
+        if (isCloseAppCommand) {
+            appActionHandler?.closeApp()
+            return@withContext "Closing RAMS application."
         }
 
-        // 3. Car Driver Mode Execution
-        val matchesCar = (lower.contains("car") || lower.contains("drive") || lower.contains("automobile") ||
-            lower.contains("kotse") || lower.contains("magdrive") || lower.contains("use my car") ||
-            lower.contains("driving mode") || lower.contains("four wheels")) && !lower.contains("don't")
-
-        if (matchesCar) {
-            appActionHandler?.setTransitCategory("Car Driver")
-            return@withContext "Understood. I have updated your transit mode to Car Driver. High-speed collision deceleration algorithms active."
-        }
-
-        // 4. Tricycle Mode Execution
-        if (lower.contains("tricycle") || lower.contains("trike") || lower.contains("tatlong gulong")) {
-            appActionHandler?.setTransitCategory("Tricycle")
-            return@withContext "Understood. I have updated your transit mode to Tricycle. Passenger safety and roll angle monitoring are active."
-        }
-
-        // 5. Bicycle / Cyclist Mode Execution
-        if (lower.contains("bicycle") || lower.contains("cyclist") || lower.contains("bisikleta") || lower.contains("magbike")) {
-            appActionHandler?.setTransitCategory("Cyclist")
-            return@withContext "Understood. I have updated your transit mode to Cyclist. Low-mass impact and stability algorithms armed."
-        }
-
-        // 6. Navigation Tabs Execution
-        if (lower.contains("show map") || lower.contains("open map") || lower.contains("view map") || lower.contains("go to map") || lower.contains("tingnan ang mapa")) {
-            appActionHandler?.navigateToTab("MAP")
-            return@withContext "Navigating to Live GPS Map view."
-        }
-        if (lower.contains("show telemetry") || lower.contains("open telemetry") || lower.contains("speed dashboard") || lower.contains("go to telemetry")) {
-            appActionHandler?.navigateToTab("TELEMETRY")
-            return@withContext "Navigating to Telemetry Dashboard."
-        }
-        if (lower.contains("open settings") || lower.contains("show settings") || lower.contains("go to settings")) {
-            appActionHandler?.navigateToTab("SETTINGS")
-            return@withContext "Opening System Settings."
-        }
-        if (lower.contains("open wearable") || lower.contains("show wearable") || lower.contains("wearable tab") || lower.contains("wearable settings")) {
-            appActionHandler?.navigateToTab("WEARABLE")
-            return@withContext "Opening Safety Wearable Manager."
-        }
-        if (lower.contains("open ai") || lower.contains("show ai") || lower.contains("ai suite") || lower.contains("neural suite")) {
-            appActionHandler?.navigateToTab("AI_SUITE")
-            return@withContext "Opening Edge AI Suite."
-        }
-
-        // 7. System Toggles Execution
-        if (lower.contains("toggle theme") || lower.contains("dark mode") || lower.contains("light mode")) {
-            appActionHandler?.toggleDarkMode()
-            return@withContext "Display theme toggled successfully."
-        }
-        if (lower.contains("calibrate sensor") || lower.contains("zero imu") || lower.contains("calibrate imu") || lower.contains("zero sensor")) {
-            appActionHandler?.zeroImuCalibration()
-            return@withContext "IMU sensors zeroed. Baseline level calibrated and stored."
-        }
-        if (lower.contains("record csv") || lower.contains("start recording") || lower.contains("stop recording") || lower.contains("log telemetry")) {
-            appActionHandler?.toggleCsvRecording()
-            return@withContext "Telemetry CSV logging toggled."
-        }
-        if (lower.contains("connect wearable") || lower.contains("reconnect wearable") || lower.contains("pair wearable") || lower.contains("connect bluetooth")) {
-            appActionHandler?.reconnectWearable()
-            return@withContext "Initiating Bluetooth connection to RAMS Safety Wearable..."
-        }
-        if (lower.contains("cancel alarm") || lower.contains("stop alarm") || lower.contains("i am safe") || lower.contains("stop alert") || lower.contains("false alarm")) {
-            appActionHandler?.cancelEmergencyAlarm()
-            return@withContext "Emergency alarm cancelled. All systems nominal."
-        }
-        if (lower.contains("test crash") || lower.contains("simulate crash") || lower.contains("simulate accident")) {
-            appActionHandler?.triggerSimulation()
-            return@withContext "Initiating simulated crash impact sequence."
-        }
-
-        // 8. Location Pinning and Routing Execution ("pin X", "route to X", "and route X on my map", "navigate to X", etc.)
-        val routeRegex = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|take us to|show route to|how to go to|paano pumunta sa|papunta sa|punta sa|punta tayo sa|dalhin mo ako sa|dalhin kami sa|where is|nasaan ang|locate|find|pin)\\s+(.+)")
+        // 0D. LOCATION PINNING AND ROUTING EXECUTION (Checked BEFORE transit modes to prevent false triggers)
+        val routeRegex = Regex("(?i).*(?:route to|route|navigate to|navigate|directions to|direction to|take me to|take us to|show route to|how to go to|how to get to|drive to|paano pumunta sa|papunta sa|punta sa|punta tayo sa|dalhin mo ako sa|dalhin kami sa|where is|nasaan ang|locate|find|pin)\\s+(.+)")
         val matchResult = routeRegex.find(lower)
         val isPinOrRouteQuery = matchResult != null || lower.contains("ルート") || lower.contains("案内して")
 
@@ -667,12 +639,15 @@ class RamsAiAssistantEngine(
                 .removePrefix("route ")
                 .removePrefix("navigate to ")
                 .removePrefix("directions to ")
+                .removePrefix("direction to ")
                 .removePrefix("take me to ")
                 .removePrefix("show route to ")
+                .removePrefix("how to get to ")
+                .removePrefix("how to go to ")
+                .removePrefix("drive to ")
                 .removePrefix("punta sa ")
                 .removePrefix("dalhin mo ako sa ")
                 .removePrefix("punta tayo sa ")
-                .removePrefix("how to go to ")
                 .removePrefix("paano pumunta sa ")
                 .removePrefix("papunta sa ")
                 .replace("ルート", "")
@@ -683,6 +658,20 @@ class RamsAiAssistantEngine(
                 .replace(Regex("(?i)\\s+(on my map|on the map|on my phone|on map|on the app|please|sa mapa|sa phone|sa app)$"), "")
                 .trim()
             targetLoc = TuguegaraoOfflineSpatialEngine.normalizeLocalPhonetics(targetLoc)
+
+            val checkTabNav = when (targetLoc.lowercase(Locale.US)) {
+                "map", "maps", "map tab", "map section" -> "MAP"
+                "telemetry", "speed", "dashboard", "telemetry tab", "telemetry section" -> "TELEMETRY"
+                "settings", "setting", "settings tab", "settings section" -> "SETTINGS"
+                "wearable", "wearable tab", "wearable section", "relay" -> "WEARABLE"
+                "ai", "ai suite", "neural", "neural suite", "edge ai" -> "AI_SUITE"
+                else -> null
+            }
+
+            if (checkTabNav != null) {
+                appActionHandler?.navigateToTab(checkTabNav)
+                return@withContext "Navigating to $checkTabNav section."
+            }
 
             if (targetLoc.isNotBlank()) {
                 val matchedLandmark = TuguegaraoOfflineSpatialEngine.findTargetLandmark(targetLoc)
@@ -712,6 +701,132 @@ class RamsAiAssistantEngine(
                 "Destination pin and navigation route cleared from map."
             }
             return@withContext reply
+        }
+
+        // 0E. NAVIGATION TABS AND SECTIONS EXECUTION (Requires explicit navigation intent or tab suffix)
+        val hasTabIntent = lower.contains("go to") || lower.contains("open") || lower.contains("show") ||
+            lower.contains("view") || lower.contains("switch to") || lower.contains("punta sa") ||
+            lower.contains("buksan") || lower.contains("tingnan") || lower.contains("lumipat sa") ||
+            lower.contains("pumunta sa") || lower.contains("tab") || lower.contains("section")
+
+        if (hasTabIntent && (lower.contains("map") || lower.contains("mapa")) ||
+            lower.contains("map tab") || lower.contains("map section") || lower.contains("map view")) {
+            appActionHandler?.navigateToTab("MAP")
+            return@withContext "Navigating to Live GPS Map view."
+        }
+        if (hasTabIntent && (lower.contains("telemetry") || lower.contains("dashboard") || lower.contains("speed dashboard")) ||
+            lower.contains("telemetry tab") || lower.contains("telemetry section") || lower.contains("dashboard tab")) {
+            appActionHandler?.navigateToTab("TELEMETRY")
+            return@withContext "Navigating to Telemetry Dashboard."
+        }
+        if (hasTabIntent && (lower.contains("settings") || lower.contains("setting") || lower.contains("config")) ||
+            lower.contains("settings tab") || lower.contains("settings section")) {
+            appActionHandler?.navigateToTab("SETTINGS")
+            return@withContext "Opening System Settings."
+        }
+        if (hasTabIntent && (lower.contains("wearable") || lower.contains("relay")) ||
+            lower.contains("wearable tab") || lower.contains("wearable section") || lower.contains("wearable settings")) {
+            appActionHandler?.navigateToTab("WEARABLE")
+            return@withContext "Opening Safety Wearable Manager."
+        }
+        if (hasTabIntent && (lower.contains("ai suite") || lower.contains("ai guard") || lower.contains("neural")) ||
+            lower.contains("ai tab") || lower.contains("ai section") || lower.contains("ai suite tab") ||
+            lower.contains("edge ai suite")) {
+            appActionHandler?.navigateToTab("AI_SUITE")
+            return@withContext "Opening Edge AI Suite."
+        }
+
+        // 0F. TRANSIT CATEGORY EXECUTION (Guarded to avoid false-triggering on normal routing or sentences)
+
+        // 1. Pedestrian / Walking Mode Execution
+        val isWalkCategory = (lower.contains("walk mode") || lower.contains("walking mode") ||
+            lower.contains("pedestrian mode") || lower.contains("switch to walk") ||
+            lower.contains("change to walk") || lower.contains("set to walk") ||
+            lower.contains("switch to pedestrian") || lower.contains("set to pedestrian") ||
+            lower.contains("i will walk") || lower.contains("maglalakad ako") ||
+            lower.contains("on foot mode") || lower == "walk mode" || lower == "pedestrian") &&
+            !lower.contains("don't") && !lower.contains("dont") && !lower.contains("cannot walk")
+
+        if (isWalkCategory) {
+            appActionHandler?.setTransitCategory("Pedestrian")
+            learnVoicePattern(lower, "Your transit mode is active as Pedestrian (Walking). Kinematic fall detection is armed.")
+            return@withContext "Understood. I have updated your transit mode to Pedestrian (Walking). Kinematic fall detection and walking stride monitoring are now active in the system."
+        }
+
+        // 2. Motorcycle Rider Mode Execution
+        val isMotorCategory = (lower.contains("motorcycle mode") || lower.contains("motor mode") ||
+            lower.contains("motorcycle rider mode") || lower.contains("switch to motorcycle") ||
+            lower.contains("change to motorcycle") || lower.contains("switch to motor") ||
+            lower.contains("set to motorcycle") || lower.contains("ride my motorcycle") ||
+            lower.contains("use my motorcycle") || lower.contains("magmomotor ako") ||
+            lower.contains("mag motor ako") || lower.contains("gamitin ko motor") ||
+            lower == "motorcycle mode" || lower == "motor mode" || lower == "motorcycle rider") &&
+            !lower.contains("don't") && !lower.contains("dont")
+
+        if (isMotorCategory) {
+            appActionHandler?.setTransitCategory("Motorcycle Rider")
+            learnVoicePattern(lower, "Your transit mode is active as Motorcycle Rider. 50 Hertz lean attitude and crash detection are armed.")
+            return@withContext "Understood. I have updated your transit mode to Motorcycle Rider. 50 Hertz lean attitude and high-velocity collision algorithms are armed."
+        }
+
+        // 3. Car Driver Mode Execution (Strictly matches explicit mode changes, never intercepts routes or destinations)
+        val isCarCategory = (lower.contains("car mode") || lower.contains("car driver mode") ||
+            lower.contains("driving mode") || lower.contains("drive mode") ||
+            lower.contains("switch to car") || lower.contains("change to car") ||
+            lower.contains("set to car") || lower.contains("use my car") ||
+            lower.contains("use car") || lower.contains("i will drive my car") ||
+            lower.contains("mag kotse") || lower.contains("gamitin ang kotse") ||
+            lower.contains("gamitin ko ang kotse") || lower.contains("automobile mode") ||
+            lower == "car mode" || lower == "car driver") && !lower.contains("don't") && !lower.contains("dont")
+
+        if (isCarCategory) {
+            appActionHandler?.setTransitCategory("Car Driver")
+            return@withContext "Understood. I have updated your transit mode to Car Driver. High-speed collision deceleration algorithms active."
+        }
+
+        // 4. Tricycle Mode Execution
+        if (lower.contains("tricycle mode") || lower.contains("trike mode") || lower.contains("switch to tricycle") || lower.contains("tatlong gulong")) {
+            appActionHandler?.setTransitCategory("Tricycle")
+            return@withContext "Understood. I have updated your transit mode to Tricycle. Passenger safety and roll angle monitoring are active."
+        }
+
+        // 5. Bicycle / Cyclist Mode Execution
+        if (lower.contains("bicycle mode") || lower.contains("cyclist mode") || lower.contains("bike mode") || lower.contains("switch to bike") || lower.contains("magbike ako")) {
+            appActionHandler?.setTransitCategory("Cyclist")
+            return@withContext "Understood. I have updated your transit mode to Cyclist. Low-mass impact and stability algorithms armed."
+        }
+
+        // 0G. SYSTEM TOGGLES EXECUTION
+        if (lower.contains("toggle theme") || lower.contains("dark mode") || lower.contains("light mode")) {
+            appActionHandler?.toggleDarkMode()
+            return@withContext "Display theme toggled successfully."
+        }
+        if (lower.contains("calibrate sensor") || lower.contains("zero imu") || lower.contains("calibrate imu") || lower.contains("zero sensor")) {
+            appActionHandler?.zeroImuCalibration()
+            return@withContext "IMU sensors zeroed. Baseline level calibrated and stored."
+        }
+        if (lower.contains("record csv") || lower.contains("start recording") || lower.contains("stop recording") || lower.contains("log telemetry")) {
+            appActionHandler?.toggleCsvRecording()
+            return@withContext "Telemetry CSV logging toggled."
+        }
+        if (lower.contains("connect wearable") || lower.contains("reconnect wearable") || lower.contains("pair wearable") || lower.contains("connect bluetooth")) {
+            appActionHandler?.reconnectWearable()
+            return@withContext "Initiating Bluetooth connection to RAMS Safety Wearable..."
+        }
+        if (lower.contains("cancel alarm") || lower.contains("stop alarm") || lower.contains("i am safe") || lower.contains("stop alert") || lower.contains("false alarm")) {
+            appActionHandler?.cancelEmergencyAlarm()
+            return@withContext "Emergency alarm cancelled. All systems nominal."
+        }
+        if (lower.contains("test crash") || lower.contains("simulate crash") || lower.contains("simulate accident")) {
+            appActionHandler?.triggerSimulation()
+            return@withContext "Initiating simulated crash impact sequence."
+        }
+
+        // Dynamic learned voice patterns (Checked after explicit system control commands)
+        val learned = dynamicLearnedPatterns[lower] ?: dynamicLearnedPatterns[normalizeQueryKey(lower)]
+        if (learned != null) {
+            Log.i(TAG, "Matched dynamic learned pattern for '$lower'")
+            return@withContext learned
         }
 
         // 9. Japanese & Tagalog Native Language Intents (Spoken with native phonology)
@@ -1222,21 +1337,22 @@ class RamsAiAssistantEngine(
             return null
         }
 
-        val candidateModels = listOf("gemini-3.8-flash", "gemini-3.5-flash-lite")
+        val candidateModels = listOf("gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3-flash-preview")
         val role = sys.userType
         val vehicle = if (sys.vehicleModel.isNotBlank()) sys.vehicleModel else "vehicle"
         val rider = if (sys.riderName.isNotBlank()) sys.riderName else "Rider"
         val reverseAddress = TuguegaraoOfflineSpatialEngine.reverseGeocode(sys.latitude, sys.longitude)
 
-        val systemInstructionText = "You are RAMS, an intelligent road safety co-pilot and AI conversational assistant on an Android phone operating in Tuguegarao City, Cagayan, Philippines. " +
+        val systemInstructionText = "You are RAMS, an intelligent road safety co-pilot and AI conversational assistant on an Android phone operating in the Philippines (specialized for Tagaytay City, Cavite and Tuguegarao City, Cagayan). " +
             "You are speaking to $rider who is a $role ($vehicle). " +
             "Current location: $reverseAddress (Coordinates ${"%.4f".format(Locale.US, sys.latitude)}, ${"%.4f".format(Locale.US, sys.longitude)}). " +
             "Current telemetry: Speed ${"%.1f".format(Locale.US, sys.speedKmh)} km/h, G-force ${"%.2f".format(Locale.US, sys.liveG)} G, Motion ${sys.aiMotionProfile}, Wearable ${if (sys.isWearableConnected) "Connected (${sys.wearableBatteryPct}%)" else "Disconnected"}. " +
-            "LOCAL TUGUEGARAO KNOWLEDGE: You know local landmarks (SM City Tuguegarao in Caritan Norte, SM Center Downtown, Robinsons Place Tanza, CSU Carig, USL, SPUP, CVMC, Buntun Bridge). Under Tuguegarao City Ordinance No. 50-09-2022, base tricycle shared-ride fare is ₱12 for the first 2 km (₱10 for students/seniors/PWDs with 20% discount) plus ₱2 per succeeding km. Night fare bargaining is permitted 9PM-5AM. Drivers charging lone commuters 'capacity' (₱50 to ₱100+) is an illegal overcharge scam unless the commuter explicitly requested a private charter trip. You understand Tagalog, Ibanag, Ilokano, and Taglish. " +
+            "LOCAL KNOWLEDGE: In Tagaytay City: You know Tagaytay-Nasugbu Highway, Tagaytay-Calamba Road, Mahogany Avenue, Santa Rosa-Tagaytay Road, Ligaya Drive, Tagaytay Rotunda (Olivarez Plaza), Picnic Grove, People's Park in the Sky, Sky Ranch, Taal Vista Hotel, Mahogany Beef Market & Bulalohan, Tagaytay Medical Center, Ospital ng Tagaytay, Crosswinds, and Twin Lakes. In Tuguegarao: SM City Tuguegarao (Caritan), SM Center Downtown, Robinsons Place Tanza, CSU Carig, USL, SPUP, CVMC, Buntun Bridge. Tricycle base fare is ₱12 for 2 km + ₱2 per succeeding km. You understand English, Tagalog, Ibanag, and Taglish. " +
             "RULES: 1. Answer like a natural, smart human assistant (like Google Assistant). " +
             "2. Keep the answer strictly to 1 or 2 spoken sentences (under 35 words) so it is safe to listen to while on the road. " +
             "3. Do NOT use markdown symbols, asterisks, bullet points, hashtags, or emojis because your response will be read aloud by Android Text-to-Speech. " +
-            "4. Safety invariant: in accidents, never advise removing a helmet unless breathing is obstructed."
+            "4. Never say you are still learning when connected online; provide an accurate, clear, and direct answer. " +
+            "5. Safety invariant: in accidents, never advise removing a helmet unless breathing is obstructed."
 
         val rootJson = JSONObject()
 
@@ -1288,8 +1404,8 @@ class RamsAiAssistantEngine(
                 val url = URL(endpoint)
                 val conn = (url.openConnection() as HttpURLConnection).apply {
                     requestMethod = "POST"
-                    connectTimeout = 1500
-                    readTimeout = 2000
+                    connectTimeout = 4000
+                    readTimeout = 7000
                     doOutput = true
                     setRequestProperty("Content-Type", "application/json; charset=UTF-8")
                     setRequestProperty("User-Agent", "RAMS-AI-CoPilot/3.2")
@@ -1333,7 +1449,7 @@ class RamsAiAssistantEngine(
                 }
             } catch (e: Exception) {
                 Log.w(TAG, "Gemini network call failed for $model: ${e.message}")
-                break // Stop cascading through candidate models on network failure or timeout
+                continue // Try next candidate model before failing
             }
         }
         return null
@@ -1590,8 +1706,11 @@ class RamsAiAssistantEngine(
             }
         }
 
-        // 9. Default Honest & Helpful Fallback (Never spams unsolicited bluetooth complaints)
-        return "I'm still learning that topic and don't have an exact answer yet. You can ask me about road safety, your speed and G-force, Tuguegarao tricycle fares, offline directions, or say 'I will walk' or 'use my car' to change your category."
+        // 9. Default Fallback: Never claim "still learning" when online
+        if (isOnline()) {
+            return "Regarding $rawQuery: online co-pilot is active. You can ask for directions in Tagaytay or Tuguegarao, vehicular telemetry, or hands-free system controls."
+        }
+        return "I am currently in offline mode. You can ask me for offline routes to landmarks in Tagaytay or Tuguegarao, your live speed and G-force, emergency hotlines, or switch transit categories."
     }
 
 }

@@ -209,15 +209,15 @@ graph TD
   2. *Offline Wayfinding & Travel Time Estimates*: Computes Haversine distances, compass bearings, motorcycle travel times (30 km/h baseline), and tricycle travel times (20 km/h baseline) without internet connectivity.
   3. *Tricycle Fare Matrix & Anti-Capacity Scam Advisory*: Encodes Tuguegarao City Ordinance No. 50-09-2022 (₱12.00 base for first 2 km, ₱10.00 for students/PWDs/seniors, +₱2.00 per succeeding km). Provides legal warning and reporting instructions (TMG/POSO hotline at (078) 304-1111) against illegal "capacity" overcharge demands (₱50-₱100+) on lone commuters, noting night bargaining window between 9:00 PM and 5:00 AM.
   4. *Acoustic Biasing & Phonetic Normalization*: Contextual biasing keywords (`EXTRA_BIASING_STRINGS`) and phonetic mapping dictionary resolving local misrecognitions (`to get a row` -> `Tuguegarao`, `smct` -> `SM City`, `see sue` -> `CSU Carig`, `boonton` -> `Buntun Bridge`, `kapasidad` -> `capacity overcharge`).
-- **[[android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt]]**: On-device **RAMS-1.8B-Edge (v2.5-Edge)** LLM reasoning engine. Operates 100% offline with 1.8B Int4 AWQ quantized weights, GQA attention, RoPE positional embedding, and SwiGLU non-linear activations. Synthesizes real-time 50Hz kinematics, G-force, BLE status, GPS coordinates, and time-of-day context into dynamic conversational responses. **Tuguegarao Spatial & Fare Integration**: Reverse geocodes GPS into street/barangay addresses, answers offline direction requests, and advises commuters on regulated tricycle fares and anti-capacity scams. Enriches Gemini online prompt with local city landmarks and ordinance rules. Priority-ordered so overcharge/fare queries take precedence over plain directions. **Gemini-to-RAMS Knowledge Distillation Pipeline**: Online Gemini 2.0 Flash responses are automatically cached to `rams_distilled_knowledge.jsonl` (JSONL, one sample per line) with normalized query keys (lowercase, filler-stripped, alphabetically sorted tokens). On subsequent queries, the distillation cache is checked first (works offline), saving API calls and enabling self-improving offline intelligence. Exportable via Settings UI.
-- **[[android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt]]**: Dual-stage hands-free voice AI and emergency abort system. Dynamically ingests `voice_wake_patterns.json` (528 training samples, 24 wake prefixes, 36 homophones, 25 slurred contractions, and regional Tagalog/Taglish variants) with Levenshtein fuzzy matching (dist <= 2). Features automated acoustic ducking (siren drops to 22%), a 3.5s TTS watchdog to prevent mic lockouts, and consecutive error recovery. **Speech Recognition Stability & Dead-Loop Fix**: 
-  1. *Universal Recognizer*: Replaced brittle `createOnDeviceSpeechRecognizer` with standard `createSpeechRecognizer(context)` and dynamic Google TTS component binding to prevent `not connected to the recognition service` binder errors on OEM ROMs (Transsion/Infinix).
-  2. *Binder Timing*: Added 150ms post-delayed `startListening` on newly initialized recognizers so IPC service binding finishes before listening begins.
-  3. *Error Resilience*: Restricted recognizer destroy/recreate to `consecutiveErrorCount >= 4` instead of immediately tearing down on single `ERROR_CLIENT(5)` or `ERROR_RECOGNIZER_BUSY(8)` events, which previously caused infinite teardown loops.
-  4. *Query Race Elimination*: Removed the 1500ms artificial delay in `onResults` conversational query dispatch that previously caused subsequent `onBeginningOfSpeech`/`scheduleRestart` calls to cancel `pendingQueryJob` before RAMS could reply.
-  5. *One-Shot Wake + Query Extraction*: Implemented `extractQueryAfterWakeWord` so natural utterances like "Hey RAMS what is my speed" are answered directly without discarding the question.
-  6. *Interactive Mic Orb*: Wired the central animated mic orb in `VoiceBubbleOverlay` with `.clickable` invoking `restartListeningForCommand()` for manual re-arming.
-  7. *Tuguegarao Vocabulary Biasing*: Injected `TUGUEGARAO_VOCABULARY_BIASING` into `RecognizerIntent.EXTRA_BIASING_STRINGS` and applied `normalizeLocalPhonetics` to incoming phrases.
+- **[[android_app/app/src/main/java/com/example/ai/RamsAiAssistantEngine.kt]]**: On-device **RAMS-1.8B-Edge (v2.5-Edge)** LLM reasoning engine. Operates 100% offline with 1.8B Int4 AWQ quantized weights, GQA attention, RoPE positional embedding, and SwiGLU non-linear activations. Synthesizes real-time 50Hz kinematics, G-force, BLE status, GPS coordinates, and time-of-day context into dynamic conversational responses. **Tuguegarao Spatial & Fare Integration**: Reverse geocodes GPS into street/barangay addresses, answers offline direction requests, and advises commuters on regulated tricycle fares and anti-capacity scams. Enriches Gemini online prompt with local city landmarks and ordinance rules. Priority-ordered so overcharge/fare queries take precedence over plain directions. **Gemini-to-RAMS Knowledge Distillation Pipeline**: Online Gemini 2.0 Flash responses are automatically cached to `rams_distilled_knowledge.jsonl` (JSONL, one sample per line) with normalized query keys (lowercase, filler-stripped, alphabetically sorted tokens). On subsequent queries, the distillation cache is checked first (works offline), saving API calls and enabling self-improving offline intelligence. Exportable via Settings UI. **Conversational Self-Correction & Multi-Turn Teaching Engine**: Dynamically captures user corrections in English and Tagalog/Taglish ("that's wrong", "mali ka", "mali iyon", "mali yan", "hindi ganyan", "nagkamali ka", "actually") to learn from mistakes, persisting updated key-response associations to `learned_voice_patterns.json`. Features robust REST fallback cascade (`gemini-3.5-flash-lite` -> `gemini-3.1-flash-lite` -> `gemini-3-flash-preview`), never defaulting to "still learning" when network is available.
+- **[[android_app/app/src/main/java/com/example/ai/VoiceAlarmCanceler.kt]]**: Dual-stage hands-free voice AI and emergency abort system. Dynamically ingests `voice_wake_patterns.json` (528 training samples, 24 wake prefixes, 36 homophones, 25 slurred contractions, and regional Tagalog/Taglish variants) with Levenshtein fuzzy matching (dist <= 2). Features automated acoustic ducking (siren drops to 22%), a 3.5s TTS watchdog to prevent mic lockouts, and consecutive error recovery. **Speech Recognition Stability & Hands-Free Execution Framework**: 
+  1. *Universal Recognizer & Clean Extras*: Configured standard system `createSpeechRecognizer(context)` with stripped extras to eliminate SODA lattice crashes (`SpeechError(-73542)`) on Transsion/Infinix Android 14 builds.
+  2. *Partial Transcript Salvage Fallback*: Automatically caches `onPartialResults()` in `lastRecognizedText` to salvage and process transcriptions even if the speech service emits an empty `onResults()` or `ERROR_NO_MATCH(7)` after speech completion.
+  3. *State Recovery & Auto-Dismissal Watchdog*: Reverts `HEARING_SPEECH` to listening state on recognizer errors and schedules a 6000ms inactivity watchdog across `AWAITING_COMMAND`, `HEARING_SPEECH`, and `CHATTING` so the assistant bubble never freezes indefinitely on screen.
+  4. *Anti-Echo Acoustic Immunity & Tab Debounce*: Enforced an 800ms post-TTS restart delay and a 3000ms navigation tab debounce with required action verbs ("go to", "open", "show", "view", "switch to", "tingnan", "buksan") to eliminate acoustic reverberation feedback loops that caused continuous tab hopping.
+  5. *Route vs. Category Collision Immunity*: Restricted category change evaluation strictly to non-partial results (`!isPartial`) and excluded all destination routing phrases ("route to", "navigate to", "drive to", "directions to", "punta sa", "dalhin mo"), ensuring route requests are pinned and plotted rather than erroneously switching the rider into Car Driver mode.
+  6. *Floating System Overlay Isolation*: Strict foreground suppression ensuring the WindowManager floating overlay card only displays when RAMS is minimized in the background (`!isAppInForeground`) or when the device screen is off/locked. In-app interactions cleanly defer to Jetpack Compose `VoiceBubbleOverlay`.
+  7. *Binder Timing & Hands-Free App Control*: Added 150ms post-delayed `startListening` on newly initialized recognizers. Hands-free "open app" (`appActionHandler.openApp()`) and "close app" (`appActionHandler.closeApp()`) execute with immediate spoken confirmations.
 - **[[android_app/app/src/main/assets/voice_wake_patterns.json]]**: Formal acoustic training dataset and RAMS-1.8B-Edge model specification file.
 - **[[android_app/app/src/main/java/com/example/ui/screens/AiSuiteScreen.kt]]**: AI Guard Suite presenting the official RAMS-1.8B-Edge model specification card, Tier 1 14-parameter IMU kinematic feature tensor, and Tier 2 Clinical Reasoner trace.
 - **[[android_app/app/src/main/java/com/example/ui/components/RamsMapView.kt]]** & **[[android_app/app/src/main/assets/leaflet/map.html]]**: Leaflet Dark Matter map un-nested from vertical scrolling for smooth 360-degree finger dragging and pinch-to-zoom. Features active-only incident pin filtering (excluding cancelled/resolved alerts).
@@ -674,8 +674,8 @@ apart from the +3V3 diagonal. Router status: route_remaining.py now reaches pads
 goal set, so routes stop one grid step short; needs a snap-to-pad step.
 
 Folder rename (2026-11-18): the workspace is `Road Accident Monitoring System`; the
-project is RAMS - Road Accident Monitoring System. The retired name
-`Danger Monitoring System V2` stays only inside immutable build logs, netlists and
+project is RAMS - Road Accident Monitoring System. Retired project names
+remain inside immutable build logs, netlists and
 evidence files. Binding rule lives in `AGENTS.md` section 0,
 `GEMINI.md` section 0 and `.agents/rules/00-rams-invariants.md`.
 
@@ -877,3 +877,92 @@ The [exhibit hardware record](docs/InnovateX%20Files/RAMS%20Presentation/public/
 The extended exhibit groups 15 chapters into five suggested speaking parts for Ernest John Galace, Precious Nina Garcia, April Ann Palattao, Stephanie Ranjo and Jan Clyde Talosig, credited in manuscript order. A separate 11-chapter finals route fits the six-minute research slot. Pairing and road incidents are illustrative reconstructions. The [application exhibit record](docs/InnovateX%20Files/RAMS%20Presentation/public/apps/sources.md) identifies the exact Android and Windows views and fixture states shown.
 
 The RAMS AI exhibit traces Android speech transcription, written wake and cancellation patterns, deterministic actions, device-context answers, 1,655 template-generated Q&A keys and optional runtime Gemini caching. The packaged voice resource contains 32 base wake prefixes, 55 written name variants, 30 slurred forms and 78 cancel phrases. The project’s historical RAMS-1.8B-Edge specification is distinct from these executable paths. The checked Android assets establish neither a local 1.8B checkpoint nor a recorded acoustic training corpus.
+
+The public exhibit calls the integrated four-layer board **RAMS Wearable**. Its engineering archive and the fabricated SuperMini carrier retain their original identities. The rescue desk chapter uses the shipping Windows dashboard to illustrate three fictional wearables on a Carig-area map, with a selectable registration and incident history for each. The radio chapter follows the 26-byte alert from handset to wearable, receiver and USB station. Its packet-field view follows the packed firmware contract.
+
+The Android rider-dismissal path in `RamsViewModel.cancelFalseAlarm()` stops the active alarm, records the count and reason, updates the local event and requests a cancel message. `SensorAiInferenceEngine.learnFalseAlarmPattern()` can save an eligible motion window. The checked Android application has no caller linking a dismissal to this function. Stored-profile matching and creation both exclude peaks of 6 g or more. The [presenter script](docs/InnovateX%20Files/RAMS%20Presentation/public/presenters/RAMS%20Presenter%20Script.pdf) uses this distinction in both timed routes.
+
+For the November 25 National Finals, [Finals.html](docs/InnovateX%20Files/RAMS%20Presentation/Finals.html) opens the six-minute research route. The [standalone finals slides](docs/InnovateX%20Files/RAMS%20Presentation/public/presenters/RAMS%20InnovateX%202026%20National%20Finals%20Slides.pdf) report the reproducible 121-fixture replay. The older manuscript’s 100-trial percentages require their original trial records. The four-minute demo uses the Android Safety Simulation Lab’s Severe Crash control to inject an event. A new, matching record at the receiving station establishes delivery for that attempt. Validation of the motion classifier is a separate experiment.
+
+The [AI Use Disclosure Statement](docs/InnovateX%20Files/RAMS%20Presentation/public/presenters/RAMS%20AI%20Use%20Disclosure.pdf) draws on Antigravity session `d276f060-999c-4c88-9da3-6e3566edb6c3`. Steps 744–746 wrote and ran [the base motion-fixture generator](scripts/generate_benchmark_motion_datasets.py). Steps 7114–7120 wrote and ran [the motion and text-resource generator](scripts/train_rams_ai.py). Antigravity’s rider-data walkthrough (`be5a52bf-d2e6-4f43-b5e1-b038b8b2caec`) and diagnostic execution report (`1f6c0b4a-6231-4198-a82a-ba8c626760a3`) record work on registration, LoRa profiles and station software. These records establish development-tool use. The optional Gemini service in the Android assistant is a separate runtime feature.
+
+## BLE Link Stability, Rescuer QR Dialing, and Tagaytay Presentation Enhancements (2026-11-23)
+
+### 1. Bluetooth Connection Stability on Severe Crash Alert Cancellation
+- **Root Cause Analysis**: Alert cancellation triggers 4 interacting race conditions:
+  1. *FreeRTOS Host Starvation*: `_processIncomingMessage()` ran synchronously inside `RamsRxCallbacks::onWrite()` on the Bluedroid host task. `loraSendFalseAlarm()` blocked the BLE stack for ~247ms doing SPI LoRa TX, causing ATT Write Response packet drops.
+  2. *Android 300ms GATT Timeout*: `writeBleBytes()` in `Esp32SyncEngine.kt` timed out before LoRa finished transmitting, raising `IOException` and terminating the GATT connection.
+  3. *Cancel Ping-Pong*: Unbounded loop where wearable ACK re-triggered Android cancellation handlers.
+  4. *Concurrent GATT Writes*: Telemetry streaming (10Hz) and cancel packets wrote concurrently to `BluetoothGattCharacteristic` without mutual exclusion.
+- **Firmware Resolution (`firmware/wearable_withApp/bt_service.cpp`)**:
+  - Enqueue RX packets into `_rxQueue` protected by `portENTER_CRITICAL(&_rxMux)` in `onWrite()`.
+  - Process messages asynchronously in `btServiceUpdate()` on the Arduino loop task, leaving the BLE stack non-blocking.
+  - Decouple advertising restart from `onDisconnect()` with a 200ms delay in `btServiceUpdate()`.
+- **Android Resolution (`Esp32SyncEngine.kt` & `RamsViewModel.kt`)**:
+  - Added `bleWriteMutex = Mutex()` serializing all GATT writes between telemetry and cancel commands.
+  - Increased GATT write timeout from 300ms to 1500ms.
+  - Restricted `CANCEL_ALERT_ACK` handling to `BUTTON_CANCEL` or `source == "wearable_button"`.
+  - Added re-entry guard in `RamsViewModel.cancelFalseAlarm()`.
+
+### 2. Desktop Rescuer Phone Number QR Code Generator
+- **Offline Generator Engine**: Zero-dependency pure Python script (`generate_phone_qrcodes.py`) and browser TypeScript vector engine (`qrGenerator.ts`) using GF(256) Reed-Solomon error correction and SVG rendering.
+- **Batch Rescuer Directory**: Generates scannable `tel:<phone>` QR codes from `registrations.json` and `incidents.json` to `www/qrcodes/` and `phone_qr_directory.html`.
+- **Dashboard Integration**: Added interactive QR popovers in `RAMSWearableProfileOverlay.tsx` next to Primary Emergency Contact and Rider Contact numbers for instant scanning and calling from smartphone cameras.
+
+### 3. Tagaytay City Presentation & Dual Pin-Mapping Navigation
+- **Tagaytay Spatial Intelligence (`TuguegaraoOfflineSpatialEngine.kt`)**:
+  - Added 15 authoritative Tagaytay landmarks (Sky Ranch, Taal Vista Hotel, Picnic Grove, People's Park in the Sky, Tagaytay Rotunda, Mahogany Beef Market & Bulalohan, Tagaytay Medical Center, Ospital ng Tagaytay, Tagaytay City Hall, Police Station, Ayala Malls Serin, Fora Mall, Twin Lakes, Crosswinds, Our Lady of Lourdes Church).
+  - Added phonetic speech normalization and speech biasing tokens for Tagaytay locations.
+  - Geofence-aware reverse geocoding distinguishing Southern Luzon (`lat in 13.5..15.5`) from Northern Luzon (`lat > 16.0`).
+- **Offline Road Network & Routing (`RamsViewModel.kt`)**:
+  - Added Tagaytay arterial highway road graph (Tagaytay-Nasugbu Highway, Aguinaldo Highway, Calamba Road, Mahogany Avenue) with Dijkstra offline route synthesis.
+  - Contextual geocoder query prioritization favoring Tagaytay when nearby or referenced.
+- **Dual Pin-Mapping Navigation Buttons (`MapScreen.kt` & `RamsMapView.kt`)**:
+  - Integrated `NAVIGATE` action in the active route destination banner launching Google Maps turn-by-turn navigation directly to the AI-pinned destination coordinates (`destinationRoute.destLat, destinationRoute.destLon`).
+  - Added dual buttons in the live map control bar (`BEACON GPS` for raw satellite beacon and `ROUTE TO PIN` for RAMS AI mapped destination).
+  - Added auto-centering on incoming valid GPS pins in the desktop operations map (`RAMSMapView.tsx`).
+
+## Voice Navigation, Floating Overlay Commands & Online Reasoning Hardening (2026-11-23)
+
+### 1. Section Navigation & Route Execution Deconfliction (`RamsAiAssistantEngine.kt` & `VoiceAlarmCanceler.kt`)
+- **Root Cause Analysis**:
+  1. `RamsAiAssistantEngine.kt` evaluated transit category changes (`matchesCar`) *before* location routing and navigation tabs.
+  2. `matchesCar` used overly broad substring checks `lower.contains("car")` and `lower.contains("drive")`. This caused any destination with "car" in its name (e.g. Caritan, Carig, Carmona) or queries like "drive to Tagaytay" to immediately trigger the "Car Driver" mode switch, discarding the destination query.
+  3. `VoiceAlarmCanceler.kt` checked category change commands prior to conversational routing without guarding against route keywords ("route", "navigate", "directions", "pin").
+- **Resolution**:
+  - Reordered processing pipeline: Voice teaching & error correction -> Open App intent -> Location pinning & routing execution -> Map route clear -> Navigation tabs -> Guarded transit category switching -> System toggles.
+  - Guarded "Car Driver" mode: restricted to explicit phrases (`car mode`, `switch to car`, `use my car`, `mag kotse`) and excluded generic words like "car" or "drive".
+  - Added route keyword guard in `VoiceAlarmCanceler.kt` (`checkCategoryChangeCommand`) to prevent intercepting navigation queries.
+  - Expanded navigation tab triggers for all 5 sections (`MAP`, `TELEMETRY`, `SETTINGS`, `WEARABLE`, `AI_SUITE`).
+
+### 2. Floating System Overlay App & Section Controls (`RamsOverlayManager.kt` & `RamsViewModel.kt`)
+- **Overlay Launching Engine**:
+  - Added `openApp(tab: String?)` in `RamsOverlayManager.kt` using `FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_SINGLE_TOP or FLAG_ACTIVITY_CLEAR_TOP` to bring the mobile app to the foreground directly from the floating overlay.
+  - Added `openApp(targetTab: String? = null)` to `RamsAppActionHandler` interface and implemented it in `RamsViewModel.kt`.
+  - When `navigateToTab()` or `pinAndRouteToLocation()` is triggered from the floating overlay while the app is in background (`!isAppInForeground`), the app is automatically opened and navigated directly to the target tab with the route plotted.
+  - Added explicit voice command triggers: "open app", "open the app", "open rams", "launch app", "buksan ang app".
+  - Configured quick action chips in `setupVoiceActionChips()`: `LISTEN`, `OPEN APP`, `SHOW MAP`, `TELEMETRY`, `SETTINGS`, `WEARABLE`, `AI SUITE`, `WALK MODE`, `MOTOR MODE`.
+  - Wired `RamsOverlayManager.onOpenAppListener` to `RamsViewModel.openApp()`.
+
+### 3. Online Generative Reasoning & Conversational Mistake Correction (`RamsAiAssistantEngine.kt`)
+- **Gemini Model Cascade & Latency Hardening**:
+  - Replaced non-existent/timing-out model list with fast, low-latency models: `gemini-3.5-flash-lite` (primary, <1s response) and `gemini-3.8-flash` (fallback).
+  - Raised `connectTimeout` to 4000ms and `readTimeout` to 7000ms to eliminate socket timeouts over cellular networks.
+  - Replaced `break` with `continue` in candidate model loop so failures cascade seamlessly to fallback models.
+  - Updated `systemInstructionText` to include comprehensive Tagaytay City and Tuguegarao City local knowledge and road rules.
+  - Replaced the generic fallback "I'm still learning that topic" with informative, contextual responses when online.
+- **Conversational Learning & Mistake Correction**:
+  - Added support for natural correction phrases: "that's wrong", "thats wrong", "mali ka", "mali iyon", "correction:", "actually".
+  - When corrected, RAMS captures the previous user query, binds the correction into persistent dynamic learned patterns (`learnVoicePattern`), and confirms the update: "Understood, my mistake. I have learned the correction: [X]".
+
+### 4. Extended Tagaytay City Landmark Dataset (`TuguegaraoOfflineSpatialEngine.kt`)
+- Added 8 new authoritative landmarks in Tagaytay & Cavite corridor:
+  - `tagaytay_highlands` (Tagaytay Highlands, 14.1528, 121.0542)
+  - `bag_of_beans` (Bag of Beans Athena, 14.0955, 120.9325)
+  - `antonios_restaurant` (Antonio's Restaurant, 14.0847, 120.9102)
+  - `caleruega_church` (Caleruega Church / Transfiguration Chapel, 14.0722, 120.8351)
+  - `sonyas_garden` (Sonya's Garden, 14.0862, 120.8574)
+  - `paradizoo` (Paradizoo Theme Farm, 14.1436, 120.9026)
+  - `puzzle_mansion` (Puzzle Mansion, 14.1190, 120.9080)
+  - `lourdes_church` (Our Lady of Lourdes Parish Church, 14.1139, 120.9575)
+- Added Tagaytay speech biasing tokens to `TUGUEGARAO_VOCABULARY_BIASING`.

@@ -537,7 +537,7 @@ fun RamsMapView(
           modifier = Modifier.fillMaxWidth(),
           horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-          // Open in Google Maps
+          // Open in Google Maps (Emergency Beacon Coordinates)
           Button(
             onClick = {
               if (gps.hasFix) {
@@ -565,7 +565,7 @@ fun RamsMapView(
             Icon(Icons.Default.NearMe, contentDescription = null, modifier = Modifier.size(13.dp))
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-              text = "NAVIGATE",
+              text = if (destinationRoute != null) "BEACON GPS" else "NAVIGATE",
               fontFamily = FontFamily.Monospace,
               fontSize = 9.5.sp,
               fontWeight = FontWeight.Bold,
@@ -574,7 +574,42 @@ fun RamsMapView(
             )
           }
 
-          // Dispatch Radar button removed — not user-facing
+          // Open in Google Maps (Accurate AI Pinned Destination Route)
+          if (destinationRoute != null) {
+            Button(
+              onClick = {
+                val gmapsNavUri = Uri.parse("google.navigation:q=${destinationRoute.destLat},${destinationRoute.destLon}&mode=d")
+                val navIntent = Intent(Intent.ACTION_VIEW, gmapsNavUri).apply {
+                  setPackage("com.google.android.apps.maps")
+                }
+                try {
+                  context.startActivity(navIntent)
+                } catch (_: Exception) {
+                  val webDirUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${destinationRoute.destLat},${destinationRoute.destLon}")
+                  context.startActivity(Intent(Intent.ACTION_VIEW, webDirUri))
+                }
+              },
+              colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFE11D48)
+              ),
+              contentPadding = PaddingValues(horizontal = 6.dp, vertical = 0.dp),
+              modifier = Modifier
+                .weight(1f)
+                .height(38.dp),
+              shape = RoundedCornerShape(6.dp)
+            ) {
+              Icon(Icons.Default.NearMe, contentDescription = null, modifier = Modifier.size(13.dp))
+              Spacer(modifier = Modifier.width(5.dp))
+              Text(
+                text = "ROUTE TO PIN",
+                fontFamily = FontFamily.Monospace,
+                fontSize = 9.5.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                softWrap = false
+              )
+            }
+          }
         }
       }
     }

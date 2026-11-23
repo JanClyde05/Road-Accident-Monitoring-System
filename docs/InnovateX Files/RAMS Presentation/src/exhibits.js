@@ -68,7 +68,7 @@ export function detection(panel) {
       ]
         .map(([a, b]) => '<div class="stat"><b>' + a + '</b><small>' + b + '</small></div>')
         .join('')}</div>
-      <div class="plate-foot"><span class="tiny">50 samples · 50 Hz</span><span>Android benchmark fixture</span></div></div>`;
+      <div class="plate-foot"><span class="tiny">50 samples · 50 Hz</span><span>${name === 'fall' ? 'Synthetic over-the-handlebars fall' : 'Android benchmark fixture'}</span></div></div>`;
     const range = panel.querySelector('input');
     function inspect() {
       const i = Number(range.value),
@@ -146,7 +146,7 @@ export function calibration(panel) {
     <ul class="pipeline"><li><b>Research</b><span>SisFall, MobiFall and other public datasets informed the project’s reference catalog.</span></li><li><b>Generate</b><span>Local Python scripts produced 11 scenario families and their variants for the Android app.</span></li><li><b>Extract</b><span>Each trace carries 14 summary features covering acceleration, rotation, jerk and tilt.</span></li></ul>
     </div><div class="plate-foot"><span class="tiny">11 scenarios</span><span>6,050 sample rows</span></div>`;
     if (tab === 'feedback')
-      body.innerHTML = `<div class="corpus-body"><div class="corpus-intro"><span class="eyebrow">After a rider cancels</span></div><ul class="pipeline"><li><b>Dismiss</b><span>Android stops the alarm and countdown and records a dismissal reason and count.</span></li><li><b>Correct</b><span>The app updates the local event and requests a separate cancel message through the paired wearable.</span></li><li><b>Learn</b><span>The classifier can match a saved motion profile below 6 g. The current cancellation handler does not save the dismissed motion as a new profile.</span></li></ul></div><div class="plate-foot"><span class="tiny">Android implementation</span><span>Local feedback path</span></div>`;
+      body.innerHTML = `<div class="corpus-body"><div class="corpus-intro"><span class="eyebrow">After a rider cancels</span></div><ul class="pipeline"><li><b>Dismiss</b><span>Android stops the alarm and countdown and records a dismissal reason and count.</span></li><li><b>Correct</b><span>The app updates the local event and requests a separate cancel message through the paired wearable.</span></li><li><b>Saved profiles</b><span>A separate matcher can recognize saved motion below 6 g. Canceling alone does not add a profile.</span></li></ul></div><div class="plate-foot"><span class="tiny">Android implementation</span><span>Local feedback path</span></div>`;
     if (tab === 'language')
       body.innerHTML = `<div class="corpus-body"><div class="corpus-intro"><b>1,655</b><span>bundled Q&amp;A records</span></div><ul class="pipeline"><li><b>Generate</b><span>The training script expands question and answer templates into an offline knowledge file.</span></li><li><b>Voice</b><span>The command resource lists 32 wake prefixes and 55 written phonetic variants of “RAMS.”</span></li><li><b>Evidence</b><span>These assets document text generation and phrase matching. The motion decision comes from the separate Android classifier.</span></li></ul></div><div class="plate-foot"><span class="tiny">Assistant resources</span><span>Text templates and variants</span></div>`;
     if (tab === 'threshold') {
@@ -318,6 +318,6 @@ export function relay(panel, road) {
 export function validation(panel) {
   panel.innerHTML = `<div class="plate"><div class="plate-head"><strong>Validation record</strong><span class="tiny">Synthetic replay</span></div><div class="stats proof-stats"><div class="stat"><b>33 / 33</b><small>Accident flags matched</small></div><div class="stat"><b>88 / 88</b><small>Benign flags matched</small></div></div>
     <div class="proof-list"><article>${icon('check')}<div><h3>Binary alarm decision</h3><p>The compiled Android classifier replayed the stored feature vectors on a desktop JVM.</p></div></article>
-    <article class="pending">${icon('focus')}<div><h3>Subtype errors</h3><p>All 11 potholes were labeled as wind flutter. Both labels suppress the alarm.</p></div></article><article class="pending">${icon('radio')}<div><h3>Next field measurements</h3><p>Held-out motion trials, packet delivery at measured distances and end-to-end alert latency.</p></div></article></div>
+    <article class="pending">${icon('focus')}<div><h3>Subtype errors</h3><p>All 11 potholes were called wind flutter. All 11 simulated falls over the handlebars were called severe collisions.</p></div></article><article class="pending">${icon('radio')}<div><h3>Next field measurements</h3><p>Held-out motion trials, packet delivery at measured distances and end-to-end alert latency.</p></div></article></div>
     <div class="plate-foot"><span class="tiny">Next · prototype demonstration</span><span>4 min</span></div></div>`;
 }
